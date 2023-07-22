@@ -25,7 +25,7 @@ export const meritData: Merit[] = meritDataJson.map((rote) => ({
     experiencePoints: 0,
   }));
 
-  const defineMeritRating = (rating: string) => {
+export const defineMeritRating = (rating: string) => {
     let maxCost = 5;
     let minCost = 0;
     let orBool = false;

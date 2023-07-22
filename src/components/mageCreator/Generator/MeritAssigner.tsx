@@ -1,6 +1,7 @@
 import { Awakened } from '../data/Awakened'
-import { Text, Center, Stack, Accordion, Button, Table, useMantineTheme, NumberInput } from '@mantine/core'
-import { getFilteredMerits, meritData, Merit, currentMeritLevel } from '../data/Merits'
+import { Group, Card, Text, Center, Stack, Accordion, Button, Table, useMantineTheme, NumberInput } from '@mantine/core'
+import { getFilteredMerits, meritData, Merit, defineMeritRating } from '../data/Merits'
+import { currentGnosisLevel } from '../data/Gnosis'
 import { useState } from 'react'
 import { globals } from '../../../globals'
 
@@ -16,17 +17,7 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
     const { filteredMerits } = getFilteredMerits(awakened)
     const theme = useMantineTheme()
 
-    const getNumberBelow = (array: any, num: number) => {
-        for (let i = 1; i < array.length; i++) {
-          if (num < array[i]) {
-            return array[i-1];
-          }
-        }
-        return array[array.length-1];
-      };
-
-
-/*     const getRemainingPoints = (awakened: Awakened): number => {
+     const getRemainingPoints = (awakened: Awakened): number => {
         let totalCreationPoints = 0;
       
         Object.values(awakened.merits).forEach((merit) => {
@@ -34,7 +25,7 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
         });
       
         return 7 - (awakened.gnosis.creationPoints + totalCreationPoints);
-      }; */
+      };
 
 /*     useEffect(() => {
         if (awakened.order !== 'Apostate') {
@@ -61,58 +52,68 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
         }
       }, [awakened.order, filteredMerits, selectedMerits]); */
 
-/*    const removeInvalidMerits = (selectedMerits: Merit[], filteredMerits: Merit[]) => {
-        const validMerits = selectedMerits.filter((merit) =>
-            filteredMerits.some((fm) => fm.name === merit.name)
+      const removeInvalidMerits = (filteredMerits: Merit[]): void => {
+        const validMerits = awakened.merits.filter((merit) =>
+          filteredMerits.some((fm) => fm.name !== merit.name)
         );
-        return validMerits;
-    }
+      };
 
-     const handleFreebiePointsChange = (merit: Merit) => {
-        setSelectedMerits((prevMerits) => {
-          const existingMeritIndex = prevMerits.findIndex((m) => m.name === merit.name);
-
-          if (existingMeritIndex >= 0) {
-            const updatedMerits = [...prevMerits];
-            updatedMerits[existingMeritIndex] = merit;
-            const validMerits = removeInvalidMerits(updatedMerits, filteredMerits);
-            return validMerits;
-          } else {
-            const validMerits = removeInvalidMerits(prevMerits, filteredMerits);
-            return [...validMerits, merit];      }
-        });
-      }; */
-
-      const handleMeritCreationPointChange = (value: any, merit: Merit) => {
-        const merits = [...awakened.merits];
-        let { totalXpNeeded, pastXpNeeded } = currentMeritLevel(merit);
-        let oldCreationPoints = merit.creationPoints;
-        merit.creationPoints = parseInt(value) > oldCreationPoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, parseInt(value));
-        setAwakened({ ...awakened, merits });
-      }
-
-      const meritInput = ( merit : Merit ) => {
+      const MeritInput = ( merit : Merit ) => {
         const getMeritCreationPoints = (merit: Merit) => {
           const meritInfo = awakened.merits.find((m) => m.name === merit.name);
           const total = meritInfo ? meritInfo.creationPoints : 0;
           return total;
         };
 
+        const { minCost, maxCost, orBool, plusBool} = defineMeritRating(merit.rating)
+
+        const handleMeritChange = (merit: Merit, newCreationPoints: number): void => {
+          const existingMerit = awakened.merits.find((m) => m.name === merit.name);
+  
+          if (existingMerit) {
+            if (newCreationPoints === 0) {
+              const updatedMerits = awakened.merits.filter((m) => m.name !== merit.name);
+              setAwakened({ ...awakened, merits: updatedMerits });
+            } else {
+              const updatedMerits = awakened.merits.map((m) =>
+              m.name === merit.name ? { ...m, creationPoints: newCreationPoints } : m
+            ) ;
+            setAwakened({ ...awakened, merits: updatedMerits });
+          }} else {
+            setAwakened({
+              ...awakened,
+              merits: [...awakened.merits, { ...merit, creationPoints: newCreationPoints }],
+            });
+          }
+        };
+
+        const getStep = (merit: Merit): number => {
+          if (minCost === maxCost) {
+            return minCost;
+          } else if (orBool && getMeritCreationPoints(merit) < minCost) {
+            return minCost;
+          } else if (orBool && getMeritCreationPoints(merit) > 0) {
+            return maxCost;
+          } else if (plusBool && getMeritCreationPoints(merit) < minCost) {
+            return minCost;
+          } else {
+            return 1;
+          }
+        };
+        
+        const step = getStep(merit)
+
         return (
             <div>
                 <NumberInput
-                    value={getMeritCreationPoints(merit)}
-                    onChange={(value) =>
-                    handleMeritCreationPointChange(
-                        value,
-                        merit,
-                    )}
-                    min={0}
-                    max={5}
-                    onWheel={(event) => {
-                        event.currentTarget.blur();
-                        event.preventDefault();
-                      }}
+                  value={getMeritCreationPoints(merit)}
+                  min={0}
+                  max={defineMeritRating(merit.rating).maxCost}
+                  step={step}
+                  onChange={(val:number) => {
+                    handleMeritChange(merit, val)
+                    removeInvalidMerits(filteredMerits)
+                  }}
                 />
             </div>
         )
@@ -139,11 +140,6 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
               bgc = theme.fn.rgba(theme.colors.gray[6], 0.90)
               break;
           }
-        /* "Mental merits" - #6D9EEB
-        "Physical merits" - #A0DDFF
-        "Social merits" - #FFC48C
-        "Mage merits" - #FFA07A
-        "Sanctum merits" - #D6A5C9 */
 
         const sortedMerits = showAllMerits
           ? meritData.filter((merit) => merit.type.toLowerCase() === type.toLowerCase())
@@ -151,8 +147,8 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
       
         return (
           <div>
-            <Accordion.Item value={type} key={type} >
-                <Accordion.Control style={{ color: "white", backgroundColor: bgc }}>{type}</Accordion.Control>
+            <Accordion.Item value={type}>
+                <Accordion.Control style={{ color: "white", backgroundColor: bgc }}>{type.toUpperCase()}</Accordion.Control>
                 <Accordion.Panel>
                     <Table>
                     <thead>
@@ -167,7 +163,7 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
                             <td style={{ minWidth: "150px" }}>
                             <Text>{merit.name} {merit.rating}</Text>
                             <Text>{merit.prerequisites? `PreReq: ${merit.prerequisites}`: ''}</Text>
-                            {meritInput(merit)}
+                            {MeritInput(merit)}
                             </td>
                             <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
                         </tr>
@@ -180,6 +176,38 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
         );
       };
       
+      const createGnosisAssigner = () => {
+
+        const currentGnosis = currentGnosisLevel(awakened);
+        const canDecreaseGnosis = currentGnosis.level > 1;
+      
+        const increaseGnosis = () => {
+          if (getRemainingPoints(awakened) >= 3) {
+            const updatedFormData = { ...awakened };
+            updatedFormData.gnosis.creationPoints += 3;
+            setAwakened(updatedFormData);
+          }
+        };
+      
+        const decreaseGnosis = () => {
+          if (canDecreaseGnosis) {
+            const updatedFormData = { ...awakened };
+            updatedFormData.gnosis.creationPoints -= 3;
+            setAwakened(updatedFormData);
+          }
+        };
+      
+        return (
+          <Card style={{backgroundColor:"#996515", color: "white"}}>
+            <Text fz={globals.smallFontSize}>Gnosis: {currentGnosis.level}</Text>
+            <Text fz={globals.smallerFontSize}>3 merit points per dot of Gnosis</Text>
+            <Button.Group>
+              <Button style={{ margin: "5px" }} color="gray" disabled={getRemainingPoints(awakened) < 3} onClick={increaseGnosis}>Increase Gnosis</Button>
+              <Button style={{ margin: "5px" }} color="gray" disabled={!canDecreaseGnosis} onClick={decreaseGnosis}>Decrease Gnosis</Button>
+            </Button.Group>
+          </Card>
+        )
+      }
 
       const isPhoneScreen = globals.isPhoneScreen
       const isSmallScreen = globals.isSmallScreen
@@ -188,13 +216,17 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
       return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '100px' : '100px'}}>
             <Stack>
-                <Text>This is a test</Text>
+              {createGnosisAssigner()}
             <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
             {
                 ["Mental merits", "Physical merits", "Social merits", "Mage merits", "Sanctum merits"].map((t) => createMeritAccordian(t, showAllMerits))
             }
             </Accordion>
-
+                  <Group style={{ position: "fixed", bottom: "0px",right: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%" }}>
+                    <Card>
+                      <Text style={{ margin: "0px" }}>Rote Points: 7/{getRemainingPoints(awakened)}</Text>
+                    </Card>
+                  </Group>
                 <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
                     <Button
                         style={{ margin: "5px" }}
@@ -204,6 +236,7 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
                         Back
                     </Button>
                     <Button
+                        disabled={getRemainingPoints(awakened) > 0}
                         style={{ margin: "5px" }}
                         color="gray"
                         onClick={nextStep}
