@@ -1,0 +1,730 @@
+[
+    {
+      "type": "Social merits",
+      "name": "Allies",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Allies represent individuals who provide assistance to your character.</li>\n  <li>Each acquisition of this merit represents a specific type of ally in an organization, society, or circle.</li>\n  <li>The rating of the merit reflects the level of influence within each group.</li>\n  <li>Different ratings offer varying levels of favors, from minor to significant to dangerous or criminal.</li>\n  <li>Doubtful requests may require a Manipulation + Persuasion roll, with a bonus equal to the character's Allies rating.</li>\n  <li>Penalties can apply based on the importance or danger of the request.</li>\n  <li>Allies are not always available, and calling in favors creates a debt that can be later requested.</li>\n</ul>",
+      "source": "WoD 114"
+    },
+    {
+      "type": "Social merits",
+      "name": "Status (Professional)",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character possesses a professional license in a specific profession.</li>\n  <li>The license grants unique privileges and benefits related to the profession.</li>\n  <li>For example, a licensed private investigator may have the right to carry a concealed weapon and access restricted databases.</li>\n  <li>When utilizing official channels, your character may need to make rolls such as Manipulation + Intimidation, Persuasion, or Socialize, depending on the situation.</li>\n  <li>The appropriate Skill is chosen based on the request, circumstances, and your character's standing within the organization.</li>\n  <li>Your character receives bonus dice equal to their Status dots.</li>\n  <li>Penalties may be applied if your character engages in browbeating (-1), threats (-2), pushing the limits of authority (-2), or exceeding their authority (-3 to -5).</li>\n</ul>",
+      "source": "WoD 116"
+    },
+    {
+      "type": "Social merits",
+      "name": "Contacts",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character has access to specific networks of connections for gathering information.</li>\n  <li>Each dot represents a different network your character can tap into.</li>\n  <li>Contacts focus on gathering information and do not provide services or direct aid.</li>\n  <li>To obtain information from contacts, your character needs to make a Manipulation + Persuasion or Socialize roll.</li>\n  <li>Penalties may apply based on factors like the rarity or confidentiality of the information.</li>\n  <li>Success doesn't guarantee specific information, as contacts may not know everything.</li>\n  <li>Dramatic failure may result in incomplete or misleading information, while failure means the contact lacks the needed information.</li>\n  <li>Success provides some helpful information, and exceptional success yields a wealth of information, often beyond what was asked.</li>\n  <li>Equipment or actions that can influence the outcome include gifts, bribes, favors, or penalties due to lack of bribes, frequent requests, confidentiality, scarcity, or obscurity of the information.</li>\n</ul>",
+      "source": "WoD 115"
+    },
+    {
+      "type": "Social merits",
+      "name": "Status (Police)",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character holds a position of authority within the police force, such as a sergeant or lieutenant.</li>\n  <li>They have legal powers of search, seizure, and arrest, along with access to databases and the ability to carry a firearm.</li>\n  <li>Efforts to get things done through official channels call for Manipulation + Intimidation, Persuasion, or Socialize rolls.</li>\n  <li>Choose the skill that is appropriate to the request, circumstances, and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties might apply if your character browbeats someone (-1), uses threats (-2), skirts the limits of their authority (-2), or exceeds their authority (-3 to -5).</li>\n</ul>",
+      "source": "WoD 116"
+    },
+    {
+      "type": "Social merits",
+      "name": "Status (Diplomatic)",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character is a registered diplomat for a sovereign country.</li>\n  <li>They enjoy benefits such as free lodging, access to their country's embassy, and immunity from foreign criminal prosecution.</li>\n  <li>Efforts to get things done through official channels call for Manipulation + Intimidation, Persuasion, or Socialize rolls.</li>\n  <li>Choose the skill that is appropriate to the request, circumstances, and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties might apply if your character browbeats someone (-1), uses threats (-2), skirts the limits of their authority (-2), or exceeds their authority (-3 to -5).</li>\n</ul>",
+      "source": "WoD 116"
+    },
+    {
+      "type": "Social merits",
+      "name": "Striking Looks",
+      "rating": "•• or ••••",
+      "prerequisites": "",
+      "description": "Your character is exceptionally attractive by modern standards. Their appearance adds +1/+2 to relevant Social rolls",
+      "source": "WoD 117"
+    },
+    {
+      "type": "Social merits",
+      "name": "Retainer",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character has a loyal assistant, aide, indentured servant, or fanatical follower.</li>\n  <li>The trusty companion was acquired through various means such as payment, indebtedness, blackmail, or supernatural influence.</li>\n  <li>The retainer is constantly loyal and follows almost any order without question.</li>\n  <li>Unless your character has direct control over the retainer's mind, they cannot be made to perform tasks that risk their own life or violate their own morals.</li>\n  <li>Each dot in this merit represents the training, capability, or flexibility of the retainer.</li>\n  <li>No roll is required to get results from the retainer; they perform the requested tasks unless subjected to abuse or intolerable assignments.</li>\n</ul>",
+      "source": "WoD 116"
+    },
+    {
+      "type": "Social merits",
+      "name": "Status (Military)",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character is an enlisted soldier with various perks and privileges.</li>\n  <li>They receive a monthly stipend and have the ability to possess military-grade firearms.</li>\n  <li>They also have access to restricted information and equipment.</li>\n  <li>High-ranking officers have even greater authority and may command units or initiate foreign operations.</li>\n  <li>Efforts to get things done through official channels call for Manipulation + Intimidation, Persuasion, or Socialize rolls.</li>\n  <li>Choose the skill that is appropriate to the request, circumstances, and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties might apply if your character browbeats someone (-1), uses threats (-2), skirts the limits of their authority (-2), or exceeds their authority (-3 to -5).</li>\n</ul>",
+      "source": "WoD 116"
+    },
+    {
+      "type": "Social merits",
+      "name": "Status (Medical)",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character is a licensed medical practitioner with privileges such as prescription writing and access to medical records.</li>\n  <li>They have the authority to enter restricted areas like crime and accident scenes.</li>\n  <li>Efforts to get things done through official channels require appropriate rolls such as Manipulation + Intimidation, Persuasion, or Socialize.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties may apply for browbeating (-1), using threats (-2), pushing the limits of authority (-2), or exceeding authority (-3 to -5).</li>\n</ul>",
+      "source": "WoD 116"
+    },
+    {
+      "type": "Social merits",
+      "name": "Status (Religious)",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character is a licensed minister, granting them access to various individuals and places.</li>\n  <li>This includes accused criminals, hospital patients, and restricted areas in religious institutions.</li>\n  <li>Efforts to get things done through official channels require appropriate rolls such as Manipulation + Intimidation, Persuasion, or Socialize.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties may apply for browbeating (-1), using threats (-2), pushing the limits of authority (-2), or exceeding authority (-3 to -5).</li>\n</ul>",
+      "source": "WoD 116"
+    },
+    {
+      "type": "Social merits",
+      "name": "Fame",
+      "rating": "• to •••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character has a measure of recognition in today's media-saturated society.</li>\n  <li>This recognition could come from being a performer, athlete, politician, or other public personality.</li>\n  <li>Being famous grants your character star treatment and a +1 modifier to Socialize (or Persuasion) rolls among those impressed by their celebrity status.</li>\n  <li>However, fame comes with a drawback - it's difficult for your character to go places without being recognized.</li>\n  <li>The Storyteller should apply a +1 modifier per dot to a Wits + Composure roll to determine if your character is recognized by anyone on the street.</li>\n  <li>An exceptional success indicates loyal fans who approach your character for autographs, pictures, and conversations.</li>\n</ul>",
+      "source": "WoD 115"
+    },
+    {
+      "type": "Social merits",
+      "name": "Status (Other)",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character possesses authority and sway within a group or organization.</li>\n  <li>The depth of this influence is proportional to the dots in this merit.</li>\n  <li>Efforts to get things done through official channels still call for Manipulation + Intimidation, Persuasion, or Socialize rolls.</li>\n  <li>The appropriate skill depends on the request, circumstances, and your character's standing within the organization.</li>\n  <li>Your character receives bonus dice equal to their Status dots when making these rolls.</li>\n  <li>Penalties may apply if your character browbeats someone (-1), uses threats (-2), skirts the limits of their authority (-2), or exceeds their authority (-3 to -5).</li>\n</ul>",
+      "source": "WoD 116"
+    },
+    {
+      "type": "Social merits",
+      "name": "Mentor",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character has a friend and teacher who provides advice and guidance.</li>\n  <li>The mentor acts on your character's behalf, offering advice and assistance as determined by the Storyteller.</li>\n  <li>The mentor may use their influence or abilities to help your character, but they expect your character to take action and not rely on constant aid.</li>\n  <li>A mentor may ask for something in return for their assistance, leading your character into interesting situations.</li>\n  <li>The number of dots purchased determines the mentor's power, knowledge, and experience.</li>\n  <li>One dot indicates a mentor with specialized skills and some experience in your character's field of interest.</li>\n  <li>Five dots indicate a mentor with immense influence and power, watching over your character and having a pivotal agenda in which your character is involved.</li>\n</ul>",
+      "source": "WoD 115"
+    },
+    {
+      "type": "Social merits",
+      "name": "Status (Hobby Club)",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character is a member of a Hobbyist Club, granting access to the club's meeting hall and a network of members for information or assistance.</li>\n  <li>Higher-ranking members have broader connections and influence over civic groups and political figures.</li>\n  <li>Efforts to get things done through official channels require Manipulation + Intimidation, Persuasion, or Socialize rolls, based on the appropriate Skill and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots, reflecting their influence and reputation within the club.</li>\n  <li>Penalties may apply if your character uses aggressive or unethical methods to achieve their goals.</li>\n</ul>",
+      "source": "WoD 116"
+    },
+    {
+      "type": "Social merits",
+      "name": "Status (Corporate)",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character is a low-level corporate executive, granting them access to company resources such as corporate credit cards, vehicles, and technology.</li>\n  <li>They may also have privileged information and connections within the company.</li>\n  <li>Efforts to get things done through official channels require Manipulation + Intimidation, Persuasion, or Socialize rolls, based on the appropriate Skill and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots, reflecting their influence and position within the company.</li>\n  <li>Penalties may apply if your character uses aggressive or unethical methods to achieve their goals.</li>\n</ul>",
+      "source": "WoD 116"
+    },
+    {
+      "type": "Social merits",
+      "name": "Resources",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>This merit measures your character's material resources, including possessions and wealth.</li>\n  <li>Dots represent disposable income and the general level of wealth your character has.</li>\n  <li>Each dot level corresponds to a range of income and assets.</li>\n  <li>Resources can be used to determine if your character can reasonably afford purchases or expenditures.</li>\n  <li>Your character's Resources dots represent available cash at any given moment.</li>\n  <li>The Storyteller can influence how your character's dots might decrease or be salvaged based on story events.</li>\n</ul>",
+      "source": "WoD 115"
+    },
+    {
+      "type": "Social merits",
+      "name": "Barfly",
+      "rating": "•",
+      "prerequisites": "",
+      "description": "Find ways into bars and clubs",
+      "source": "WoD 114"
+    },
+    {
+      "type": "Social merits",
+      "name": "Inspiring",
+      "rating": "••••",
+      "prerequisites": "Presence ••••",
+      "description": "<ul>\n  <li>Your character possesses the ability to inspire others during challenging situations.</li>\n  <li>Once per game session, your character can rally those around them by making a Presence + Persuasion roll.</li>\n  <li>If successful, individuals actively assisting your character and within earshot regain one spent Willpower point (up to their maximum Willpower dots).</li>\n  <li>This merit cannot be used on the character themselves.</li>\n  <li>It can only be used on the same individuals once per day.</li>\n</ul>",
+      "source": "WoD 115"
+    },
+    {
+      "type": "Sanctum merits",
+      "name": "Alchemical Lab",
+      "rating": "• to •••••",
+      "prerequisites": "Sanctum",
+      "description": "<ul>\n  <li>Your character possesses a laboratory, they engage in spiritual experiments and practice alchemy.</li>\n  <li>The character's merit dots provide an equipment bonus for creating gross matter and substances that retain and deliver spell effects.</li>\n  <li>More dots in the merit increase the chances of having the required ingredients for new projects.</li>\n  <li>Refer to the \"Producing Gross Matter\" section for further details on using the laboratory.</li>\n</ul>",
+      "source": "TotM p146"
+    },
+    {
+      "type": "Sanctum merits",
+      "name": "Alchemical Lab (Shared)",
+      "rating": "• to •••••",
+      "prerequisites": "Sanctum (Shared)",
+      "description": "<ul>\n  <li>Your character possesses a laboratory, they engage in spiritual experiments and practice alchemy.</li>\n  <li>The character's merit dots provide an equipment bonus for creating gross matter and substances that retain and deliver spell effects.</li>\n  <li>More dots in the merit increase the chances of having the required ingredients for new projects.</li>\n  <li>Refer to the \"Producing Gross Matter\" section for further details on using the laboratory.</li>\n</ul>",
+      "source": "TotM p146"
+    },
+    {
+      "type": "Sanctum merits",
+      "name": "Athenaeum (Shared)",
+      "rating": "• to •••••",
+      "prerequisites": "The Mysterium, Status (Order), Sanctum (Shared)",
+      "description": "<ul>\n  <li>This merit allows you to convert each dot into two dots in the Laboratory, Library, and Scriptorium merits.</li>\n  <li>You must use these converted dots to acquire at least two different merits from the given list.</li>\n  <li>You can combine these converted dots with the standard version of each merit.</li>\n  <li>The resulting merits cannot exceed five dots, with a few potential exceptions based on ancient or secret circumstances.</li>\n</ul>",
+      "source": "Myst p66"
+    },
+    {
+      "type": "Sanctum merits",
+      "name": "Scriptorium (Shared)",
+      "rating": "••+",
+      "prerequisites": "The Mysterium, Status (Order), Sanctum (Shared)",
+      "description": "<ul>\n  <li>The Scriptorium merit is a facility used by the Mysterium to distill magical knowledge into formal rotes.</li>\n  <li>It has two aspects: Scriptorium Subjects and Scriptorium Depth.</li>\n  <li>Scriptorium Subjects represents the different Arcana, with each dot encompassing one of the ten Arcanum.</li>\n  <li>Scriptorium Depth determines the maximum rank of rotes that can be studied in each Arcanum.</li>\n  <li>Studying applicable rotes in a scriptorium reduces the experience cost by half.</li>\n  <li>Using a scriptorium requires the mage to have Academics dots equal to the highest Arcanum rank of the rote being researched.</li>\n  <li>Mages cannot add Subject Arcana they do not know or raise the scriptorium's Depth higher than their highest Arcanum rank.</li>\n  <li>Multiple characters can combine their merit dots to share a scriptorium, but the maximum rating for Subjects or Depth is five dots.</li>\n  <li>There may be exceptional scriptoria that go beyond this limit, such as legendary Athenaea.</li>\n</ul>",
+      "source": ""
+    },
+    {
+      "type": "Sanctum merits",
+      "name": "Portable",
+      "rating": "•",
+      "prerequisites": "Sanctum",
+      "description": "<ul>\n  <li>The Portable Sanctum merit allows mages who travel frequently to create temporary sanctuaries for their magical activities.</li>\n  <li>Creating a portable sanctum involves an extended roll of Wits + Crafts or Larceny.</li>\n  <li>Successes on the roll are used to \"buy\" the sanctum's traits, starting with Portability and Size.</li>\n  <li>Other applicable Sanctum Traits can be added up to the normal ratings of the Sanctum merit.</li>\n  <li>The Portable Sanctum can be combined with other Sanctum merits, except for the Sanctum Gauntlet merit.</li>\n  <li>The sanctum's traits may decrease over time. The Storyteller rolls dice each day to determine if the sanctum loses a trait dot.</li>\n  <li>A mage can possess both a portable sanctum and a permanent one, purchasing them separately.</li>\n  <li>Portable sanctums are personal and cannot be shared.</li>\n</ul>",
+      "source": ""
+    },
+    {
+      "type": "Sanctum merits",
+      "name": "Library",
+      "rating": "• to •••••",
+      "prerequisites": "Sanctum",
+      "description": "<ul>\n  <li>Your character possesses a personal library within their sanctum, containing valuable information for natural and supernatural research.</li>\n  <li>Each dot in this merit represents a field of study or area of knowledge within the library.</li>\n  <li>Accessing the library requires a research task, with each roll taking 10 minutes.</li>\n  <li>Success does not guarantee specific information, as libraries may have differing perspectives and limitations.</li>\n  <li>Other mages may consult the library, but without the merit, it takes longer.</li>\n  <li>The library is protected within the sanctum, and multiple mages can share its benefits and invite others to use it.</li>\n  <li>In case of conflicts, library privileges can be revoked or divided among the users.</li>\n</ul>",
+      "source": "M:tA 85"
+    },
+    {
+      "type": "Sanctum merits",
+      "name": "Hallow",
+      "rating": "• to •••••",
+      "prerequisites": "Sanctum",
+      "description": "<ul>\n  <li>Within your character's sanctum, there is a Hallow, a nexus of magical energy that generates Mana each day.</li>\n  <li>The Hallow is typically found in high places with visible stars.</li>\n  <li>The Hallow generates a number of Mana points equal to its dot rating daily.</li>\n  <li>The mage can replenish their own Mana by performing an oblation or using a Prime 3 spell.</li>\n  <li>The Hallow's Mana has a particular time for replenishment, often at sundown, sunrise, or midnight.</li>\n  <li>Unharvested Mana congeals into tass or imbues objects.</li>\n  <li>The Hallow's Mana carries a resonance quality, affecting spellcasting rolls with penalties based on the opposition of the resonance to the spell's effects.</li>\n  <li>The Hallow's close vicinity allows mages within its range to avoid spending one point of Mana when required, except for excess points.</li>\n  <li>This power cannot be siphoned or stored by Prime magic or the mage's personal Mana reserve.</li>\n</ul>",
+      "source": "M:tA p83"
+    },
+    {
+      "type": "Sanctum merits",
+      "name": "Hallow (Shared)",
+      "rating": "• to •••••",
+      "prerequisites": "Sanctum (Shared)",
+      "description": "<ul>\n  <li>Within your character's sanctum, there is a Hallow, a nexus of magical energy that generates Mana each day.</li>\n  <li>The Hallow is typically found in high places with visible stars.</li>\n  <li>The Hallow generates a number of Mana points equal to its dot rating daily.</li>\n  <li>The mage can replenish their own Mana by performing an oblation or using a Prime 3 spell.</li>\n  <li>The Hallow's Mana has a particular time for replenishment, often at sundown, sunrise, or midnight.</li>\n  <li>Unharvested Mana congeals into tass or imbues objects.</li>\n  <li>The Hallow's Mana carries a resonance quality, affecting spellcasting rolls with penalties based on the opposition of the resonance to the spell's effects.</li>\n  <li>The Hallow's close vicinity allows mages within its range to avoid spending one point of Mana when required, except for excess points.</li>\n  <li>This power cannot be siphoned or stored by Prime magic or the mage's personal Mana reserve.</li>\n</ul>",
+      "source": "M:tA p83"
+    },
+    {
+      "type": "Sanctum merits",
+      "name": "Sanctum",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>The Sanctum merit represents a mage's personal stronghold where they can practice their magic in privacy.</li>\n  <li>The merit is divided into two aspects: Sanctum Size and Sanctum Security.</li>\n  <li>Players allocate their merit dots between these aspects to customize their sanctum.</li>\n  <li>Sanctum Size determines the physical space and storage capacity of the sanctum.</li>\n  <li>Sanctum Security represents the difficulty of intrusion into the sanctum.</li>\n  <li>Each dot in Security subtracts dice from intrusion attempts and provides a bonus to initiative for those inside.</li>\n  <li>Characters without any dots in Sanctum have humble chambers or share space with others, lacking the mechanical benefits of a dedicated sanctum.</li>\n</ul>",
+      "source": ""
+    },
+    {
+      "type": "Sanctum merits",
+      "name": "Athenaeum",
+      "rating": "• to •••••",
+      "prerequisites": "The Mysterium, Status (Order), Sanctum",
+      "description": "<ul>\n  <li>This merit allows you to convert each dot into two dots in the Laboratory, Library, and Scriptorium merits.</li>\n  <li>You must use these converted dots to acquire at least two different merits from the given list.</li>\n  <li>You can combine these converted dots with the standard version of each merit.</li>\n  <li>The resulting merits cannot exceed five dots, with a few potential exceptions based on ancient or secret circumstances.</li>\n</ul>",
+      "source": "Myst p66"
+    },
+    {
+      "type": "Sanctum merits",
+      "name": "Library (Shared)",
+      "rating": "• to •••••",
+      "prerequisites": "Sanctum (Shared)",
+      "description": "<ul>\n  <li>Your character possesses a personal library within their sanctum, containing valuable information for natural and supernatural research.</li>\n  <li>Each dot in this merit represents a field of study or area of knowledge within the library.</li>\n  <li>Accessing the library requires a research task, with each roll taking 10 minutes.</li>\n  <li>Success does not guarantee specific information, as libraries may have differing perspectives and limitations.</li>\n  <li>Other mages may consult the library, but without the merit, it takes longer.</li>\n  <li>The library is protected within the sanctum, and multiple mages can share its benefits and invite others to use it.</li>\n  <li>In case of conflicts, library privileges can be revoked or divided among the users.</li>\n</ul>",
+      "source": "M:tA 85"
+    },
+    {
+      "type": "Sanctum merits",
+      "name": "Sanctum (Shared)",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>The Sanctum merit represents a mage's personal stronghold where they can practice their magic in privacy.</li>\n  <li>The merit is divided into two aspects: Sanctum Size and Sanctum Security.</li>\n  <li>Players allocate their merit dots between these aspects to customize their sanctum.</li>\n  <li>Sanctum Size determines the physical space and storage capacity of the sanctum.</li>\n  <li>Sanctum Security represents the difficulty of intrusion into the sanctum.</li>\n  <li>Each dot in Security subtracts dice from intrusion attempts and provides a bonus to initiative for those inside.</li>\n  <li>Characters without any dots in Sanctum have humble chambers or share space with others, lacking the mechanical benefits of a dedicated sanctum.</li>\n  <li>Both Sanctum Size and Sanctum Security have a maximum rating of 5, with a total limit of 10 dots for the entire merit.</li>\n</ul>",
+      "source": ""
+    },
+    {
+      "type": "Sanctum merits",
+      "name": "Scriptorium",
+      "rating": "••+",
+      "prerequisites": "The Mysterium, Sanctum, Status (Order)",
+      "description": "<ul>\n  <li>The Scriptorium merit is a facility used by the Mysterium to distill magical knowledge into formal rotes.</li>\n  <li>It has two aspects: Scriptorium Subjects and Scriptorium Depth.</li>\n  <li>Scriptorium Subjects represents the different Arcana, with each dot encompassing one of the ten Arcanum.</li>\n  <li>Scriptorium Depth determines the maximum rank of rotes that can be studied in each Arcanum.</li>\n  <li>Studying applicable rotes in a scriptorium reduces the experience cost by half.</li>\n  <li>Using a scriptorium requires the mage to have Academics dots equal to the highest Arcanum rank of the rote being researched.</li>\n  <li>Mages cannot add Subject Arcana they do not know or raise the scriptorium's Depth higher than their highest Arcanum rank.</li>\n  <li>Multiple characters can combine their merit dots to share a scriptorium, but the maximum rating for Subjects or Depth is five dots.</li>\n  <li>There may be exceptional scriptoria that go beyond this limit, such as legendary Athenaea.</li>\n</ul>",
+      "source": ""
+    },
+    {
+      "type": "Physical merits",
+      "name": "Toxin Resistance",
+      "rating": "••",
+      "prerequisites": "Stamina •••",
+      "description": "+2 on Stamina rolls to resist toxins",
+      "source": "WoD 113"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Strong Back",
+      "rating": "•",
+      "prerequisites": "Strength ••",
+      "description": "+1 to lift or carry",
+      "source": "WoD 113"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Iron Stamina",
+      "rating": "• to •••",
+      "prerequisites": "Stamina ••• or Resolve •••",
+      "description": "You can push your body well past the limits of physical endurance when you have to. Each dot eliminates a negative modifier (on a one-for-one basis) when resisting the effects of fatigue or injury.",
+      "source": "WoD 112"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Iron Stomach",
+      "rating": "••",
+      "prerequisites": "Stamina ••",
+      "description": "Your character can eat almost anything, under almost any conditions. Add two dice to appropriate Survival rolls. Add three to Stamina to resist deprivation",
+      "source": "WoD 113"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Disarm",
+      "rating": "••",
+      "prerequisites": "Dexterity •••, Weaponry •",
+      "description": "When making a normal attack, compare your successes to the opponent’s Dexterity. If you get a number of successes equal to or greater than the opponent’s Dexterity, you can choose to have your character disarm him instead of doing damage. A weapon lands a number of yards away from the opponent equal to your successes rolled.",
+      "source": "WoD 110"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Brawling Dodge",
+      "rating": "•",
+      "prerequisites": "Strength ••, Brawl •",
+      "description": "Add Brawl rather than doubling Defense on Dodge",
+      "source": "WoD 110"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Quick Draw",
+      "rating": "•",
+      "prerequisites": "Dexterity •••",
+      "description": "Draw weapon reflexively without the normal loss of Defense. Separate Quick Draw merits must be acquired for use with firearms and melee weapons.",
+      "source": "WoD 113"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Fleet of Foot",
+      "rating": "• to •••",
+      "prerequisites": "Strength ••",
+      "description": "+1/dot to Speed",
+      "source": "WoD 112"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Quick Healer",
+      "rating": "••••",
+      "prerequisites": "Stamina ••••",
+      "description": "Heal twice as fast",
+      "source": "WoD 113"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Disarm",
+      "rating": "••",
+      "prerequisites": "Dexterity •••, Weaponry •",
+      "description": "Can disarm if damage exceeds Dexterity",
+      "source": "WoD 110"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Ambidextrous",
+      "rating": "•••",
+      "prerequisites": "",
+      "description": "Ignore offhand penalties. You do not suffer a -2 penalty for using your off-hand in combat or to perform other actions. Character creation only.",
+      "source": "WoD 110"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Stunt Driver",
+      "rating": "•••",
+      "prerequisites": "Dexterity •••",
+      "description": "Your character can drive a vehicle and perform an unrelated action in the same turn.",
+      "source": "WoD 113"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Fighting Finesse",
+      "rating": "•• mult",
+      "prerequisites": "Dexterity •••, Weaponry ••",
+      "description": "Your character prefers to fight with a chosen weapon in a manner that favors agility over power. Substitute Dexterity for Strength. This merit may be purchased multiple times.",
+      "source": "WoD 110"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Natural Immunity",
+      "rating": "•",
+      "prerequisites": "Stamina ••",
+      "description": "+2 on Stamina rolls to resist illness",
+      "source": "WoD 113"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Weaponry Dodge",
+      "rating": "•",
+      "prerequisites": "Strength ••, Weaponry •",
+      "description": "Add Weaponry rather than doubling Defense on Dodge",
+      "source": "WoD 114"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Direction Sense",
+      "rating": "•",
+      "prerequisites": "",
+      "description": "Your character has an innate sense of direction that instinctively allows him to remain oriented.",
+      "source": "WoD 110"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Giant",
+      "rating": "••••",
+      "prerequisites": "",
+      "description": "Your character is well over two meters tall and over 110 kilograms in weight. +1 Size. Character Creation only.",
+      "source": "WoD 112"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Fast Reflexes",
+      "rating": "• or ••",
+      "prerequisites": "Dexterity •••",
+      "description": "+1/dot to Initiative",
+      "source": "WoD 110"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Strong Lungs",
+      "rating": "•••",
+      "prerequisites": "Athletics •••",
+      "description": "+2 on Stamina rolls to hold breath",
+      "source": "WoD 113"
+    },
+    {
+      "type": "Physical merits",
+      "name": "Fresh Start",
+      "rating": "•",
+      "prerequisites": "Fast Reflexes",
+      "description": "Delay action into next round. Your character has the ability to change their position in the Initiative order for the next turn and all future turns by dedicating an action to do so. They can choose to place themselves at a different position in the roster, even if it means going first when they previously went last.",
+      "source": "WoD 112"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Holistic Awareness",
+      "rating": "•••",
+      "prerequisites": "",
+      "description": "Help others heal faster. Make an Intelligence + Medicine roll once per game when your character spends an hour treating a patient.",
+      "source": "WoD 109"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Language",
+      "rating": "• mult",
+      "prerequisites": "",
+      "description": "Speak another language. You must specify which language your character is familiar with when purchasing this merit.",
+      "source": "WoD 109, errata"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Trained Memory",
+      "rating": "•",
+      "prerequisites": "Composure ••, Investigation •",
+      "description": "Memorize information perfectly; roll to memorize for entire scene (i.e. everything a character could sense in a given moment) instead of specific information or sensory input. Just as for any other character, you must make an Intelligence + Composure roll for the\ncharacter to remember any additional details about a subject during stressful situations (such as combat).",
+      "source": "GotV 46"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Rational Explanation (Science)",
+      "rating": "••••",
+      "prerequisites": "Resolve ••, Science ••••",
+      "description": "When required to make a Resolve + Composure roll to resist fear, panic or some other mental breakdown in the face of the supernatural, if you spend a Willpower, add your Science or Academics dots to the roll.",
+      "source": "FC 133"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Crafter's Sense",
+      "rating": "•••",
+      "prerequisites": "Crafts •••",
+      "description": "Your character has an intuitive sense of her craft. When engaging in your character's crafts, the storyteller may make a reflexive Wits + Crafts roll one per game if your character is about to embark on a disasterouse course of action reguarding their craft.",
+      "source": "FC 131"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Common Sense",
+      "rating": "•",
+      "prerequisites": "",
+      "description": "Storyteller can make a reflexive Wits + Composure roll once per game for your character if they are about to embark on a disasterouse course of action. Character Creation only.",
+      "source": "WoD 108"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Area of Expertise",
+      "rating": "••",
+      "prerequisites": "Resolve ••",
+      "description": "Effect: Increase a Mental Specialty bonus to +2. Drawback: You cannot have any other speciality in the same skill.",
+      "source": "FC 131"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Scientist's Sense",
+      "rating": "•••",
+      "prerequisites": "Science •••",
+      "description": "Speciality in Science required. Gain Common Sense related to your area of Science expertise.",
+      "source": "FC 133"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Danger Sense",
+      "rating": "••",
+      "prerequisites": "",
+      "description": "Your character has a well-developed survival instinct that warns him of impending danger. +2 to detect ambush",
+      "source": "WoD 108"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Whispers",
+      "rating": "•",
+      "prerequisites": "",
+      "description": "Your character’s mind has ripped open, allowing tendrils of underlying primordial truths to reach into his psyche. Can purchase Dream and use it as Instant Action, at the cost of sanity",
+      "source": "Myst 179"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Interdisciplinary Specialty",
+      "rating": "•",
+      "prerequisites": "",
+      "description": "Requires Two Skills ••• and a specialty. Share Specialty between two Skills",
+      "source": "FC 132"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Vision",
+      "rating": "• to •••••",
+      "prerequisites": "Intelligence •••• or Wits •••• or Resolve •••• or Composure ••••",
+      "description": "<ul>\n<li>The character possesses a valuable attribute called Vision.</li>\n<li>By expending a Willpower point, the character can rely on their vision to gain bonus dice in extended actions.</li>\n<li>Each success rolled with the Vision attribute adds bonus dice to subsequent rolls for the extended action.</li>\n<li>In collaborative efforts, the character can use their Vision dots as a substitute for an Attribute or a Skill when assisting another character in an extended action.</li>\n<li>Vision cannot replace Strength for tasks like lifting.</li>\n<li>Spending Willpower points to activate this merit grants access to its benefits but does not provide other typical Willpower benefits.</li>\n<li>The character can only spend one Willpower point per turn.</li>\n</ul>",
+      "source": "FC 133"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Make Do",
+      "rating": "• to ••• mult",
+      "prerequisites": "Wits •••",
+      "description": "Remove -1/dot penalty for shoddy tools. When you purchase this merit, assign it to a particular skill. This merit can be purchased multiple times to apply to multiple Skills.",
+      "source": "FC 132"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Eidetic Memory",
+      "rating": "••",
+      "prerequisites": "",
+      "description": "Your character has a near-photographic memory, being able to recall vast amounts of observed detail with astonishing accuracy. Remember with ease, gain +2 to Intelligence + Composure to remember facts from large swaths of data. Character Creation only.",
+      "source": "WoD 108"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Encyclopedic Knowledge",
+      "rating": "••••",
+      "prerequisites": "",
+      "description": "Your character is a veritable font of useful (and sometimes useless) information on a wide variety of topics. You can make Intelligence + Wits rolls to gain facts outside their normal realm of experience. Character Creation only.",
+      "source": "WoD 109"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Meditative Mind",
+      "rating": "•",
+      "prerequisites": "Familiar",
+      "description": "All environmental penalties imposed to Wits + Composure draws to meditate are ignored.",
+      "source": "WoD 109"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Informative",
+      "rating": "•• or •••• mult",
+      "prerequisites": "Wits ••",
+      "description": "Your character may not be much of a writer or public speaker, but get him talking about his work and he becomes downright erudite. Use specified Skill in place of Expression, up to a maximum of the dots in this merit when discussing matters related to this skill. You must specify the Mental skill to which this merit applies.",
+      "source": "FC 131"
+    },
+    {
+      "type": "Mental merits",
+      "name": "Rational Explanation (Academics)",
+      "rating": "••••",
+      "prerequisites": "Resolve ••, Academics ••••",
+      "description": "When required to make a Resolve + Composure roll to resist fear, panic or some other mental breakdown in the face of the supernatural, if you spend a Willpower, add your Science or Academics dots to the roll.",
+      "source": "FC 133"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Familiar",
+      "rating": "••• or ••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Your character has a magical bond with an immaterial and invisible spirit from the Shadow Realm.</li>\n  <li>The familiar normally dwells in Twilight and can manifest like ghosts, but their ephemeral bodies are otherwise invisible and intangible to the physical world.</li>\n  <li>A familiar must manifest or use Numina to affect anything in the physical world.</li>\n  <li>The familiar can touch and be seen by its bonded individual, who is always able to see the familiar.</li>\n  <li>Familiars can accompany their masters into the Shadow Realm or travel there themselves if their Numina allow it.</li>\n</ul>",
+      "source": "M:tA p82"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Status (Order)",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>Order Status represents a mage's rank, achievements, and responsibilities within a magical order.</li>\n  <li>Having at least one dot of Order Status is necessary to access the special abilities and secrets of the mage's order, including learning the order's rotes.</li>\n  <li>Leaving an order after acquiring such abilities does not cause them to be lost, but the mage may need to find a new teacher to learn additional order-specific abilities.</li>\n  <li>Violating an order's oaths and divulging its secrets may result in punishment.</li>\n  <li>Order Status is not solely tied to specific titles; it reflects an individual's accomplishments within the order.</li>\n  <li>Levels of Order Status range from being known to a select subset of the order to being renowned nationally.</li>\n  <li>The highest level indicates that the mage's name and face are synonymous with the order, and their exploits are taught to new members.</li>\n</ul>",
+      "source": "M:tA p88"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Masque",
+      "rating": "• mult",
+      "prerequisites": "Manipulation •••, The Guardians of the Veil, Status (Order)",
+      "description": "<ul>\n  <li>The Greater Masque merit allows your character to master a specific Greater Masque.</li>\n  <li>When your character possesses the token of that Masque, they gain the bonus provided by the Masque.</li>\n  <li>Wearing or using the token while assuming the Masque's identity as a disguise grants a +2 dice bonus to disguise attempts associated with that Masque's identity.</li>\n  <li>You can purchase this merit multiple times to represent training in different Greater Masques or different identities within the same Greater Masque.</li>\n  <li>Each Greater Masque favors different skills.</li>\n  <li>You also acquire the corresponding drawback of the Masque.</li>\n  <li>The dice modifiers of the Masque's benefit and drawback do not apply to magical or supernatural tasks.</li>\n</ul>",
+      "source": "GotV p69"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Gesture Lore",
+      "rating": "• to •••••",
+      "prerequisites": "Dexterity •••, Occult •••",
+      "description": "<ul>\n<li>This merit allows a mage to substitute one gesture type for another in a rote they have learned.</li>\n<li>Each dot in this merit allows the substitution of one gesture type.</li>\n<li>The mage can choose from the gesture types of asana, darshana, mudra, nata, and pranayama.</li>\n<li>The substitution can be made for the mandated gesture in a specific rote.</li>\n<li>The mage can also pass on the rotes they know using one of the alternate gesture forms they have studied.</li>\n<li>This merit only applies to rotes the mage knows and only for personal castings of those rotes.</li>\n<li>A mage can only pass on one gesture set while teaching a specific rote, regardless of how many gesture sets they know.</li>\n</ul>",
+      "source": "TotM p94"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Imbued Item",
+      "rating": "••+ mult orto",
+      "prerequisites": "",
+      "description": "<ul>\n  <li>A magical item possessed by your mage has one or more powers imbued into it using the Prime Arcanum.</li>\n  <li>The base merit dot cost of an imbued item is determined by adding one dot, the dot rating of its Arcanum power, and one dot per additional power or the highest Arcanum dot rating involved.</li>\n  <li>Imbued items can have persistent or contingent powers.</li>\n  <li>Persistent powers are always active, while contingent powers need to be activated for each use.</li>\n  <li>If a contingent power requires Mana, the item must either have its own Mana pool or the mage must supply the points.</li>\n  <li>Imbued items' vulgar powers can invoke Paradoxes.</li>\n  <li>An imbued item can also be enhanced. The cost of all imbuements and enhancements is added together to determine the item's total cost.</li>\n</ul>",
+      "source": "M:tA p84"
+    },
+    {
+      "type": "Mage merits",
+      "name": "High Speech",
+      "rating": "•",
+      "prerequisites": "",
+      "description": "allows use of Words of Power",
+      "source": "M:tA p84"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Ritual Synergy",
+      "rating": "••• or •••••",
+      "prerequisites": "Gnosis •••",
+      "description": "<ul>\n<li>The Ritual Synergy merit allows mages to perform group rituals where participants contribute their abilities to enhance the spell.</li>\n<li>Mages with this merit can bypass the requirement of each participant needing to be able to cast the spell individually.</li>\n<li>At the ••• level of the merit, the leader of the ritual must be able to cast the spell, but participants with this merit don't need to know how to cast it themselves.</li>\n<li>The leader rolls their normal dice pool, while each participant's dice pool is equal to their own Gnosis.</li>\n<li>Participants with knowledge of the primary Arcanum used in the spell can add their dots in that Arcanum to the dice pool.</li>\n<li>Even if their knowledge is below the required level, they can contribute their dots in the primary Arcanum.</li>\n<li>At the beginning of the ritual, each participant, including the leader, must spend a point of Mana.</li>\n</ul>",
+      "source": "TotM 74"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Destiny",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n<li>Your character's thread stands out in the skein of fate.</li>\n<li>She has the ability to weave her thread into a sound pattern of her choosing.</li>\n<li>She has a fatal flaw that others can use to tear apart her pattern.</li>\n<li>Each chapter, she has a pool of destiny dice equal to twice her dots in this merit.</li>\n<li>She can add destiny dice to any dice pool, using them all at once or splitting them up.</li>\n<li>Once used, destiny dice are gone until the next chapter or game session.</li>\n<li>There is a drawback: her bane, which can bring her down.</li>\n<li>Her bane penalizes her dice pools by one die per Destiny dot whenever it comes into play.</li>\n</ul>",
+      "source": "M:tA p81"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Glyph Lore",
+      "rating": "• to ••••",
+      "prerequisites": "High Speech, Intelligence •••, Occult •••",
+      "description": "<ul>\n<li>The merit grants automatic understanding of High Speech glyphs.</li>\n<li>Each dot corresponds to comprehension of a specific category of glyphs.</li>\n<li>Categories include Classical, Illuminated, Palimpsest, and Vulgar.</li>\n<li>Mage can effortlessly comprehend glyphs regardless of cultural origin.</li>\n<li>Mage can use runes to extend spell duration.</li>\n<li>Mage can inscribe learned rotes using the chosen form of High Speech.</li>\n<li>The chosen form can differ from the original form in which the rote was learned.</li>\n</ul>",
+      "source": "TotM p97"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Ancient Signs",
+      "rating": "•••",
+      "prerequisites": "Occult •••, The Guardians of the Veil, Status (Order)",
+      "description": "<ul>\n<li>The character possesses knowledge of symbols and tokens implanted by the Guardians of the Veil.</li>\n<li>By making a Wits + Occult roll, successes add dice to social dice pools when interacting with secret societies that use these symbols.</li>\n<li>This helps the character convince the society of their membership or feign a higher status.</li>\n<li>Even in the present day, unrelated organizations still use signs and tokens created by Guardian Cultors.</li>\n</ul>",
+      "source": "GotV p58"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Mystery Initiation",
+      "rating": "• to •••••",
+      "prerequisites": "The Mysterium, Status (Order) •",
+      "description": "<ul>\n<li>All Mysterium mages undergo stages of initiation in the Atlantean Mystery.</li>\n<li>The initiation process varies in depth and significance for each mage.</li>\n<li>For some, it is a recognition of respect and added responsibility.</li>\n<li>For those who deeply understand and connect with the Mystery, each initiation brings a Mystery Revelation.</li>\n<li>Mystery Revelations grant mechanical benefits reflecting the enlightenment gained through the rites.</li>\n</ul>",
+      "source": "Myst p102"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Sleepwalker Retainer",
+      "rating": "• to ••••• mult",
+      "prerequisites": "",
+      "description": "<ul>\n<li>Your character has a single Sleepwalker as a retainer.</li>\n<li>The Sleepwalker has been magically initiated into the secrets of the order.</li>\n<li>The Sleepwalker is aware of the existence of magic.</li>\n<li>Your character has recruited the Sleepwalker as an assistant.</li>\n<li>Your character can openly practice magic in the Sleepwalker's presence without fear of betraying the Mysteries.</li>\n<li>This merit functions similarly to the Retainer merit.</li>\n</ul>",
+      "source": "M:tA p88"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Graduate of Otranto",
+      "rating": "•••",
+      "prerequisites": "Acanthus, The Mysterium, Status (Order)",
+      "description": "Graduates of Otranto possess a deep understanding of doom. When casting certain spells like \"The Evil Eye,\" \"Monkey's Paw,\" \"Forge Doom,\" and \"Great Curse,\" they gain a +2 dice bonus to their spellcasting pools. The Storyteller may extend this bonus to other curses utilizing the Fate Arcanum. \nHowever, using this benefit comes with a drawback. The mage takes on a portion of the target's doom, resulting in an additional Paradox die, even if the spell appeared plausible and covert.",
+      "source": "Myst p72"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Artifact",
+      "rating": "•••+ mult orto",
+      "prerequisites": "",
+      "description": "<ul>\n<li>An Artifact is a magical item that originated in a Supernal Realm or has been touched by Supernal power.</li>\n<li>The base cost of an Artifact is 2 dots plus the dot-rating of the Arcanum power it mimics, plus one dot per additional power.</li>\n<li>Artifacts are unique and legendary, often with a historical or mythical significance.</li>\n<li>Only mages can use Artifacts; Sleepers and other supernatural creatures lack the necessary connection to the Supernal World.</li>\n<li>Artifacts have a Durability that is two points higher than normal for their materials and manufacture.</li>\n<li>Artifacts can have persistent or contingent powers. Persistent powers are always active, while contingent powers need to be activated for each use.</li>\n<li>Some Artifact powers require Mana, which can be drawn from the Artifact itself or from the mage's own reserves.</li>\n<li>Artifact powers can invoke Paradoxes and are subject to the same rules as spells, including vulgar effects and Sleeper disbelief.</li>\n</ul>",
+      "source": "M:tA p80"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Thrall",
+      "rating": "••• mult",
+      "prerequisites": "",
+      "description": "<ul>\n<li>Your mage has physical control over another mage's Soul Stone, making that mage his thrall.</li>\n<li>The mage can demand up to three favors from the thrall before he must return the Soul Stone.</li>\n<li>The favors can range from weak to daunting, but if they are particularly difficult or dangerous, the thrall can seek redress from the Consilium.</li>\n<li>Possessing the Soul Stone allows the mage to tap into the owner's Mana without casting a Prime spell.</li>\n<li>The mage rolls Gnosis + Presence - the thrall's Resolve to steal Mana, gaining one Mana per success.</li>\n<li>The identity of the thrall is determined by the Storyteller, and the more powerful or politically connected the thrall, the more potent the favors they can provide.</li>\n<li>After the three favors are completed, the mage is expected to return the Soul Stone and free the thrall.</li>\n<li>Failure to free the thrall after completing the favors can result in punishment from any other mage, even outside the mage's order or Consilium.</li>\n</ul>",
+      "source": "M:tA p89"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Oathbound",
+      "rating": "• to •••••",
+      "prerequisites": "The Adamantine Arrow",
+      "description": "<ul>\n<li>Your character can make powerful vows that have supernatural consequences.</li>\n<li>Each dot in this merit represents the capacity to retain one point's worth of oaths.</li>\n<li>Oaths can be intense or minor, as long as their point values don't exceed the character's total Oathbound merit dots.</li>\n<li>The cost of binding an oath during the chronicle is one point of Mana and 16 hours of secluded study and meditation.</li>\n<li>New characters can fill their capacity at no cost, assuming they bound these oaths before play began.</li>\n<li>Bound oaths are public matters and the character has 24 hours to inform others about them.</li>\n<li>If the conditions for binding an oath are not met, the oath doesn't bind to the character's soul and is lost.</li>\n</ul>",
+      "source": "AA p63"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Status (Consilium)",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n<li>Consilium Status represents a mage's recognized position and influence within the Consilium.</li>\n<li>It is achieved through accomplishments, involvement in Consilium affairs, or popularity among mages.</li>\n<li>It can be held by officers like Hierarchs, Heralds, and Sentinels, as well as influential mages without official positions.</li>\n<li>The level of Consilium Status ranges from \"Leigeman-woman\" to \"Hierarch\" or \"Councilor,\" indicating increasing prestige and recognition.</li>\n<li>Mages with Consilium Status are respected by other mages, but may not always have their opinions heeded or access to confidential information.</li>\n</ul>",
+      "source": "M:tA p88"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Enhanced Item",
+      "rating": "• to ••••• mult orto",
+      "prerequisites": "",
+      "description": "<ul>\n<li>Enhanced Item merit allows your mage to alter the properties of an object using the Matter Arcanum.</li>\n<li>The alteration can increase Durability, Structure, Size, or provide an equipment bonus.</li>\n<li>Special properties, requiring other Arcana, must be achieved through imbuing the item.</li>\n<li>Enhanced items have a persistent function, meaning their power is always active as long as the user holds or wears the item.</li>\n<li>Enhanced items do not invoke Paradoxes but may invoke Disbelief in Sleepers if their properties are clearly impossible.</li>\n<li>An item can be both enhanced and imbued, and the total merit cost is determined by adding the costs of all enhancements and imbuements.</li>\n<li>Acquiring an enhanced item during play requires roleplaying actions, and if lost, stolen, or destroyed, the player loses the merit and the points spent to gain it.</li>\n</ul>",
+      "source": "M:tA p82"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Law of Embodiment",
+      "rating": "•••••",
+      "prerequisites": "Gnosis •••, at least 5 Rotes",
+      "description": "cast Rote while attacking",
+      "source": "TotM p77"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Manifestation Machine",
+      "rating": "• to •••",
+      "prerequisites": "Familiar",
+      "description": "<ul>\n<li>The Manifestation Machine merit grants your character's fetch (familiar) a +1 die bonus on manifestation rolls within a certain range.</li>\n<li>Each dot in the merit corresponds to a +1 die bonus, with the range typically being around 10 to 15 yards.</li>\n<li>The Manifestation Machine object has a Size equal to its merit dots or larger.</li>\n<li>The object's Durability and Structure are equal to twice its merit dots, and its Size is equal to its merit dots.</li>\n<li>The specific object representing the Manifestation Machine must be determined in collaboration with the Storyteller.</li>\n<li>Alternative names for this merit include Twilight buoys, spirit flags, fetch channels, or other suitable names based on the setting.</li>\n<li>Manifestation Machine objects are like spiritual receivers or hand-holds that facilitate the familiar's manifestation in the material world.</li>\n<li>These objects have a unique spiritual quality that allows them to connect with the familiar's spiritual \"signal\" or reach into Twilight.</li>\n</ul>",
+      "source": "FC p131"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Occultation",
+      "rating": "• to •••",
+      "prerequisites": "",
+      "description": "<ul>\n<li>The Occultation merit allows a mage to conceal their magical aura and presence.</li>\n<li>It makes it difficult for others to detect or analyze the mage's spells.</li>\n<li>The mage's Occultation dots subtract dice from attempts to read their aura or analyze their magic.</li>\n<li>It provides protection against spells that target the mage at sympathetic range.</li>\n<li>The caster's dice pool is reduced by the mage's Occultation dots in such cases.</li>\n<li>It can also affect other supernatural abilities used to identify the mage.</li>\n<li>Activation rolls for these abilities have dice subtracted based on the mage's Occultation dots.</li>\n<li>Occulted mages are elusive, living on the fringes of mundane reality.</li>\n<li>They are challenging to gather information about, and records and investigations often falter.</li>\n<li>Gathering information about the mage is penalized by subtracting their Occultation dots from the researcher's dice pool.</li>\n</ul>",
+      "source": "M:tA p86"
+    },
+    {
+      "type": "Mage merits",
+      "name": "Dream",
+      "rating": "• to •••••",
+      "prerequisites": "",
+      "description": "<ul>\n<li>The Dream merit allows a mage to gain supernatural insight through dreams and altered states of consciousness.</li>\n<li>Once per game session, the mage can use their Dream ability to seek answers or insights on a question or topic.</li>\n<li>Activating this ability requires at least one hour spent in sleep, trance, or focused activity.</li>\n<li>The Storyteller rolls the mage's Wits + Composure in secret to determine the success of the insight.</li>\n<li>A successful roll grants one or more clues per dot of Dream.</li>\n<li>The information conveyed in dreams is hidden behind allegory, symbols, and archetypes.</li>\n<li>Dreams rarely provide direct answers but rely on symbolism and imagery.</li>\n<li>The insight has the potential to resolve the problem or provide guidance.</li>\n<li>It is a tool for the Storyteller to drive the events of the story.</li>\n</ul>",
+      "source": "M:tA p82"
+    }
+  ]

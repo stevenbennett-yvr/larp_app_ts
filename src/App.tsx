@@ -1,25 +1,70 @@
-import React from 'react';
-import logo from './logo.svg';
+import { AppShell, Container, Header } from '@mantine/core';
+import { useMediaQuery, useViewportSize } from '@mantine/hooks'
+import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider, useAuth } from './contexts/AuthContext'
+
+import PrivateRoute from './components/PrivateRoute';
+
 import './App.css';
+import Login from './components/Login'
+import Dashboard from './components/Dashboard';
+import Topbar from './topbar/Topbar';
+import ChooseChronicle from './components/ChooseChronicle';
+import GenerateAwakened from './components/mageCreator/CreateAwakened'
+
+import { globals } from './globals';
+import { UserProvider } from './contexts/UserContext';
+
 
 function App() {
+  const { height: viewportHeight, width: viewportWidth } = useViewportSize()
+  globals.viewportHeightPx = viewportHeight
+  globals.viewportWidthPx = viewportWidth
+  globals.isPhoneScreen = useMediaQuery(`(max-width: ${globals.phoneScreenW}px)`)
+  globals.isSmallScreen = useMediaQuery(`(max-width: ${globals.smallScreenW}px)`)
+
+  useEffect(() => {
+    globals.largeFontSize = globals.isPhoneScreen ? "21px" : "25px"
+    globals.smallFontSize = globals.isPhoneScreen ? "16px" : "20px"
+    globals.smallerFontSize = globals.isPhoneScreen ? "14px" : "16px"
+  },  [globals.isPhoneScreen, globals.isSmallScreen] )
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+        <Router>
+          <AuthProvider>
+            <UserProvider>
+              <AuthenticatedApp></AuthenticatedApp>
+            </UserProvider>
+          </AuthProvider>
+        </Router>
+
+  );
+}
+
+function AuthenticatedApp() {
+  const { currentUser } = useAuth();
+  const showHeader = currentUser != null;
+
+  return (
+    <AppShell
+      padding="0"
+      //navbar={globals.isSmallScreen ? <></> : <Navbar width={{ base: 300 }} height={"100%"} p="xs">{<Sidebar character={character} />}</Navbar>}
+      header={showHeader?<Header height={75} p="xs"><Topbar /></Header>:<></>}
+      //aside={showAsideBar ? <AsideBar selectedStep={selectedStep} setSelectedStep={setSelectedStep} character={character} /> : <></>}
+      styles={(theme) => ({
+        main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
+      })}
+    >
+      <Container h={"100%"}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/choose-chronicle" element={<PrivateRoute><ChooseChronicle /></PrivateRoute>}/>
+          <Route path="/create-mage" element={<GenerateAwakened/>}/>
+        </Routes>
+      </Container>
+    </AppShell>
   );
 }
 

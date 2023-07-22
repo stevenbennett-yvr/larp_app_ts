@@ -1,3 +1,5 @@
+import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -7,9 +9,19 @@ import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
-    <App />
+    <MantineProvider 
+      theme={{ 
+        colorScheme: 'dark' 
+      }} 
+      withGlobalStyles 
+      withNormalizeCSS
+      >
+      <Notifications position="bottom-center" />
+      <App />
+    </MantineProvider>
   </React.StrictMode>
 );
 

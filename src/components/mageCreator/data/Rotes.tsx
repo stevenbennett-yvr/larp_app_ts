@@ -1,0 +1,100 @@
+import { z } from 'zod'
+import { Awakened } from './Awakened'
+import { ArcanaKey } from './Arcanum'
+import roteDataJson from '../data/RotesData.json'
+
+export const roteSchema = z.object({
+    arcanum: z.string(),
+    level: z.number(),
+    name: z.string(),
+    source: z.string(),
+    cost: z.string(),
+    duration: z.string(),
+    practice: z.string(),
+    description: z.string(),
+    aspect: z.string(),
+    otherArcana: z.string(),
+    rotePool: z.string(),
+    creationPoints: z.number(),
+    freebiePoints: z.number(),
+    experiencePoints: z.number()
+})
+export type Rote = z.infer<typeof roteSchema>
+
+export const roteData: Rote[] = roteDataJson.map((rote) => ({
+    ...rote,
+    creationPoints: 0,
+    freebiePoints: 0,
+    experiencePoints: 0,
+  }));
+
+
+export const getFilteredRotes = (awakened: Awakened, roteData: Rote[]): Rote[] => {
+    const userArcana = [] as { arcana: ArcanaKey; number: number }[];
+    for (const arcanum in awakened.arcana) {
+      if (awakened.arcana[arcanum as ArcanaKey].creationPoints !== 0) {
+        const creationPoints = awakened.arcana[arcanum as ArcanaKey].creationPoints;
+        userArcana.push({ arcana: arcanum as ArcanaKey, number: creationPoints });
+      }
+    }
+
+    const filteredRotes = roteData.filter((rote) => {
+      const requiredArcanum = rote.arcanum?.toLowerCase()
+      const level = rote.level
+      const matchingArcana = userArcana.find((a) => a.arcana === requiredArcanum)
+      let matchingOtherArcana = false;
+
+      if (!rote.otherArcana) {
+        matchingOtherArcana = true;
+      } else {
+        const otherRequired = rote.otherArcana.includes(", ")
+        ? rote.otherArcana.toLowerCase().split(", ")
+        : [rote.otherArcana.toLowerCase()];
+
+        if (otherRequired.length > 1 || otherRequired[0].includes(" or ")) {
+          let matchingArray = [] as Boolean[]
+          otherRequired.forEach((req) => {
+            let items = req.split(" or ");
+            if (items.length > 1) {
+              let orArray = [] as Boolean[]
+              items.forEach((item) => {
+                const [reqArcana, reqDotStr] = item.split(" ");
+                if (reqArcana && reqDotStr) {
+                  const reqDots = parseInt(reqDotStr)
+                  const matchingUserArcana = userArcana.find(
+                    (a) => a.arcana === reqArcana && a.number >= reqDots
+                  )
+                  orArray.push(Boolean(matchingUserArcana))
+                }
+              });
+              matchingOtherArcana = (orArray.includes(true)? true: false)
+            } else {
+              const [reqArcana, reqPointsStr] = req.split(" ");
+              if (reqArcana && reqPointsStr) {
+                const reqPoints = parseInt(reqPointsStr);
+                const matchingUserArcana = userArcana.find(
+                  (a) => a.arcana === reqArcana && a.number >= reqPoints
+                );
+                matchingArray.push(Boolean(matchingUserArcana));
+              }
+              if (matchingArray.includes(false)) {
+                matchingOtherArcana = false;
+              }
+            }
+          })
+        } else {
+          // Handle single condition
+          const [reqArcana, reqPointsStr] = otherRequired[0].split(" ");
+          if (reqArcana && reqPointsStr) {
+            const reqPoints = parseInt(reqPointsStr);
+            const matchingUserArcana = userArcana.find(
+              (a) => a.arcana === reqArcana && a.number >= reqPoints
+            );
+            matchingOtherArcana = Boolean(matchingUserArcana);
+          }
+        }
+      }
+      return matchingArcana && matchingOtherArcana && matchingArcana.number >= level;
+    })
+    return filteredRotes
+  }
