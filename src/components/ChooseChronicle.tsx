@@ -25,6 +25,8 @@ export default function ChooseChronicle() {
       }
       // Add logic for other chronicles if needed
     };
+
+    // TODO: Move chroncicle details into a type.
   
     return (
         <Center h={globals.isPhoneScreen ? "100%" : "100%"} >
@@ -80,7 +82,7 @@ export default function ChooseChronicle() {
             )}
   
             <div>
-              <Button style={{ margin: '5px' }} onClick={handleJoinChronicle}>Join Tattered Veil</Button>
+              <Button style={{ margin: '5px' }} onClick={handleJoinChronicle}>Create Character</Button>
               <Button style={{ margin: '5px' }} onClick={handleClosePopup}>Back</Button>
             </div>
           </div>

@@ -72,57 +72,6 @@ export const skillsSchema = z.object({
     };
   };
 
-  export const getSkillCategory = (skill: SkillNames): SkillCategory => {
-    if (["academics", "computer", "crafts", "investigation", "medicine", "occult", "politics", "science"].includes(skill)) {
-        return "mental";
-    } else if (["athletics", "brawl", "drive", "firearms", "larceny", "stealth", "survival", "weaponry"].includes(skill)) {
-        return "physical";
-    } else if (["animal_ken", "empathy", "expression", "intimidation", "persuasion", "socialize", "streetwise", "subterfuge"].includes(skill)) {
-        return "social";
-    } else {
-        // Handle cases where the skill name doesn't match any category
-        throw new Error(`Invalid skill category for skill: ${skill}`);
-    }
-    };
-
-    export const currentSkillLevel = (
-      awakened: Awakened,
-      skill: string,
-    ): { level: number; totalXpNeeded: number; pastXpNeeded: number[] } => {
-      const skills = awakened.skills as any;
-      const category = getSkillCategory(skill as any) as string;
-      const skillData = skills[category][skill] as Skill; // Get the attribute data
-    
-      // Extract the required properties from attributeData
-      let { creationPoints, freebiePoints = 0, experiencePoints = 0 } = skillData;
-          
-      let totalXpNeeded = 0;
-      let pastXpNeeded = [0];
-    
-      if (experiencePoints === 0) {
-        let level = creationPoints + freebiePoints;
-        let xpNeeded = (level + 1) * 5;
-        totalXpNeeded = xpNeeded;
-        pastXpNeeded.push(totalXpNeeded);
-        return { level, totalXpNeeded, pastXpNeeded };
-      } else {
-        let level = creationPoints + freebiePoints;
-        let xpNeeded = (level + 1) * 5;
-        totalXpNeeded += xpNeeded;
-        pastXpNeeded.push(totalXpNeeded);
-    
-        while (experiencePoints >= xpNeeded) {
-          level++;
-          experiencePoints -= xpNeeded;
-          xpNeeded = (level + 1) * 5;
-          totalXpNeeded += xpNeeded;
-          pastXpNeeded.push(totalXpNeeded);
-        }
-    
-        return { level, totalXpNeeded, pastXpNeeded };
-      }
-    };
-
  export const allSkills: SkillNames[] = [
   "athletics",
   "brawl",
@@ -184,4 +133,85 @@ export const skillsSchema = z.object({
         subterfuge: "The ability to deceive and manipulate others through stealth and guile. Subterfuge includes knowledge of disguise and misdirection techniques.",
         },
   };
-  
+
+  export const getSkillCategory = (skill: SkillNames): SkillCategory => {
+    if (["academics", "computer", "crafts", "investigation", "medicine", "occult", "politics", "science"].includes(skill)) {
+        return "mental";
+    } else if (["athletics", "brawl", "drive", "firearms", "larceny", "stealth", "survival", "weaponry"].includes(skill)) {
+        return "physical";
+    } else if (["animal_ken", "empathy", "expression", "intimidation", "persuasion", "socialize", "streetwise", "subterfuge"].includes(skill)) {
+        return "social";
+    } else {
+        // Handle cases where the skill name doesn't match any category
+        throw new Error(`Invalid skill category for skill: ${skill}`);
+    }
+    };
+
+    export const currentSkillLevel = (
+      awakened: Awakened,
+      skill: string,
+    ): { level: number; totalXpNeeded: number; pastXpNeeded: number[] } => {
+      const skills = awakened.skills as any;
+      const category = getSkillCategory(skill as any) as string;
+      const skillData = skills[category][skill] as Skill; // Get the attribute data
+    
+      // Extract the required properties from attributeData
+      let { creationPoints, freebiePoints = 0, experiencePoints = 0 } = skillData;
+          
+      let totalXpNeeded = 0;
+      let pastXpNeeded = [0];
+    
+      if (experiencePoints === 0) {
+        let level = creationPoints + freebiePoints;
+        let xpNeeded = (level + 1) * 5;
+        totalXpNeeded = xpNeeded;
+        pastXpNeeded.push(totalXpNeeded);
+        return { level, totalXpNeeded, pastXpNeeded };
+      } else {
+        let level = creationPoints + freebiePoints;
+        let xpNeeded = (level + 1) * 5;
+        totalXpNeeded += xpNeeded;
+        pastXpNeeded.push(totalXpNeeded);
+    
+        while (experiencePoints >= xpNeeded) {
+          level++;
+          experiencePoints -= xpNeeded;
+          xpNeeded = (level + 1) * 5;
+          totalXpNeeded += xpNeeded;
+          pastXpNeeded.push(totalXpNeeded);
+        }
+    
+        return { level, totalXpNeeded, pastXpNeeded };
+      }
+    };
+
+    type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "roteSkill" | "specialities";
+    export const handleSkillChange = (awakened: Awakened, setAwakened: Function, skill: SkillNames, variableKey: VariableKeys, value: any) => {
+      let category = getSkillCategory(skill);
+      
+      const updatedSkills = {
+        ...awakened.skills,
+        [category]: {
+          ...(awakened.skills[category] as { [K in SkillNames]: Skill }),
+          [skill]: {
+            ...(awakened.skills[category as keyof Skills][skill as keyof Skills[SkillCategory]] as Skill),
+              [variableKey]: value
+          }
+        }
+      };
+    
+      const updatedAwakened = {
+        ...awakened,
+        skills: updatedSkills
+      };
+    
+      setAwakened(updatedAwakened); // Update the awakened object with the updatedSkills
+    };
+
+    export const getSpecialities = (awakened: Awakened, skill: SkillNames) => {
+      let category = getSkillCategory(skill)
+      const skillInfo = (awakened.skills[category as keyof Skills][skill as keyof Skills[SkillCategory]] as Skill)
+      let specialities = skillInfo.specialities
+      return specialities
+
+    }

@@ -1,9 +1,10 @@
 import z from "zod";
 import { Awakened } from "../data/Awakened";
-import { SkillCategory, SkillNames, skillTooltips, Skills, Skill } from "../data/Skills";
-import { Stack, Text, Select, NumberInput, Grid, Center, Button, Tooltip } from "@mantine/core";
+import { allSkills, SkillCategory, SkillNames, skillTooltips, handleSkillChange, Speciality, getSkillCategory, Skill, Skills, getSpecialities } from "../data/Skills";
+import { ScrollArea, Group, TextInput, Alert, Stack, Text, Select, NumberInput, Grid, Center, Button, Tooltip, Modal } from "@mantine/core";
 import { globals } from "../../../globals";
 import { useLocalStorage } from "@mantine/hooks";
+import { useState } from "react";
 
 type SkillAssignerProps = {
     awakened: Awakened;
@@ -38,6 +39,8 @@ const SkillAssigner = ({
     backStep,
 }: SkillAssignerProps) => {
 
+  const [modalOpen, setModalOpen] = useState(false);
+
   const [categorySettings, setCategorySettings] = useLocalStorage<CategorySetting>({ key: "skillSettings", defaultValue: {
     primary: {
       priority: "primary",
@@ -68,23 +71,6 @@ const SkillAssigner = ({
         return values.includes(11) && values.includes(7) && values.includes(4);
       };
 
-  const updateSkillCreationPoints = (
-    skills: Skills,
-    category: SkillCategory,
-    skillName: SkillNames,
-    newCreationPoints: number
-  ): Skills => {
-    return {
-      ...skills,
-      [category]: {
-        ...(skills[category] as { [K in SkillNames]: Skill }),
-        [skillName]: {
-          ...(skills[category as keyof Skills][skillName as keyof Skills[SkillCategory]] as Skill),
-          creationPoints: newCreationPoints,
-        },
-      },
-    };
-  };
 
     function changeCreationPoints(
         category: SkillCategory,
@@ -110,15 +96,7 @@ const SkillAssigner = ({
             });
           }
 
-          const updatedSkills = updateSkillCreationPoints(
-            awakened.skills,
-            category,
-            skillName,
-            newCreationPoints
-          )
-
-          const updatedAwakened = { ...awakened, skills: updatedSkills };
-          setAwakened(updatedAwakened);
+          handleSkillChange(awakened, setAwakened, skillName, "creationPoints", newCreationPoints)
     }
 
     const getCategorySettings = (
@@ -193,8 +171,10 @@ const SkillAssigner = ({
               span={globals.isPhoneScreen ? "content" : 4}
               key={`${category} Skills`}
             >
-              <Text>
-                {category.toUpperCase()} : {remainingPonits}
+              <Text fs="italic" fw={700} ta="center">
+                {category.charAt(0).toUpperCase() + category.slice(1)} 
+                : 
+                {priority === "primary"? ` 11/${remainingPonits}`: priority === "secondary"? ` 7/${remainingPonits}` : priority === 'tertiary'? ` 4/${remainingPonits}` : ''}
               </Text>
               <Select
                 value={priority || ""}
@@ -208,6 +188,7 @@ const SkillAssigner = ({
                   { value: "", label: "Unselected" },
                 ]}
               />
+              <hr/>
               {Object.entries(skillsInfo).map(([skill, skillsInfo]) => {
                 const skillName = skill as SkillNames;
                 return (
@@ -227,7 +208,7 @@ const SkillAssigner = ({
                     key={`${category}-${skillName}`}
                     label={`${skillName.charAt(0).toUpperCase() + skillName.slice(1)}`}
                     min={
-                      1
+                      0
                     }
                     max={remainingPonits <= 0 ? skillsInfo.creationPoints : remainingPonits === 1 && skillsInfo.creationPoints === 4 ? 4 : 5}
                     value={skillsInfo.creationPoints}
@@ -249,14 +230,216 @@ const SkillAssigner = ({
         }
       );
     
+      const skillsArray: { skill: SkillNames; creationPoints: number }[] = [];
+
+      Object.entries(awakened.skills).forEach(([,categorySkills]) => {
+          Object.entries(categorySkills).forEach(([skill, currentSkill]) => {
+            skillsArray.push({
+              skill: skill as SkillNames,
+              creationPoints: currentSkill.creationPoints,
+            });
+          });
+        });
+
+      skillsArray.sort((a, b) => b.creationPoints - a.creationPoints);
+
+      const topSkills = skillsArray.slice(0, 3);
+
+      const [firstSkill, setFirstSkill] = useLocalStorage<SkillNames>({
+        key: "firstSkill",
+        defaultValue: topSkills[0].skill,
+      });
+      const [secondSkill, setSecondSkill] = useLocalStorage<SkillNames>({
+        key: "secondSkill",
+        defaultValue: topSkills[1].skill,
+      });
+      const [thirdSkill, setThirdSkill] = useLocalStorage<SkillNames>({
+        key: "thirdSkill",
+        defaultValue: topSkills[2].skill,
+      });        
+    const [firstSpecialityName, setFirstSpecialityName] = useLocalStorage({ key: "firstSpecialityName", defaultValue: ''});
+    const [secondSpecialityName, setSecondSpecialityName] = useLocalStorage({ key: "secondSpecialityName", defaultValue: ''});
+    const [thirdSpecialityName, setThirdSpecialityName] = useLocalStorage({ key: "thirdSpecialityName", defaultValue: ''});
+
+
+        const specialityInput = () => {
+
+        const handleAddSpeciality = (selectedSkill: SkillNames, specialityName: string) => {        
+
+            let specialityArray = getSpecialities(awakened, selectedSkill)
+
+            const newSpeciality: Speciality = {
+              name: specialityName,
+              creationPoints: 1,
+              freebiePoints: 0,
+              experiencePoints: 0,
+            };
+
+            specialityArray.push(newSpeciality);
+
+            handleSkillChange(awakened, setAwakened, selectedSkill, "specialities", specialityArray )
+        };
+
+        const handleRemoveSpeciality = (
+          selectedSkill: SkillNames,
+          specialityName: string,
+          setSpecialtyName: Function 
+        ) => {
+          let specialityArray = getSpecialities(awakened, selectedSkill)
+
+          // Find the index of the specialty to remove
+          const indexToRemove = specialityArray.findIndex(
+            (speciality) => speciality.name === specialityName
+          );
+        
+          if (indexToRemove !== -1) {
+            // Remove the specialty using splice method
+            specialityArray.splice(indexToRemove, 1);
+        
+            // Call setSpecialtyName to update the specialty name in the component
+            setSpecialtyName("");
+            
+            // Update the state with the updated skills
+            handleSkillChange(awakened, setAwakened, selectedSkill, "specialities", specialityArray )
+          }
+        };
+          
+          const isSpecialityAdded = (
+            skillName: SkillNames,
+            specialityName: string,
+          ) => {
+            const skills = awakened.skills
+            const skillCategory: SkillCategory = getSkillCategory(skillName);
+            let specialities = (skills[skillCategory as keyof Skills][skillName as keyof Skills[SkillCategory]] as Skill).specialities
+            return specialities.some((speciality: Speciality) => speciality.name === specialityName);
+          };
+
+          const inputW = globals.isPhoneScreen ? 140 : 200
+
+          return (
+            <Center style={{paddingBottom:"100px"}}>
+            <Stack>
+              <Text>
+               <p>{`Where skills represent base knowledge of a subjet, Specialities represent a more fouced area of study. When applied Specialites provide a bonus modifier.`}</p>
+               <p>{`Add three Skill Specialites. These should be very specific.`}</p>
+              </Text>
+
+                  <Group>
+                      <Select
+                        w={inputW}
+                        searchable
+                        dropdownPosition="bottom"
+                        data={allSkills}
+                        value={firstSkill}
+                        onChange={(value) => setFirstSkill(value as SkillNames)}
+                        maxDropdownHeight={150}
+                        />
+                      <TextInput 
+                        w={inputW}
+                        disabled={isSpecialityAdded(firstSkill, firstSpecialityName)}
+                        value={firstSpecialityName} 
+                        onChange={(event) => setFirstSpecialityName(event.currentTarget.value)}
+                      />
+                      {isSpecialityAdded(firstSkill, firstSpecialityName) ? (
+                          <Button color="red" onClick={() => handleRemoveSpeciality(firstSkill, firstSpecialityName, setFirstSpecialityName)}>Remove Speciality</Button>
+                      ) : (
+                          <Button disabled={firstSpecialityName === ""} onClick={() => handleAddSpeciality(firstSkill, firstSpecialityName)}>Add Speciality</Button>
+                      )}
+                  </Group>
+                  <Group>
+                  <Select
+                          w={inputW}
+                          searchable
+                          dropdownPosition="bottom"
+                          data={allSkills}
+                          value={secondSkill}
+                          onChange={(value) => setSecondSkill(value as SkillNames)}
+                          maxDropdownHeight={150}
+                          />
+                      <TextInput 
+                        w={inputW}
+                        disabled={isSpecialityAdded(secondSkill, secondSpecialityName)}
+                        value={secondSpecialityName} 
+                        onChange={(event) => setSecondSpecialityName(event.currentTarget.value)}
+                      />
+                      {isSpecialityAdded(secondSkill, secondSpecialityName) ? (
+                          <Button color="red" onClick={() => handleRemoveSpeciality(secondSkill, secondSpecialityName, setSecondSpecialityName)}>Remove Speciality</Button>
+                      ) : (
+                          <Button disabled={secondSpecialityName === ""} onClick={() => handleAddSpeciality(secondSkill, secondSpecialityName)}>Add Speciality</Button>
+                      )}
+                  </Group>
+                  <Group>
+                  <Select
+                    w={inputW}
+                    searchable
+                    dropdownPosition="bottom"
+                    data={allSkills}
+                    value={thirdSkill}
+                    onChange={(value) => setThirdSkill(value as SkillNames)}
+                    maxDropdownHeight={150}
+                    />
+                      <TextInput
+                        w={inputW} 
+                        disabled={isSpecialityAdded(thirdSkill, thirdSpecialityName)}
+                        value={thirdSpecialityName} 
+                        onChange={(event) => setThirdSpecialityName(event.currentTarget.value)}
+                      />
+                      {isSpecialityAdded(thirdSkill, thirdSpecialityName) ? (
+                          <Button color="red" onClick={() => handleRemoveSpeciality(thirdSkill, thirdSpecialityName, setThirdSpecialityName)}>Remove Speciality</Button>
+                      ) : (
+                          <Button disabled={thirdSpecialityName === ""} onClick={() => handleAddSpeciality(thirdSkill, thirdSpecialityName)}>Add Speciality</Button>
+                      )}
+                  </Group>
+                  <Button.Group>      
+                  <Button
+                  disabled={!isSpecialityAdded(firstSkill, firstSpecialityName) || !isSpecialityAdded(secondSkill, secondSpecialityName) || !isSpecialityAdded(thirdSkill, thirdSpecialityName)}
+                  style={{ margin: "5px" }}
+                  color="gray"
+                  onClick={nextStep}
+                  >
+                  Next
+                  </Button>
+                  </Button.Group>
+              </Stack>
+          </Center>
+          )
+
+
+        }
+
+      const handleOpenModal = () => {
+        setModalOpen(true);
+        };
+
+      const handleCloseModal = () => {
+        setModalOpen(false);
+        };
+
       return (
-        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '60px' : undefined }}>
-          <Stack>
-            <Grid gutter="lg" justify="center">
-              {skillInputs}
-    
+        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '60px' : undefined}}>
+        <Stack>
+            <Alert color="gray">
+              <Text mt={"xl"} ta="center" fz="xl" fw={700}>Skills</Text>
+              <p>{`Character Skills reflect the education and training your character has aquired over their life in addition to whatever other interests they may carry.`}</p>
+              <p>{`Like Attributes, Skills are broken down into three categoires. Mental, Physical and Social. Note that skills do not begin with one dot in Each, it is possible to be completely untrained in a particular skill.`}</p>
+              <p>{`The fifth dot in any Skill, like with attributes before, cost two dots to purchase.`}</p>
+            </Alert>
+
+              <Grid gutter="lg" justify="center">
+                {skillInputs}
               <Grid.Col>
-              <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
+
+              <Modal
+                title="Specialities"
+                opened={modalOpen}
+                onClose={handleCloseModal}
+                size={700}
+                scrollAreaComponent={ScrollArea.Autosize}
+              >
+                {specialityInput()}
+              </Modal>
+              <Alert color="gray" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
+              <Button.Group>
                   <Button
                     style={{ margin: "5px" }}
                     color="gray"
@@ -269,11 +452,12 @@ const SkillAssigner = ({
                   disabled={!checkSkillsAssigned(categoryCounts)}
                   style={{ margin: "5px" }}
                   color="gray"
-                  onClick={nextStep}
+                  onClick={handleOpenModal}
                   >
                   Next
                   </Button>
-                  </Button.Group>
+              </Button.Group>
+              </Alert>
               </Grid.Col>
             </Grid>
           </Stack>

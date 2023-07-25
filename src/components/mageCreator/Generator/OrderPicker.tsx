@@ -1,7 +1,7 @@
 import { Awakened } from "../data/Awakened";
 import { OrderName, Orders, orderNameSchema } from "../data/Order";
 import { globals } from "../../../globals";
-import { Stack, Button, Modal, Card, Center, Grid, useMantineTheme, Image, Title, Text } from "@mantine/core";
+import { Alert, Stack, Button, Modal, Card, Center, Grid, useMantineTheme, Image, Title, Text } from "@mantine/core";
 import { useState } from "react";
 import OrderSettings from "./utils/OrderSetting";
 
@@ -15,6 +15,7 @@ type OrderPickerProps = {
 const OrderPicker = ({ awakened, setAwakened, nextStep, backStep}: OrderPickerProps) => {
     const theme = useMantineTheme()
     const [order, setOrder] = useState<OrderName>(awakened.order);
+
 
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -77,7 +78,13 @@ const OrderPicker = ({ awakened, setAwakened, nextStep, backStep}: OrderPickerPr
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '60px' : undefined}}>
             <Stack>
                 <Center>
-                    <Text fz={"30px"} ta={"center"}>Pick your <b>Order</b></Text>
+                    <Alert color="gray">
+                    <Text mt={"xl"} ta="center" fz="xl" fw={700}>Orders</Text>
+                    <p>{`The `}
+                      <strong>Orders</strong>
+                    {` are social organizations of mages united by philosophy, cultural connection, and convenience. These groups find new mages, provide them with training, camaraderie, and initiate them into Awakened Society. The five core orders are allied into an organization known as the Pentacle.`}</p>
+                    <p>{`Take a look at the options on offer and see what speaks to you.`}</p>
+                    </Alert>
                 </Center>
             <Grid grow m={0}>
                 {
@@ -114,20 +121,22 @@ const OrderPicker = ({ awakened, setAwakened, nextStep, backStep}: OrderPickerPr
                 <Button
                     onClick={() => {
                         OrderSettings({awakened, setAwakened, order})
-                        setAwakened({...awakened, order})
+                        setAwakened({...awakened, order: order, merits: []})
                         nextStep()
                 }}
                 >Confirm Order</Button>
             </Modal>
             )}
                 <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
-                    <Button
-                        style={{ margin: "5px" }}
-                        color="gray"
-                        onClick={backStep}
-                    >
-                        Back
-                    </Button>
+                <Alert color="gray" radius="xs" style={{padding:"0px"}}>
+                        <Button
+                            style={{ margin: "5px" }}
+                            color="gray"
+                            onClick={backStep}
+                        >
+                            Back
+                        </Button>
+                    </Alert>
                 </Button.Group>
                 </Stack>
         </Center>

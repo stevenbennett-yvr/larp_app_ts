@@ -7,6 +7,11 @@ This is intended to be run as a service.
 
 The application runs in your browser. Users can log in with Oauth to access the available tools. User data and Characters created are stored on a Firebase server and returned on login.
 
+## Documentation Referenced
+* Typescript(OOP Javascript): https://www.typescriptlang.org/docs/
+* Mantine(UI Components): https://mantine.dev/
+* Firebase(Database Infrastructure): https://firebase.google.com/docs
+
 ## How to run
 * `npm install`
 * `npm start`

@@ -1,8 +1,8 @@
 import { Awakened } from '../data/Awakened'
-import { Group, Card, Text, Center, Stack, Accordion, Button, Table, useMantineTheme, NumberInput } from '@mantine/core'
-import { getFilteredMerits, meritData, Merit, defineMeritRating } from '../data/Merits'
+import { Group, Text, Center, Stack, Accordion, Button, Table, useMantineTheme, NumberInput, Alert } from '@mantine/core'
+import { getFilteredMerits, meritData, Merit, defineMeritRating, handleMeritChange } from '../data/Merits'
 import { currentGnosisLevel } from '../data/Gnosis'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { globals } from '../../../globals'
 
 type MeritAssignerProps = {
@@ -16,6 +16,35 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
     //const [ selectedMerits, setSelectedMerits ] = useState(awakened.merits);
     const { filteredMerits } = getFilteredMerits(awakened)
     const theme = useMantineTheme()
+    const freebieMerits = [
+      { name: 'Status (Order)' },
+      { name: 'Status (Consilium)' }
+    ];
+
+    useEffect(() => {
+      if (awakened.order !== 'Apostate') {
+        const meritsToAdd = [
+          { merit: 'High Speech' },
+          { merit: 'Status (Order)' },
+          { merit: 'Status (Consilium)' }
+        ];
+  
+        const updatedMerits = [...awakened.merits];
+  
+        meritsToAdd.forEach((meritToAdd) => {
+          const existingMerit = updatedMerits.find((m) => m.name === meritToAdd.merit);
+  
+          if (!existingMerit) {
+            const merit = filteredMerits.find((m) => m.name === meritToAdd.merit);
+            if (merit) {
+              updatedMerits.push({ ...merit, freebiePoints: 1 });
+            }
+          }
+        });
+  
+        setAwakened({...awakened, merits: updatedMerits});
+      }
+    }, [awakened.order, filteredMerits]);
 
      const getRemainingPoints = (awakened: Awakened): number => {
         let totalCreationPoints = 0;
@@ -27,74 +56,26 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
         return 7 - (awakened.gnosis.creationPoints + totalCreationPoints);
       };
 
-/*     useEffect(() => {
-        if (awakened.order !== 'Apostate') {
-          const meritsToAdd = [
-            { merit: 'High Speech' },
-            { merit: 'Status (Order)' },
-            { merit: 'Status (Consilium)' }
-          ];
-    
-          const updatedMerits = [...selectedMerits];
-    
-          meritsToAdd.forEach((meritToAdd) => {
-            const existingMerit = updatedMerits.find((m) => m.name === meritToAdd.merit);
-    
-            if (!existingMerit) {
-              const merit = filteredMerits.find((m) => m.name === meritToAdd.merit);
-              if (merit) {
-                updatedMerits.push({ ...merit, freebiePoints: 1 });
-              }
-            }
-          });
-    
-          setSelectedMerits(updatedMerits);
-        }
-      }, [awakened.order, filteredMerits, selectedMerits]); */
 
-      const removeInvalidMerits = (filteredMerits: Merit[]): void => {
-        const validMerits = awakened.merits.filter((merit) =>
-          filteredMerits.some((fm) => fm.name !== merit.name)
-        );
-      };
-
-      const MeritInput = ( merit : Merit ) => {
-        const getMeritCreationPoints = (merit: Merit) => {
+      const MeritInput = ( merit : Merit, type: any ) => {
+        const getMeritPoints = (merit: Merit) => {
           const meritInfo = awakened.merits.find((m) => m.name === merit.name);
-          const total = meritInfo ? meritInfo.creationPoints : 0;
+          const creation = meritInfo ? meritInfo.creationPoints : 0
+          const freebie = meritInfo ? meritInfo.freebiePoints : 0
+          const total = creation + freebie
           return total;
         };
 
         const { minCost, maxCost, orBool, plusBool} = defineMeritRating(merit.rating)
 
-        const handleMeritChange = (merit: Merit, newCreationPoints: number): void => {
-          const existingMerit = awakened.merits.find((m) => m.name === merit.name);
-  
-          if (existingMerit) {
-            if (newCreationPoints === 0) {
-              const updatedMerits = awakened.merits.filter((m) => m.name !== merit.name);
-              setAwakened({ ...awakened, merits: updatedMerits });
-            } else {
-              const updatedMerits = awakened.merits.map((m) =>
-              m.name === merit.name ? { ...m, creationPoints: newCreationPoints } : m
-            ) ;
-            setAwakened({ ...awakened, merits: updatedMerits });
-          }} else {
-            setAwakened({
-              ...awakened,
-              merits: [...awakened.merits, { ...merit, creationPoints: newCreationPoints }],
-            });
-          }
-        };
-
         const getStep = (merit: Merit): number => {
           if (minCost === maxCost) {
             return minCost;
-          } else if (orBool && getMeritCreationPoints(merit) < minCost) {
+          } else if (orBool && getMeritPoints(merit) < minCost) {
             return minCost;
-          } else if (orBool && getMeritCreationPoints(merit) > 0) {
+          } else if (orBool && getMeritPoints(merit) > 0) {
             return maxCost;
-          } else if (plusBool && getMeritCreationPoints(merit) < minCost) {
+          } else if (plusBool && getMeritPoints(merit) < minCost) {
             return minCost;
           } else {
             return 1;
@@ -106,13 +87,12 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
         return (
             <div>
                 <NumberInput
-                  value={getMeritCreationPoints(merit)}
-                  min={0}
-                  max={defineMeritRating(merit.rating).maxCost}
+                  value={getMeritPoints(merit)}
+                  min={type==="freebiePoints"?1:0}
+                  max={type==="freebiePoints"?2:defineMeritRating(merit.rating).maxCost}
                   step={step}
                   onChange={(val:number) => {
-                    handleMeritChange(merit, val)
-                    removeInvalidMerits(filteredMerits)
+                    handleMeritChange(awakened, setAwakened, merit, type, val)
                   }}
                 />
             </div>
@@ -121,7 +101,7 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
       };
     
       const createMeritAccordian = (type: string, showAllMerits: Boolean) => {
-        
+
         let bgc = ""
         switch (type) {
             case "Mental merits":
@@ -158,16 +138,18 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
                         </tr>
                     </thead>
                     <tbody>
-                        {sortedMerits.map((merit) => (
-                        <tr key={`${merit.name} ${merit.type}`}>
-                            <td style={{ minWidth: "150px" }}>
-                            <Text>{merit.name} {merit.rating}</Text>
-                            <Text>{merit.prerequisites? `PreReq: ${merit.prerequisites}`: ''}</Text>
-                            {MeritInput(merit)}
-                            </td>
-                            <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
-                        </tr>
-                        ))}
+                        {sortedMerits.map((merit) => {
+                          const isFreebieMerit = freebieMerits.some((item) => item.name === merit.name);
+                          return (
+                            <tr key={`${merit.name} ${merit.type}`}>
+                                <td style={{ minWidth: "150px" }}>
+                                <Text>{merit.name} {merit.rating}</Text>
+                                <Text>{merit.prerequisites? `PreReq: ${merit.prerequisites}`: ''}</Text>
+                                {isFreebieMerit? MeritInput(merit, "freebiePoints"):MeritInput(merit, "creationPoints")}
+                                </td>
+                                <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
+                            </tr>
+                          )})}
                     </tbody>
                     </Table>
                 </Accordion.Panel>
@@ -198,14 +180,14 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
         };
       
         return (
-          <Card style={{backgroundColor:"#996515", color: "white"}}>
+          <Alert w={globals.isSmallScreen ? "100%" : "600px"} style={{backgroundColor:"#996515", color: "white"}}>
             <Text fz={globals.smallFontSize}>Gnosis: {currentGnosis.level}</Text>
             <Text fz={globals.smallerFontSize}>3 merit points per dot of Gnosis</Text>
             <Button.Group>
               <Button style={{ margin: "5px" }} color="gray" disabled={getRemainingPoints(awakened) < 3} onClick={increaseGnosis}>Increase Gnosis</Button>
               <Button style={{ margin: "5px" }} color="gray" disabled={!canDecreaseGnosis} onClick={decreaseGnosis}>Decrease Gnosis</Button>
             </Button.Group>
-          </Card>
+          </Alert>
         )
       }
 
@@ -214,20 +196,41 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
       const [showAllMerits, setShowAllMerits] = useState(false);
 
       return (
-        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '100px' : '100px'}}>
+        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '100px' : '100px'}}>
             <Stack>
+              <Alert color='gray'>
+              <h2>Merits</h2>
+                <p>{`Merits are special capabilities or qualities that add individuality to your character. Some are intrinsic, developed early in life, others can be acquired through trial and error, training and other efforts.`}</p>
+                <p>{`Each merit has a number of dots associated with it. These dots represent the number of points that need to be spent to purchase it.`}</p>
+                <p>{`As a member of one of the five Pentacle Orders, you are taught the rudiments of Atlantean High Speech and gain that merit for free. You also gain up to two free dots of Status (Order) and Status (Consilium) to represent your rank in Mage society.`}</p>
+                <h3>Gnosis</h3>
+                <p>{`A Mage's empowered will is measured by their Gnosis. As a Mage, you start with one dot in Gnosis by default.`}</p>
+                <p>{`The Gnosis trait is rated from 1 to 10 dots. It has the following game effects:`}</p>
+                <ul>
+                  <li>{`Gnosis determines a character's potential to gain master of an Arcanum and successive Arcana. See "Arcana Mastery", M:ta pg. 76`}</li>
+                  <li>{`A Mage roll Gnosis + Arcanum when casting improvised spells.`}</li>
+                  <li>{`The higher a mage’s Gnosis, the more quickly they can cast elaborate or powerful spells.`}</li>
+                  <li>{`Gnosis affects how many points of Mana a mage can spend in a single turn and how much Mana they can store.`}</li>
+                  <li>{`A Mages can maintain only a certain number of active spells simultaneously, equal to Gnosis +3.`}</li>
+                  <li>{`Mages can combine spells into a single casting, with the total number limited by Gnosis.`}</li>
+                </ul>
+                <p>{`You can spend 3 merit points here to purchase additional dots of Gnosis.`}</p>
+              </Alert>
+              <Center>
               {createGnosisAssigner()}
-            <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
-            {
-                ["Mental merits", "Physical merits", "Social merits", "Mage merits", "Sanctum merits"].map((t) => createMeritAccordian(t, showAllMerits))
-            }
-            </Accordion>
-                  <Group style={{ position: "fixed", bottom: "0px",right: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%" }}>
-                    <Card>
-                      <Text style={{ margin: "0px" }}>Rote Points: 7/{getRemainingPoints(awakened)}</Text>
-                    </Card>
-                  </Group>
-                <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
+              </Center>
+              <Center>
+                <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
+                {
+                    ["Mental merits", "Physical merits", "Social merits", "Mage merits", "Sanctum merits"].map((t) => createMeritAccordian(t, showAllMerits))
+                }
+                </Accordion>
+            </Center>
+          </Stack>
+
+            <Alert color="gray" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
+              <Group>
+                <Button.Group>
                     <Button
                         style={{ margin: "5px" }}
                         color="gray"
@@ -250,8 +253,10 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
                   >
                     {showAllMerits ? "Hide All" : "Show All"}
                   </Button>
-                  </Button.Group>
-            </Stack>
+                  <Text fz={globals.smallerFontSize} style={{ margin: "10px"}}>Rote Points: 7/{getRemainingPoints(awakened)}</Text>
+              </Button.Group>
+            </Group>
+            </Alert>
         </Center>
       )
       

@@ -1,7 +1,7 @@
 import { Awakened } from "../data/Awakened";
 import { PathName, Paths, pathNameSchema } from "../data/Path";
 import { globals } from "../../../globals";
-import { Stack, Button, Modal, Card, Center, Grid, useMantineTheme, Image, Title, Text } from "@mantine/core";
+import { Alert, Stack, Button, Modal, Card, Center, Grid, useMantineTheme, Image, Title, Text } from "@mantine/core";
 import { useState } from "react";
 import PathSettings from "./utils/PathSettings"
 
@@ -79,7 +79,13 @@ const PathPicker = ({ awakened, setAwakened, nextStep, backStep}: PathPickerProp
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '60px' : undefined}}>
             <Stack>
                 <Center>
-                <Text fz={"30px"}>Pick your <b>Path</b></Text>
+                    <Alert color="gray">
+                        <Text mt={"xl"} ta="center" fz="xl" fw={700}>Path</Text>
+                        <p>{`Mages are not born to magic, they Awaken to it. The process is different for each individual, but it always involves a Journey, a Tower, and the writing of a Name.`}</p>
+                        <p>{`When a mage Awakens, their soul undergoes a journey to one of the five Supernal Realms, and they are eternally changed. The Mage's `}
+                        <strong>Path</strong>
+                        {` represents their magical connection to the supernal world. It is through this connection that the mage draws the laws of that Realm into the mundane world, performing magic.`}</p>
+                    </Alert>
                 </Center>
             <Grid grow m={0}>
                 {
@@ -121,6 +127,7 @@ const PathPicker = ({ awakened, setAwakened, nextStep, backStep}: PathPickerProp
             </Modal>
             )}
                 <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
+                <Alert color="gray" radius="xs" style={{padding:"0px"}}>
                     <Button
                         style={{ margin: "5px" }}
                         color="gray"
@@ -128,6 +135,7 @@ const PathPicker = ({ awakened, setAwakened, nextStep, backStep}: PathPickerProp
                     >
                         Back
                     </Button>
+                    </Alert>
                 </Button.Group>
                 </Stack>
         </Center>

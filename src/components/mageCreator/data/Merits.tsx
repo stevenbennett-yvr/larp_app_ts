@@ -325,3 +325,33 @@ export const currentMeritLevel = (meritInfo: Merit) => {
 
     return { filteredMerits }
 }
+
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
+
+export const handleMeritChange = (
+  awakened: Awakened,
+  setAwakened: Function,
+  merit: Merit,
+  type: VariableKeys,
+  newPoints: number
+): void => {
+  const existingMerit = awakened.merits.find((m) => m.name === merit.name);
+
+  if (existingMerit) {
+    if (newPoints === 0) {
+      const updatedMerits = awakened.merits.filter((m) => m.name !== merit.name);
+      setAwakened({ ...awakened, merits: updatedMerits });
+    } else {
+      const updatedMerits = awakened.merits.map((m) =>
+        m.name === merit.name ? { ...m, [type]: newPoints } : m
+      );
+      setAwakened({ ...awakened, merits: updatedMerits });
+    }
+  } else {
+    setAwakened({
+      ...awakened,
+      merits: [...awakened.merits, { ...merit, [type]: newPoints }],
+    });
+  }
+};
+

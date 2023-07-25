@@ -1,10 +1,10 @@
 import { Awakened } from "../data/Awakened"
-import { Stack, Button, Text, Tooltip, Card, Center, Grid, Image, NumberInput, Title, useMantineTheme, Table, Accordion, Group } from "@mantine/core";
-import { ArcanaKey, arcanaDescriptions, arcanaKeySchema } from "../data/Arcanum";
+import { Stack, Button, Text, Tooltip, Card, Center, Grid, Image, NumberInput, Title, useMantineTheme, Table, Accordion, Alert, Group } from "@mantine/core";
+import { ArcanaKey, arcanaDescriptions, arcanaKeySchema, arcana } from "../data/Arcanum";
 import { globals } from "../../../globals";
 import { Paths } from "../data/Path";
 import { useState, useEffect } from 'react';
-import { Rote, roteData, getFilteredRotes } from "../data/Rotes";
+import { Rote, roteData, getFilteredRotes, handleRoteChange } from "../data/Rotes";
 
 type ArcanaRoteAssignerProps = {
     awakened: Awakened,
@@ -18,18 +18,16 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
 
     const c1 = "rgba(26, 27, 30, 0.90)"
 
-    const arcana: ArcanaKey[] =  [  "prime", "forces", "fate", "time", "mind", "space", "spirit", "life", "death", "matter" ]
     const rulingArcana = Paths[awakened.path].rulingArcana
     const inferiorArcana = Paths[awakened.path].inferiorArcana
     const otherArcana = arcana.filter((arcanaName) => !rulingArcana.includes(arcanaName));
-    const [selectedRotes, setSelectedRotes] = useState(awakened.rotes)
     const [rotePoints, setRotePoints] = useState(6)
 
     const getRotePoints = () => {
       const startingPoints = 6;
       let dotsTotal = 0;
     
-      Object.values(selectedRotes).forEach((rote) => {
+      Object.values(awakened.rotes).forEach((rote) => {
         let dots = rote.creationPoints;
         dotsTotal += dots;
       });
@@ -75,7 +73,7 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
       return total;
     };
 
-    const handleArcanumChange = (arcanum: ArcanaKey, newCreationPoints: number): void => {
+    const handleArcanumCreationPointChange = (arcanum: ArcanaKey, newCreationPoints: number): void => {
       const updatedArcana = {
         ...awakened.arcana,
         [arcanum]: {
@@ -91,7 +89,6 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
         second: [secondRuling, updatedArcana[secondRuling].creationPoints]
       });
 
-      setSelectedRotes([])
       setAwakened({ ...awakened, arcana: updatedArcana });
     };
 
@@ -165,7 +162,7 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
                   max={isTotalSix ? 0 : isRulingSet && !isRuling? 0: isThreeAssigned ? 2 : isInferior? 1 : 3}
                   value={awakened.arcana[arcanum].creationPoints}
                   onChange={(val: number) =>
-                    handleArcanumChange(arcanum, val)
+                    handleArcanumCreationPointChange(arcanum, val)
                   }
                   disabled={ isDisabled }
                 >
@@ -178,7 +175,7 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
       };
       
       const getColorByArcanum = (arcanum: ArcanaKey) => {
-        return arcanaDescriptions[arcanum].color; // Retrieve the color from the Order object
+        return arcanaDescriptions[arcanum].color;
       }; 
 
       const createRoteAccordian = (arcanum: ArcanaKey, showAllRotes: Boolean) => {
@@ -189,22 +186,18 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
           if (a.level !== b.level) {
             return a.level - b.level;
           }
-        
           return a.name.localeCompare(b.name); 
         });
 
          const handleSelect = (rote: Rote) => {
-          if (!selectedRotes.includes(rote)) {
+          if (!awakened.rotes.includes(rote)) {
             const roteLevel = rote.level
-            let newRote = {...rote, creationPoints: roteLevel}
-            setSelectedRotes([...selectedRotes, newRote])
-            setAwakened({...awakened, rotes: selectedRotes})
+            handleRoteChange(awakened, setAwakened, rote, "creationPoints", roteLevel)
           }
         }
 
         const handleDeselect = (rote: Rote) => {
-          setSelectedRotes(selectedRotes.filter((selected) => selected.name !== rote.name));
-          setAwakened({...awakened, rotes: selectedRotes})
+          handleRoteChange(awakened, setAwakened, rote, "creationPoints", 0)
         };
  
         const isPhoneScreen = globals.isPhoneScreen
@@ -237,13 +230,13 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
                             style={{ filter: "brightness(0)" }}
                           />
                           <p style={{ color: "white" }}>{rote.arcanum} {rote.level} {rote.otherArcana ? `+ ${rote.otherArcana}` : ""}</p>
-                          {selectedRotes.some((selectedRote) => (selectedRote.name === rote.name && selectedRote.arcanum === rote.arcanum)) ? null : 
+                          {awakened.rotes.some((selectedRote) => (selectedRote.name === rote.name && selectedRote.arcanum === rote.arcanum)) ? null : 
                           rotePoints < rote.level || !learnableRotes.some(lr => lr.name === rote.name) ? <Button disabled>Select</Button> :
                           (
-                          <Button onClick={() => {handleSelect(rote);getRotePoints();}}>Select</Button>
+                          <Button color="gray" onClick={() => {handleSelect(rote);getRotePoints();}}>Select</Button>
                       
                           )}
-                          {selectedRotes.some((selectedRote) => (selectedRote.name === rote.name && selectedRote.arcanum === rote.arcanum)) && (
+                          {awakened.rotes.some((selectedRote) => (selectedRote.name === rote.name && selectedRote.arcanum === rote.arcanum)) && (
                             <Button color="red" onClick={() => {handleDeselect(rote);getRotePoints();}}>Deselect</Button>
                           )}
                         </td>
@@ -279,13 +272,13 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
                         </td>
                         <td dangerouslySetInnerHTML={{ __html: `${rote.description} <p>Rote Pool: ${rote.rotePool}</p>` }} />
                         <td>
-                        {selectedRotes.some((selectedRote) => (selectedRote.name === rote.name && selectedRote.arcanum === rote.arcanum)) ? null : 
+                        {awakened.rotes.some((selectedRote) => (selectedRote.name === rote.name && selectedRote.arcanum === rote.arcanum)) ? null : 
                           rotePoints < rote.level || !learnableRotes.some(lr => lr.name === rote.name)?  <Button disabled>Select</Button> :
                           (
                           <Button onClick={() => {handleSelect(rote);getRotePoints();}}>Select</Button>
                       
                         )}
-                        {selectedRotes.some((selectedRote) => (selectedRote.name === rote.name && selectedRote.arcanum === rote.arcanum)) && (
+                        {awakened.rotes.some((selectedRote) => (selectedRote.name === rote.name && selectedRote.arcanum === rote.arcanum)) && (
                           <Button color="red" onClick={() => {handleDeselect(rote);getRotePoints();}}>Deselect</Button>
                         )}
                         </td>
@@ -309,9 +302,23 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
       const [showAllRotes, setShowAllRotes] = useState(false);
 
       return (
-        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '100px' : '100px'}}>
+        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '100px' : '100px'}}>
         <Stack>
-        
+          <Alert color="gray">
+          <Text mt={"xl"} ta="center" fz="xl" fw={700}>Arcana</Text>
+            <p>{`
+              Arcana are the ten spheres of magical influence. By improving their knowledge of the Arcana, a mage improves their skill at altering reality.  
+            `}</p>
+            <p>{`
+              A mages Ruling Arcana, and the limits of their understanding, is determined by the Path.
+            `}</p>
+            <p>{`
+              A mage can learn up to the fifth dot in their Ruling Arcana. Without aid, they can learn up to the fourth dot in other Arcana. Of their Inferior Arcanum, in which a mage is particularly weak, they can only learn the first two dots before needing assistance. Assistance comes from mages of other Paths with ruling Arcnaa of which the user wishes to learn.
+            `}</p>
+            <p>
+              {`At creation, you gain 2 dots in one Arcanum, 2 dots in a second Arcanum and 1 dot in a third Arcanum. two of these Arcana must be in your character's Path's Ruling Arcana. Finally you gain 1 dot you can place anywhere.`}
+            </p>
+          </Alert>
             <Grid columns={isPhoneScreen? 4 : 5} grow m={0}>
                 {
                     rulingArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => createArcanaPicker(arcanum, getColorByArcanum(arcanum)))
@@ -322,7 +329,15 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
                     otherArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => createArcanaPicker(arcanum, getColorByArcanum(arcanum)))
                 }
             </Grid>
+            {countArcanaWithCreationPoints() > 0 || showAllRotes? 
+            <Alert color="gray">
+              <Text mt={"xl"} ta="center" fz="xl" fw={700}>Rotes</Text>
+              <p>{`Rotes are magical feats simplified into a recipe. They provide an easier and safer way for mages to perform magic compared to improvisational spells. `}</p>
+              <p>{`You may purchase up to 6 points of rotes. A rote's cost is equal to it's Arcanum rating. No rote can be rated higher than your character's level in that Arcanum. `}</p>
+            </Alert>
+            : <></> }
                   <Center>
+
                   <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
                     {showAllRotes ? (
                     // Render all rotes
@@ -333,13 +348,9 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
                     )}
                   </Accordion>
                   </Center>
-                  <Group style={{ position: "fixed", bottom: "0px",right: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%" }}>
-                    <Card>
-                      <Text style={{ margin: "0px" }}>Rote Points: 6/{rotePoints}</Text>
-
-                    </Card>
-                  </Group>
-                  <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
+                  <Alert color="gray" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
+                    <Group>
+                  <Button.Group>
                     <Button
                         style={{ margin: "5px" }}
                         color="gray"
@@ -363,6 +374,9 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
                     {showAllRotes ? "Hide All" : "Show All"}
                   </Button>
                   </Button.Group>
+                  <Text fz={globals.smallerFontSize} style={{ marginRight: "10px"}}>Rote Points: 6/{rotePoints}</Text>
+                  </Group>
+                  </Alert>
           </Stack>
         </Center>
       )

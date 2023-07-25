@@ -98,3 +98,33 @@ export const getFilteredRotes = (awakened: Awakened, roteData: Rote[]): Rote[] =
     })
     return filteredRotes
   }
+
+
+  type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
+
+export const handleRoteChange = (
+  awakened: Awakened,
+  setAwakened: Function,
+  rote: Rote,
+  type: VariableKeys,
+  newPoints: number
+): void => {
+  const existingRote = awakened.rotes.find((r) => r.name === rote.name);
+
+  if (existingRote) {
+    if (newPoints === 0) {
+      const updatedRotes = awakened.rotes.filter((r) => r.name !== rote.name);
+      setAwakened({ ...awakened, rotes: updatedRotes });
+    } else {
+      const updatedRotes = awakened.rotes.map((r) =>
+        r.name === rote.name ? { ...r, [type]: newPoints } : r
+      );
+      setAwakened({ ...awakened, rotes: updatedRotes });
+    }
+  } else {
+    setAwakened({
+      ...awakened,
+      rotes: [...awakened.rotes, { ...rote, [type]: newPoints }],
+    });
+  }
+};

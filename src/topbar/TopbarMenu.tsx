@@ -38,6 +38,8 @@ export function LogoutButton() {
   };
 
   return (
-    <Button  variant='link' color="gray" compact leftIcon={<FontAwesomeIcon icon={faSignOut} />} onClick={handleLogout}>Logout</Button>
+    <Button  variant='link' color="gray" compact leftIcon={<FontAwesomeIcon icon={faSignOut} />} onClick={handleLogout}>
+      Logout
+    </Button>
   );
 }

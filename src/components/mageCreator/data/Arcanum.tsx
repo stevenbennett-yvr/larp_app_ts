@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Awakened } from "./Awakened";
 import ArcanumDeath from '../resources/arcanum/ArcanumDeath.webp';
 import ArcanumFate from '../resources/arcanum/ArcanumFate.webp';
 import ArcanumForces from '../resources/arcanum/ArcanumForces.webp';
@@ -9,6 +10,7 @@ import ArcanumPrime from '../resources/arcanum/ArcanumPrime.webp';
 import ArcanumSpace from '../resources/arcanum/ArcanumSpace.webp';
 import ArcanumSpirit from '../resources/arcanum/ArcanumSpirit.webp';
 import ArcanumTime from '../resources/arcanum/ArcanumTime.webp';
+
 
 export const arcanumSchema = z.object({
     type: z.union([
@@ -37,6 +39,7 @@ export const arcanaSchema = z.object({
 })
 
 export type Arcana = z.infer<typeof arcanaSchema>;
+export const arcana: ArcanaKey[] =  [  "prime", "forces", "fate", "time", "mind", "space", "spirit", "life", "death", "matter" ]
 
 export const arcanaKeySchema = arcanaSchema.keyof()
 export type ArcanaKey = z.infer<typeof arcanaKeySchema>
@@ -133,7 +136,6 @@ export const arcanaDescriptions: Record<ArcanaKey, ArcanaDescription> = {
     },
 }
   
-
 export const emptyArcana: Arcana = {
     death: {type:"Common", creationPoints: 0, freebiePoints: 0, experiencePoints: 0},
     fate: {type:"Common", creationPoints: 0, freebiePoints: 0, experiencePoints: 0},
@@ -146,3 +148,22 @@ export const emptyArcana: Arcana = {
     spirit: {type:"Common", creationPoints: 0, freebiePoints: 0, experiencePoints: 0},
     time: {type:"Common", creationPoints: 0, freebiePoints: 0, experiencePoints: 0},
 }
+
+// function for changes to the Arcana
+type VariableKeys = "type" | "creationPoints" | "freebiePoints" | "experiencePoints";
+type ValidValue = number | "Common" | "Inferior" | "Ruling"
+export const handleArcanumChange = (awakened: Awakened, setAwakened: Function, arcanum: ArcanaKey, variableKey: VariableKeys, value: ValidValue) => {
+    const updatedArcana = {
+        ...awakened.arcana,
+        [arcanum]: {
+            ...awakened.arcana[arcanum],
+            variableKey: variableKey,
+            value: value
+        }
+    };
+    const updatedAwakened = {
+        ...awakened,
+        arcana: updatedArcana
+    };
+    setAwakened(updatedAwakened); // Update the awakened object with the updatedArcana
+};

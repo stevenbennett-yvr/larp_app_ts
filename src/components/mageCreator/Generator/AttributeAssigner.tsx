@@ -1,7 +1,7 @@
 import z from "zod";
 import { Awakened } from "../data/Awakened";
-import { AttributeCategory, AttributeNames, attributeTooltips, Attributes, Attribute } from "../data/Attributes";
-import { Stack, Text, Select, NumberInput, Grid, Center, Button, Tooltip } from "@mantine/core";
+import { AttributeCategory, AttributeNames, attributeTooltips, handleAttributeChange } from "../data/Attributes";
+import { Alert, Stack, Text, Select, NumberInput, Grid, Center, Button, Tooltip } from "@mantine/core";
 import { globals } from "../../../globals";
 import { useLocalStorage } from "@mantine/hooks";
 
@@ -30,7 +30,6 @@ const categorySettingSchema = z.object({
 });
 
 type CategorySetting = z.infer<typeof categorySettingSchema>;
-
   const AttributeAssigner = ({
     awakened,
     setAwakened,
@@ -67,24 +66,6 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
     return values.includes(5) && values.includes(4) && values.includes(3);
   };
 
-  const updateAttributeCreationPoints = (
-    attributes: Attributes,
-    category: AttributeCategory,
-    attributeName: AttributeNames,
-    newCreationPoints: number
-  ): Attributes => {
-    return {
-      ...attributes,
-      [category]: {
-        ...(attributes[category] as { [K in AttributeNames]: Attribute }),
-        [attributeName]: {
-          ...(attributes[category as keyof Attributes][attributeName as keyof Attributes[AttributeCategory]] as Attribute),
-          creationPoints: newCreationPoints,
-        },
-      },
-    };
-  };
-
   function changeCreationPoints(
     category: AttributeCategory,
     attributeName: AttributeNames,
@@ -109,15 +90,13 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
       });
     }
   
-    const updatedAttributes = updateAttributeCreationPoints(
-      awakened.attributes,
-      category,
+    handleAttributeChange(
+      awakened,
+      setAwakened,
       attributeName,
+      "creationPoints",
       newCreationPoints
     );
-  
-    const updatedAwakened = { ...awakened, attributes: updatedAttributes };
-    setAwakened(updatedAwakened);
   }
 
   const getCategorySettings = (
@@ -189,8 +168,10 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
           span={globals.isPhoneScreen ? "content" : 4}
           key={`${category} Attributes`}
         >
-          <Text>
-            {category.toUpperCase()} : {remainingPonits}
+          <Text fs="italic" fw={700} ta="center">
+            {category.charAt(0).toUpperCase() + category.slice(1)} 
+              : 
+            {priority === "primary"? ` 5/${remainingPonits}`: priority === "secondary"? ` 4/${remainingPonits}` : priority === 'tertiary'? ` 3/${remainingPonits}` : ''}
           </Text>
           <Select
             value={priority || ""}
@@ -204,6 +185,7 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
               { value: "", label: "Unselected" },
             ]}
           />
+          <hr/>
           {Object.entries(attributesInfo).map(([attribute, attributeInfo]) => {
           const attributeName = attribute as AttributeNames;
           return (
@@ -221,7 +203,7 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
                 >              
                 <NumberInput
                 key={`${category}-${attributeName}`}
-                label={`${`${attribute.charAt(0).toUpperCase() + attribute.slice(1)}`}`}
+                label={`${attribute.charAt(0).toUpperCase() + attribute.slice(1)}`}
                 min={
                   1
                 }
@@ -252,11 +234,21 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
 
     <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '60px' : undefined}}>
     <Stack>
+        <Alert color="gray">
+          <Text mt={"xl"} ta="center" fz="xl" fw={700}>Attributes</Text>
+          <p>{`How would you describe your character's natural capabilities? Are they scheming, sly, or sturdy? Attribute Points define these characteristics mechanically across three categories: Mental, Physical, and Social.`}</p>
+          <p>{`Your first step is to decide which of these three categories is your Primary, the category in which you excel the most. Next, select your so-so Secondary category. Finally, choose your weakest Tertiary category.`}</p>
+          <p>{`All characters begin with one dot in each Attribute, representing basic human capabilities.`}</p>
+          <p>{`The fifth dot in any Attribute costs two points to purchase. Reaching a rating of Five in any Attribute requires a total of five points (the first dot is free).`}</p>
+        </Alert>
+
         <Grid gutter="lg" justify="center">
           {attributeInputs}
         </Grid>
 
+
         <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
+          <Alert color="gray" radius="xs" style={{padding:"0px"}}>
           <Button
               style={{ margin: "5px" }}
               color="gray"
@@ -272,7 +264,9 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
           >
               Next
           </Button>
+          </Alert>
         </Button.Group>
+        
       </Stack>
     </Center>
   );

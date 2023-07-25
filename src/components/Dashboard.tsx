@@ -4,6 +4,13 @@ import { Alert, Card, Center, Text, Button } from '@mantine/core';
 import { globals } from "../globals"
 import { useNavigate } from "react-router-dom";
 
+/* 
+  TODO: 
+    Create a space for a Domain profile, add a domains Json with domain data.
+    Improve user Profile space, ability for user to change their userData. 
+    Create game portal cards to take a user to a dedicated game page. ie Tattered Veil, Good Intentions, etc.
+    Figma the above items.
+*/
 
 export default function Dashboard() {
     const navigate = useNavigate();

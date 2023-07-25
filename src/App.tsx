@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from './PrivateRoute';
 
 import './App.css';
 import Login from './components/Login'
@@ -41,6 +41,8 @@ function App() {
 
   );
 }
+
+// TODO: Setup the side bar to display character levels. This will be difficult
 
 function AuthenticatedApp() {
   const { currentUser } = useAuth();
