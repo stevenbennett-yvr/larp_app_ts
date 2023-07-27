@@ -10,7 +10,8 @@ import ArcanumPrime from '../resources/arcanum/ArcanumPrime.webp';
 import ArcanumSpace from '../resources/arcanum/ArcanumSpace.webp';
 import ArcanumSpirit from '../resources/arcanum/ArcanumSpirit.webp';
 import ArcanumTime from '../resources/arcanum/ArcanumTime.webp';
-
+import {currentGnosisLevel} from './Gnosis'
+import { getNumberBelow } from "./utils";
 
 export const arcanumSchema = z.object({
     type: z.union([
@@ -149,21 +150,157 @@ export const emptyArcana: Arcana = {
     time: {type:"Common", creationPoints: 0, freebiePoints: 0, experiencePoints: 0},
 }
 
+export const currentArcanumLevel = (awakened:Awakened, arcanum:ArcanaKey) => {
+    const { creationPoints, freebiePoints, experiencePoints, type } = awakened.arcana[arcanum]
+    let xp = experiencePoints
+    let totalXpNeeded = 0
+    let pastXpNeeded = [0]
+    if (xp === 0) {
+      let level = creationPoints + freebiePoints;
+      let totalXpNeeded = (level + 1) * (type==="Ruling"? 6: type==="Inferior"? 8: 7);
+      pastXpNeeded.push(totalXpNeeded)
+      return {level, totalXpNeeded, pastXpNeeded};
+    } 
+    else {
+      let level = creationPoints + freebiePoints;
+      let xpNeeded = (level + 1) * (type==="Ruling"? 6: type==="Inferior"? 8: 7);
+      totalXpNeeded += xpNeeded
+      pastXpNeeded.push(totalXpNeeded)
+      while (xp >= xpNeeded) {
+        level++;
+        xp -= xpNeeded;
+        xpNeeded = (level + 1) * (type==="Ruling"? 6: type==="Inferior"? 8: 7);
+        totalXpNeeded += xpNeeded
+        pastXpNeeded.push(totalXpNeeded)
+      }
+      return {level, totalXpNeeded, pastXpNeeded};
+    }
+  }
+
+  //
+  export const getArcanaLevels = (awakened: Awakened): number[] => {
+    const arcana = awakened.arcana; // Use 'arcana' instead of 'arcanas'
+    const levelArray: number[] = [];
+    Object.keys(arcana).forEach((arcanum) => {
+        let arcanumName = arcanum as ArcanaKey 
+        const level = currentArcanumLevel(awakened, arcanumName).level;
+        levelArray.push(level);
+    });
+    levelArray.sort((a, b) => b - a);
+    return levelArray;
+  };
+  
+  function getOccurrence(array: number[], value: number) {
+    var count = 0;
+    array.forEach((v) => (v === value && count++));
+    return count;
+  }
+
+export const findMaxArcana = (awakened:Awakened, arcanum:ArcanaKey) => {
+    const { experiencePoints } = awakened.arcana[arcanum]
+    const xp = experiencePoints;
+    const { level } = currentArcanumLevel(awakened, arcanum);
+  
+    let max = undefined;
+    const gnosisLevel = (currentGnosisLevel(awakened).level)
+    const arcanaLevels = getArcanaLevels(awakened)
+  
+    if (gnosisLevel === 1) {
+      if (level === 3) {
+      max = xp;
+      }if (level === 2 && getOccurrence(arcanaLevels, 3) === 4) {
+        max = xp;
+        } if (getOccurrence(arcanaLevels, 2) === 4 && level === 1) {
+          max = xp;
+        }
+    }
+    if (gnosisLevel === 2) {
+      if (level === 4) {
+        max = xp;
+        }if (level === 3 && getOccurrence(arcanaLevels, 4) === 2) {
+          max = xp;
+          } if (level === 2 && getOccurrence(arcanaLevels, 3) === 3) {
+            max = xp;
+          } if (level === 1 && getOccurrence(arcanaLevels, 2) === 3) {
+            max = xp;
+          }      
+        }
+    if (gnosisLevel === 3) {
+      if (level === 5) {
+        max = xp;
+        }if (level === 4 && getOccurrence(arcanaLevels, 5) === 1) {
+          max = xp;
+          } if (level === 3 && getOccurrence(arcanaLevels, 4) === 2) {
+            max = xp;
+          } if (level === 2 && getOccurrence(arcanaLevels, 3) === 3) {
+            max = xp;
+          } if (level === 1 && getOccurrence(arcanaLevels, 2) === 3) {
+            max = xp;
+          }
+    }
+    if (gnosisLevel === 4) {
+      if (level === 5) {
+        max = xp;
+        }if (level === 4 && getOccurrence(arcanaLevels, 5) === 2) {
+          max = xp;
+          } if (level === 3 && getOccurrence(arcanaLevels, 4) === 2) {
+            max = xp;
+          } if (level === 2 && getOccurrence(arcanaLevels, 3) === 3) {
+            max = xp;
+          }
+    } if (gnosisLevel === 5) {
+      if (level === 5) {
+        max = xp;
+        }if (level === 4 && getOccurrence(arcanaLevels, 5) === 3) {
+          max = xp;
+          } if (level === 3 && getOccurrence(arcanaLevels, 4) === 2) {
+            max = xp;
+          } if (level === 2 && getOccurrence(arcanaLevels, 3) === 3) {
+            max = xp;
+          }
+    } if (gnosisLevel === 6) {
+      if (level === 6) {
+        max = xp;
+        }if (level === 5 && getOccurrence(arcanaLevels, 6) === 1) {
+          max = xp;
+          }if (level === 4 && getOccurrence(arcanaLevels, 5) === 3) {
+          max = xp;
+          } if (level === 3 && getOccurrence(arcanaLevels, 4) === 2) {
+            max = xp;
+          } if (level === 2 && getOccurrence(arcanaLevels, 3) === 3) {
+            max = xp;
+          }
+    }
+    return max
+  }
+  
+
 // function for changes to the Arcana
 type VariableKeys = "type" | "creationPoints" | "freebiePoints" | "experiencePoints";
 type ValidValue = number | "Common" | "Inferior" | "Ruling"
 export const handleArcanumChange = (awakened: Awakened, setAwakened: Function, arcanum: ArcanaKey, variableKey: VariableKeys, value: ValidValue) => {
-    const updatedArcana = {
-        ...awakened.arcana,
-        [arcanum]: {
-            ...awakened.arcana[arcanum],
-            variableKey: variableKey,
-            value: value
-        }
-    };
-    const updatedAwakened = {
-        ...awakened,
-        arcana: updatedArcana
-    };
-    setAwakened(updatedAwakened); // Update the awakened object with the updatedArcana
+  const { totalXpNeeded, pastXpNeeded } = currentArcanumLevel(awakened, arcanum);
+  const oldXp = awakened.arcana[arcanum].experiencePoints;
+
+  let newValue = null
+  if (typeof value === "number") {
+    newValue = value > oldXp ? totalXpNeeded : getNumberBelow(pastXpNeeded, value);
+  } else {
+    newValue = value
+    }
+
+  const updatedArcana = {
+    ...awakened.arcana,
+    [arcanum]: {
+      ...awakened.arcana[arcanum],
+      [variableKey]: newValue,
+    },
+  };
+
+  const updatedAwakened = {
+    ...awakened,
+    arcana: updatedArcana,
+  };
+
+  setAwakened(updatedAwakened); // Update the awakened object with the updatedArcana
 };

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { Awakened } from './Awakened'
-import { ArcanaKey } from './Arcanum'
+import { ArcanaKey, currentArcanumLevel } from './Arcanum'
 import roteDataJson from '../data/RotesData.json'
 
 export const roteSchema = z.object({
@@ -32,9 +32,9 @@ export const roteData: Rote[] = roteDataJson.map((rote) => ({
 export const getFilteredRotes = (awakened: Awakened, roteData: Rote[]): Rote[] => {
     const userArcana = [] as { arcana: ArcanaKey; number: number }[];
     for (const arcanum in awakened.arcana) {
-      if (awakened.arcana[arcanum as ArcanaKey].creationPoints !== 0) {
-        const creationPoints = awakened.arcana[arcanum as ArcanaKey].creationPoints;
-        userArcana.push({ arcana: arcanum as ArcanaKey, number: creationPoints });
+      if (currentArcanumLevel(awakened, arcanum as ArcanaKey).level !== 0) {
+        const level = currentArcanumLevel(awakened, arcanum as ArcanaKey).level;
+        userArcana.push({ arcana: arcanum as ArcanaKey, number: level });
       }
     }
 
@@ -96,6 +96,7 @@ export const getFilteredRotes = (awakened: Awakened, roteData: Rote[]): Rote[] =
       }
       return matchingArcana && matchingOtherArcana && matchingArcana.number >= level;
     })
+
     return filteredRotes
   }
 

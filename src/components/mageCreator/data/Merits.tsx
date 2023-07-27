@@ -1,13 +1,15 @@
 import { z } from "zod";
 import { Awakened } from "./Awakened";
-import { allAttributes, currentAttributeLevel } from "./Attributes";
-import { allSkills, currentSkillLevel } from "./Skills";
+import { allAttributes, currentAttributeLevel, AttributeNames } from "./Attributes";
+import { SkillNames, allSkills, currentSkillLevel } from "./Skills";
 import { currentGnosisLevel } from "./Gnosis"
 import meritDataJson from './mageMerits.json'
+import { getNumberBelow } from "./utils";
 
 export const meritSchema = z.object({
     type: z.string(),
     name: z.string(),
+    id: z.string(),
     rating: z.string(),
     prerequisites: z.string(),
     description: z.string(),
@@ -20,6 +22,7 @@ export type Merit = z.infer<typeof meritSchema>
 
 export const meritData: Merit[] = meritDataJson.map((rote) => ({
     ...rote,
+    id: "",
     creationPoints: 0,
     freebiePoints: 0,
     experiencePoints: 0,
@@ -195,11 +198,10 @@ export const currentMeritLevel = (meritInfo: Merit) => {
   };
 
 
-  export const getFilteredMerits = (awakened : Awakened) : { filteredMerits: Merit[] } => {
+  export const getFilteredMerits = (awakened : Awakened): Merit[]  => {
     const merits = awakened.merits;
     const order = awakened.order;
     const path = awakened.path;
-
 
     const filteredMerits: Merit[] = []; 
 
@@ -215,19 +217,19 @@ export const currentMeritLevel = (meritInfo: Merit) => {
                 const categoryValue = category.toLowerCase();
                 const requiredValue = (value.match(/•/g) || []).length + 1;
                 //check attribute requirement
-    
+  
                 merits.forEach((merit) => {
                   if (item === merit.name.toLowerCase() && requiredValue <= currentMeritLevel(merit).level) 
                   { return; }
                 })
-                if (categoryValue in allAttributes) {
+                  if (allAttributes.includes(categoryValue as AttributeNames)) {
                   if (requiredValue <= currentAttributeLevel(awakened, categoryValue).level) {
                     return;
                   } else {
                     allRequirementsMet = false;
                   }
                 //check skill requirement
-                } if (categoryValue in allSkills) {
+                } if (allSkills.includes(categoryValue as SkillNames)) {
                   if (requiredValue <= currentSkillLevel(awakened, categoryValue).level) {
                     return;
                   } else {
@@ -257,14 +259,14 @@ export const currentMeritLevel = (meritInfo: Merit) => {
                   const requiredValue = (value.match(/•/g) || []).length + 1;
               
                   // Check attribute requirement
-                  if (categoryValue in allAttributes) {
+                  if (allAttributes.includes(categoryValue as AttributeNames)) {
                     if (requiredValue <= currentAttributeLevel(awakened, categoryValue).level) {
                       reqsMet  = true;
                       break;
                     }
                   }
                   // Check skill requirement
-                  else if (categoryValue in allSkills) {
+                  else if (allSkills.includes(categoryValue as SkillNames)) {
                     if (requiredValue <= currentSkillLevel(awakened, categoryValue).level) {
                       reqsMet  = true;
                       break;
@@ -323,7 +325,7 @@ export const currentMeritLevel = (meritInfo: Merit) => {
         }
     })
 
-    return { filteredMerits }
+    return filteredMerits
 }
 
 type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
@@ -338,7 +340,7 @@ export const handleMeritChange = (
   const existingMerit = awakened.merits.find((m) => m.name === merit.name);
 
   if (existingMerit) {
-    if (newPoints === 0) {
+    if (newPoints === 0 && type !== "experiencePoints") {
       const updatedMerits = awakened.merits.filter((m) => m.name !== merit.name);
       setAwakened({ ...awakened, merits: updatedMerits });
     } else {
@@ -350,8 +352,30 @@ export const handleMeritChange = (
   } else {
     setAwakened({
       ...awakened,
-      merits: [...awakened.merits, { ...merit, [type]: newPoints }],
+      merits: [...awakened.merits, { ...merit, [type]: newPoints, id: `${merit.name}-${Date.now()}` }],
     });
   }
 };
 
+export const findMaxMerit = (meritInfo:Merit) => {
+  const xp = meritInfo.experiencePoints;
+  const { level } = currentMeritLevel(meritInfo)
+
+  let max = undefined;
+  if (level === 5 || level === defineMeritRating(meritInfo.rating).maxCost) {
+    max = xp;
+  }
+  return max
+}
+
+export const handleXpMeritChange = (awakened:Awakened, setAwakened:Function, merit:Merit, value:number) => {
+  let { level, totalXpNeeded, pastXpNeeded } = currentMeritLevel(merit) 
+  let oldXp = merit.experiencePoints
+  if(level < defineMeritRating(merit.rating).maxCost) {
+    let xp = value > oldXp ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
+    handleMeritChange(awakened, setAwakened, merit, "experiencePoints", xp)
+  } else if (level > defineMeritRating(merit.rating).minCost) {
+    let xp = value > oldXp ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
+    handleMeritChange(awakened, setAwakened, merit, "experiencePoints", xp)
+  }
+}

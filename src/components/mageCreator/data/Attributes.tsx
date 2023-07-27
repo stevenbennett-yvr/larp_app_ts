@@ -1,5 +1,7 @@
 import { z } from "zod";
 import { Awakened } from "./Awakened";
+import {currentGnosisLevel} from "./Gnosis"
+import {getNumberBelow} from './utils'
 
 const attributeSchema = z.object({
   creationPoints: z.number().min(1).max(6).int(),
@@ -128,6 +130,24 @@ export const attributesSchema = z.object({
       }
     };
 
+    export const findMaxAttribute = (awakened: Awakened, attribute: string) => {
+      const attributes = awakened.attributes as any;
+      const category = getAttributeCategory(attribute as any) as string;
+      const attributeData = attributes[category][attribute] as Attribute; // Get the attribute data
+      
+      const { experiencePoints } = attributeData;
+      const { level } = currentAttributeLevel(awakened, attribute);
+  
+      const gnosisLevel = (currentGnosisLevel(awakened).level)
+  
+      let max = undefined;
+      if (gnosisLevel <= 5 && level === 5) {
+        max = experiencePoints;
+      } if (gnosisLevel > 5 && level === gnosisLevel) {
+        max = experiencePoints;
+      }
+      return max;
+    };
 
     type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
     export const handleAttributeChange = (awakened: Awakened, setAwakened: Function, attribute: AttributeNames, variableKey: VariableKeys, value: number) => {
@@ -152,3 +172,16 @@ export const attributesSchema = z.object({
       setAwakened(updatedAwakened); // Update the awakened object with the updatedAttributes
     };
     
+
+
+    export const handleXpAttributeChange = (awakened:Awakened, setAwakened:Function, attribute:AttributeNames, value:number) => {
+      const { totalXpNeeded, pastXpNeeded } = currentAttributeLevel(awakened, attribute)
+      const attributes = awakened.attributes as any;
+      const category = getAttributeCategory(attribute as any) as string;
+      const attributeData = attributes[category][attribute] as Attribute; // Get the attribute data
+
+      let xp = value > attributeData.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value) 
+
+      handleAttributeChange(awakened, setAwakened, attribute, "experiencePoints", xp)
+      return xp
+    }

@@ -1,6 +1,6 @@
 import z from "zod";
 import { Awakened } from "../data/Awakened";
-import { allSkills, SkillCategory, SkillNames, skillTooltips, handleSkillChange, Speciality, getSkillCategory, Skill, Skills, getSpecialities } from "../data/Skills";
+import { addSpeciality, removeSpeciality, skillSelect, SkillCategory, SkillNames, skillTooltips, handleSkillChange, Speciality, getSkillCategory, Skill, Skills } from "../data/Skills";
 import { ScrollArea, Group, TextInput, Alert, Stack, Text, Select, NumberInput, Grid, Center, Button, Tooltip, Modal } from "@mantine/core";
 import { globals } from "../../../globals";
 import { useLocalStorage } from "@mantine/hooks";
@@ -11,6 +11,8 @@ type SkillAssignerProps = {
     setAwakened: (awakened: Awakened) => void;
     nextStep: () => void;
     backStep: () => void;
+    showInstructions: boolean;
+    setShowInstructions: (showInstruction: boolean) => void;
 }
 
 const prioritySchema = z.object({
@@ -37,6 +39,8 @@ const SkillAssigner = ({
     setAwakened,
     nextStep,
     backStep,
+    showInstructions, 
+    setShowInstructions
 }: SkillAssignerProps) => {
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -263,46 +267,6 @@ const SkillAssigner = ({
 
 
         const specialityInput = () => {
-
-        const handleAddSpeciality = (selectedSkill: SkillNames, specialityName: string) => {        
-
-            let specialityArray = getSpecialities(awakened, selectedSkill)
-
-            const newSpeciality: Speciality = {
-              name: specialityName,
-              creationPoints: 1,
-              freebiePoints: 0,
-              experiencePoints: 0,
-            };
-
-            specialityArray.push(newSpeciality);
-
-            handleSkillChange(awakened, setAwakened, selectedSkill, "specialities", specialityArray )
-        };
-
-        const handleRemoveSpeciality = (
-          selectedSkill: SkillNames,
-          specialityName: string,
-          setSpecialtyName: Function 
-        ) => {
-          let specialityArray = getSpecialities(awakened, selectedSkill)
-
-          // Find the index of the specialty to remove
-          const indexToRemove = specialityArray.findIndex(
-            (speciality) => speciality.name === specialityName
-          );
-        
-          if (indexToRemove !== -1) {
-            // Remove the specialty using splice method
-            specialityArray.splice(indexToRemove, 1);
-        
-            // Call setSpecialtyName to update the specialty name in the component
-            setSpecialtyName("");
-            
-            // Update the state with the updated skills
-            handleSkillChange(awakened, setAwakened, selectedSkill, "specialities", specialityArray )
-          }
-        };
           
           const isSpecialityAdded = (
             skillName: SkillNames,
@@ -319,17 +283,21 @@ const SkillAssigner = ({
           return (
             <Center style={{paddingBottom:"100px"}}>
             <Stack>
-              <Text>
-               <p>{`Where skills represent base knowledge of a subjet, Specialities represent a more fouced area of study. When applied Specialites provide a bonus modifier.`}</p>
-               <p>{`Add three Skill Specialites. These should be very specific.`}</p>
-              </Text>
-
+            <Button color="gray" onClick={toggleInstructions}>
+                    {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+                </Button>
+                    {showInstructions && (
+                      <Text>
+                      <p>{`Where skills represent base knowledge of a subjet, Specialities represent a more fouced area of study. When applied Specialites provide a bonus modifier.`}</p>
+                      <p>{`Add three Skill Specialites. These should be very specific.`}</p>
+                      </Text>
+                    )}
                   <Group>
                       <Select
                         w={inputW}
                         searchable
                         dropdownPosition="bottom"
-                        data={allSkills}
+                        data={skillSelect}
                         value={firstSkill}
                         onChange={(value) => setFirstSkill(value as SkillNames)}
                         maxDropdownHeight={150}
@@ -341,9 +309,9 @@ const SkillAssigner = ({
                         onChange={(event) => setFirstSpecialityName(event.currentTarget.value)}
                       />
                       {isSpecialityAdded(firstSkill, firstSpecialityName) ? (
-                          <Button color="red" onClick={() => handleRemoveSpeciality(firstSkill, firstSpecialityName, setFirstSpecialityName)}>Remove Speciality</Button>
+                          <Button color="red" onClick={() => {removeSpeciality(awakened, setAwakened, firstSkill, firstSpecialityName); setFirstSpecialityName("")}}>Remove Speciality</Button>
                       ) : (
-                          <Button disabled={firstSpecialityName === ""} onClick={() => handleAddSpeciality(firstSkill, firstSpecialityName)}>Add Speciality</Button>
+                          <Button disabled={firstSpecialityName === ""} onClick={() => addSpeciality(awakened, setAwakened, firstSkill, firstSpecialityName, "creationPoints")}>Add Speciality</Button>
                       )}
                   </Group>
                   <Group>
@@ -351,7 +319,7 @@ const SkillAssigner = ({
                           w={inputW}
                           searchable
                           dropdownPosition="bottom"
-                          data={allSkills}
+                          data={skillSelect}
                           value={secondSkill}
                           onChange={(value) => setSecondSkill(value as SkillNames)}
                           maxDropdownHeight={150}
@@ -363,9 +331,9 @@ const SkillAssigner = ({
                         onChange={(event) => setSecondSpecialityName(event.currentTarget.value)}
                       />
                       {isSpecialityAdded(secondSkill, secondSpecialityName) ? (
-                          <Button color="red" onClick={() => handleRemoveSpeciality(secondSkill, secondSpecialityName, setSecondSpecialityName)}>Remove Speciality</Button>
+                          <Button color="red" onClick={() => {removeSpeciality(awakened, setAwakened, secondSkill, secondSpecialityName); setSecondSpecialityName("")}}>Remove Speciality</Button>
                       ) : (
-                          <Button disabled={secondSpecialityName === ""} onClick={() => handleAddSpeciality(secondSkill, secondSpecialityName)}>Add Speciality</Button>
+                          <Button disabled={secondSpecialityName === ""} onClick={() => addSpeciality(awakened, setAwakened, secondSkill, secondSpecialityName, "creationPoints")}>Add Speciality</Button>
                       )}
                   </Group>
                   <Group>
@@ -373,7 +341,7 @@ const SkillAssigner = ({
                     w={inputW}
                     searchable
                     dropdownPosition="bottom"
-                    data={allSkills}
+                    data={skillSelect}
                     value={thirdSkill}
                     onChange={(value) => setThirdSkill(value as SkillNames)}
                     maxDropdownHeight={150}
@@ -385,9 +353,9 @@ const SkillAssigner = ({
                         onChange={(event) => setThirdSpecialityName(event.currentTarget.value)}
                       />
                       {isSpecialityAdded(thirdSkill, thirdSpecialityName) ? (
-                          <Button color="red" onClick={() => handleRemoveSpeciality(thirdSkill, thirdSpecialityName, setThirdSpecialityName)}>Remove Speciality</Button>
+                          <Button color="red" onClick={() => {removeSpeciality(awakened, setAwakened, thirdSkill, thirdSpecialityName); setThirdSpecialityName("")}}>Remove Speciality</Button>
                       ) : (
-                          <Button disabled={thirdSpecialityName === ""} onClick={() => handleAddSpeciality(thirdSkill, thirdSpecialityName)}>Add Speciality</Button>
+                          <Button disabled={thirdSpecialityName === ""} onClick={() => addSpeciality(awakened, setAwakened, thirdSkill, thirdSpecialityName, "creationPoints")}>Add Speciality</Button>
                       )}
                   </Group>
                   <Button.Group>      
@@ -415,15 +383,26 @@ const SkillAssigner = ({
         setModalOpen(false);
         };
 
+        const toggleInstructions = () => {
+          setShowInstructions(!showInstructions);
+        };
+
       return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '60px' : undefined}}>
         <Stack>
             <Alert color="gray">
               <Text mt={"xl"} ta="center" fz="xl" fw={700}>Skills</Text>
-              <p>{`Character Skills reflect the education and training your character has aquired over their life in addition to whatever other interests they may carry.`}</p>
-              <p>{`Like Attributes, Skills are broken down into three categoires. Mental, Physical and Social. Note that skills do not begin with one dot in Each, it is possible to be completely untrained in a particular skill.`}</p>
-              <p>{`The fifth dot in any Skill, like with attributes before, cost two dots to purchase.`}</p>
-            </Alert>
+              <Button color="gray" onClick={toggleInstructions}>
+                    {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+                </Button>
+                    {showInstructions && (
+                      <div>
+                        <p>{`Character Skills reflect the education and training your character has aquired over their life in addition to whatever other interests they may carry.`}</p>
+                        <p>{`Like Attributes, Skills are broken down into three categoires. Mental, Physical and Social. Note that skills do not begin with one dot in Each, it is possible to be completely untrained in a particular skill.`}</p>
+                        <p>{`The fifth dot in any Skill, like with attributes before, cost two dots to purchase.`}</p>
+                      </div>
+                    )}
+              </Alert>
 
               <Grid gutter="lg" justify="center">
                 {skillInputs}

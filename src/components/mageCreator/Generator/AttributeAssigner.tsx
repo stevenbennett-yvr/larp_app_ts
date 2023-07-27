@@ -10,6 +10,8 @@ type AttributeAssignerProps = {
   setAwakened: (awakened: Awakened) => void;
   nextStep: () => void;
   backStep: () => void;
+  showInstructions: boolean
+  setShowInstructions: (showInstruction: boolean) => void
 };
 
 const prioritySchema = z.object({
@@ -35,6 +37,7 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
     setAwakened,
     nextStep,
     backStep,
+    showInstructions, setShowInstructions 
   }: AttributeAssignerProps) => {
   const [categorySettings, setCategorySettings] = useLocalStorage<CategorySetting>({ key: "attributeSettings", defaultValue: {
     primary: {
@@ -70,7 +73,7 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
     category: AttributeCategory,
     attributeName: AttributeNames,
     newCreationPoints: number,
-    prevCreationPoints: number
+    prevCreationPoints: number,
   ): void {
     let totalPoints = categoryCounts[category];
     if (newCreationPoints === 5 && prevCreationPoints < newCreationPoints) {
@@ -229,6 +232,10 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
 
   const isPhoneScreen =globals.isPhoneScreen
   const isSmallScreen = globals.isSmallScreen
+  
+  const toggleInstructions = () => {
+    setShowInstructions(!showInstructions);
+  };
 
   return (
 
@@ -236,10 +243,17 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
     <Stack>
         <Alert color="gray">
           <Text mt={"xl"} ta="center" fz="xl" fw={700}>Attributes</Text>
-          <p>{`How would you describe your character's natural capabilities? Are they scheming, sly, or sturdy? Attribute Points define these characteristics mechanically across three categories: Mental, Physical, and Social.`}</p>
-          <p>{`Your first step is to decide which of these three categories is your Primary, the category in which you excel the most. Next, select your so-so Secondary category. Finally, choose your weakest Tertiary category.`}</p>
-          <p>{`All characters begin with one dot in each Attribute, representing basic human capabilities.`}</p>
-          <p>{`The fifth dot in any Attribute costs two points to purchase. Reaching a rating of Five in any Attribute requires a total of five points (the first dot is free).`}</p>
+          <Button color="gray" onClick={toggleInstructions}>
+            {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+          </Button>
+          {showInstructions && (
+            <div>
+            <p>{`How would you describe your character's natural capabilities? Are they scheming, sly, or sturdy? Attribute Points define these characteristics mechanically across three categories: Mental, Physical, and Social.`}</p>
+            <p>{`Your first step is to decide which of these three categories is your Primary, the category in which you excel the most. Next, select your so-so Secondary category. Finally, choose your weakest Tertiary category.`}</p>
+            <p>{`All characters begin with one dot in each Attribute, representing basic human capabilities.`}</p>
+            <p>{`The fifth dot in any Attribute costs two points to purchase. Reaching a rating of Five in any Attribute requires a total of five points (the first dot is free).`}</p>
+            </div>
+          )}
         </Alert>
 
         <Grid gutter="lg" justify="center">

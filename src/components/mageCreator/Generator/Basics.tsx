@@ -9,9 +9,11 @@ type BasicsPickerProps = {
     awakened: Awakened,
     setAwakened: (character: Awakened) => void
     nextStep: () => void
+    showInstructions: boolean
+    setShowInstructions: (showInstruction: boolean) => void
 }
 
-const Basics = ({ awakened, setAwakened, nextStep }: BasicsPickerProps) => {
+const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInstructions }: BasicsPickerProps) => {
 
     const [name, setName] = useState(awakened.name)
     const [concept, setConcept] = useState(awakened.concept)
@@ -24,20 +26,35 @@ const Basics = ({ awakened, setAwakened, nextStep }: BasicsPickerProps) => {
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
 
+    const toggleInstructions = () => {
+        setShowInstructions(!showInstructions);
+      };
+
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
             <Stack mt={"xl"} align="center" spacing="xl">
-                <Alert color="gray">
-                    <Text mt={"xl"} ta="center" fz="xl" fw={700}>Come up with the basics</Text>
-                    <p>{`With this, you are building a character to act as your persona in `}<u>Tattered Veil</u>{`. It is more important to craft the character around your vision of their personality, background, and quirks rather than putting together the perfect wizard based on some tactical scheme.`}</p>
-                    <p>{`Your allocation of traits should illustrate who they are and what they were in life.`}</p>
-                    <Text mt={"xl"} ta="center" fz="xl" fw={700}>Concept</Text>
-                    <p>What do you want to be? What do you want to do?</p>
-                    <p>{`Your Character Concept is a short descriptor that informs you and the storyteller about what your character is about.`}</p>
-                    <p>{`Generally, this consists of two to three words, including an adjective and noun, which could include a career. Examples include "Amiable Vagrant," "Drug-Addled Detective," "Captivating Socialite," "Fierce Campaigner," "Murderous Haberdasher," "Sesquipedalian Storyteller."`}</p>
-                    <p>{`Don't stress about the exact details. Keep it simple for now and use the concept as a guiding light.`}</p>
-                    <p>{`Next, consider what their defining strengths and weaknesses are. These inform your Virtue and Vice. Acting out either in a difficult situation reinforces your character's fundamental self and earns you Willpower, a beneficial resource.`}</p>
-                </Alert>
+                
+
+            <Alert color="gray">
+                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Basics</Text>
+                <Button color="gray" onClick={toggleInstructions}>
+                    {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+                </Button>
+                    {showInstructions && (
+                    <div>
+                        <p>{`With this, you are building a character to act as your persona in `}<u>Tattered Veil</u>{`. It is more important to craft the character around your vision of their personality, background, and quirks rather than putting together the perfect wizard based on some tactical scheme.`}</p>
+                        <p>{`Your allocation of traits should illustrate who they are and what they were in life.`}</p>
+                        <Text mt="xl" ta="center" fz="xl" fw={700}>
+                            Concept
+                        </Text>
+                        <p>What do you want to be? What do you want to do?</p>
+                        <p>{`Your Character Concept is a short descriptor that informs you and the storyteller about what your character is about.`}</p>
+                        <p>{`Generally, this consists of two to three words, including an adjective and noun, which could include a career. Examples include "Amiable Vagrant," "Drug-Addled Detective," "Captivating Socialite," "Fierce Campaigner," "Murderous Haberdasher," "Sesquipedalian Storyteller."`}</p>
+                        <p>{`Don't stress about the exact details. Keep it simple for now and use the concept as a guiding light.`}</p>
+                        <p>{`Next, consider what their defining strengths and weaknesses are. These inform your Virtue and Vice. Acting out either in a difficult situation reinforces your character's fundamental self and earns you Willpower, a beneficial resource.`}</p>
+                    </div>
+                    )}
+            </Alert>
 
                 <Grid columns={globals.isPhoneScreen?4:8}>
                     <Grid.Col span={4}>

@@ -10,9 +10,11 @@ type PathPickerProps = {
     setAwakened: (awakened: Awakened) => void
     nextStep: () => void
     backStep: () => void
+    showInstructions: boolean
+    setShowInstructions: (showInstruction: boolean) => void
 }
 
-const PathPicker = ({ awakened, setAwakened, nextStep, backStep}: PathPickerProps) => {
+const PathPicker = ({ awakened, setAwakened, nextStep, backStep, showInstructions, setShowInstructions}: PathPickerProps) => {
     const theme = useMantineTheme()
     const [path, setPath] = useState<PathName>(awakened.path);
 
@@ -75,16 +77,27 @@ const PathPicker = ({ awakened, setAwakened, nextStep, backStep}: PathPickerProp
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
 
+    const toggleInstructions = () => {
+        setShowInstructions(!showInstructions);
+      };
+
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '60px' : undefined}}>
             <Stack>
                 <Center>
                     <Alert color="gray">
-                        <Text mt={"xl"} ta="center" fz="xl" fw={700}>Path</Text>
-                        <p>{`Mages are not born to magic, they Awaken to it. The process is different for each individual, but it always involves a Journey, a Tower, and the writing of a Name.`}</p>
-                        <p>{`When a mage Awakens, their soul undergoes a journey to one of the five Supernal Realms, and they are eternally changed. The Mage's `}
-                        <strong>Path</strong>
-                        {` represents their magical connection to the supernal world. It is through this connection that the mage draws the laws of that Realm into the mundane world, performing magic.`}</p>
+                    <Text mt={"xl"} ta="center" fz="xl" fw={700}>Path</Text>
+                    <Button color="gray" onClick={toggleInstructions}>
+                    {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+                    </Button>
+                        {showInstructions && (
+                            <div>
+                            <p>{`Mages are not born to magic, they Awaken to it. The process is different for each individual, but it always involves a Journey, a Tower, and the writing of a Name.`}</p>
+                            <p>{`When a mage Awakens, their soul undergoes a journey to one of the five Supernal Realms, and they are eternally changed. The Mage's `}
+                            <strong>Path</strong>
+                            {` represents their magical connection to the supernal world. It is through this connection that the mage draws the laws of that Realm into the mundane world, performing magic.`}</p>
+                            </div>
+                        )}
                     </Alert>
                 </Center>
             <Grid grow m={0}>
@@ -120,7 +133,7 @@ const PathPicker = ({ awakened, setAwakened, nextStep, backStep}: PathPickerProp
                 <Button
                     onClick={() => {
                     PathSettings({awakened, setAwakened, path})
-                    setAwakened({...awakened, path})
+                    setAwakened({...awakened, path, merits: [], rotes: []})
                     nextStep()
                 }}
                 >Confirm Path</Button>

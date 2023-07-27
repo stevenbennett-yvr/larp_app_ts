@@ -10,9 +10,11 @@ type OrderPickerProps = {
     setAwakened: (awakened: Awakened) => void
     nextStep: () => void
     backStep: () => void
+    showInstructions: boolean
+    setShowInstructions: (showInstruction: boolean) => void
 }
 
-const OrderPicker = ({ awakened, setAwakened, nextStep, backStep}: OrderPickerProps) => {
+const OrderPicker = ({ awakened, setAwakened, nextStep, backStep, showInstructions, setShowInstructions}: OrderPickerProps) => {
     const theme = useMantineTheme()
     const [order, setOrder] = useState<OrderName>(awakened.order);
 
@@ -74,16 +76,28 @@ const OrderPicker = ({ awakened, setAwakened, nextStep, backStep}: OrderPickerPr
       const isPhoneScreen = globals.isPhoneScreen
       const isSmallScreen = globals.isSmallScreen
 
+
+      const toggleInstructions = () => {
+        setShowInstructions(!showInstructions);
+    };
+
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '60px' : undefined}}>
             <Stack>
                 <Center>
                     <Alert color="gray">
                     <Text mt={"xl"} ta="center" fz="xl" fw={700}>Orders</Text>
-                    <p>{`The `}
-                      <strong>Orders</strong>
-                    {` are social organizations of mages united by philosophy, cultural connection, and convenience. These groups find new mages, provide them with training, camaraderie, and initiate them into Awakened Society. The five core orders are allied into an organization known as the Pentacle.`}</p>
-                    <p>{`Take a look at the options on offer and see what speaks to you.`}</p>
+                    <Button color="gray" onClick={toggleInstructions}>
+                        {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+                    </Button>
+                        {showInstructions && (
+                        <div>
+                            <p>{`The `}
+                            <strong>Orders</strong>
+                            {` are social organizations of mages united by philosophy, cultural connection, and convenience. These groups find new mages, provide them with training, camaraderie, and initiate them into Awakened Society. The five core orders are allied into an organization known as the Pentacle.`}</p>
+                            <p>{`Take a look at the options on offer and see what speaks to you.`}</p>
+                        </div>
+                        )}
                     </Alert>
                 </Center>
             <Grid grow m={0}>

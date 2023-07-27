@@ -10,11 +10,12 @@ type MeritAssignerProps = {
     setAwakened: (awakened: Awakened) => void
     nextStep: () => void
     backStep: () => void
+    showInstructions: boolean
+    setShowInstructions: (showInstruction: boolean) => void
 }
 
-const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssignerProps) => {
-    //const [ selectedMerits, setSelectedMerits ] = useState(awakened.merits);
-    const { filteredMerits } = getFilteredMerits(awakened)
+const MeritAssigner = ({awakened, setAwakened, nextStep, backStep, showInstructions, setShowInstructions}: MeritAssignerProps) => {
+    const filteredMerits = getFilteredMerits(awakened)
     const theme = useMantineTheme()
     const freebieMerits = [
       { name: 'Status (Order)' },
@@ -121,9 +122,14 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
               break;
           }
 
-        const sortedMerits = showAllMerits
-          ? meritData.filter((merit) => merit.type.toLowerCase() === type.toLowerCase())
-          : filteredMerits.filter((merit) => merit.type.toLowerCase() === type.toLowerCase());
+          const sortedMerits = showAllMerits
+          ? meritData
+              .filter((merit) => merit.type.toLowerCase() === type.toLowerCase())
+              .sort((a, b) => a.name.localeCompare(b.name))
+          : filteredMerits
+              .filter((merit) => merit.type.toLowerCase() === type.toLowerCase())
+              .sort((a, b) => a.name.localeCompare(b.name));
+        
       
         return (
           <div>
@@ -143,7 +149,8 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
                           return (
                             <tr key={`${merit.name} ${merit.type}`}>
                                 <td style={{ minWidth: "150px" }}>
-                                <Text>{merit.name} {merit.rating}</Text>
+                                <Text>{merit.name}</Text>
+                                <Text>{merit.rating}</Text>
                                 <Text>{merit.prerequisites? `PreReq: ${merit.prerequisites}`: ''}</Text>
                                 {isFreebieMerit? MeritInput(merit, "freebiePoints"):MeritInput(merit, "creationPoints")}
                                 </td>
@@ -195,26 +202,37 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep}: MeritAssigne
       const isSmallScreen = globals.isSmallScreen
       const [showAllMerits, setShowAllMerits] = useState(false);
 
+      const toggleInstructions = () => {
+        setShowInstructions(!showInstructions);
+      };
+
       return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '100px' : '100px'}}>
             <Stack>
               <Alert color='gray'>
-              <h2>Merits</h2>
-                <p>{`Merits are special capabilities or qualities that add individuality to your character. Some are intrinsic, developed early in life, others can be acquired through trial and error, training and other efforts.`}</p>
-                <p>{`Each merit has a number of dots associated with it. These dots represent the number of points that need to be spent to purchase it.`}</p>
-                <p>{`As a member of one of the five Pentacle Orders, you are taught the rudiments of Atlantean High Speech and gain that merit for free. You also gain up to two free dots of Status (Order) and Status (Consilium) to represent your rank in Mage society.`}</p>
-                <h3>Gnosis</h3>
-                <p>{`A Mage's empowered will is measured by their Gnosis. As a Mage, you start with one dot in Gnosis by default.`}</p>
-                <p>{`The Gnosis trait is rated from 1 to 10 dots. It has the following game effects:`}</p>
-                <ul>
-                  <li>{`Gnosis determines a character's potential to gain master of an Arcanum and successive Arcana. See "Arcana Mastery", M:ta pg. 76`}</li>
-                  <li>{`A Mage roll Gnosis + Arcanum when casting improvised spells.`}</li>
-                  <li>{`The higher a mage’s Gnosis, the more quickly they can cast elaborate or powerful spells.`}</li>
-                  <li>{`Gnosis affects how many points of Mana a mage can spend in a single turn and how much Mana they can store.`}</li>
-                  <li>{`A Mages can maintain only a certain number of active spells simultaneously, equal to Gnosis +3.`}</li>
-                  <li>{`Mages can combine spells into a single casting, with the total number limited by Gnosis.`}</li>
-                </ul>
-                <p>{`You can spend 3 merit points here to purchase additional dots of Gnosis.`}</p>
+              <Text mt={"xl"} ta="center" fz="xl" fw={700}>Merits</Text>
+              <Button color="gray" onClick={toggleInstructions}>
+                    {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+                </Button>
+                    {showInstructions && (
+                    <div>
+                        <p>{`Merits are special capabilities or qualities that add individuality to your character. Some are intrinsic, developed early in life, others can be acquired through trial and error, training and other efforts.`}</p>
+                        <p>{`Each merit has a number of dots associated with it. These dots represent the number of points that need to be spent to purchase it.`}</p>
+                        <p>{`As a member of one of the five Pentacle Orders, you are taught the rudiments of Atlantean High Speech and gain that merit for free. You also gain up to two free dots of Status (Order) and Status (Consilium) to represent your rank in Mage society.`}</p>
+                        <Text mt={"xl"} ta="center" fz="xl" fw={700}>Gnosis</Text>
+                        <p>{`A Mage's empowered will is measured by their Gnosis. As a Mage, you start with one dot in Gnosis by default.`}</p>
+                        <p>{`The Gnosis trait is rated from 1 to 10 dots. It has the following game effects:`}</p>
+                        <ul>
+                          <li>{`Gnosis determines a character's potential to gain master of an Arcanum and successive Arcana. See "Arcana Mastery", M:ta pg. 76`}</li>
+                          <li>{`A Mage roll Gnosis + Arcanum when casting improvised spells.`}</li>
+                          <li>{`The higher a mage’s Gnosis, the more quickly they can cast elaborate or powerful spells.`}</li>
+                          <li>{`Gnosis affects how many points of Mana a mage can spend in a single turn and how much Mana they can store.`}</li>
+                          <li>{`A Mages can maintain only a certain number of active spells simultaneously, equal to Gnosis +3.`}</li>
+                          <li>{`Mages can combine spells into a single casting, with the total number limited by Gnosis.`}</li>
+                        </ul>
+                        <p>{`You can spend 3 merit points here to purchase additional dots of Gnosis.`}</p>
+                      </div>
+                    )}
               </Alert>
               <Center>
               {createGnosisAssigner()}

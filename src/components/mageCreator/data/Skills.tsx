@@ -1,5 +1,7 @@
 import { z } from "zod";
 import { Awakened } from "./Awakened";
+import { getNumberBelow } from "./utils";
+import { currentGnosisLevel } from "./Gnosis";
 
 const specialitySchema = z.object({
     name: z.string(),
@@ -100,6 +102,37 @@ export const skillsSchema = z.object({
   "politics",
   "science",
  ]
+
+ export const skillSelect: { value: string; label: string; group?: string }[] = [
+  { value: 'athletics', label: 'Athletics', group: 'Physical Skills' },
+  { value: 'brawl', label: 'Brawl', group: 'Physical Skills' },
+  { value: 'drive', label: 'Drive', group: 'Physical Skills' },
+  { value: 'firearms', label: 'Firearms', group: 'Physical Skills' },
+  { value: 'weaponry', label: 'Weaponry', group: 'Physical Skills' },
+  { value: 'larceny', label: 'Larceny', group: 'Physical Skills' },
+  { value: 'stealth', label: 'Stealth', group: 'Physical Skills' },
+  { value: 'survival', label: 'Survival', group: 'Physical Skills' },
+
+  { value: 'animal_ken', label: 'Animal Ken', group: 'Social Skills' },
+  { value: 'socialize', label: 'Socialize', group: 'Social Skills' },
+  { value: 'empathy', label: 'Empathy', group: 'Social Skills' },
+  { value: 'intimidation', label: 'Intimidation', group: 'Social Skills' },
+  { value: 'expression', label: 'Expression', group: 'Social Skills' },
+  { value: 'persuasion', label: 'Persuasion', group: 'Social Skills' },
+  { value: 'streetwise', label: 'Streetwise', group: 'Social Skills' },
+  { value: 'subterfuge', label: 'Subterfuge', group: 'Social Skills' },
+
+  { value: 'academics', label: 'Academics', group: 'Mental Skills' },
+  { value: 'computer', label: 'Computer', group: 'Mental Skills' },
+  { value: 'crafts', label: 'Crafts', group: 'Mental Skills' },
+  { value: 'investigation', label: 'Investigation', group: 'Mental Skills' },
+  { value: 'medicine', label: 'Medicine', group: 'Mental Skills' },
+  { value: 'occult', label: 'Occult', group: 'Mental Skills' },
+  { value: 'politics', label: 'Politics', group: 'Mental Skills' },
+  { value: 'science', label: 'Science', group: 'Mental Skills' },
+];
+
+  
   
   export const skillTooltips: SkillsKeys = {
     mental: {
@@ -163,26 +196,45 @@ export const skillsSchema = z.object({
     
       if (experiencePoints === 0) {
         let level = creationPoints + freebiePoints;
-        let xpNeeded = (level + 1) * 5;
+        let xpNeeded = (level + 1) * 3;
         totalXpNeeded = xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
         return { level, totalXpNeeded, pastXpNeeded };
       } else {
         let level = creationPoints + freebiePoints;
-        let xpNeeded = (level + 1) * 5;
+        let xpNeeded = (level + 1) * 3;
         totalXpNeeded += xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
     
         while (experiencePoints >= xpNeeded) {
           level++;
           experiencePoints -= xpNeeded;
-          xpNeeded = (level + 1) * 5;
+          xpNeeded = (level + 1) * 3;
           totalXpNeeded += xpNeeded;
           pastXpNeeded.push(totalXpNeeded);
         }
     
         return { level, totalXpNeeded, pastXpNeeded };
       }
+    };
+
+    export const findMaxSkill = (awakened: Awakened, skill: string) => {
+      const skills = awakened.skills as any;
+      const category = getSkillCategory(skill as any) as string;
+      const attributeData = skills[category][skill] as Skill; // Get the attribute data
+      
+      const { experiencePoints } = attributeData;
+      const { level } = currentSkillLevel(awakened, skill);
+  
+      const gnosisLevel = (currentGnosisLevel(awakened).level)
+  
+      let max = undefined;
+      if (gnosisLevel <= 5 && level === 5) {
+        max = experiencePoints;
+      } if (gnosisLevel > 5 && level === gnosisLevel) {
+        max = experiencePoints;
+      }
+      return max;
     };
 
     type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "roteSkill" | "specialities";
@@ -213,5 +265,57 @@ export const skillsSchema = z.object({
       const skillInfo = (awakened.skills[category as keyof Skills][skill as keyof Skills[SkillCategory]] as Skill)
       let specialities = skillInfo.specialities
       return specialities
+    }
 
+        export const handleXpSkillChange = (awakened:Awakened, setAwakened:Function, skill:SkillNames, value:number) => {
+      const { totalXpNeeded, pastXpNeeded } = currentSkillLevel(awakened, skill)
+      const skills = awakened.skills as any;
+      const category = getSkillCategory(skill as any) as string;
+      const skillData = skills[category][skill] as Skill; // Get the skill data
+
+      let xp = value > skillData.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value) 
+
+      handleSkillChange(awakened, setAwakened, skill, "experiencePoints", xp)
+      return xp
+    }
+
+    export const addSpeciality = (
+      awakened: Awakened,
+      setAwakened: Function,
+      skill: SkillNames,
+      specialityName: string,
+      value: string
+    ) => {
+      let specialityArray = getSpecialities(awakened, skill);
+    
+      const newSpeciality: Speciality = {
+        name: specialityName,
+        creationPoints: value === "creationPoints" ? 1 : 0,
+        freebiePoints: value === "freebiePoints" ? 1 : 0,
+        experiencePoints: value === "experiencePoints" ? 3 : 0,
+      };
+    
+      specialityArray.push(newSpeciality);
+    
+      handleSkillChange(awakened, setAwakened, skill, "specialities", specialityArray);
+    };
+
+    export const removeSpeciality = (
+      awakened: Awakened,
+      setAwakened: Function,
+      skill: SkillNames,
+      specialityName: string,
+    ) => {
+      let specialityArray = getSpecialities(awakened, skill);
+      const indexToRemove = specialityArray.findIndex(
+        (speciality) => speciality.name === specialityName
+      );
+      if (indexToRemove !== -1) {
+        // Remove the specialty using splice method
+        specialityArray.splice(indexToRemove, 1);
+    
+        // Call setSpecialtyName to update the specialty name in the component        
+        // Update the state with the updated skills
+        handleSkillChange(awakened, setAwakened, skill, "specialities", specialityArray )
+      }
     }

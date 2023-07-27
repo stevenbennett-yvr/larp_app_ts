@@ -11,9 +11,11 @@ type ArcanaRoteAssignerProps = {
     setAwakened: (awakened: Awakened) => void
     nextStep: () => void
     backStep: () => void
+    showInstructions: boolean
+    setShowInstructions: (showInstruction: boolean) => void
 }
 
-const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: ArcanaRoteAssignerProps) => {
+const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstructions, setShowInstructions}: ArcanaRoteAssignerProps) => {
     const theme = useMantineTheme()
 
     const c1 = "rgba(26, 27, 30, 0.90)"
@@ -301,23 +303,34 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
       });
       const [showAllRotes, setShowAllRotes] = useState(false);
 
+      const toggleInstructions = () => {
+        setShowInstructions(!showInstructions);
+      };
+
       return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '100px' : '100px'}}>
         <Stack>
           <Alert color="gray">
           <Text mt={"xl"} ta="center" fz="xl" fw={700}>Arcana</Text>
-            <p>{`
-              Arcana are the ten spheres of magical influence. By improving their knowledge of the Arcana, a mage improves their skill at altering reality.  
-            `}</p>
-            <p>{`
-              A mages Ruling Arcana, and the limits of their understanding, is determined by the Path.
-            `}</p>
-            <p>{`
-              A mage can learn up to the fifth dot in their Ruling Arcana. Without aid, they can learn up to the fourth dot in other Arcana. Of their Inferior Arcanum, in which a mage is particularly weak, they can only learn the first two dots before needing assistance. Assistance comes from mages of other Paths with ruling Arcnaa of which the user wishes to learn.
-            `}</p>
-            <p>
-              {`At creation, you gain 2 dots in one Arcanum, 2 dots in a second Arcanum and 1 dot in a third Arcanum. two of these Arcana must be in your character's Path's Ruling Arcana. Finally you gain 1 dot you can place anywhere.`}
-            </p>
+          <Button color="gray" onClick={toggleInstructions}>
+                    {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+                </Button>
+                    {showInstructions && (
+                    <div>
+                      <p>{`
+                        Arcana are the ten spheres of magical influence. By improving their knowledge of the Arcana, a mage improves their skill at altering reality.  
+                      `}</p>
+                      <p>{`
+                        A mages Ruling Arcana, and the limits of their understanding, is determined by the Path.
+                      `}</p>
+                      <p>{`
+                        A mage can learn up to the fifth dot in their Ruling Arcana. Without aid, they can learn up to the fourth dot in other Arcana. Of their Inferior Arcanum, in which a mage is particularly weak, they can only learn the first two dots before needing assistance. Assistance comes from mages of other Paths with ruling Arcnaa of which the user wishes to learn.
+                      `}</p>
+                      <p>
+                        {`At creation, you gain 2 dots in one Arcanum, 2 dots in a second Arcanum and 1 dot in a third Arcanum. two of these Arcana must be in your character's Path's Ruling Arcana. Finally you gain 1 dot you can place anywhere.`}
+                      </p>
+                      </div>
+                      )}
           </Alert>
             <Grid columns={isPhoneScreen? 4 : 5} grow m={0}>
                 {
@@ -332,8 +345,15 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep}: Arcana
             {countArcanaWithCreationPoints() > 0 || showAllRotes? 
             <Alert color="gray">
               <Text mt={"xl"} ta="center" fz="xl" fw={700}>Rotes</Text>
-              <p>{`Rotes are magical feats simplified into a recipe. They provide an easier and safer way for mages to perform magic compared to improvisational spells. `}</p>
-              <p>{`You may purchase up to 6 points of rotes. A rote's cost is equal to it's Arcanum rating. No rote can be rated higher than your character's level in that Arcanum. `}</p>
+                <Button color="gray" onClick={toggleInstructions}>
+                    {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+                </Button>
+                    {showInstructions && (
+                      <div>
+                        <p>{`Rotes are magical feats simplified into a recipe. They provide an easier and safer way for mages to perform magic compared to improvisational spells. `}</p>
+                        <p>{`You may purchase up to 6 points of rotes. A rote's cost is equal to it's Arcanum rating. No rote can be rated higher than your character's level in that Arcanum. `}</p>
+                      </div>
+                    )}
             </Alert>
             : <></> }
                   <Center>
