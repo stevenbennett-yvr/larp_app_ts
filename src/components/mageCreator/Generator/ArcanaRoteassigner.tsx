@@ -91,7 +91,7 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
         second: [secondRuling, updatedArcana[secondRuling].creationPoints]
       });
 
-      setAwakened({ ...awakened, arcana: updatedArcana });
+      setAwakened({ ...awakened, arcana: updatedArcana, rotes: [] });
     };
 
     const countArcanaWithCreationPoints = () => {

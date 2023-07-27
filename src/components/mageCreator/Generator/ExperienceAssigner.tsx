@@ -266,7 +266,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
         )
     }
     
-    // ROTE SECTION
+    // ROTES SECTION
 
     const [learnableRotes, setLearnableRotes] = useState<Rote[]>(getFilteredRotes(awakened, roteData));
     const [selectedRote, setSelectedRote] = useState<string | null>("");
@@ -288,7 +288,12 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
           });
           
       
-        const selectData = sortedRotes.map((rote) => ({
+        // Filter out the rotes that also appear in awakened.rotes
+        const filteredRotes = sortedRotes.filter((rote) => {
+            return !awakened.rotes.some((existingRote) => existingRote.name === rote.name);
+        });
+
+        const selectData = filteredRotes.map((rote) => ({
             value: `${rote.name}`,
             label: `${rote.arcanum} ${rote.level} - ${rote.name}`,
             image: `${arcanaDescriptions[rote.arcanum.toLowerCase() as ArcanaKey].logo}`,
@@ -430,6 +435,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
           <div>
             <Select
                 data={selectData} 
+                value={selectedRote}
                 onChange={(val) => setSelectedRote(val)} 
                 placeholder="Select Rote to Buy"
                 itemComponent={SelectItem}
@@ -470,7 +476,14 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                 return a.name.localeCompare(b.name);
             }
         });
-        const selectData = sortedMerits.map((merit) => ({
+
+        const filteredMerits = sortedMerits.filter((merit) => {
+            return merit.rating.includes("mult") || (!merit.description.includes("Character Creation only") && !awakened.merits.some((existingMerit) => existingMerit.name === merit.name))
+          });
+          
+          //merit.description.includes("Character Creation only") || !merit.rating.includes("multi") || 
+
+        const selectData = filteredMerits.map((merit) => ({
             value: `${merit.name}`,
             label: `${merit.name} ${merit.rating}`,
             bgc: `${merit.type==="Mental merits"? theme.fn.rgba(theme.colors.blue[8], 0.90): merit.type==="Physical merits"?theme.fn.rgba(theme.colors.red[8], 0.90):merit.type==="Social merits"?theme.fn.rgba(theme.colors.grape[8], 0.90):merit.type==="Mage merits"?theme.fn.rgba(theme.colors.green[9], 0.90):merit.type==="Sanctum merits"?theme.fn.rgba(theme.colors.gray[6], 0.90):""}` 
@@ -529,8 +542,8 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                                                 cost = cost + (i * 2)
                                             }
                                         }
-                                        handleMeritChange(awakened,setAwakened,selectedMeritData, "experiencePoints", cost)
-                                        setSelectedRote("")
+                                        handleMeritChange(awakened,setAwakened,selectedMeritData, "experiencePoints", cost, null)
+                                        setSelectedMerit("")
                                     }}>Buy</Button>                         </td>
                                     <td dangerouslySetInnerHTML={{ __html: `${selectedMeritData.description}` }} />
                                 </tr>
@@ -578,7 +591,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
             }
     
         
-            const sortedMerits = awakened.merits.filter((merit) => merit.type.toLowerCase() === type.toLowerCase()).sort((a, b) => a.name.localeCompare(b.name))
+            const sortedMerits = awakened.merits.filter((merit) => merit.type.toLowerCase() === type.toLowerCase()).sort((a, b) => a.id.localeCompare(b.id))
 
             return (
                 <div>
@@ -599,6 +612,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                                     <tr key={`${merit.name} ${merit.type}`}>
                                         <td style={{ minWidth: "150px" }}>
                                         <Text>{merit.name} {currentMeritLevel(merit).level}</Text>
+                                        <Text>{merit.rating}</Text>
                                         <Text>{merit.prerequisites? `PreReq: ${merit.prerequisites}`: ''}</Text>                                        
                                         {merit.name ==="Status (Consilium)" || merit.name ==="Status (Order)"? <></>:
                                             <Group key={`${merit.name} input`}>
@@ -661,6 +675,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
             <div>
                 <Select
                     data={selectData}
+                    value={selectedMerit}
                     onChange={(val) => setSelectedMerit(val)}
                     placeholder="Select Merit to Buy"
                     itemComponent={SelectItem}

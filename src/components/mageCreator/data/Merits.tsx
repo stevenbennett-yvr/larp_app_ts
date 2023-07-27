@@ -20,9 +20,9 @@ export const meritSchema = z.object({
 })
 export type Merit = z.infer<typeof meritSchema>
 
-export const meritData: Merit[] = meritDataJson.map((rote) => ({
-    ...rote,
-    id: "",
+export const meritData: Merit[] = meritDataJson.map((merit, index) => ({
+    ...merit,
+    id: `merit_${index}`,
     creationPoints: 0,
     freebiePoints: 0,
     experiencePoints: 0,
@@ -335,24 +335,25 @@ export const handleMeritChange = (
   setAwakened: Function,
   merit: Merit,
   type: VariableKeys,
-  newPoints: number
+  newPoints: number,
+  customId: string | null,
 ): void => {
-  const existingMerit = awakened.merits.find((m) => m.name === merit.name);
-
-  if (existingMerit) {
+  const existingMerit = awakened.merits.find((m) => m.id === merit.id);
+  const meritId = customId || merit.id; 
+    if (existingMerit) {
     if (newPoints === 0 && type !== "experiencePoints") {
-      const updatedMerits = awakened.merits.filter((m) => m.name !== merit.name);
+      const updatedMerits = awakened.merits.filter((m) => m.id !== merit.id);
       setAwakened({ ...awakened, merits: updatedMerits });
     } else {
       const updatedMerits = awakened.merits.map((m) =>
-        m.name === merit.name ? { ...m, [type]: newPoints } : m
+        m.id === merit.id ? { ...m, [type]: newPoints } : m
       );
       setAwakened({ ...awakened, merits: updatedMerits });
     }
   } else {
     setAwakened({
       ...awakened,
-      merits: [...awakened.merits, { ...merit, [type]: newPoints, id: `${merit.name}-${Date.now()}` }],
+      merits: [...awakened.merits, { ...merit, [type]: newPoints, id: meritId }],
     });
   }
 };
@@ -373,9 +374,9 @@ export const handleXpMeritChange = (awakened:Awakened, setAwakened:Function, mer
   let oldXp = merit.experiencePoints
   if(level < defineMeritRating(merit.rating).maxCost) {
     let xp = value > oldXp ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
-    handleMeritChange(awakened, setAwakened, merit, "experiencePoints", xp)
+    handleMeritChange(awakened, setAwakened, merit, "experiencePoints", xp, null)
   } else if (level > defineMeritRating(merit.rating).minCost) {
     let xp = value > oldXp ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
-    handleMeritChange(awakened, setAwakened, merit, "experiencePoints", xp)
+    handleMeritChange(awakened, setAwakened, merit, "experiencePoints", xp, null)
   }
 }

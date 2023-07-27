@@ -93,7 +93,7 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep, showInstructi
                   max={type==="freebiePoints"?2:defineMeritRating(merit.rating).maxCost}
                   step={step}
                   onChange={(val:number) => {
-                    handleMeritChange(awakened, setAwakened, merit, type, val)
+                    handleMeritChange(awakened, setAwakened, merit, type, val, null)
                   }}
                 />
             </div>
