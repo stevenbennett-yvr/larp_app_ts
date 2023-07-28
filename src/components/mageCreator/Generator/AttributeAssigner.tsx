@@ -262,7 +262,7 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
 
 
         <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
-          <Alert color="gray" radius="xs" style={{padding:"0px"}}>
+          <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px"}}>
           <Button
               style={{ margin: "5px" }}
               color="gray"

@@ -9,14 +9,8 @@ import { arcanaSchema } from './Arcanum';
 import { meritSchema } from "./Merits";
 import { roteSchema } from "./Rotes";
 import { gnosisSchema } from "./Gnosis";
+import { wisdomSchema } from "./Wisdom";
 
-  export const wisdomSchema = z.object({
-    creationPoints: z.number().default(7),
-    freebiePoints: z.number().min(0).int(),
-    experiencePoints: z.number().min(0).int(),
-  });
-  
-  export type Wisdom = z.infer<typeof wisdomSchema>;
 
 export const awakenedSchema = z.object({
     name: z.string(),
@@ -121,7 +115,7 @@ export const getEmptyAwakened = (): Awakened => {
 
     gnosis: {creationPoints: 0, freebiePoints: 0, experiencePoints: 0},
 
-    wisdom: {creationPoints: 0, freebiePoints: 0, experiencePoints: 0},
+    wisdom: {creationPoints: 7, freebiePoints: 0, experiencePoints: 0},
 
     changeLogs: {},
 

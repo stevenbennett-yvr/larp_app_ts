@@ -1,7 +1,7 @@
 import { Awakened } from '../data/Awakened'
 import { Group, Text, Center, Stack, Accordion, Button, Table, useMantineTheme, NumberInput, Alert } from '@mantine/core'
 import { getFilteredMerits, meritData, Merit, defineMeritRating, handleMeritChange } from '../data/Merits'
-import { currentGnosisLevel } from '../data/Gnosis'
+import { currentGnosisLevel, Gnoses } from '../data/Gnosis'
 import { useState, useEffect } from 'react'
 import { globals } from '../../../globals'
 
@@ -90,10 +90,11 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep, showInstructi
                 <NumberInput
                   value={getMeritPoints(merit)}
                   min={type==="freebiePoints"?1:0}
-                  max={type==="freebiePoints"?2:defineMeritRating(merit.rating).maxCost}
+                  max={getRemainingPoints(awakened) < minCost?getMeritPoints(merit):type==="freebiePoints"?2:defineMeritRating(merit.rating).maxCost}
                   step={step}
+                  disabled={(getRemainingPoints(awakened) < minCost && getMeritPoints(merit)===0) || (type==="freebiePoints" && awakened.order === "Apostate")}
                   onChange={(val:number) => {
-                    handleMeritChange(awakened, setAwakened, merit, type, val, null)
+                    handleMeritChange(awakened, setAwakened, merit, type, val)
                   }}
                 />
             </div>
@@ -187,14 +188,53 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep, showInstructi
         };
       
         return (
-          <Alert w={globals.isSmallScreen ? "100%" : "600px"} style={{backgroundColor:"#996515", color: "white"}}>
-            <Text fz={globals.smallFontSize}>Gnosis: {currentGnosis.level}</Text>
-            <Text fz={globals.smallerFontSize}>3 merit points per dot of Gnosis</Text>
-            <Button.Group>
-              <Button style={{ margin: "5px" }} color="gray" disabled={getRemainingPoints(awakened) < 3} onClick={increaseGnosis}>Increase Gnosis</Button>
-              <Button style={{ margin: "5px" }} color="gray" disabled={!canDecreaseGnosis} onClick={decreaseGnosis}>Decrease Gnosis</Button>
-            </Button.Group>
-          </Alert>
+          <div>
+            <Center>
+              <Alert w={globals.isSmallScreen ? "100%" : "600px"} style={{backgroundColor:"#996515", color: "white"}}>
+                <Text fz={globals.smallFontSize}>Gnosis: {currentGnosis.level}</Text>
+                <Text fz={globals.smallerFontSize}>3 merit points per dot of Gnosis</Text>
+                <Button.Group>
+                  <Button style={{ margin: "5px" }} color="gray" disabled={getRemainingPoints(awakened) < 3} onClick={increaseGnosis}>Increase Gnosis</Button>
+                  <Button style={{ margin: "5px" }} color="gray" disabled={!canDecreaseGnosis} onClick={decreaseGnosis}>Decrease Gnosis</Button>
+                </Button.Group>
+              </Alert>
+            </Center>
+          <Table striped withColumnBorders fontSize="xs">
+          <thead>
+              <tr>
+                  <th>
+                    Mana Max/Per Turn  
+                  </th>
+                  <th>
+                      Active Spells
+                  </th>
+                  {Gnoses[currentGnosisLevel(awakened).level].aura!==""?<th>Aura</th>:<></>}
+                  <th>
+                      Paradox Pool
+                  </th>
+                  <th>
+                      Extended Casting Time/Breaks
+                  </th>
+                  {Gnoses[currentGnosisLevel(awakened).level].combinedSpells!==0?<th>Combined Spells</th>:<></>}
+                  <th>Aimed Spell <p/>(Short/Med -2/ Long -4)</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>{Gnoses[currentGnosisLevel(awakened).level].mana}</td>
+                  <td>{Gnoses[currentGnosisLevel(awakened).level].activeSpells}</td>
+                  {Gnoses[currentGnosisLevel(awakened).level].aura!==""?<td>{Gnoses[currentGnosisLevel(awakened).level].aura}</td>:<></>}
+                  <td>{Gnoses[currentGnosisLevel(awakened).level].paradoxPool}</td>
+                  <td>{Gnoses[currentGnosisLevel(awakened).level].extendedCasting}</td>
+                  {Gnoses[currentGnosisLevel(awakened).level].combinedSpells!==0?<td>{Gnoses[currentGnosisLevel(awakened).level].combinedSpells}</td>:<></>}
+                  <td>{Gnoses[currentGnosisLevel(awakened).level].aimedSpell}</td>
+              </tr>
+              <tr>
+              <td colSpan={8}>Arcana Mastery: {Gnoses[currentGnosisLevel(awakened).level].arcanaMastery.join(" ● ")}</td>
+              </tr>
+          </tbody>
+      </Table>
+      </div>
         )
       }
 
@@ -246,7 +286,7 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep, showInstructi
             </Center>
           </Stack>
 
-            <Alert color="gray" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
+            <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
               <Group>
                 <Button.Group>
                     <Button

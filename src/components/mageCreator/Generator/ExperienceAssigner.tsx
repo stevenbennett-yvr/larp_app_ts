@@ -8,6 +8,8 @@ import { arcanaKeySchema, ArcanaKey, arcana, arcanaDescriptions, currentArcanumL
 import React, { useState, forwardRef, useEffect } from "react";
 import { roteData, Rote, getFilteredRotes, handleRoteChange } from "../data/Rotes";
 import { getFilteredMerits, handleMeritChange, Merit, defineMeritRating, currentMeritLevel, findMaxMerit, handleXpMeritChange } from "../data/Merits";
+import { currentGnosisLevel, handleGnosisChange, findMaxGnosis, Gnoses } from "../data/Gnosis";
+import { handleWisdomChange, currentWisdomLevel, Wisdoms, findMaxWisdom } from "../data/Wisdom";
 
 type ExperienceAssignerProps = {
     awakened: Awakened,
@@ -503,6 +505,25 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                 </div>
             )
         ); 
+
+        const handleMeritBuy = (meritData: Merit) => {
+            let {minCost, orBool, orToBool} = defineMeritRating(meritData.rating)
+            
+            let cost = 0
+            if (orBool || orToBool) {
+              cost = minCost * 2
+            }
+            else {
+            for (let i = 0; i < minCost +1; i++) {
+              cost = cost + (i * 2)
+            }      
+          }
+          const newMerit = { ...meritData, id: `${meritData.id}-${Date.now()}`};
+            handleMeritChange(awakened, setAwakened, newMerit, "experiencePoints", cost)        
+            setSelectedMerit("");
+        
+          }
+
         const getSelectedMeritData = () => {
             if (selectedMerit) {
                 const selectedMeritData = sortedMerits.find((merit) => merit.name === selectedMerit);
@@ -532,18 +553,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                                     <Text color="white">{selectedMeritData.rating}</Text>
                                     <Text color="white">{selectedMeritData.prerequisites? `PreReq: ${selectedMeritData.prerequisites}`: ''}</Text>
                                     <Button color="gray" onClick={() => {
-                                        let {minCost, orBool, orToBool} = defineMeritRating(selectedMeritData.rating)
-                                        let cost = 0
-                                        if (orBool || orToBool) {
-                                            cost = minCost * 2
-                                        }
-                                        else {
-                                            for (let i = 0; i < minCost +1; i++) {
-                                                cost = cost + (i * 2)
-                                            }
-                                        }
-                                        handleMeritChange(awakened,setAwakened,selectedMeritData, "experiencePoints", cost, null)
-                                        setSelectedMerit("")
+                                        handleMeritBuy(selectedMeritData)
                                     }}>Buy</Button>                         </td>
                                     <td dangerouslySetInnerHTML={{ __html: `${selectedMeritData.description}` }} />
                                 </tr>
@@ -693,6 +703,158 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
         )
     }
 
+    // GNOSIS SECTION
+
+    const gnosisInput = () => {
+
+        return (
+            <div>
+                <Center>
+                    <Input.Wrapper label={`Gnosis ${currentGnosisLevel(awakened).level}`}>
+                        <Group>
+                            <Button
+                                size="xs"
+                                variant='outline'
+                                color='gray'
+                                onClick={() => handleGnosisChange(awakened, setAwakened, "experiencePoints", awakened.gnosis.experiencePoints - 1)}
+                            >
+                                -
+                            </Button>
+                            <Input
+                                style={{ width: '60px', margin: '0 8px' }}
+                                type="number"
+                                key={`Gnosis`}
+                                min={0}
+                                max={findMaxGnosis(awakened)}
+                                value={awakened.gnosis.experiencePoints}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                const value = Number(e.target.value);
+                                handleGnosisChange(awakened, setAwakened, "experiencePoints", value);
+                                }}
+                            />
+                            <Button
+                                size="xs"
+                                variant='outline'
+                                color='gray'
+                                disabled={currentGnosisLevel(awakened).level >=6}
+                                onClick={() => handleGnosisChange(awakened, setAwakened, "experiencePoints", awakened.gnosis.experiencePoints + 1)}
+                            >
+                                +
+                            </Button>
+                        </Group>
+                    </Input.Wrapper>
+                </Center>
+
+                <Table striped withColumnBorders fontSize="xs">
+                    <thead>
+                        <tr>
+                            <th>
+                                Mana Max/Per Turn  
+                            </th>
+                            <th>
+                                Active Spells
+                            </th>
+                            {Gnoses[currentGnosisLevel(awakened).level].aura!==""?<th>Aura</th>:<></>}
+                            <th>
+                                Paradox Pool
+                            </th>
+                            <th>
+                                Extended Casting Time/Breaks
+                            </th>
+                            {Gnoses[currentGnosisLevel(awakened).level].combinedSpells!==0?<th>Combined Spells</th>:<></>}
+                            <th>Aimed Spell <p/>(Short/Med -2/ Long -4)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{Gnoses[currentGnosisLevel(awakened).level].mana}</td>
+                            <td>{Gnoses[currentGnosisLevel(awakened).level].activeSpells}</td>
+                            {Gnoses[currentGnosisLevel(awakened).level].aura!==""?<td>{Gnoses[currentGnosisLevel(awakened).level].aura}</td>:<></>}
+                            <td>{Gnoses[currentGnosisLevel(awakened).level].paradoxPool}</td>
+                            <td>{Gnoses[currentGnosisLevel(awakened).level].extendedCasting}</td>
+                            {Gnoses[currentGnosisLevel(awakened).level].combinedSpells!==0?<td>{Gnoses[currentGnosisLevel(awakened).level].combinedSpells}</td>:<></>}
+                            <td>{Gnoses[currentGnosisLevel(awakened).level].aimedSpell}</td>
+                        </tr>
+                        <tr>
+                        <td colSpan={8}>Arcana Mastery: {Gnoses[currentGnosisLevel(awakened).level].arcanaMastery.join(" ● ")}</td>
+                        </tr>
+                    </tbody>
+                </Table>
+
+            </div>
+        )
+    }
+
+    // WISDOM Section
+
+    const wisdomInput = () => {
+        return(
+            <div>
+                <Center>
+                    <Input.Wrapper label={`Wisdom ${currentWisdomLevel(awakened).level}`}>
+                        <Group>
+                            <Button
+                                size="xs"
+                                variant='outline'
+                                color='gray'
+                                onClick={() => handleWisdomChange(awakened, setAwakened, "experiencePoints", awakened.gnosis.experiencePoints - 1)}
+                            >
+                                -
+                            </Button>
+                            <Input
+                                style={{ width: '60px', margin: '0 8px' }}
+                                type="number"
+                                key={`Wisdom`}
+                                min={0}
+                                max={findMaxWisdom(awakened)}
+                                value={awakened.wisdom.experiencePoints}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                const value = Number(e.target.value);
+                                handleWisdomChange(awakened, setAwakened, "experiencePoints", value);
+                                }}
+                            />
+                            <Button
+                                size="xs"
+                                variant='outline'
+                                color='gray'
+                                disabled={currentWisdomLevel(awakened).level >=10}
+                                onClick={() => handleWisdomChange(awakened, setAwakened, "experiencePoints", awakened.gnosis.experiencePoints + 1)}
+                            >
+                                +
+                            </Button>
+                        </Group>
+                    </Input.Wrapper>
+                </Center>
+
+                <Table striped withColumnBorders fontSize="xs">
+                    <thead>
+                        <tr>
+                            <th>Hubris Roll</th>
+                            <th>Bedlam Duration</th>
+                            <th>Paradox Duration</th>
+                            <th>Spirit/Abyssal Modifier</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{Wisdoms[currentWisdomLevel(awakened).level].bedlamDuration}</td>
+                            <td>{Wisdoms[currentWisdomLevel(awakened).level].paradoxDuration}</td>
+                            <td>{Wisdoms[currentWisdomLevel(awakened).level].spiritMod}</td>
+                        </tr>
+                        {Object.entries(Wisdoms)
+                            .slice(0, currentWisdomLevel(awakened).level + 1)
+                            .reverse()
+                            .map(([level, wisdom]) => (
+                            <tr key={level}>
+                                <td colSpan={8}><u>Act of Hubris:</u> {wisdom.hubris} (Roll {wisdom.diceRoll} die)</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            </div>
+        )
+    }
+
     // END RETURN SECTION
 
     const toggleInstructions = () => {
@@ -734,20 +896,20 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                     )}
                 </Alert>
 
-                    <Text mt={"xl"} ta="center" fz="xl" fw={700}>Attributes</Text>
-                    <hr style={{width:"50%"}}/>
+                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Attributes</Text>
+                <hr style={{width:"50%"}}/>
                     <Grid gutter="lg" justify="center">
                         {attributeXpInputs}
                     </Grid>
 
-                    <Text mt={"xl"} ta="center" fz="xl" fw={700}>Skills</Text>
-                    <hr style={{width:"50%"}}/>
+                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Skills</Text>
+                <hr style={{width:"50%"}}/>
                     <Grid gutter="lg" justify="center">
                         {skillXpInputs}
                     </Grid>
 
-                    <Text mt={"xl"} ta="center" fz="xl" fw={700}>Arcana</Text>
-                    <hr style={{width:"50%"}}/>
+                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Arcana</Text>
+                <hr style={{width:"50%"}}/>
                     <Grid columns={10} grow m={0}>
                         {
                             rulingArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => arcanumXpInputs(arcanum, getColorByArcanum(arcanum)))
@@ -755,16 +917,25 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                             otherArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => arcanumXpInputs(arcanum, getColorByArcanum(arcanum)))
                         }
                     </Grid>
-                    <Text mt={"xl"} ta="center" fz="xl" fw={700}>Rotes</Text>
-                    <hr style={{width:"50%"}}/>
-                        {roteInputs(learnableRotes)}
+                
+                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Rotes</Text>
+                <hr style={{width:"50%"}}/>
+                    {roteInputs(learnableRotes)}
 
-                    <Text mt={"xl"} ta="center" fz="xl" fw={700}>Merits</Text>
-                    <hr style={{width:"50%"}}/>
+                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Merits</Text>
+                <hr style={{width:"50%"}}/>
                     {meritInput(buyableMerits)}
 
+                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Gnosis</Text>
+                <hr style={{width:"50%"}}/>
+                    {gnosisInput()}
+
+                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Wisdom</Text>
+                <hr style={{width:"50%"}}/>
+                    {wisdomInput()}
+
                 <Button.Group style={{ position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
-                <Alert color="gray" radius="xs" style={{padding:"0px"}}>
+                <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px"}}>
                 <Button
                     style={{ margin: "5px" }}
                     color="gray"

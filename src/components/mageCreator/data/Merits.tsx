@@ -89,6 +89,13 @@ export const currentMeritLevel = (meritInfo: Merit) => {
     const { minCost, maxCost, orBool, plusBool, orToBool } = defineMeritRating(meritInfo.rating);
     let level = Math.max(minCost, meritInfo.creationPoints + meritInfo.freebiePoints);
   
+    if (level === maxCost && !orBool && !orToBool) {
+      let xpNeeded = minCost * 2;
+      totalXpNeeded = xpNeeded;
+      pastXpNeeded.push(totalXpNeeded);
+      return { level, totalXpNeeded, pastXpNeeded };
+    }
+
     if (orToBool) {
       if (!creationPoints && !freebiePoints) {
         level = minCost;
@@ -110,26 +117,8 @@ export const currentMeritLevel = (meritInfo: Merit) => {
       return { level, totalXpNeeded, pastXpNeeded };
     }
   
-    if (level === maxCost && !orBool && !orToBool) {
-      let xpNeeded = minCost * 2;
-      totalXpNeeded = xpNeeded;
-      pastXpNeeded.push(totalXpNeeded);
-      return { level, totalXpNeeded, pastXpNeeded };
-    }
-  
     if (orBool && !orToBool) {
-      if (creationPoints !== 0) {
-        if (experiencePoints > 0) {
-          let totalXpNeeded = maxCost * 2;
-          level = maxCost;
-          return { level, totalXpNeeded, pastXpNeeded };
-        }
-        if (experiencePoints < maxCost) {
-          let totalXpNeeded = maxCost * 2;
-          level = minCost;
-          return { level, totalXpNeeded, pastXpNeeded };
-        }
-      } else {
+      if (!creationPoints && !freebiePoints) {
         let minXp = minCost * 2;
         let maxXp = maxCost * 2;
         let totalXpNeeded = maxXp;
@@ -138,6 +127,18 @@ export const currentMeritLevel = (meritInfo: Merit) => {
           level = maxCost;
           totalXpNeeded = maxXp + minXp;
           pastXpNeeded.push(totalXpNeeded);
+        }
+        return { level, totalXpNeeded, pastXpNeeded };
+      } else {
+        level = creationPoints + freebiePoints;
+        let minXp = 0
+        let maxXp = (maxCost - level) * 2
+        let totalXpNeeded = maxXp
+        pastXpNeeded.push(minXp)
+        if (experiencePoints > minXp) {
+          level = maxCost
+          totalXpNeeded = maxXp
+          pastXpNeeded.push(totalXpNeeded)
         }
         return { level, totalXpNeeded, pastXpNeeded };
       }
@@ -336,10 +337,8 @@ export const handleMeritChange = (
   merit: Merit,
   type: VariableKeys,
   newPoints: number,
-  customId: string | null,
 ): void => {
   const existingMerit = awakened.merits.find((m) => m.id === merit.id);
-  const meritId = customId || merit.id; 
     if (existingMerit) {
     if (newPoints === 0 && type !== "experiencePoints") {
       const updatedMerits = awakened.merits.filter((m) => m.id !== merit.id);
@@ -353,10 +352,11 @@ export const handleMeritChange = (
   } else {
     setAwakened({
       ...awakened,
-      merits: [...awakened.merits, { ...merit, [type]: newPoints, id: meritId }],
+      merits: [...awakened.merits, { ...merit, [type]: newPoints }],
     });
   }
 };
+
 
 export const findMaxMerit = (meritInfo:Merit) => {
   const xp = meritInfo.experiencePoints;
@@ -369,14 +369,15 @@ export const findMaxMerit = (meritInfo:Merit) => {
   return max
 }
 
+// For the xp change buttons.
 export const handleXpMeritChange = (awakened:Awakened, setAwakened:Function, merit:Merit, value:number) => {
   let { level, totalXpNeeded, pastXpNeeded } = currentMeritLevel(merit) 
   let oldXp = merit.experiencePoints
   if(level < defineMeritRating(merit.rating).maxCost) {
     let xp = value > oldXp ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
-    handleMeritChange(awakened, setAwakened, merit, "experiencePoints", xp, null)
+    handleMeritChange(awakened, setAwakened, merit, "experiencePoints", xp)
   } else if (level > defineMeritRating(merit.rating).minCost) {
     let xp = value > oldXp ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
-    handleMeritChange(awakened, setAwakened, merit, "experiencePoints", xp, null)
+    handleMeritChange(awakened, setAwakened, merit, "experiencePoints", xp)
   }
 }
