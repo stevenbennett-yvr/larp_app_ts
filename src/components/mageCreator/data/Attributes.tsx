@@ -35,6 +35,18 @@ export const attributesSchema = z.object({
   const physicalAttributesKeySchema = attributesSchema.shape.physical.keyof();
   const socialAttributesKeySchema = attributesSchema.shape.social.keyof();
 
+export type MentalAttributes = z.infer<
+  typeof mentalAttributesKeySchema
+>
+
+export type PhysicalAttributes = z.infer<
+  typeof physicalAttributesKeySchema
+>
+
+export type SocialAttributes = z.infer<
+  typeof socialAttributesKeySchema
+>
+
   export type AttributeNames = z.infer<
   typeof mentalAttributesKeySchema | typeof physicalAttributesKeySchema | typeof socialAttributesKeySchema
 >;  

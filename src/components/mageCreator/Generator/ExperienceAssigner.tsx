@@ -1,15 +1,20 @@
+//technical imports
+import React, { useState, forwardRef, useEffect } from "react";
 import { useMantineTheme, Alert, Avatar, Button, Card, Center, Grid, Group, Image, Input, Select, Stack, Table, Text, Title, Accordion } from "@mantine/core";
-import { Awakened } from "../data/Awakened";
 import { globals } from "../../../globals";
+
+//data imports
+import { Awakened } from "../data/Awakened";
+import { Paths } from "../data/Path";
 import { findMaxAttribute, handleXpAttributeChange, AttributeNames, currentAttributeLevel } from "../data/Attributes";
 import { removeSpeciality, addSpeciality, findMaxSkill, handleXpSkillChange, SkillNames, currentSkillLevel} from "../data/Skills"
-import { Paths } from "../data/Path";
 import { arcanaKeySchema, ArcanaKey, arcana, arcanaDescriptions, currentArcanumLevel, findMaxArcana, handleArcanumChange } from "../data/Arcanum";
-import React, { useState, forwardRef, useEffect } from "react";
 import { roteData, Rote, getFilteredRotes, handleRoteChange } from "../data/Rotes";
 import { getFilteredMerits, handleMeritChange, Merit, defineMeritRating, currentMeritLevel, findMaxMerit, handleXpMeritChange } from "../data/Merits";
 import { currentGnosisLevel, handleGnosisChange, findMaxGnosis, Gnoses } from "../data/Gnosis";
 import { handleWisdomChange, currentWisdomLevel, Wisdoms, findMaxWisdom } from "../data/Wisdom";
+import { currentExperience } from "../data/Experience"
+
 
 type ExperienceAssignerProps = {
     awakened: Awakened,
@@ -204,6 +209,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
         const isRuling = rulingArcana.includes(arcanum); 
         const isInferior =  inferiorArcana.includes(arcanum)
 
+        
         return (
             <Grid.Col key={arcanum} span={2}>
                 <Card
@@ -797,7 +803,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                                 size="xs"
                                 variant='outline'
                                 color='gray'
-                                onClick={() => handleWisdomChange(awakened, setAwakened, "experiencePoints", awakened.gnosis.experiencePoints - 1)}
+                                onClick={() => handleWisdomChange(awakened, setAwakened, "experiencePoints", awakened.wisdom.experiencePoints - 1)}
                             >
                                 -
                             </Button>
@@ -818,7 +824,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                                 variant='outline'
                                 color='gray'
                                 disabled={currentWisdomLevel(awakened).level >=10}
-                                onClick={() => handleWisdomChange(awakened, setAwakened, "experiencePoints", awakened.gnosis.experiencePoints + 1)}
+                                onClick={() => handleWisdomChange(awakened, setAwakened, "experiencePoints", awakened.wisdom.experiencePoints + 1)}
                             >
                                 +
                             </Button>
@@ -829,7 +835,6 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                 <Table striped withColumnBorders fontSize="xs">
                     <thead>
                         <tr>
-                            <th>Hubris Roll</th>
                             <th>Bedlam Duration</th>
                             <th>Paradox Duration</th>
                             <th>Spirit/Abyssal Modifier</th>
@@ -934,25 +939,28 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                 <hr style={{width:"50%"}}/>
                     {wisdomInput()}
 
-                <Button.Group style={{ position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
-                <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px"}}>
-                <Button
-                    style={{ margin: "5px" }}
-                    color="gray"
-                    onClick={backStep}
-                >
-                    Back
-                </Button>
-                <Button
-                    style={{ margin: "5px" }}
-                    color="gray"
-                    onClick={nextStep}
-                >
-                    Next
-                </Button>
-                </Alert>
-                </Button.Group>
-
+                    <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
+              <Group>
+                <Button.Group>
+                    <Button
+                        style={{ margin: "5px" }}
+                        color="gray"
+                        onClick={backStep}
+                    >
+                        Back
+                    </Button>
+                    <Button
+                        style={{ margin: "5px" }}
+                        color="gray"
+                        onClick={nextStep}
+                        disabled={currentExperience(awakened) > 10}
+                    >
+                        Next
+                    </Button>
+                  <Text fz={globals.smallerFontSize} style={{ margin: "10px"}}>Remaining Experience: {currentExperience(awakened)}</Text>
+              </Button.Group>
+            </Group>
+            </Alert>
             </Stack>
         </Center>
     )

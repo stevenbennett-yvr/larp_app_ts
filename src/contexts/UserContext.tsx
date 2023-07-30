@@ -11,7 +11,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 
-interface User {
+export interface User {
     name: string;
     domain: string;
     email: string;
@@ -26,7 +26,6 @@ interface User {
 
 interface UserContextProps {
   characterList: { id: string }[];
-  getUser: () => Promise<User | null>;
   updateUser: (id: string, updatedUser: Partial<User>) => Promise<void>;
   name: string;
   domain: string;
@@ -44,6 +43,23 @@ export function useUser() {
   }
   return context;
 }
+
+export const getUser = async (currentUser: any) => {
+  if (!currentUser) return null;
+  const userDocRef = doc(db, "users", currentUser.uid);
+  try {
+    const userSnapshot = await getDoc(userDocRef);
+    if (userSnapshot.exists()) {
+      return userSnapshot.data() as User;
+    } else {
+      // User document does not exist
+      return null;
+    }
+  } catch (error) {
+    console.error("Error retrieving user document:", error);
+    return null;
+  }
+};
 
 export function UserProvider({ children }: { children: React.ReactNode}): JSX.Element {
   const { currentUser } = useAuth();
@@ -78,23 +94,6 @@ export function UserProvider({ children }: { children: React.ReactNode}): JSX.El
     return unsubscribe;
   }, [charactersCollectionRef]);
 
-  const getUser = useCallback(async () => {
-    if (!currentUser) return null;
-    const userDocRef = doc(db, "users", currentUser.uid);
-    try {
-      const userSnapshot = await getDoc(userDocRef);
-      if (userSnapshot.exists()) {
-        return userSnapshot.data() as User;
-      } else {
-        // User document does not exist
-        return null;
-      }
-    } catch (error) {
-      console.error("Error retrieving user document:", error);
-      return null;
-    }
-  }, [currentUser]);
-
   const updateUser = useCallback(
     async (id: string, updatedUser: Partial<User>) => {
       const userDoc = doc(db, "users", id);
@@ -110,7 +109,7 @@ export function UserProvider({ children }: { children: React.ReactNode}): JSX.El
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const user = await getUser();
+      const user = await getUser(currentUser);
       setUserData(user);
     };
   
@@ -127,7 +126,6 @@ export function UserProvider({ children }: { children: React.ReactNode}): JSX.El
   const value = useMemo(() => {
     return {
       characterList,
-      getUser,
       updateUser,
       name: userData?.name || "",
       domain: userData?.domain || "",

@@ -145,22 +145,22 @@ export const findMaxWisdom = (awakened: Awakened) => {
   type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
   export const handleWisdomChange = (awakened: Awakened, setAwakened: Function, type: VariableKeys, value: number): void => {
     const { totalXpNeeded, pastXpNeeded } = currentWisdomLevel(awakened);
-    let updatedGnosis = { ...awakened.gnosis };
+    let updatedWisdom = { ...awakened.wisdom };
     if (type === "experiencePoints") {
-      let xp = value > awakened.gnosis.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value);
-      updatedGnosis = {
-        ...updatedGnosis,
+      let xp = value > awakened.wisdom.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value);
+      updatedWisdom = {
+        ...updatedWisdom,
         [type]: xp,
       };
     } else {
-      updatedGnosis = {
-        ...updatedGnosis,
+      updatedWisdom = {
+        ...updatedWisdom,
         [type]: value,
       };
     }
     const updatedAwakened = {
       ...awakened,
-      gnosis: updatedGnosis,
+      wisdom: updatedWisdom,
     };
     setAwakened(updatedAwakened);
   };

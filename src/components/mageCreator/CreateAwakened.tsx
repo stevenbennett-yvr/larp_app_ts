@@ -8,6 +8,7 @@ import OrderPicker from "./Generator/OrderPicker";
 import ArcanaRoteAssigner from "./Generator/ArcanaRoteassigner"
 import MeritAssigner from "./Generator/MeritAssigner";
 import ExperienceAssigner from "./Generator/ExperienceAssigner"
+import FinalTouches from "./Generator/FinalTouches"
 import { useLocalStorage } from "@mantine/hooks";
 
 
@@ -135,6 +136,16 @@ const GenerateAwakened = () => {
               }}
               showInstructions={showInstructions}
               setShowInstructions={setShowInstructions}
+            />
+          )
+        case 8:
+          return (
+            <FinalTouches
+              awakened={awakened}
+              setAwakened={setAwakened}
+              backStep={() => {
+                setSelectedStep(selectedStep - 1)
+              }}
             />
           )
       default:

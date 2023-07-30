@@ -11,10 +11,17 @@ import { roteSchema } from "./Rotes";
 import { gnosisSchema } from "./Gnosis";
 import { wisdomSchema } from "./Wisdom";
 
+const backgroundSchema = z.object({
+  history: z.string(),
+  goals: z.string(),
+  description: z.string(),
+  profilePic: z.string(),
+})
 
 export const awakenedSchema = z.object({
     name: z.string(),
     concept: z.string(),
+    background: backgroundSchema,
     virtue: virtueNameSchema,
     vice: viceNameSchema,
 
@@ -32,6 +39,7 @@ export const awakenedSchema = z.object({
     gnosis: gnosisSchema,
     wisdom: wisdomSchema,
 
+    startDate: z.date(),
     changeLogs: z.object({
     })
 })
@@ -40,6 +48,14 @@ export const getEmptyAwakened = (): Awakened => {
   return {
     name: "",
     concept: "",
+
+    background: {
+      history: "",
+      goals: "",
+      description: "",
+      profilePic: "../resources/SkullMTAw.webp"
+    },
+
     virtue: "",
     vice: "",
     path: "",
@@ -117,6 +133,7 @@ export const getEmptyAwakened = (): Awakened => {
 
     wisdom: {creationPoints: 7, freebiePoints: 0, experiencePoints: 0},
 
+    startDate: new Date(Date.now()),
     changeLogs: {},
 
   }
