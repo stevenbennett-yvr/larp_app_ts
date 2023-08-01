@@ -12,6 +12,12 @@ import coverMyster from '../resources/order/Mtawthemysterium.webp'
 import coverSilver from '../resources/order/Mtawthesilverladder.webp'
 import coverMage from '../resources/order/Mtawrulebook.webp'
 
+import RuneArrow from '../resources/order/Adamantine_Arrow_glyph.webp'
+import RuneFree from '../resources/order/Free_Council_glyph.webp'
+import RuneGuard from '../resources/order/Guardians_of_the_Veil_glyph.webp'
+import RuneMyst from '../resources/order/RuneOrderMysterium.webp'
+import RuneSilver from '../resources/order/RuneOrderSilverLadder.webp'
+
 export const orderNameSchema = z.union([
     z.literal('The Adamantine Arrow'),
     z.literal('The Free Council'),
@@ -28,6 +34,7 @@ export const orderSchema = z.object({
     name: orderNameSchema,
     description: z.string(),
     logo: z.string(),
+    rune: z.string(),
     roteSpecialities: z.array(z.string()),
     color: z.string(),
     cover: z.string(),
@@ -47,6 +54,7 @@ export const Orders: Record<OrderName, Order> = {
         <p><i>Rote Secialities:</i> Athletics, Intimidation, Medicine</p>          
         `,
         logo: OrderAdamantineArrow,
+        rune: RuneArrow,
         roteSpecialities: ["Athletics", "Intimidation", "Medicine"],
         color: "#B0C4DE",
         cover: coverArrow,
@@ -60,6 +68,7 @@ export const Orders: Record<OrderName, Order> = {
         <p><i>Rote Secialities:</i> Crafts, Persuasion, Science</p>          </Card.Body>
         `,
         logo: OrderFreeCouncil,
+        rune: RuneFree,
         roteSpecialities: ["Crafts", "Persuasion", "Science"],
         color: "#B87333",
         cover: coverFree,
@@ -73,6 +82,7 @@ export const Orders: Record<OrderName, Order> = {
         <p><i>Rote Secialities:</i>Investigation, Stealth, Subterfuge</p>          </Card.Body>
         `,
         logo: OrderGuardians,
+        rune: RuneGuard,
         roteSpecialities: ["Investigation", "Stealth", "Subterfuge"],
         color: "#656970",
         cover: coverGuardians,
@@ -86,6 +96,7 @@ export const Orders: Record<OrderName, Order> = {
         <p><i>Rote Secialities:</i> Investigation, Occult, Survival</p>          </Card.Body>
         `,
         logo: orderMysterium,
+        rune: RuneMyst,
         roteSpecialities: ["Investigation", "Occult", "Survival"],
         color: "#C0C0C0",
         cover: coverMyster,
@@ -99,6 +110,7 @@ export const Orders: Record<OrderName, Order> = {
         <p><i>Rote Secialities:</i> Expression, Persuasion, Subterfuge</p>
         `,
         logo: orderSilver,
+        rune: RuneSilver,
         roteSpecialities: ["Expression", "Persuasion", "Subterfuge"],
         color: "#D4AF37",
         cover: coverSilver,
@@ -111,6 +123,7 @@ export const Orders: Record<OrderName, Order> = {
         <p><u>Apostasy is not recommended for beginners.</u> </p>
         `,
         logo: mageSkull,
+        rune: mageSkull,
         roteSpecialities: [],
         color: "#757575",
         cover: coverMage,
@@ -120,6 +133,7 @@ export const Orders: Record<OrderName, Order> = {
         name: "",
         description: "",
         logo: "",
+        rune: "",
         roteSpecialities: [],
         color: "",
         cover: "",

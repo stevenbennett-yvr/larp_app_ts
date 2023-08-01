@@ -1,5 +1,6 @@
 import { Center } from "@mantine/core";
 import { Awakened, getEmptyAwakened } from "./data/Awakened";
+import { logChanges } from './Generator/utils/Logging'
 import Basics from "./Generator/Basics";
 import AttributeAssigner from "./Generator/AttributeAssigner";
 import SkillAssigner from "./Generator/SkillAssigner"
@@ -9,12 +10,13 @@ import ArcanaRoteAssigner from "./Generator/ArcanaRoteassigner"
 import MeritAssigner from "./Generator/MeritAssigner";
 import ExperienceAssigner from "./Generator/ExperienceAssigner"
 import FinalTouches from "./Generator/FinalTouches"
+import PrintSheet from './Generator/PrintSheet'
 import { useLocalStorage } from "@mantine/hooks";
-
 
 // TODO: PRIORITY: Finish the character creator
 
 const GenerateAwakened = () => {
+  const emptyAwakened = getEmptyAwakened()
   const [awakened, setAwakened] = useLocalStorage<Awakened>({ key: "awakened", defaultValue: getEmptyAwakened()})
   const [selectedStep, setSelectedStep] = useLocalStorage({ key: "selectedStep", defaultValue: 0 })
   const [showInstructions, setShowInstructions] = useLocalStorage({ key: "showInstructions", defaultValue: false });
@@ -143,8 +145,24 @@ const GenerateAwakened = () => {
             <FinalTouches
               awakened={awakened}
               setAwakened={setAwakened}
+              nextStep={() => {
+                setSelectedStep(selectedStep + 1);
+              }}
               backStep={() => {
                 setSelectedStep(selectedStep - 1)
+              }}
+            />
+          )
+        case 9:
+          return (
+            <PrintSheet
+              awakened={awakened}
+              backStep={() => {
+                setSelectedStep(selectedStep - 1);
+              }}
+              submit={() => {
+                const changes = logChanges(emptyAwakened, awakened);
+                console.log(changes)
               }}
             />
           )
@@ -152,6 +170,9 @@ const GenerateAwakened = () => {
         return null; // Return a default component or handle the case accordingly
     }
   };
+
+  
+
 
   return <Center h={"100%"}>{getStepComponent()}</Center>;
 };

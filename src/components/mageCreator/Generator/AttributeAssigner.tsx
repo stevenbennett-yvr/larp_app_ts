@@ -1,7 +1,8 @@
 import z from "zod";
+import { useState } from "react";
 import { Awakened } from "../data/Awakened";
 import { AttributeCategory, AttributeNames, attributeTooltips, handleAttributeChange } from "../data/Attributes";
-import { Alert, Stack, Text, Select, NumberInput, Grid, Center, Button, Tooltip } from "@mantine/core";
+import { Alert, Stack, Text, Select, NumberInput, Grid, Center, Button, Tooltip, Indicator } from "@mantine/core";
 import { globals } from "../../../globals";
 import { useLocalStorage } from "@mantine/hooks";
 
@@ -149,6 +150,8 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
     setCategorySettings(updatedCategorySettings);
   };
 
+  const [visibilityState, setVisibilityState] = useState<{ [key in AttributeNames]?: boolean }>({});
+
   const attributeInputs = Object.entries(awakened.attributes).map(
     ([category, attributesInfo]) => {
       const typedCategory = category as AttributeCategory;
@@ -165,7 +168,7 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
       const isTertiarySelected = Object.values(categorySettings).some(
         (setting) => setting.priority === "tertiary" && setting.category !== ""
       );
-
+      
       return (
         <Grid.Col
           span={globals.isPhoneScreen ? "content" : 4}
@@ -176,6 +179,7 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
               : 
             {priority === "primary"? ` 5/${remainingPonits}`: priority === "secondary"? ` 4/${remainingPonits}` : priority === 'tertiary'? ` 3/${remainingPonits}` : ''}
           </Text>
+          <Indicator color={priority === "primary" || priority === "secondary" || priority === "tertiary" ? "" : "red"} inline processing size={12}>
           <Select
             value={priority || ""}
             onChange={(value) =>
@@ -188,9 +192,11 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
               { value: "", label: "Unselected" },
             ]}
           />
+          </Indicator>
           <hr/>
           {Object.entries(attributesInfo).map(([attribute, attributeInfo]) => {
           const attributeName = attribute as AttributeNames;
+          const selectedAttribute = visibilityState[attributeName];
           return (
               <div
               key={`${attribute} input`}
@@ -201,9 +207,10 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
                   withArrow
                   transitionProps={{ duration: 200 }}
                   label={attributeTooltips[typedCategory][attributeName as keyof typeof attributeTooltips[AttributeCategory]]}
-                  events={globals.tooltipTriggerEvents}
                   position={globals.isPhoneScreen ? "bottom" : "top"}
-                >              
+                  opened={selectedAttribute}
+                  events={{ hover: false, focus: true, touch: false }}
+                  >
                 <NumberInput
                 key={`${category}-${attributeName}`}
                 label={`${attribute.charAt(0).toUpperCase() + attribute.slice(1)}`}
@@ -220,6 +227,19 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
                     attributeInfo.creationPoints
                   )
                 }
+                onClick={() => {
+                  setVisibilityState((prevState) => ({
+                    ...prevState,
+                    [attributeName]: true,
+                  }));
+              }}
+                onBlur={() => {
+                  setVisibilityState((prevState) => ({
+                    ...prevState,
+                    [attributeName]: false, 
+                  }));
+              }} 
+
               />
               </Tooltip>
               </div>

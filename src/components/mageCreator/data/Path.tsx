@@ -6,6 +6,12 @@ import PathMastigos from '../resources/path/PathMastigos.webp'
 import PathMoros from '../resources/path/PathMoros.webp'
 import PathObrimos from '../resources/path/PathObrimos.webp'
 import PathThyrsus from '../resources/path/PathThyrsus.webp'
+//Path Rune
+import RuneArcanthus from '../resources/path/PathAcanthusRune.webp'
+import RuneMastigos from '../resources/path/PathMastigosRune.webp'
+import RuneMoros from '../resources/path/PathMorosRune.webp'
+import RuneObrimos from '../resources/path/PathMorosRune.webp'
+import RuneThyrsus from '../resources/path/PathThyrsusRune.webp'
 //Path Tarot
 import Fool from '../resources/path/RWS_Tarot_00_Fool.jpg'
 import Devil from '../resources/path/RWS_Tarot_15_Devil.jpg'
@@ -30,6 +36,7 @@ export const pathSchema = z.object({
   inferiorArcana: arcanaKeySchema,
   resistanceAttribute: z.enum(["Composure", "Resolve", ""]),
   logo: z.string(),
+  rune: z.string(),
   tarot: z.string(),
   color: z.string(),
 });
@@ -53,6 +60,7 @@ export const Paths: Record<PathName, Path> = {
         inferiorArcana: "forces",
         resistanceAttribute: "Composure",
         logo: PathArcanthus,
+        rune: RuneArcanthus,
         tarot: Fool,
         color: "#5ECFBB"
     },
@@ -69,6 +77,7 @@ export const Paths: Record<PathName, Path> = {
         inferiorArcana: "matter",
         resistanceAttribute: "Resolve",
         logo: PathMastigos,
+        rune: RuneMastigos,
         tarot: Devil,
         color: "#DD2C00"
     },
@@ -85,6 +94,7 @@ export const Paths: Record<PathName, Path> = {
         inferiorArcana: "spirit",
         resistanceAttribute: "Composure",
         logo: PathMoros,
+        rune: RuneMoros,
         tarot: Death,
         color: "#7f7d99"
     },
@@ -101,6 +111,7 @@ export const Paths: Record<PathName, Path> = {
         inferiorArcana: "death",
         resistanceAttribute: "Resolve",
         logo: PathObrimos,
+        rune: RuneObrimos,
         tarot: Strength,
         color: "#f5f940"
     },
@@ -117,6 +128,7 @@ export const Paths: Record<PathName, Path> = {
         inferiorArcana: "mind",
         resistanceAttribute: "Composure",
         logo: PathThyrsus,
+        rune: RuneThyrsus,
         tarot: Moon,
         color: "#fd7615"
     },
@@ -127,6 +139,7 @@ export const Paths: Record<PathName, Path> = {
         inferiorArcana: "prime",
         resistanceAttribute: "",
         logo: "",
+        rune:"",
         tarot: '',
         color: "",
     }

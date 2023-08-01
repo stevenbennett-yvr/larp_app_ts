@@ -1,7 +1,7 @@
 import z from "zod";
 import { Awakened } from "../data/Awakened";
 import { addSpeciality, removeSpeciality, skillSelect, SkillCategory, SkillNames, skillTooltips, handleSkillChange, Speciality, getSkillCategory, Skill, Skills } from "../data/Skills";
-import { ScrollArea, Group, TextInput, Alert, Stack, Text, Select, NumberInput, Grid, Center, Button, Tooltip, Modal } from "@mantine/core";
+import { ScrollArea, Indicator, Group, TextInput, Alert, Stack, Text, Select, NumberInput, Grid, Center, Button, Tooltip, Modal } from "@mantine/core";
 import { globals } from "../../../globals";
 import { useLocalStorage } from "@mantine/hooks";
 import { useState } from "react";
@@ -152,6 +152,7 @@ const SkillAssigner = ({
     
       const isPhoneScreen = globals.isPhoneScreen
       const isSmallScreen = globals.isSmallScreen
+      const [visibilityState, setVisibilityState] = useState<{ [key in SkillNames]?: boolean }>({});
 
       const skillInputs = Object.entries(awakened.skills).map(
         ([category, skillsInfo]) => {
@@ -180,6 +181,7 @@ const SkillAssigner = ({
                 : 
                 {priority === "primary"? ` 11/${remainingPonits}`: priority === "secondary"? ` 7/${remainingPonits}` : priority === 'tertiary'? ` 4/${remainingPonits}` : ''}
               </Text>
+              <Indicator color={priority === "primary" || priority === "secondary" || priority === "tertiary" ? "" : "red"} inline processing size={12}>
               <Select
                 value={priority || ""}
                 onChange={(value) =>
@@ -192,9 +194,12 @@ const SkillAssigner = ({
                   { value: "", label: "Unselected" },
                 ]}
               />
+              </Indicator>
               <hr/>
               {Object.entries(skillsInfo).map(([skill, skillsInfo]) => {
                 const skillName = skill as SkillNames;
+                const selectedSkill = visibilityState[skillName];
+      
                 return (
                   <div
                   key={`${skill} input`}
@@ -205,7 +210,8 @@ const SkillAssigner = ({
                       withArrow
                       transitionProps={{ duration: 200 }}
                       label={skillTooltips[typedCategory][skillName as keyof typeof skillTooltips[SkillCategory]]}
-                      events={globals.tooltipTriggerEvents}
+                      opened={selectedSkill}
+                      events={{ hover: false, focus: true, touch: false }}
                       position={globals.isPhoneScreen ? "bottom" : "top"}
                     >              
                     <NumberInput
@@ -224,6 +230,18 @@ const SkillAssigner = ({
                         skillsInfo.creationPoints
                       )
                     }
+                    onClick={() => {
+                      setVisibilityState((prevState) => ({
+                        ...prevState,
+                        [skillName]: true,
+                      }));
+                  }}
+                    onBlur={() => {
+                      setVisibilityState((prevState) => ({
+                        ...prevState,
+                        [skillName]: false, 
+                      }));
+                  }} 
                   />
                   </Tooltip>
                   </div>

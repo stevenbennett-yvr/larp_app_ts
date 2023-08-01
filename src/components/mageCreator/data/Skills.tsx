@@ -183,13 +183,13 @@ export const skillsSchema = z.object({
     export const currentSkillLevel = (
       awakened: Awakened,
       skill: string,
-    ): { level: number; totalXpNeeded: number; pastXpNeeded: number[] } => {
+    ): { level: number; totalXpNeeded: number; pastXpNeeded: number[], roteSkill: boolean } => {
       const skills = awakened.skills as any;
       const category = getSkillCategory(skill as any) as string;
       const skillData = skills[category][skill] as Skill; // Get the attribute data
     
       // Extract the required properties from attributeData
-      let { creationPoints, freebiePoints = 0, experiencePoints = 0 } = skillData;
+      let { creationPoints, freebiePoints = 0, experiencePoints = 0, roteSkill } = skillData;
           
       let totalXpNeeded = 0;
       let pastXpNeeded = [0];
@@ -199,7 +199,7 @@ export const skillsSchema = z.object({
         let xpNeeded = (level + 1) * 3;
         totalXpNeeded = xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
-        return { level, totalXpNeeded, pastXpNeeded };
+        return { level, totalXpNeeded, pastXpNeeded, roteSkill };
       } else {
         let level = creationPoints + freebiePoints;
         let xpNeeded = (level + 1) * 3;
@@ -214,7 +214,7 @@ export const skillsSchema = z.object({
           pastXpNeeded.push(totalXpNeeded);
         }
     
-        return { level, totalXpNeeded, pastXpNeeded };
+        return { level, totalXpNeeded, pastXpNeeded, roteSkill };
       }
     };
 
@@ -267,7 +267,7 @@ export const skillsSchema = z.object({
       return specialities
     }
 
-        export const handleXpSkillChange = (awakened:Awakened, setAwakened:Function, skill:SkillNames, value:number) => {
+    export const handleXpSkillChange = (awakened:Awakened, setAwakened:Function, skill:SkillNames, value:number) => {
       const { totalXpNeeded, pastXpNeeded } = currentSkillLevel(awakened, skill)
       const skills = awakened.skills as any;
       const category = getSkillCategory(skill as any) as string;

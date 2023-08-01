@@ -9,7 +9,7 @@ import { Paths } from "../data/Path";
 import { findMaxAttribute, handleXpAttributeChange, AttributeNames, currentAttributeLevel } from "../data/Attributes";
 import { removeSpeciality, addSpeciality, findMaxSkill, handleXpSkillChange, SkillNames, currentSkillLevel} from "../data/Skills"
 import { arcanaKeySchema, ArcanaKey, arcana, arcanaDescriptions, currentArcanumLevel, findMaxArcana, handleArcanumChange } from "../data/Arcanum";
-import { roteData, Rote, getFilteredRotes, handleRoteChange } from "../data/Rotes";
+import { roteData, Rote, getFilteredRotes, handleRoteChange, calculatePool } from "../data/Rotes";
 import { getFilteredMerits, handleMeritChange, Merit, defineMeritRating, currentMeritLevel, findMaxMerit, handleXpMeritChange } from "../data/Merits";
 import { currentGnosisLevel, handleGnosisChange, findMaxGnosis, Gnoses } from "../data/Gnosis";
 import { handleWisdomChange, currentWisdomLevel, Wisdoms, findMaxWisdom } from "../data/Wisdom";
@@ -361,7 +361,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                                     setSelectedRote("")
                                 }}>Buy</Button>
                             </td>
-                            <td dangerouslySetInnerHTML={{ __html: `${selectedRoteData.description} <p>Rote Pool: ${selectedRoteData.rotePool}</p>` }} />
+                            <td dangerouslySetInnerHTML={{ __html: `${selectedRoteData.description} <p>Rote Pool: ${selectedRoteData.rotePool} ${calculatePool(selectedRoteData.rotePool, awakened)}</p>` }} />
                         </tr>
                     </tbody>
                 </Table>
@@ -429,7 +429,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                                         <></>
                                         }
                                         </td>
-                                        <td dangerouslySetInnerHTML={{ __html: `${rote.description} <p>Rote Pool: ${rote.rotePool}</p>` }} />
+                                        <td dangerouslySetInnerHTML={{ __html: `${rote.description} <p>Rote Pool: ${rote.rotePool} ${calculatePool(rote.rotePool, awakened)}</p>` }} />
                                     </tr>
                             )})}
                         </tbody>
@@ -953,7 +953,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                         style={{ margin: "5px" }}
                         color="gray"
                         onClick={nextStep}
-                        disabled={currentExperience(awakened) > 10}
+                        disabled={currentExperience(awakened) > 10 || 0 > currentExperience(awakened)}
                     >
                         Next
                     </Button>

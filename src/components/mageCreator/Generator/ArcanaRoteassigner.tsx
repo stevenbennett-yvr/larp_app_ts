@@ -4,7 +4,7 @@ import { ArcanaKey, arcanaDescriptions, arcanaKeySchema, arcana } from "../data/
 import { globals } from "../../../globals";
 import { Paths } from "../data/Path";
 import { useState, useEffect } from 'react';
-import { Rote, roteData, getFilteredRotes, handleRoteChange } from "../data/Rotes";
+import { Rote, roteData, getFilteredRotes, handleRoteChange, calculatePool } from "../data/Rotes";
 
 type ArcanaRoteAssignerProps = {
     awakened: Awakened,
@@ -242,7 +242,7 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
                             <Button color="red" onClick={() => {handleDeselect(rote);getRotePoints();}}>Deselect</Button>
                           )}
                         </td>
-                        <td dangerouslySetInnerHTML={{ __html: `${rote.description} <p>Rote Pool: ${rote.rotePool}</p>` }} />
+                        <td dangerouslySetInnerHTML={{ __html: `${rote.description} <p>Rote Pool: ${rote.rotePool}  (${calculatePool(rote.rotePool, awakened)})</p>` }} />
                       </tr>
                     ))}
                   </tbody>
@@ -272,7 +272,7 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
                           />
                           <p style={{ color: "white" }}>{rote.arcanum} {rote.level} {rote.otherArcana ? `+ ${rote.otherArcana}` : ""}</p>
                         </td>
-                        <td dangerouslySetInnerHTML={{ __html: `${rote.description} <p>Rote Pool: ${rote.rotePool}</p>` }} />
+                        <td dangerouslySetInnerHTML={{ __html: `${rote.description} <p>Rote Pool: ${rote.rotePool}  (${calculatePool(rote.rotePool, awakened)})</p>` }} />
                         <td>
                         {awakened.rotes.some((selectedRote) => (selectedRote.name === rote.name && selectedRote.arcanum === rote.arcanum)) ? null : 
                           rotePoints < rote.level || !learnableRotes.some(lr => lr.name === rote.name)?  <Button disabled>Select</Button> :

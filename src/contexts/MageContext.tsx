@@ -1,20 +1,18 @@
 import React, { useContext, useMemo, useState, useCallback, useEffect } from "react";
 import { db } from "./firebase";
 import { useAuth } from "./AuthContext";
+import { useUser } from "./UserContext";
 import {
   getDocs,
   collection,
   addDoc,
   updateDoc,
   doc,
-  getDoc,
   query,
   where,
 } from "firebase/firestore";
 import PropTypes from "prop-types";
-import { User } from "firebase/auth";
 import { Awakened } from "../components/mageCreator/data/Awakened";
-import { getUser } from "./UserContext";
 
 type AwakenedContextValue = {
   awakenedList: Awakened[];
@@ -37,13 +35,14 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
   const { currentUser } = useAuth();
   const collectionRef = collection(db, "tatteredVeil");
   const [userData, setUserData] = useState<any | null>(null);
+  const { getUser } = useUser();
 
 
   
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const user = await getUser(currentUser);
+      const user = await getUser();
       setUserData(user);
     };
 

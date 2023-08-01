@@ -15,7 +15,10 @@ const backgroundSchema = z.object({
   history: z.string(),
   goals: z.string(),
   description: z.string(),
+  showPublic: z.boolean(),
   profilePic: z.string(),
+  publicIntro: z.string().max(280),
+  publicTitle: z.string()
 })
 
 export const awakenedSchema = z.object({
@@ -53,7 +56,10 @@ export const getEmptyAwakened = (): Awakened => {
       history: "",
       goals: "",
       description: "",
-      profilePic: "../resources/SkullMTAw.webp"
+      profilePic: "https://firebasestorage.googleapis.com/v0/b/larp-app-5a526.appspot.com/o/mage%2FcenteredSkullMTAw.png?alt=media&token=e4d6fccf-42ea-4f1a-9573-13a8b197d059",
+      publicIntro: "",
+      publicTitle: "",
+      showPublic: false,
     },
 
     virtue: "",
