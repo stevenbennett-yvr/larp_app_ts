@@ -197,3 +197,24 @@ export type SocialAttributes = z.infer<
       handleAttributeChange(awakened, setAwakened, attribute, "experiencePoints", xp)
       return xp
     }
+
+
+    export const attributesCreationPointsCheck = (awakened:Awakened) => {
+      const mentalAttributes = awakened.attributes["mental"] as any
+      const physicalAttributes = awakened.attributes["physical"] as any
+      const socialAttributes = awakened.attributes["social"] as any
+
+      let categoryCount = [0,0,0]
+
+      for (const attribute in mentalAttributes) {
+        categoryCount[0] += (mentalAttributes[attribute].creationPoints === 5? 6 : mentalAttributes[attribute].creationPoints)
+      }
+      for (const attribute in physicalAttributes) {
+        categoryCount[1] += (physicalAttributes[attribute].creationPoints === 5? 6 : physicalAttributes[attribute].creationPoints)
+      }
+      for (const attribute in socialAttributes) {
+        categoryCount[2] += (socialAttributes[attribute].creationPoints === 5? 6 : socialAttributes[attribute].creationPoints)
+      }
+
+      return categoryCount.includes(6) && categoryCount.includes(7) && categoryCount.includes(8);
+    }

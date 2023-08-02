@@ -304,3 +304,14 @@ export const handleArcanumChange = (awakened: Awakened, setAwakened: Function, a
 
   setAwakened(updatedAwakened); // Update the awakened object with the updatedArcana
 };
+
+
+export const checkArcanaCreationPointsTotal = (awakened: Awakened) => {
+  const arcana = awakened.arcana;
+  let total = 0;
+  Object.keys(arcana).forEach((arcanum) => {
+    const dots = arcana[arcanum as ArcanaKey].creationPoints;
+    total += dots;
+  });
+  return total === 6;
+};

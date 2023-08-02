@@ -319,3 +319,35 @@ export const skillsSchema = z.object({
         handleSkillChange(awakened, setAwakened, skill, "specialities", specialityArray )
       }
     }
+
+    
+    export const SkillCreationPointsCheck = (awakened:Awakened) => {
+      const mentalSkills = awakened.skills["mental"] as any
+      const physicalSkills = awakened.skills["physical"] as any
+      const socialSkills = awakened.skills["social"] as any
+
+      let categoryCount = [0, 0, 0, 0]
+
+      for (const skill in mentalSkills) {
+        categoryCount[0] += (mentalSkills[skill].creationPoints === 5? 6 : mentalSkills[skill].creationPoints)
+        const skillSpecailities = mentalSkills[skill].specialities
+        for (let i = 0; i < skillSpecailities.length; i++) {
+          categoryCount[3] += skillSpecailities[i].creationPoints
+        }
+      }
+      for (const skill in physicalSkills) {
+        categoryCount[1] += (physicalSkills[skill].creationPoints === 5? 6 : physicalSkills[skill].creationPoints)
+        const skillSpecailities = physicalSkills[skill].specialities
+        for (let i = 0; i < skillSpecailities.length; i++) {
+          categoryCount[3] += skillSpecailities[i].creationPoints
+        }
+      }
+      for (const skill in socialSkills) {
+        categoryCount[2] += (socialSkills[skill].creationPoints === 5? 6 : socialSkills[skill].creationPoints)
+        const skillSpecailities = socialSkills[skill].specialities
+        for (let i = 0; i < skillSpecailities.length; i++) {
+          categoryCount[3] += skillSpecailities[i].creationPoints
+        }
+      }
+      return categoryCount.includes(3) && categoryCount.includes(4) && categoryCount.includes(7) && categoryCount.includes(11);
+    }

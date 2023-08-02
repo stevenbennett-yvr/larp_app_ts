@@ -531,7 +531,6 @@ const PrintSheet = ({awakened, backStep, submit}: PrintSheetProps) => {
                     >
                         Submit
                     </Button>
-                  <Text fz={globals.smallerFontSize} style={{ margin: "10px"}}>Remaining Experience: {currentExperience(awakened)}</Text>
               </Button.Group>
             </Group>
             </Alert>

@@ -381,3 +381,15 @@ export const handleXpMeritChange = (awakened:Awakened, setAwakened:Function, mer
     handleMeritChange(awakened, setAwakened, merit, "experiencePoints", xp)
   }
 }
+
+export const checkMeritCreationPoints = (awakened: Awakened) => {
+  let totalCreationPoints = 0;
+
+  Object.values(awakened.merits).forEach((merit) => {
+    totalCreationPoints += merit.creationPoints === 5 ? 6 : merit.creationPoints;
+  });
+
+  totalCreationPoints += awakened.gnosis.creationPoints
+
+  return totalCreationPoints === 7;
+};

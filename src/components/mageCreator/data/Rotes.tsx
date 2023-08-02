@@ -173,3 +173,15 @@ export const getFilteredRotes = (awakened: Awakened, roteData: Rote[]): Rote[] =
       });
     }
   };
+
+
+  export const checkRoteCreationPoints = (awakened:Awakened) => {
+    let dotsTotal = 0;
+  
+    Object.values(awakened.rotes).forEach((rote) => {
+      let dots = rote.creationPoints;
+      dotsTotal += dots;
+    });
+
+    return dotsTotal === 6
+  };

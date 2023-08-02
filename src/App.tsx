@@ -3,6 +3,7 @@ import { useMediaQuery, useViewportSize } from '@mantine/hooks'
 import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { MageProvider } from './contexts/MageContext';
 
 import PrivateRoute from './PrivateRoute';
 
@@ -34,13 +35,16 @@ function App() {
         <Router>
           <AuthProvider>
             <UserProvider>
+              <MageProvider>
               <AuthenticatedApp></AuthenticatedApp>
+              </MageProvider>
             </UserProvider>
           </AuthProvider>
         </Router>
 
   );
 }
+
 
 // TODO: Setup the side bar to display character levels. This will be difficult
 
@@ -53,7 +57,6 @@ function AuthenticatedApp() {
       padding="0"
       //navbar={globals.isSmallScreen ? <></> : <Navbar width={{ base: 300 }} height={"100%"} p="xs">{<Sidebar character={character} />}</Navbar>}
       header={showHeader?<Header height={75} p="xs"><Topbar /></Header>:<></>}
-      //aside={showAsideBar ? <AsideBar selectedStep={selectedStep} setSelectedStep={setSelectedStep} character={character} /> : <></>}
       styles={(theme) => ({
         main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
       })}

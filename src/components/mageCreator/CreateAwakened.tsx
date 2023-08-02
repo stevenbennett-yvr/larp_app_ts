@@ -1,6 +1,6 @@
 import { Center } from "@mantine/core";
 import { Awakened, getEmptyAwakened } from "./data/Awakened";
-import { logChanges } from './Generator/utils/Logging'
+//import { logChanges } from './Generator/utils/Logging'
 import Basics from "./Generator/Basics";
 import AttributeAssigner from "./Generator/AttributeAssigner";
 import SkillAssigner from "./Generator/SkillAssigner"
@@ -11,12 +11,14 @@ import MeritAssigner from "./Generator/MeritAssigner";
 import ExperienceAssigner from "./Generator/ExperienceAssigner"
 import FinalTouches from "./Generator/FinalTouches"
 import PrintSheet from './Generator/PrintSheet'
+import NavBar from "./Generator/utils/Stepper";
+import SideSheet from "./Generator/utils/SideSheet";
 import { useLocalStorage } from "@mantine/hooks";
 
 // TODO: PRIORITY: Finish the character creator
 
 const GenerateAwakened = () => {
-  const emptyAwakened = getEmptyAwakened()
+//  const emptyAwakened = getEmptyAwakened()
   const [awakened, setAwakened] = useLocalStorage<Awakened>({ key: "awakened", defaultValue: getEmptyAwakened()})
   const [selectedStep, setSelectedStep] = useLocalStorage({ key: "selectedStep", defaultValue: 0 })
   const [showInstructions, setShowInstructions] = useLocalStorage({ key: "showInstructions", defaultValue: false });
@@ -161,8 +163,8 @@ const GenerateAwakened = () => {
                 setSelectedStep(selectedStep - 1);
               }}
               submit={() => {
-                const changes = logChanges(emptyAwakened, awakened);
-                console.log(changes)
+                //const changes = logChanges(emptyAwakened, awakened);
+
               }}
             />
           )
@@ -174,7 +176,19 @@ const GenerateAwakened = () => {
   
 
 
-  return <Center h={"100%"}>{getStepComponent()}</Center>;
+  return (
+    <Center h={"100%"}>
+      <SideSheet
+        awakened={awakened}
+      />
+      <NavBar
+        selectedStep={selectedStep}
+        setSelectedStep={setSelectedStep}
+        awakened={awakened}
+      />
+      {getStepComponent()}
+    </Center>
+  );
 };
 
 export default GenerateAwakened;
