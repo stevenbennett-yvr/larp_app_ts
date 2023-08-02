@@ -41,15 +41,15 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
   
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const user = await getUser();
-      setUserData(user);
-    };
-
     if (currentUser) {
+      const fetchUserData = async () => {
+        const user = await getUser();
+        setUserData(user);
+      };
+  
       fetchUserData();
     }
-  }, [currentUser]);
+  }, [currentUser, getUser]);
 
   const [awakenedList, setAwakenedList] = useState<any>([]);
 

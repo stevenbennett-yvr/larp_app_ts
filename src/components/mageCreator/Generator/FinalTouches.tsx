@@ -54,8 +54,6 @@ const FinalTouches = ({awakened, setAwakened, backStep, nextStep}: FinalTouchesP
 
   const conStatus = awakened.merits.filter((merit) => merit.name === "Status (Consilium)")
 
-  console.log(conStatus[0]?.freebiePoints)
-
   return (
     <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
       <Stack>
@@ -113,7 +111,7 @@ const FinalTouches = ({awakened, setAwakened, backStep, nextStep}: FinalTouchesP
         <Alert color="gray" title="Public Info" style={{ width: "400px" }}>
             <Checkbox
               checked={awakened.background.showPublic}
-              label="Show details to the public?"
+              label="Create and display Public Info card?"
               onChange={(event) =>
                 setAwakened({
                   ...awakened,
@@ -124,6 +122,8 @@ const FinalTouches = ({awakened, setAwakened, backStep, nextStep}: FinalTouchesP
                 })
               }
             />
+          {awakened.background.showPublic? 
+          <div>
           <TextInput
               value={awakened.background.publicTitle}
               onChange={(event) =>
@@ -132,11 +132,11 @@ const FinalTouches = ({awakened, setAwakened, backStep, nextStep}: FinalTouchesP
                 background: { ...awakened.background, publicTitle: event.target.value },
                 })
             }
-              label="Character Title"
+              label="Public Title"
           /> 
 
           <Textarea
-              label="Public Information"
+              label="Public Intro"
               placeholder="Max Characters (280)"
               autosize
               minRows={2}
@@ -150,6 +150,8 @@ const FinalTouches = ({awakened, setAwakened, backStep, nextStep}: FinalTouchesP
                   })
               }
           />
+          </div>
+          :<></>}
         </Alert>
 
         {awakened.background.showPublic? 
@@ -190,7 +192,7 @@ const FinalTouches = ({awakened, setAwakened, backStep, nextStep}: FinalTouchesP
                 </Grid.Col>
                 <Grid.Col span={9}>
                   <Stack>
-                    {awakened.background.publicTitle? <Text weight={500}>{awakened.background.publicTitle}</Text>: <></>}
+                    {awakened.background.publicTitle? <Text fs="italic">{awakened.background.publicTitle}</Text>: <></>}
                     {awakened.background.publicIntro? <Text>{awakened.background.publicIntro}</Text>: <></>}
                     <Group>
                       <Center>

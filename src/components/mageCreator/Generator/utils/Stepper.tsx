@@ -21,21 +21,18 @@ const NavBar = ({ selectedStep, setSelectedStep, awakened}: StepperProps) => {
         let value = false
         if (step >= 1) {
             value = !awakened.name || !awakened.concept || !awakened.virtue || !awakened.vice
-            console.log(value)
             if (value) {
                 return value
             }
         }
         if (step >= 2) {
             value = !attributesCreationPointsCheck(awakened)
-            console.log(value)
             if (value) {
                 return value
             }
         }
         if (step >= 3) {
             value = !SkillCreationPointsCheck(awakened)
-            console.log(value)
 
             if (value) {
                 return value
@@ -43,7 +40,6 @@ const NavBar = ({ selectedStep, setSelectedStep, awakened}: StepperProps) => {
         }
         if (step >= 4) {
             value = !awakened.path
-            console.log(value)
 
             if (value) {
                 return value
@@ -51,7 +47,6 @@ const NavBar = ({ selectedStep, setSelectedStep, awakened}: StepperProps) => {
         }
         if (step >= 5) {
             value = !awakened.order
-            console.log(value)
 
             if (value) {
                 return value
@@ -59,7 +54,6 @@ const NavBar = ({ selectedStep, setSelectedStep, awakened}: StepperProps) => {
         }
         if (step >= 6) {
             value = !checkArcanaCreationPointsTotal(awakened) || !checkRoteCreationPoints(awakened)
-            console.log(value)
 
             if (value) {
                 return value
@@ -67,7 +61,6 @@ const NavBar = ({ selectedStep, setSelectedStep, awakened}: StepperProps) => {
         }
         if (step >= 7) {
             value = !checkMeritCreationPoints(awakened)
-            console.log(value)
 
             if (value) {
                 return value
@@ -75,7 +68,6 @@ const NavBar = ({ selectedStep, setSelectedStep, awakened}: StepperProps) => {
         }
         if (step >= 8) {
             value = !(currentExperience(awakened) < 10)
-            console.log(value)
 
             if (value) {
                 return value

@@ -29,7 +29,7 @@ function App() {
     globals.largeFontSize = globals.isPhoneScreen ? "21px" : "25px"
     globals.smallFontSize = globals.isPhoneScreen ? "16px" : "20px"
     globals.smallerFontSize = globals.isPhoneScreen ? "14px" : "16px"
-  },  [globals.isPhoneScreen, globals.isSmallScreen] )
+  },  [] )
 
   return (
         <Router>

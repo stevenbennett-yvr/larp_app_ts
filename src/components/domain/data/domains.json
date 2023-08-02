@@ -1,0 +1,239 @@
+[
+    {
+        "name": "Vancouver - Nova Albion",
+        "id": "CND-001",
+        "location": "Vancouver, BC, Canada",
+        "status": "active",
+        "coordinator": {
+            "name": "Murdock Uriel",
+            "email": "dc.001@canadaatmidnight.com"
+        },
+        "facebook": "",
+        "discord": ""
+    },
+    {
+        "name": "CND-002 Saint John",
+        "id": "CND-002",
+        "location": "Saint John, NB, Canada",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.002@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-008 Toronto",
+        "id": "CND-008",
+        "location": "Toronto, ON, Canada",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.008@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-014 Hamilton",
+        "id": "CND-014",
+        "location": "Hamilton, ON, Canada",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.014@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "Montreal - Berceau de la Rébellion",
+        "id": "CND-015",
+        "location": "Montreal, QC, Canada",
+        "status": "active",
+        "coordinator": {
+            "name": "Ivan Vasilini",
+            "email": "dc.015@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-024 Ottawa",
+        "id": "CND-024",
+        "location": "Ottawa, ON, Canada",
+        "status": "active",
+        "coordinator": {
+            "name": "Dave Desgagnes",
+            "email": "dc.024@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "Northern Winds Virtual Domain",
+        "id": "CND-099",
+        "location": "Thunder Bay, ON, Canada",
+        "status": "active",
+        "coordinator": {
+            "name": "Yvonne Day",
+            "email": "dc.099@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "Little Rock @ Midnight",
+        "id": "CND-101",
+        "location": "Little Rock, Arkansas",
+        "status": "active",
+        "coordinator": {
+            "name": "Justin Green",
+            "email": "dc.101@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "Seattle - Night Symphonies",
+        "id": "CND-102",
+        "location": "Seattle, Washington",
+        "status": "active",
+        "coordinator": {
+            "name": "John Finkbiner",
+            "email": "dc.102@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-103 Austin, Texas",
+        "id": "CND-103",
+        "location": "Austin, Texas",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.103@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-104 Dallas, Texas",
+        "id": "CND-104",
+        "location": "Dallas, Texas",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.104@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-105 Portland, Oregon",
+        "id": "CND-105",
+        "location": "Portland, Oregon",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.105@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-106 San Diego, California",
+        "id": "CND-106",
+        "location": "San Diego, California",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.106@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-107 Savannah, Georgia",
+        "id": "CND-107",
+        "location": "Savannah, Georgia",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.107@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-108 Los Angeles, California",
+        "id": "CND-108",
+        "location": "Los Angeles, California",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.108@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-109 Houston, Texas",
+        "id": "CND-109",
+        "location": "Houston, Texas",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.109@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-110 Boston, Massachusetts",
+        "id": "CND-110",
+        "location": "Boston, Massachusetts",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.110@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-111 Tucson, Arizona",
+        "id": "CND-111",
+        "location": "Tucson, Arizona",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.111@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-112 Atlanta, Georgia",
+        "id": "CND-112",
+        "location": "Atlanta, Georgia",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.112@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-113 Portland, Maine",
+        "id": "CND-113",
+        "location": "Portland, Maine",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.113@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-114 Detroit, Michigan",
+        "id": "CND-114",
+        "location": "Detroit, Michigan",
+        "status": "active",
+        "coordinator": {
+            "email": "dc.114@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-115 Knoxville, Tennessee",
+        "id": "CND-115",
+        "location": "Knoxville, Tennessee",
+        "coordinator": {
+            "email": "dc.115@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-116 Contra Costa, California",
+        "id": "CND-116",
+        "location": "Contra Costa, California",
+        "coordinator": {
+            "email": "dc.116@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-117 Kennewick, Washington",
+        "id": "CND-117",
+        "location": "Kennewick, Washington",
+        "coordinator": {
+            "email": "dc.117@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-118 Baltimore, Maryland",
+        "id": "CND-118",
+        "location": "Baltimore, Maryland",
+        "coordinator": {
+            "email": "dc.118@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-120 Tampa, Florida",
+        "id": "CND-120",
+        "location": "Tampa, Florida",
+        "coordinator": {
+            "email": "dc.120@canadaatmidnight.com"
+        }
+    }
+]

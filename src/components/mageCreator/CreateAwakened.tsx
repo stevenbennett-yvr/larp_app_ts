@@ -1,6 +1,6 @@
 import { Center } from "@mantine/core";
 import { Awakened, getEmptyAwakened } from "./data/Awakened";
-//import { logChanges } from './Generator/utils/Logging'
+import { logChanges } from './Generator/utils/Logging'
 import Basics from "./Generator/Basics";
 import AttributeAssigner from "./Generator/AttributeAssigner";
 import SkillAssigner from "./Generator/SkillAssigner"
@@ -14,14 +14,71 @@ import PrintSheet from './Generator/PrintSheet'
 import NavBar from "./Generator/utils/Stepper";
 import SideSheet from "./Generator/utils/SideSheet";
 import { useLocalStorage } from "@mantine/hooks";
+import { useEffect, useState } from "react";
+import { useUser } from "../../contexts/UserContext";
+import { useMageDb } from "../../contexts/MageContext";
+import { useNavigate } from "react-router-dom";
 
 // TODO: PRIORITY: Finish the character creator
 
 const GenerateAwakened = () => {
-//  const emptyAwakened = getEmptyAwakened()
+  const navigate = useNavigate();
+  const emptyAwakened = getEmptyAwakened()
+  const { getUser } = useUser()
+  const { onSubmitAwakened } = useMageDb()
   const [awakened, setAwakened] = useLocalStorage<Awakened>({ key: "awakened", defaultValue: getEmptyAwakened()})
   const [selectedStep, setSelectedStep] = useLocalStorage({ key: "selectedStep", defaultValue: 0 })
   const [showInstructions, setShowInstructions] = useLocalStorage({ key: "showInstructions", defaultValue: false });
+  const [userdata, setUserData] = useState<any>()
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const user = await getUser();
+        setUserData(user);
+      } catch (error) {
+        // Handle error
+        console.log(error);
+      }
+    };
+
+    fetchUserData();
+  }, [])
+
+  async function handleSubmit() {
+    try {
+      // Get the changes log
+      let experienceLog = logChanges(emptyAwakened, awakened);
+  
+      if (experienceLog.length !== 0) {
+        experienceLog.unshift({ user: userdata.email });
+  
+        // Update the 'experienceLog' property of the 'awakened' state
+        setAwakened((prevAwakened) => ({
+          ...prevAwakened,
+          changeLogs: {
+            [new Date().toISOString()]: experienceLog,
+          },
+        }));
+        await onSubmitAwakened(awakened);
+        localStorage.removeItem("awakened");
+        localStorage.removeItem("selectedStep");
+        localStorage.removeItem("attributeSettings");
+        localStorage.removeItem("attributeCount");
+        localStorage.removeItem("skillSettings");
+        localStorage.removeItem("skillCount");
+        localStorage.removeItem("firstSkill");
+        localStorage.removeItem("secondSkill");
+        localStorage.removeItem("thirdSkill");
+        localStorage.removeItem("firstSpecialityName");
+        localStorage.removeItem("secondSpecialityName");
+        localStorage.removeItem("thirdSpecialityName");
+        navigate('/')
+      }
+    } catch {
+      console.log("Failed to create character");
+    }
+  }
 
     const getStepComponent = () => {
     switch (selectedStep) {
@@ -163,8 +220,7 @@ const GenerateAwakened = () => {
                 setSelectedStep(selectedStep - 1);
               }}
               submit={() => {
-                //const changes = logChanges(emptyAwakened, awakened);
-
+                handleSubmit()
               }}
             />
           )
@@ -172,9 +228,6 @@ const GenerateAwakened = () => {
         return null; // Return a default component or handle the case accordingly
     }
   };
-
-  
-
 
   return (
     <Center h={"100%"}>

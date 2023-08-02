@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '../contexts/UserContext';
-import { Alert, Card, Center, Text, Button } from '@mantine/core';
+import { Alert, Card, Center, Text, Button, Group } from '@mantine/core';
 import { globals } from "../globals"
 import { useNavigate } from "react-router-dom";
+import DomainSelector from './domain/DomainSelector';
 
 /* 
   TODO: 
@@ -19,29 +20,33 @@ export default function Dashboard() {
       const savedUserData = localStorage.getItem('userData');
       return savedUserData ? JSON.parse(savedUserData) : '';
   });
+    const [showDomainSelector, setShowDomainSelector] = useState(false);
+
 
     useEffect(() => {
-    const fetchUserData = async () => {
-      const userData = await getUser();
-      if (userData) {
-        // User data exists, set it in the state
-        setUserData(userData);
-        localStorage.setItem('userData', JSON.stringify(userData));
-      } else {
-        // User data does not exist
-        console.log("User data not found");
+      if (!userData) { // Check if userData is not set
+        const fetchUserData = async () => {
+          const fetchedUserData = await getUser();
+          if (fetchedUserData) {
+            setUserData(fetchedUserData);
+            setShowDomainSelector(!userData.domain);
+            localStorage.setItem('userData', JSON.stringify(fetchedUserData));
+          } else {
+            console.log("User data not found");
+          }
+        };
+    
+        fetchUserData();
       }
-    };
-
-    fetchUserData();
-  }, [getUser]);
+    }, [userData, getUser]);
 
   const handleNavigateChronicle = () => {
     navigate("/choose-chronicle");
   };
 
-      return (
-        <Center h={"100%"}>
+  return (
+    <Center h={"100%"}>
+      <Group>
         <Alert mt={globals.isPhoneScreen ? "75px" : "50px"} color='gray' variant='outline'>
             <Card shadow="sm" padding="lg" radius="md" withBorder>
               <Text fz={globals.largeFontSize} mb={"lg"}>Profile</Text>
@@ -52,8 +57,13 @@ export default function Dashboard() {
             </Card>
             <Button onClick={handleNavigateChronicle}>Create Character</Button>
         </Alert>
-        </Center>
-      )
-
+      </Group>
+    <DomainSelector
+      showDomainSelector={showDomainSelector}
+      setShowDomainSelector={setShowDomainSelector}
+      userData={userData}
+    />
+    </Center>
+  )
 }
 
