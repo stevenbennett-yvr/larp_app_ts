@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '../contexts/UserContext';
-import { Alert, Card, Center, Text, Button, Group } from '@mantine/core';
+import { Alert, Card, Center, Text, Group, Stack } from '@mantine/core';
 import { globals } from "../globals"
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import DomainSelector from './domain/DomainSelector';
+import ChroncileSelector from './chronicle/ChronicleSelector'
+import { domainDisplay } from './domain/DomainDisplay';
 
 /* 
   TODO: 
@@ -14,7 +16,7 @@ import DomainSelector from './domain/DomainSelector';
 */
 
 export default function Dashboard() {
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     const { getUser } = useUser();
     const [userData, setUserData] = useState(() => {
       const savedUserData = localStorage.getItem('userData');
@@ -22,30 +24,30 @@ export default function Dashboard() {
   });
     const [showDomainSelector, setShowDomainSelector] = useState(false);
 
+  useEffect(() => {
+    if (!userData) { // Check if userData is not set
+      const fetchUserData = async () => {
+        const fetchedUserData = await getUser();
+        if (fetchedUserData) {
+          setUserData(fetchedUserData);
+          setShowDomainSelector(!userData.domain);
+          localStorage.setItem('userData', JSON.stringify(fetchedUserData));
+        } else {
+          console.log("User data not found");
+        }
+      };
+  
+      fetchUserData();
+    }
+  }, [userData, getUser]);
 
-    useEffect(() => {
-      if (!userData) { // Check if userData is not set
-        const fetchUserData = async () => {
-          const fetchedUserData = await getUser();
-          if (fetchedUserData) {
-            setUserData(fetchedUserData);
-            setShowDomainSelector(!userData.domain);
-            localStorage.setItem('userData', JSON.stringify(fetchedUserData));
-          } else {
-            console.log("User data not found");
-          }
-        };
-    
-        fetchUserData();
-      }
-    }, [userData, getUser]);
-
-  const handleNavigateChronicle = () => {
+/*   const handleNavigateChronicle = () => {
     navigate("/choose-chronicle");
-  };
+  }; */
 
   return (
     <Center h={"100%"}>
+      <Stack>
       <Group>
         <Alert mt={globals.isPhoneScreen ? "75px" : "50px"} color='gray' variant='outline'>
             <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -55,14 +57,16 @@ export default function Dashboard() {
               <Text fz={globals.smallerFontSize}>MC: {userData.mc}</Text>
               <Text fz={globals.smallerFontSize}>Domain: {userData.domain}</Text>
             </Card>
-            <Button onClick={handleNavigateChronicle}>Create Character</Button>
         </Alert>
+        {domainDisplay(userData)}
       </Group>
-    <DomainSelector
-      showDomainSelector={showDomainSelector}
-      setShowDomainSelector={setShowDomainSelector}
-      userData={userData}
-    />
+      {ChroncileSelector(userData)}
+      <DomainSelector
+        showDomainSelector={showDomainSelector}
+        setShowDomainSelector={setShowDomainSelector}
+        userData={userData}
+      />
+      </Stack>
     </Center>
   )
 }

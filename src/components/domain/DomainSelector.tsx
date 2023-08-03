@@ -38,10 +38,12 @@ const DomainSelector = ({showDomainSelector, setShowDomainSelector, userData}: D
         }
     }
 
-    const selectData = domains.map((domain) => ({
-        value: `${domain.name}`,
-        label: `${domain.name}`
-    }))
+    const activeDomains = domains.filter((domain) => domain.status === "active");
+
+    const selectData = activeDomains.map((domain) => ({
+        value: domain.name,
+        label: domain.name
+    }));
     
     const handleDomainConfirm = async () => {
         try {
@@ -82,9 +84,12 @@ const DomainSelector = ({showDomainSelector, setShowDomainSelector, userData}: D
     return(
         <Modal opened={showDomainSelector} onClose={() => setShowDomainSelector(false)}>
             <Modal.Title>
-                Select Domain
+                Choose Domain
             </Modal.Title>
             <Modal.Body>
+              Domains are local chapters of the Canada at Midnight club. Below is the list of all active domains, choose the one nearest you to see what games are available there.
+              If you do not have any domains in your area, you can join the Northern Winds Virtual Domain, or you can organize your own domain.
+              <Button variant='link' onClick={() => window.open("https://docs.google.com/document/d/1gY629DxclYA_rREYa4vWzqHFdEvXm--pOmNSJIoDpFI/edit?usp=sharing")}>For more information on how to start a domain, click here.</Button>
                 <Select 
                     data={selectData} 
                     value={selectedDomain}
