@@ -81,6 +81,7 @@ const DomainSelector = ({showDomainSelector, setShowDomainSelector, userData}: D
         }
     };
 
+    // Extra showDomainSelector is just to make sure I'm not overcharged for the map component.
     return(
         <Modal opened={showDomainSelector} onClose={() => setShowDomainSelector(false)}>
             <Modal.Title>
@@ -97,7 +98,9 @@ const DomainSelector = ({showDomainSelector, setShowDomainSelector, userData}: D
                     nothingFound="Nothing Found"
                     onChange={(value) => handleDomainChange(value)}>
                 </Select>
+                {showDomainSelector?
                 <MapComponent center={selectedCoordinates}/>
+                :<></>}
             </Modal.Body>
             <Button onClick={handleDomainConfirm}>
                 Confirm

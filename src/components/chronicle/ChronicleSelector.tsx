@@ -14,7 +14,7 @@ const ChroncileSelector = (userData: any) => {
     let currentChronicles = domain?.currentChronicles
 
     const createChroniclePicker = (chronicle: ChronicleName) => {
-        const bgColor = theme.fn.linearGradient(0, c1)
+        const bgColor = theme.fn.linearGradient(0, c1, Chronciles[chronicle].color)
 
         return (
             <Grid.Col key={chronicle} span={4}>
@@ -49,11 +49,7 @@ const ChroncileSelector = (userData: any) => {
     }
 
     return (
-        <Grid>
-            {
-                currentChronicles?.map((c) => chronicleNameSchema.parse(c)).map((chronicle) => createChroniclePicker(chronicle))
-            }
-        </Grid>
+        currentChronicles?.map((c) => chronicleNameSchema.parse(c)).map((chronicle) => createChroniclePicker(chronicle))
     )
 }
 

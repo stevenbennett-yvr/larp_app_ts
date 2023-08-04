@@ -1,6 +1,6 @@
 import { z } from "zod";
 import MageLogo from '../../mageCreator/resources/MageAwakeningLogo.webp'
-
+import VampireLogo from '../resources/VampireMasqueradeV5Logo.webp'
 
 export const chronicleNameSchema = z.union([
     z.literal('Tattered Veil'),
@@ -22,6 +22,7 @@ export const chronicleSchema = z.object({
     name: chronicleNameSchema,
     gameLine: gameLineSchema,
     logo: z.string(),
+    color: z.string(),
     documents: z.string(),
     startDate: z.string().datetime(),
     endDate: z.string().datetime(),
@@ -36,14 +37,16 @@ export const Chronciles: Record<ChronicleName, Chronicle> = {
         name: "Tattered Veil",
         gameLine: "Mage the Awakening 1st Edition",
         logo: MageLogo,
+        color: "#134f5c",
         documents: "https://docs.google.com/document/d/14Bj_az4YHf7G4utiwAK0-QMoYzok5gd5mbtsjngQ43I/",
         startDate: new Date(2023, 7, 1).toISOString(),
         endDate: ""
     },
     "Good Intentions": {
-        name: "",
+        name: "Good Intentions",
         gameLine: "Laws of the Night V5",
-        logo: "",
+        logo: VampireLogo,
+        color: "#86306c",
         documents: "",
         startDate: "",
         endDate: ""
@@ -52,6 +55,7 @@ export const Chronciles: Record<ChronicleName, Chronicle> = {
         name: "",
         gameLine: "",
         logo: "",
+        color: "",
         documents: "",
         startDate: "",
         endDate: ""

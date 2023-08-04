@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '../contexts/UserContext';
-import { Alert, Card, Center, Text, Group, Stack } from '@mantine/core';
+import { Alert, Card, Center, Text, Group, Stack, Grid, Title } from '@mantine/core';
 import { globals } from "../globals"
 //import { useNavigate } from "react-router-dom";
 import DomainSelector from './domain/DomainSelector';
@@ -50,6 +50,7 @@ export default function Dashboard() {
       <Stack>
       <Group>
         <Alert mt={globals.isPhoneScreen ? "75px" : "50px"} color='gray' variant='outline'>
+          <Group>
             <Card shadow="sm" padding="lg" radius="md" withBorder>
               <Text fz={globals.largeFontSize} mb={"lg"}>Profile</Text>
               <Text fz={globals.smallerFontSize}>Email: {userData.email}</Text>
@@ -57,10 +58,14 @@ export default function Dashboard() {
               <Text fz={globals.smallerFontSize}>MC: {userData.mc}</Text>
               <Text fz={globals.smallerFontSize}>Domain: {userData.domain}</Text>
             </Card>
+            {domainDisplay(userData)}
+          </Group>
         </Alert>
-        {domainDisplay(userData)}
       </Group>
-      {ChroncileSelector(userData)}
+      <Title order={3}>Venue Portals</Title>
+      <Grid grow m={0}>
+        {ChroncileSelector(userData)}
+      </Grid>
       <DomainSelector
         showDomainSelector={showDomainSelector}
         setShowDomainSelector={setShowDomainSelector}
