@@ -1,5 +1,5 @@
 import { z } from "zod";
-import MageLogo from '../../mageCreator/resources/MageAwakeningLogo.webp'
+import MageLogo from '../../tatteredVeil/resources/MageAwakeningLogo.webp'
 import VampireLogo from '../resources/VampireMasqueradeV5Logo.webp'
 
 export const chronicleNameSchema = z.union([

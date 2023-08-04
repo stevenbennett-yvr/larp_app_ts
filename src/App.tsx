@@ -12,7 +12,8 @@ import Login from './components/Login'
 import Dashboard from './components/Dashboard';
 import Topbar from './topbar/Topbar';
 import ChooseChronicle from './components/ChooseChronicle';
-import GenerateAwakened from './components/mageCreator/CreateAwakened'
+import GenerateAwakened from './components/tatteredVeil/CreateAwakened'
+import TatteredVeilVenueDashboard from './components/tatteredVeil/TatteredVeilDashboard'
 
 import { globals } from './globals';
 import { UserProvider } from './contexts/UserContext';
@@ -55,7 +56,6 @@ function AuthenticatedApp() {
   return (
     <AppShell
       padding="0"
-      //navbar={globals.isSmallScreen ? <></> : <Navbar width={{ base: 300 }} height={"100%"} p="xs">{<Sidebar character={character} />}</Navbar>}
       header={showHeader?<Header height={75} p="xs"><Topbar /></Header>:<></>}
       styles={(theme) => ({
         main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
@@ -67,6 +67,7 @@ function AuthenticatedApp() {
           <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/choose-chronicle" element={<PrivateRoute><ChooseChronicle /></PrivateRoute>}/>
           <Route path="/create-mage" element={<GenerateAwakened/>}/>
+          <Route path="/tattered-veil" element={<TatteredVeilVenueDashboard/>}/>
         </Routes>
       </Container>
     </AppShell>

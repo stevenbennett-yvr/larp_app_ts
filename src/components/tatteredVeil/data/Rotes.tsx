@@ -3,7 +3,7 @@ import { Awakened } from './Awakened'
 import { ArcanaKey, currentArcanumLevel, arcana } from './Arcanum'
 import { currentAttributeLevel, allAttributes, AttributeNames } from './Attributes'
 import { currentSkillLevel, allSkills, SkillNames } from './Skills'
-import roteDataJson from '../data/RotesData.json'
+import roteDataJson from './RotesData.json'
 
 export const roteSchema = z.object({
     arcanum: z.string(),

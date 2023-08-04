@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useUser } from '../contexts/UserContext';
 import { Alert, Card, Center, Text, Group, Stack, Grid, Title } from '@mantine/core';
 import { globals } from "../globals"
-//import { useNavigate } from "react-router-dom";
 import DomainSelector from './domain/DomainSelector';
 import ChroncileSelector from './chronicle/ChronicleSelector'
 import { domainDisplay } from './domain/DomainDisplay';
