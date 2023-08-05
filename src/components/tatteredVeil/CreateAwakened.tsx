@@ -43,7 +43,7 @@ const GenerateAwakened = () => {
     };
 
     fetchUserData();
-  }, [])
+  }, [getUser])
 
   async function handleSubmit() {
     try {

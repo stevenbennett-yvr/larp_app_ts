@@ -19,6 +19,7 @@ type AwakenedContextValue = {
   onSubmitAwakened: (newAwakened: Awakened) => void;
   updateAwakened: (id: string, updatedAwakened: Awakened) => void;
   fetchAwakened: () => void;
+  getAwakenedById: (id: string) => Awakened;
 };
 
 const MageContext = React.createContext<AwakenedContextValue | null>(null);
@@ -100,14 +101,19 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
   }, [charactersCollectionRef]);
   
 
+  const getAwakenedById = useCallback((id:string) => {
+    return awakenedList.find((character:any) => character.id === id)
+  }, [awakenedList])
+
   const value = useMemo(() => {
     return {
       awakenedList,
       onSubmitAwakened,
       updateAwakened,
       fetchAwakened,
+      getAwakenedById,
     };
-  }, [awakenedList, onSubmitAwakened, updateAwakened, fetchAwakened]);
+  }, [awakenedList, onSubmitAwakened, updateAwakened, fetchAwakened, getAwakenedById]);
 
   return <MageContext.Provider value={value}>{children}</MageContext.Provider>;
 }

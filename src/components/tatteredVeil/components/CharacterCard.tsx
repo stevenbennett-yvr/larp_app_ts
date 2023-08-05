@@ -65,7 +65,6 @@ const CharacterCard = ({ awakenedList }: CharacterCardProps) => {
     <>
       {awakenedList.map((character) => {
         const conStatus = character.merits.filter((merit) => merit.name === 'Status (Consilium)');
-
         return (
           <Center>
           <Alert color="gray" style={{ width: '400px' }} key={character.uid}>
@@ -122,6 +121,12 @@ const CharacterCard = ({ awakenedList }: CharacterCardProps) => {
                           opacity: 0.6, // Adjust the opacity here (0.5 = 50% transparent)
                         }}
                       />
+                        <Button
+                          variant='link'
+                          onClick={() => { navigate(`/awakened-sheet/${character.id}`) }}
+                        >
+                          Update Character
+                        </Button>
                     </Center>
                   </Group>
                 </Stack>

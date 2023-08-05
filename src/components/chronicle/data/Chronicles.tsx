@@ -57,7 +57,7 @@ export const Chronciles: Record<ChronicleName, Chronicle> = {
     "": {
         name: "",
         gameLine: "",
-        path: "",
+        path: "/",
         logo: "",
         color: "",
         documents: "",

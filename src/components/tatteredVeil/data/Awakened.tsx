@@ -25,6 +25,7 @@ export const awakenedSchema = z.object({
     name: z.string(),
     concept: z.string(),
     uid: z.string(),
+    id: z.optional(z.string()),
     background: backgroundSchema,
     virtue: virtueNameSchema,
     vice: viceNameSchema,
