@@ -16,6 +16,8 @@ const ChroncileSelector = (userData: any) => {
     const createChroniclePicker = (chronicle: ChronicleName) => {
         const bgColor = theme.fn.linearGradient(0, c1, Chronciles[chronicle].color)
 
+
+
         return (
             <Grid.Col key={chronicle} span={4}>
                 <Card 
@@ -24,7 +26,7 @@ const ChroncileSelector = (userData: any) => {
                     padding="lg" 
                     radius="md"  
                     style={{ background: bgColor }}
-                    onClick={() => navigate("/choose-chronicle")}
+                    onClick={() => navigate(Chronciles[chronicle].path)}
                 >
                     <Card.Section>
                         <Center>

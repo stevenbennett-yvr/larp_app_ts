@@ -37,9 +37,6 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
   const [userData, setUserData] = useState<any | null>(null);
   const { getUser } = useUser();
 
-
-  
-
   useEffect(() => {
     if (currentUser) {
       const fetchUserData = async () => {

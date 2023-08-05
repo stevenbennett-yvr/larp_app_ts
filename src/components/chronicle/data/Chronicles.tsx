@@ -21,6 +21,7 @@ export type GameLine = z.infer<typeof gameLineSchema>
 export const chronicleSchema = z.object({
     name: chronicleNameSchema,
     gameLine: gameLineSchema,
+    path: z.string(),
     logo: z.string(),
     color: z.string(),
     documents: z.string(),
@@ -35,6 +36,7 @@ export type ChronicleKey = z.infer<typeof chronicleKeySchema>
 export const Chronciles: Record<ChronicleName, Chronicle> = {
     "Tattered Veil": {
         name: "Tattered Veil",
+        path: "/tattered-veil",
         gameLine: "Mage the Awakening 1st Edition",
         logo: MageLogo,
         color: "#134f5c",
@@ -44,6 +46,7 @@ export const Chronciles: Record<ChronicleName, Chronicle> = {
     },
     "Good Intentions": {
         name: "Good Intentions",
+        path: "/good-intentions",
         gameLine: "Laws of the Night V5",
         logo: VampireLogo,
         color: "#86306c",
@@ -54,6 +57,7 @@ export const Chronciles: Record<ChronicleName, Chronicle> = {
     "": {
         name: "",
         gameLine: "",
+        path: "",
         logo: "",
         color: "",
         documents: "",

@@ -25,11 +25,11 @@ const GenerateAwakened = () => {
   const navigate = useNavigate();
   const emptyAwakened = getEmptyAwakened()
   const { getUser } = useUser()
+  const [userdata, setUserData] = useState<any>()
   const { onSubmitAwakened } = useMageDb()
   const [awakened, setAwakened] = useLocalStorage<Awakened>({ key: "awakened", defaultValue: getEmptyAwakened()})
   const [selectedStep, setSelectedStep] = useLocalStorage({ key: "selectedStep", defaultValue: 0 })
   const [showInstructions, setShowInstructions] = useLocalStorage({ key: "showInstructions", defaultValue: false });
-  const [userdata, setUserData] = useState<any>()
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -47,6 +47,12 @@ const GenerateAwakened = () => {
 
   async function handleSubmit() {
     try {
+      // Set the uid
+      setAwakened((prevAwakened) => ({
+        ...prevAwakened,
+        uid: userdata.uid,
+      }));
+
       // Get the changes log
       let experienceLog = logChanges(emptyAwakened, awakened);
   

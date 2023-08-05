@@ -1,6 +1,6 @@
 //technical imports
 import { useState } from "react";
-import { Avatar, useMantineTheme, Alert, Button, Card, Center, Grid, Group, Image, Select, Stack, Table, Text, Accordion } from "@mantine/core";
+import { Avatar, useMantineTheme, Alert, Button, Center, Grid, Group, Image, Select, Stack, Table, Text, Accordion } from "@mantine/core";
 import { globals } from "../../../globals";
 
 //data imports
@@ -167,42 +167,31 @@ const PrintSheet = ({awakened, backStep, submit}: PrintSheetProps) => {
     const arcanumXpInputs = (arcanum: ArcanaKey, c2: string) => {
         
         return (
-            <Grid.Col key={arcanum} span={2}>
-                <Card
-                    shadow="sm"
-                    padding="lg"
-                    radius="md"
-                    style={{ background: c2 }}
-                >
-                    <Card.Section>
-                        <Center>
-                            <Group>
-                                <Image
-                                    fit="contain"
-                                    withPlaceholder
-                                    src={arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey].logo}
-                                    height={30}
-                                    width={30}
-                                    alt="order"
-                                    style={{ filter: "brightness(0)" }} 
-                                />
-                                <Text ta="center" color="white">
-                                    {arcanaDescriptions[arcanum].name} 
-                                </Text>
-                                {Array.from({ length: currentArcanumLevel(awakened, arcanum).level }, (_, index) => (
-                                    <span
-                                        key={index}
-                                        style={{color:"white"}}
-                                    >
-                                        ●
-                                    </span>
-                                ))}
-                            </Group>
-                        </Center>
-                    </Card.Section>
-                </Card>
+            <Grid.Col key={arcanum} span={4}> {/* Adjust the span value as needed */}
+              <Center>
+                <Group>
+                  <Image
+                    fit="contain"
+                    withPlaceholder
+                    src={arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey].logo}
+                    height={30}
+                    width={30}
+                    alt="order"
+                    style={{ filter: 'brightness(0)' }}
+                  />
+                  <Text ta="center" color="white">
+                    {arcanaDescriptions[arcanum].name}
+                  </Text>
+                  {Array.from({ length: currentArcanumLevel(awakened, arcanum).level }, (_, index) => (
+                    <span key={index} style={{ color: c2 }}>
+                      ●
+                    </span>
+                  ))}
+                </Group>
+              </Center>
             </Grid.Col>
-        )
+          );
+        
     }
     
     // ROTES SECTION
@@ -487,7 +476,7 @@ const PrintSheet = ({awakened, backStep, submit}: PrintSheetProps) => {
 
                 <Text mt={"xl"} ta="center" fz="xl" fw={700}>Arcana</Text>
                 <hr style={{width:"50%"}}/>
-                    <Grid columns={10} grow m={0}>
+                    <Grid columns={2} grow m={0}>
                         {
                             rulingArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => arcanumXpInputs(arcanum, getColorByArcanum(arcanum)))
                         }{
