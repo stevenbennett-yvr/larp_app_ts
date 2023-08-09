@@ -70,7 +70,7 @@ export const Orders: Record<OrderName, Order> = {
         `,
         logo: OrderFreeCouncil,
         rune: RuneFree,
-        roteSpecialities: ["Crafts", "Persuasion", "Science"],
+        roteSpecialities: ["crafts", "Persuasion", "Science"],
         color: "#B87333",
         cover: coverFree,
         link: 'https://www.drivethrurpg.com/product/25983'

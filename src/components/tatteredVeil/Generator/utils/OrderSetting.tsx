@@ -13,32 +13,22 @@ type OrderSettingsProps = {
     
       const roteSpecialities = Orders[order].roteSpecialities;
       
-      if (roteSpecialities.length === 0) {
-        allSkills.forEach((selectSkill) => {
-          // if apostate or without order, removes all rote specialities
-          const skillCategory: SkillCategory = getSkillCategory(selectSkill);
-          const categorySkills = skills[skillCategory as SkillCategory] as { [key in SkillNames]: Skill };
-          Object.entries(categorySkills).forEach(([,skill]) => {
-            skill.roteSkill = false;
-          });
-        })
-      } else {
+      allSkills.forEach((selectSkill) => {
+        // if apostate or without order, removes all rote specialities
+        const skillCategory: SkillCategory = getSkillCategory(selectSkill);
+        const categorySkills = skills[skillCategory as SkillCategory] as { [key in SkillNames]: Skill };
+        Object.entries(categorySkills).forEach(([,skill]) => {
+          skill.roteSkill = false;
+        });
+      })
         // adds rote specialies based on the roteSpecialities list in the Orders types
         roteSpecialities.forEach((specialityName: string) => {
           const lowercaseSpecial = specialityName.toLowerCase() as SkillNames;
           const skillCategory: SkillCategory = getSkillCategory(lowercaseSpecial);
-    
-          const categorySkills = skills[skillCategory as SkillCategory] as { [key in SkillNames]: Skill };
-    
-          Object.entries(categorySkills).forEach(([skillName, skill]) => {
-            if (skillName !== lowercaseSpecial) {
-              skill.roteSkill = false;
-            }
-          });
-    
+          
+          const categorySkills = skills[skillCategory as SkillCategory] as { [key in SkillNames]: Skill };  
           categorySkills[lowercaseSpecial].roteSkill = true;
-        });
-      }
+      })
     
       setAwakened({ ...awakened, skills: skills });
     };

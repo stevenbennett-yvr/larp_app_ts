@@ -263,9 +263,6 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
     <Stack>
         <Alert color="gray">
           <Text mt={"xl"} ta="center" fz="xl" fw={700}>Attributes</Text>
-          <Button color="gray" onClick={toggleInstructions}>
-            {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
-          </Button>
           {showInstructions && (
             <div>
             <p>{`How would you describe your character's natural capabilities? Are they scheming, sly, or sturdy? Attribute Points define these characteristics mechanically across three categories: Mental, Physical, and Social.`}</p>
@@ -274,6 +271,11 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
             <p>{`The fifth dot in any Attribute costs two points to purchase. Reaching a rating of Five in any Attribute requires a total of five points (the first dot is free).`}</p>
             </div>
           )}
+          <Center>
+          <Button variant="outline" color="gray" onClick={toggleInstructions}>
+            {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+          </Button>
+          </Center>
         </Alert>
 
         <Grid gutter="lg" justify="center">

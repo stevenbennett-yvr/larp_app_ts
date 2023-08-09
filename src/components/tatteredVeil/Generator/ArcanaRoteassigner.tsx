@@ -312,25 +312,27 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
         <Stack>
           <Alert color="gray">
           <Text mt={"xl"} ta="center" fz="xl" fw={700}>Arcana</Text>
-          <Button color="gray" onClick={toggleInstructions}>
-                    {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
-                </Button>
-                    {showInstructions && (
-                    <div>
-                      <p>{`
-                        Arcana are the ten spheres of magical influence. By improving their knowledge of the Arcana, a mage improves their skill at altering reality.  
-                      `}</p>
-                      <p>{`
-                        A mages Ruling Arcana, and the limits of their understanding, is determined by the Path.
-                      `}</p>
-                      <p>{`
-                        A mage can learn up to the fifth dot in their Ruling Arcana. Without aid, they can learn up to the fourth dot in other Arcana. Of their Inferior Arcanum, in which a mage is particularly weak, they can only learn the first two dots before needing assistance. Assistance comes from mages of other Paths with ruling Arcnaa of which the user wishes to learn.
-                      `}</p>
-                      <p>
-                        {`At creation, you gain 2 dots in one Arcanum, 2 dots in a second Arcanum and 1 dot in a third Arcanum. two of these Arcana must be in your character's Path's Ruling Arcana. Finally you gain 1 dot you can place anywhere.`}
-                      </p>
-                      </div>
-                      )}
+              {showInstructions && (
+              <div>
+                <p>{`
+                  Arcana are the ten spheres of magical influence. By improving their knowledge of the Arcana, a mage improves their skill at altering reality.  
+                `}</p>
+                <p>{`
+                  A mages Ruling Arcana, and the limits of their understanding, is determined by the Path.
+                `}</p>
+                <p>{`
+                  A mage can learn up to the fifth dot in their Ruling Arcana. Without aid, they can learn up to the fourth dot in other Arcana. Of their Inferior Arcanum, in which a mage is particularly weak, they can only learn the first two dots before needing assistance. Assistance comes from mages of other Paths with ruling Arcnaa of which the user wishes to learn.
+                `}</p>
+                <p>
+                  {`At creation, you gain 2 dots in one Arcanum, 2 dots in a second Arcanum and 1 dot in a third Arcanum. two of these Arcana must be in your character's Path's Ruling Arcana. Finally you gain 1 dot you can place anywhere.`}
+                </p>
+                </div>
+                )}
+          <Center>
+          <Button variant="outline" color="gray" onClick={toggleInstructions}>
+              {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+          </Button>
+          </Center>
           </Alert>
             <Grid columns={isPhoneScreen? 4 : 5} grow m={0}>
                 {
@@ -345,58 +347,60 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
             {countArcanaWithCreationPoints() > 0 || showAllRotes? 
             <Alert color="gray">
               <Text mt={"xl"} ta="center" fz="xl" fw={700}>Rotes</Text>
-                <Button color="gray" onClick={toggleInstructions}>
+                {showInstructions && (
+                  <div>
+                    <p>{`Rotes are magical feats simplified into a recipe. They provide an easier and safer way for mages to perform magic compared to improvisational spells. `}</p>
+                    <p>{`You may purchase up to 6 points of rotes. A rote's cost is equal to it's Arcanum rating. No rote can be rated higher than your character's level in that Arcanum. `}</p>
+                  </div>
+                )}
+                <Center>
+                <Button variant="outline" color="gray" onClick={toggleInstructions}>
                     {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
                 </Button>
-                    {showInstructions && (
-                      <div>
-                        <p>{`Rotes are magical feats simplified into a recipe. They provide an easier and safer way for mages to perform magic compared to improvisational spells. `}</p>
-                        <p>{`You may purchase up to 6 points of rotes. A rote's cost is equal to it's Arcanum rating. No rote can be rated higher than your character's level in that Arcanum. `}</p>
-                      </div>
-                    )}
+                </Center>
             </Alert>
             : <></> }
-                  <Center>
+              <Center>
 
-                  <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
-                    {showAllRotes ? (
-                    // Render all rotes
-                    (arcana as ArcanaKey[]).map((a) => createRoteAccordian(a, showAllRotes))
-                    ) : (
-                    // Render filtered rotes based on knownArcana
-                    (knownArcana as ArcanaKey[]).map((a) => createRoteAccordian(a, showAllRotes))
-                    )}
-                  </Accordion>
-                  </Center>
-                  <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
-                    <Group>
-                  <Button.Group>
-                    <Button
-                        style={{ margin: "5px" }}
-                        color="gray"
-                        onClick={backStep}
-                    >
-                        Back
-                    </Button>
-                    <Button
-                        style={{ margin: "5px" }}
-                        color="gray"
-                        onClick={nextStep}
-                        disabled={rotePoints !== 0}
-                    >
-                        Next
-                    </Button>
-                    <Button
-                    color="gray"
+              <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
+                {showAllRotes ? (
+                // Render all rotes
+                (arcana as ArcanaKey[]).map((a) => createRoteAccordian(a, showAllRotes))
+                ) : (
+                // Render filtered rotes based on knownArcana
+                (knownArcana as ArcanaKey[]).map((a) => createRoteAccordian(a, showAllRotes))
+                )}
+              </Accordion>
+              </Center>
+              <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
+                <Group>
+              <Button.Group>
+                <Button
                     style={{ margin: "5px" }}
-                    onClick={() => setShowAllRotes((prevShowAllRotes) => !prevShowAllRotes)}
-                  >
-                    {showAllRotes ? "Hide All" : "Show All"}
-                  </Button>
-                  </Button.Group>
-                  <Text fz={globals.smallerFontSize} style={{ marginRight: "10px"}}>Rote Points: 6/{rotePoints}</Text>
-                  </Group>
-                  </Alert>
+                    color="gray"
+                    onClick={backStep}
+                >
+                    Back
+                </Button>
+                <Button
+                    style={{ margin: "5px" }}
+                    color="gray"
+                    onClick={nextStep}
+                    disabled={rotePoints !== 0}
+                >
+                    Next
+                </Button>
+                <Button
+                color="gray"
+                style={{ margin: "5px" }}
+                onClick={() => setShowAllRotes((prevShowAllRotes) => !prevShowAllRotes)}
+              >
+                {showAllRotes ? "Hide All" : "Show All"}
+              </Button>
+              </Button.Group>
+              <Text fz={globals.smallerFontSize} style={{ marginRight: "10px"}}>Rote Points: 6/{rotePoints}</Text>
+              </Group>
+              </Alert>
           </Stack>
         </Center>
       )

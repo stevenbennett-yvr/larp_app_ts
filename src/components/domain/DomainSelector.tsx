@@ -83,29 +83,41 @@ const DomainSelector = ({showDomainSelector, setShowDomainSelector, userData}: D
 
     // Extra showDomainSelector is just to make sure I'm not overcharged for the map component.
     return(
-        <Modal opened={showDomainSelector} onClose={() => setShowDomainSelector(false)}>
-            <Modal.Title>
-                Choose Domain
-            </Modal.Title>
-            <Modal.Body>
-              Domains are local chapters of the Canada at Midnight club. Below is the list of all active domains, choose the one nearest you to see what games are available there.
-              If you do not have any domains in your area, you can join the Northern Winds Virtual Domain, or you can organize your own domain.
-              <Button variant='link' onClick={() => window.open("https://docs.google.com/document/d/1gY629DxclYA_rREYa4vWzqHFdEvXm--pOmNSJIoDpFI/edit?usp=sharing")}>For more information on how to start a domain, click here.</Button>
-                <Select 
-                    data={selectData} 
-                    value={selectedDomain}
-                    searchable
-                    nothingFound="Nothing Found"
-                    onChange={(value) => handleDomainChange(value)}>
-                </Select>
-                {showDomainSelector?
-                <MapComponent center={selectedCoordinates}/>
-                :<></>}
-            </Modal.Body>
-            <Button onClick={handleDomainConfirm}>
-                Confirm
-            </Button>
-        </Modal>
+    <Modal opened={showDomainSelector} onClose={() => setShowDomainSelector(false)}>
+      <Modal.Title style={{ marginBottom: '10px', fontWeight: 'bold', fontSize: '24px' }}>
+        Choose Domain
+      </Modal.Title>
+      <Modal.Body>
+        <div style={{ marginBottom: '15px', fontSize: '16px' }}>
+          Domains are local chapters of the Canada at Midnight club. Below is the list of all active domains, choose the one nearest you to see what games are available there.
+        </div>
+        <div style={{ marginBottom: '15px', fontSize: '16px' }}>
+          If you do not have any domains in your area, you can join the Northern Winds Virtual Domain, or you can organize your own domain.
+        </div>
+        <div style={{ marginBottom: '15px' }}>
+          <Button
+            variant="link"
+            onClick={() => window.open("https://docs.google.com/document/d/1gY629DxclYA_rREYa4vWzqHFdEvXm--pOmNSJIoDpFI/edit?usp=sharing")}
+            style={{ fontSize: '16px', color: '#007BFF' }}
+          >
+            To organize a domain,
+            click here.
+          </Button>
+        </div>
+        <Select
+          data={selectData}
+          value={selectedDomain}
+          searchable
+          nothingFound="Nothing Found"
+          style={{ marginBottom: '15px' }}
+          onChange={(value) => handleDomainChange(value)}
+        />
+        {showDomainSelector ? <MapComponent center={selectedCoordinates} /> : <></>}
+      </Modal.Body>
+      <Button onClick={handleDomainConfirm} variant="outline">
+        Confirm
+      </Button>
+    </Modal>
     )
 }
 

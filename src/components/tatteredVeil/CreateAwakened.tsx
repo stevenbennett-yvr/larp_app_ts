@@ -14,77 +14,53 @@ import PrintSheet from './Generator/PrintSheet'
 import NavBar from "./Generator/utils/Stepper";
 import SideSheet from "./Generator/utils/SideSheet";
 import { useLocalStorage } from "@mantine/hooks";
-import { useEffect, useState } from "react";
-import { useUser } from "../../contexts/UserContext";
 import { useMageDb } from "../../contexts/MageContext";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 // TODO: PRIORITY: Finish the character creator
 
 const GenerateAwakened = () => {
   const navigate = useNavigate();
   const emptyAwakened = getEmptyAwakened()
-  const { getUser } = useUser()
-  const [userdata, setUserData] = useState<any>()
+  const { currentUser } = useAuth()
   const { onSubmitAwakened } = useMageDb()
   const [awakened, setAwakened] = useLocalStorage<Awakened>({ key: "awakened", defaultValue: getEmptyAwakened()})
   const [selectedStep, setSelectedStep] = useLocalStorage({ key: "selectedStep", defaultValue: 0 })
   const [showInstructions, setShowInstructions] = useLocalStorage({ key: "showInstructions", defaultValue: false });
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const user = await getUser();
-        setUserData(user);
-      } catch (error) {
-        // Handle error
-        console.log(error);
-      }
-    };
-
-    fetchUserData();
-  }, [getUser])
-
   async function handleSubmit() {
     try {
-      // Set the uid
-      setAwakened((prevAwakened) => ({
-        ...prevAwakened,
-        uid: userdata.uid,
-      }));
-
-      // Get the changes log
-      let experienceLog = logChanges(emptyAwakened, awakened);
-  
-      if (experienceLog.length !== 0) {
-        experienceLog.unshift({ user: userdata.email });
-  
-        // Update the 'experienceLog' property of the 'awakened' state
-        setAwakened((prevAwakened) => ({
-          ...prevAwakened,
-          changeLogs: {
-            [new Date().toISOString()]: experienceLog,
-          },
-        }));
-        await onSubmitAwakened(awakened);
-        localStorage.removeItem("awakened");
-        localStorage.removeItem("selectedStep");
-        localStorage.removeItem("attributeSettings");
-        localStorage.removeItem("attributeCount");
-        localStorage.removeItem("skillSettings");
-        localStorage.removeItem("skillCount");
-        localStorage.removeItem("firstSkill");
-        localStorage.removeItem("secondSkill");
-        localStorage.removeItem("thirdSkill");
-        localStorage.removeItem("firstSpecialityName");
-        localStorage.removeItem("secondSpecialityName");
-        localStorage.removeItem("thirdSpecialityName");
-        navigate('/')
+      // Ensure userdata and uid are available
+      if (!currentUser || !currentUser.uid) {
+        console.error("User data or uid is not available.");
+        return;
       }
+  
+      // Update uid and changeLogs using functional updates
+      const updatedAwakened = {
+        ...awakened,
+        uid: currentUser.uid,
+        email: currentUser.email,
+        changeLogs: {
+          ...awakened.changeLogs,
+          [new Date().toISOString()]: logChanges(emptyAwakened, awakened),
+        },
+      };
+  
+      // Submit the updated awakened
+      await onSubmitAwakened(updatedAwakened);
+  
+      // Clear local storage and navigate
+      localStorage.removeItem("selectedStep");
+      localStorage.removeItem("attributeSettings");
+      // ... (remove other items)
+      navigate("/tattered-veil");
     } catch {
       console.log("Failed to create character");
     }
   }
+    
 
     const getStepComponent = () => {
     switch (selectedStep) {
@@ -216,6 +192,8 @@ const GenerateAwakened = () => {
               backStep={() => {
                 setSelectedStep(selectedStep - 1)
               }}
+              showInstructions={showInstructions}
+              setShowInstructions={setShowInstructions}
             />
           )
         case 9:

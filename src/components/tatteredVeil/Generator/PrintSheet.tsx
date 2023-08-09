@@ -32,6 +32,9 @@ const PrintSheet = ({awakened, backStep, submit}: PrintSheetProps) => {
                         <Avatar
                             src={awakened.background.profilePic}
                             size={100}
+                            style={{
+                                backgroundImage: `linear-gradient(to bottom right, ${Paths[awakened.path].color}, ${Orders[awakened.order].color})`,
+                            }}
                         />
                     </Center>
                 </Grid.Col>
@@ -128,7 +131,7 @@ const PrintSheet = ({awakened, backStep, submit}: PrintSheetProps) => {
                     <Alert color="gray">
                         <Stack>
                         <Group key={`${skill} input`}>
-                            <Text>{`${skillInfo.roteSkill ? '☑️' : '☐'} ${skill.charAt(0).toUpperCase() + skill.slice(1)}`}</Text>
+                            <Text>{`${skillInfo.roteSkill ? '🔷' : '☐'} ${skill.charAt(0).toUpperCase() + skill.slice(1)}`}</Text>
                             {Array.from({ length: level }, (_, index) => (
                             <span
                                 key={index}

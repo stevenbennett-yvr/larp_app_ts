@@ -112,6 +112,9 @@ export const getFilteredRotes = (awakened: Awakened, roteData: Rote[]): Rote[] =
         let maxOrValue = 0;
         items.forEach((item) => {
           let orValue = 0;
+          if (item === "perception") {
+            orValue = currentAttributeLevel(awakened, 'wits').level + currentAttributeLevel(awakened, 'composure').level
+          }
           if (allAttributes.includes(item as AttributeNames)) {
             orValue = Math.max(orValue, currentAttributeLevel(awakened, item).level);
           }
@@ -127,6 +130,9 @@ export const getFilteredRotes = (awakened: Awakened, roteData: Rote[]): Rote[] =
         pool += maxOrValue;
       } else {
         let item = variable.toLowerCase();
+        if (item === "perception") {
+          pool += currentAttributeLevel(awakened, 'wits').level + currentAttributeLevel(awakened, 'composure').level
+        }
         if (allAttributes.includes(item as AttributeNames)) {
           pool += currentAttributeLevel(awakened, item).level;
           }

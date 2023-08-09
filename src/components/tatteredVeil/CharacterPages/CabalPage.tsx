@@ -12,12 +12,12 @@ import { Paths } from "../data/Path";
 import { Orders } from "../data/Order";
 import { getAuth } from "firebase/auth";
 
-type BackgroundPageProps = {
+type CabalEditProps = {
     awakened: Awakened,
     setAwakened: (awakened: Awakened) => void
 }
 
-const BackgroundPage = ({awakened, setAwakened}: BackgroundPageProps) => {
+const CabalEdit = ({awakened, setAwakened}: CabalEditProps) => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
   const {currentUser} = getAuth()
 
@@ -159,15 +159,18 @@ const BackgroundPage = ({awakened, setAwakened}: BackgroundPageProps) => {
                   <Center>
                     <Stack>
                       <Text weight={700}>{awakened.name}</Text>
-                      <Avatar 
-                      src={awakened.background.profilePic} 
-                      size="70px" 
-                      radius="xl"
-                      style={{
-                        backgroundImage: `linear-gradient(to bottom right, ${Paths[awakened.path].color}, ${Orders[awakened.order].color})`,
-                      }}
-                    />
+                      <Avatar
+                        src={awakened.background.profilePic}
+                        size="70px"
+                        radius="xl"
+                      />
                         <div className="avatar-container">
+                          <div
+                            className="avatar"
+                            style={{
+                              backgroundImage: `linear-gradient(to bottom right, ${Paths[awakened.path].color}, ${Orders[awakened.order].color})`,
+                            }}
+                          />
                           <div className="dots-container" style={{textAlign:"center"}}>
                             {Array.from({ length: 5 }, (_, index) => (
                               <span
@@ -250,4 +253,4 @@ const BackgroundPage = ({awakened, setAwakened}: BackgroundPageProps) => {
     )
 }
 
-export default BackgroundPage
+export default CabalEdit

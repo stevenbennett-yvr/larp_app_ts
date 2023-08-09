@@ -158,7 +158,7 @@
   {
     "arcanum": "Death",
     "level": 2,
-    "name": "Soul Jar",
+    "name": "Soul Jar (Death)",
     "source": "M:tA pg.215",
     "cost": "None",
     "duration": "Prolonged",
@@ -405,7 +405,7 @@
   {
     "arcanum": "Death",
     "level": 3,
-    "name": "Restore Corpus",
+    "name": "Restore Corpus (Death)",
     "source": "M:tA pg.220",
     "cost": "None",
     "duration": "Lasting",
@@ -795,7 +795,7 @@
   {
     "arcanum": "Death",
     "level": 5,
-    "name": "Secret Marriage",
+    "name": "Secret Marriage (Death)",
     "source": "TotM pg.152",
     "cost": "None",
     "duration": "Prolonged",
@@ -2992,7 +2992,7 @@
   {
     "arcanum": "Life",
     "level": 3,
-    "name": "Verminous Metamorphosis",
+    "name": "Verminous Metamorphosis (Life)",
     "source": "M:tA pg.296",
     "cost": "",
     "duration": "Transitory",
@@ -3759,7 +3759,7 @@
   {
     "arcanum": "Matter",
     "level": 3,
-    "name": "Verminous Metamorphosis",
+    "name": "Verminous Metamorphosis (Matter)",
     "source": "M:tA pg.296",
     "cost": "",
     "duration": "",
@@ -6892,7 +6892,7 @@
   {
     "arcanum": "Spirit",
     "level": 2,
-    "name": "Soul Jar",
+    "name": "Soul Jar (Spirit)",
     "source": "M:tA pg.362",
     "cost": "",
     "duration": "",
@@ -7061,7 +7061,7 @@
   {
     "arcanum": "Spirit",
     "level": 3,
-    "name": "Restore Corpus",
+    "name": "Restore Corpus (Spirit)",
     "source": "M:tA pg.365",
     "cost": "",
     "duration": "",
@@ -7360,7 +7360,7 @@
   {
     "arcanum": "Spirit",
     "level": 5,
-    "name": "Secret Marriage",
+    "name": "Secret Marriage (Spirit)",
     "source": "TotM pg.152",
     "cost": "",
     "duration": "",

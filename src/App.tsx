@@ -11,7 +11,6 @@ import './App.css';
 import Login from './components/Login'
 import Dashboard from './components/Dashboard';
 import Topbar from './topbar/Topbar';
-import ChooseChronicle from './components/ChooseChronicle';
 import GenerateAwakened from './components/tatteredVeil/CreateAwakened'
 import TatteredVeilVenueDashboard from './components/tatteredVeil/TatteredVeilDashboard'
 import AwakenedPage from './components/tatteredVeil/AwakenedPage';
@@ -66,7 +65,6 @@ function AuthenticatedApp() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/choose-chronicle" element={<PrivateRoute><ChooseChronicle /></PrivateRoute>}/>
           <Route path="/create-mage" element={<GenerateAwakened/>}/>
           <Route path="/tattered-veil" element={<TatteredVeilVenueDashboard/>}/>
           <Route path="/awakened-sheet/:characterId" element={<AwakenedPage/>}/>

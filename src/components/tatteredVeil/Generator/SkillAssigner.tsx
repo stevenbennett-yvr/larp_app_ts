@@ -301,16 +301,19 @@ const SkillAssigner = ({
           return (
             <Center style={{paddingBottom:"100px"}}>
             <Stack>
-            <Button color="gray" onClick={toggleInstructions}>
-                    {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
-                </Button>
+              <Text mt={"xl"} ta="center" fz="xl" fw={700}>Specialities</Text>
                     {showInstructions && (
                       <Text>
                       <p>{`Where skills represent base knowledge of a subjet, Specialities represent a more fouced area of study. When applied Specialites provide a bonus modifier.`}</p>
                       <p>{`Add three Skill Specialites. These should be very specific.`}</p>
                       </Text>
                     )}
-                  <Group>
+              <Center>
+              <Button variant="outline" color="gray" onClick={toggleInstructions}>
+                {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+              </Button>
+              </Center>
+              <Group>
                       <Select
                         w={inputW}
                         searchable
@@ -319,6 +322,7 @@ const SkillAssigner = ({
                         value={firstSkill}
                         onChange={(value) => setFirstSkill(value as SkillNames)}
                         maxDropdownHeight={150}
+                        disabled={isSpecialityAdded(firstSkill, firstSpecialityName)}
                         />
                       <TextInput 
                         w={inputW}
@@ -341,6 +345,7 @@ const SkillAssigner = ({
                           value={secondSkill}
                           onChange={(value) => setSecondSkill(value as SkillNames)}
                           maxDropdownHeight={150}
+                          disabled={isSpecialityAdded(secondSkill, secondSpecialityName)}
                           />
                       <TextInput 
                         w={inputW}
@@ -363,6 +368,7 @@ const SkillAssigner = ({
                     value={thirdSkill}
                     onChange={(value) => setThirdSkill(value as SkillNames)}
                     maxDropdownHeight={150}
+                    disabled={isSpecialityAdded(thirdSkill, thirdSpecialityName)}
                     />
                       <TextInput
                         w={inputW} 
@@ -410,9 +416,11 @@ const SkillAssigner = ({
         <Stack>
             <Alert color="gray">
               <Text mt={"xl"} ta="center" fz="xl" fw={700}>Skills</Text>
-              <Button color="gray" onClick={toggleInstructions}>
+                <Center>
+                <Button variant="outline" color="gray" onClick={toggleInstructions}>
                     {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
                 </Button>
+                </Center>
                     {showInstructions && (
                       <div>
                         <p>{`Character Skills reflect the education and training your character has aquired over their life in addition to whatever other interests they may carry.`}</p>
@@ -427,7 +435,6 @@ const SkillAssigner = ({
               <Grid.Col>
 
               <Modal
-                title="Specialities"
                 opened={modalOpen}
                 onClose={handleCloseModal}
                 size={700}

@@ -87,17 +87,19 @@ const OrderPicker = ({ awakened, setAwakened, nextStep, backStep, showInstructio
                 <Center>
                     <Alert color="gray">
                     <Text mt={"xl"} ta="center" fz="xl" fw={700}>Orders</Text>
-                    <Button color="gray" onClick={toggleInstructions}>
-                        {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
-                    </Button>
-                        {showInstructions && (
-                        <div>
-                            <p>{`The `}
-                            <strong>Orders</strong>
-                            {` are social organizations of mages united by philosophy, cultural connection, and convenience. These groups find new mages, provide them with training, camaraderie, and initiate them into Awakened Society. The five core orders are allied into an organization known as the Pentacle.`}</p>
-                            <p>{`Take a look at the options on offer and see what speaks to you.`}</p>
-                        </div>
-                        )}
+                    {showInstructions && (
+                    <div>
+                        <p>{`The `}
+                        <strong>Orders</strong>
+                        {` are social organizations of mages united by philosophy, cultural connection, and convenience. These groups find new mages, provide them with training, camaraderie, and initiate them into Awakened Society. The five core orders are allied into an organization known as the Pentacle.`}</p>
+                        <p>{`Take a look at the options on offer and see what speaks to you.`}</p>
+                    </div>
+                    )}
+                    <Center>
+                        <Button variant="outline" color="gray" onClick={toggleInstructions}>
+                            {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+                        </Button>
+                    </Center>
                     </Alert>
                 </Center>
             <Grid grow m={0}>

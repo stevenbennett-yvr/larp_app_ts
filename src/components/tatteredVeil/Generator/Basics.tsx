@@ -37,23 +37,25 @@ const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInst
 
             <Alert color="gray">
                 <Text mt={"xl"} ta="center" fz="xl" fw={700}>Basics</Text>
-                <Button color="gray" onClick={toggleInstructions}>
+                {showInstructions && (
+                <div>
+                    <p>{`With this, you are building a character to act as your persona in `}<u>Tattered Veil</u>{`. It is more important to craft the character around your vision of their personality, background, and quirks rather than putting together the perfect wizard based on some tactical scheme.`}</p>
+                    <p>{`Your allocation of traits should illustrate who they are and what they were in life.`}</p>
+                    <Text mt="xl" ta="center" fz="xl" fw={700}>
+                        Concept
+                    </Text>
+                    <p>What do you want to be? What do you want to do?</p>
+                    <p>{`Your Character Concept is a short descriptor that informs you and the storyteller about what your character is about.`}</p>
+                    <p>{`Generally, this consists of two to three words, including an adjective and noun, which could include a career. Examples include "Amiable Vagrant," "Drug-Addled Detective," "Captivating Socialite," "Fierce Campaigner," "Murderous Haberdasher," "Sesquipedalian Storyteller."`}</p>
+                    <p>{`Don't stress about the exact details. Keep it simple for now and use the concept as a guiding light.`}</p>
+                    <p>{`Next, consider what their defining strengths and weaknesses are. These inform your Virtue and Vice. Acting out either in a difficult situation reinforces your character's fundamental self and earns you Willpower, a beneficial resource.`}</p>
+                </div>
+                )}
+                <Center>
+                <Button variant="outline" color="gray" onClick={toggleInstructions}>
                     {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
                 </Button>
-                    {showInstructions && (
-                    <div>
-                        <p>{`With this, you are building a character to act as your persona in `}<u>Tattered Veil</u>{`. It is more important to craft the character around your vision of their personality, background, and quirks rather than putting together the perfect wizard based on some tactical scheme.`}</p>
-                        <p>{`Your allocation of traits should illustrate who they are and what they were in life.`}</p>
-                        <Text mt="xl" ta="center" fz="xl" fw={700}>
-                            Concept
-                        </Text>
-                        <p>What do you want to be? What do you want to do?</p>
-                        <p>{`Your Character Concept is a short descriptor that informs you and the storyteller about what your character is about.`}</p>
-                        <p>{`Generally, this consists of two to three words, including an adjective and noun, which could include a career. Examples include "Amiable Vagrant," "Drug-Addled Detective," "Captivating Socialite," "Fierce Campaigner," "Murderous Haberdasher," "Sesquipedalian Storyteller."`}</p>
-                        <p>{`Don't stress about the exact details. Keep it simple for now and use the concept as a guiding light.`}</p>
-                        <p>{`Next, consider what their defining strengths and weaknesses are. These inform your Virtue and Vice. Acting out either in a difficult situation reinforces your character's fundamental self and earns you Willpower, a beneficial resource.`}</p>
-                    </div>
-                    )}
+                </Center>
             </Alert>
 
                 <Grid columns={globals.isPhoneScreen?4:8}>
@@ -65,7 +67,7 @@ const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInst
                             position="bottom" 
                             withArrow 
                             label={`Mages rarely use their given name (its harder to work magic against someone whose given name you don't know), insead adopting a Shadow Name. This is a general moniker or call sign. Feel free to provide one or the other or both below.`}
-                            events={globals.tooltipTriggerEvents}
+                            events={{ hover: false, focus: true, touch: false }}
                             >
                                 <TextInput
                                     style={{ width: "300px" }}
@@ -84,7 +86,7 @@ const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInst
                             position="bottom" 
                             withArrow 
                             label={`A concept is generally an adjective and a noun that describes your character...`}
-                            events={globals.tooltipTriggerEvents}
+                            events={{ hover: false, focus: true, touch: true }}
                             >
                                 <TextInput
                                     style={{ width: "300px" }}
@@ -104,7 +106,7 @@ const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInst
                             position="top" 
                             withArrow 
                             label={`When creating your character, choose one of the seven Virtues detailed here...`}
-                            events={globals.tooltipTriggerEvents}
+                            events={{ hover: false, focus: true, touch: true }}
                             >
                                 <Center>
                                 <Select
@@ -157,7 +159,7 @@ const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInst
                             position="top"
                             withArrow 
                             label={`When creating your character, choose one of the seven Vices detailed below as her defining one...`}
-                            events={globals.tooltipTriggerEvents}
+                            events={{ hover: false, focus: true, touch: false }}
                             >
                                 <Center>
                                 <Select

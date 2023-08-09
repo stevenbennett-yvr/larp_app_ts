@@ -65,11 +65,15 @@ export default function Dashboard() {
       <Grid grow m={0}>
         {ChroncileSelector(userData)}
       </Grid>
+      {!userData.domain?
       <DomainSelector
         showDomainSelector={showDomainSelector}
         setShowDomainSelector={setShowDomainSelector}
         userData={userData}
       />
+      :
+      <></>
+      }
       </Stack>
     </Center>
   )

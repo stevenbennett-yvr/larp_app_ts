@@ -73,14 +73,15 @@ const CharacterCard = ({ awakenedList }: CharacterCardProps) => {
                 <Center>
                   <Stack>
                     <Text weight={700}>{character.name}</Text>
-                    <Avatar src={character.background.profilePic} size="70px" radius="xl" />
+                    <Avatar 
+                      src={character.background.profilePic} 
+                      size="70px" 
+                      radius="xl"
+                      style={{
+                        backgroundImage: `linear-gradient(to bottom right, ${Paths[character.path].color}, ${Orders[character.order].color})`,
+                      }}
+                    />
                     <div className="avatar-container">
-                      <div
-                        className="avatar"
-                        style={{
-                          backgroundImage: `linear-gradient(to bottom right, ${Paths[character.path].color}, ${Orders[character.order].color})`,
-                        }}
-                      />
                       <div className="dots-container" style={{ textAlign: 'center' }}>
                         {Array.from({ length: 5 }, (_, index) => (
                           <span
