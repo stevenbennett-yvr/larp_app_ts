@@ -90,9 +90,9 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep, showInstructi
                 <NumberInput
                   value={getMeritPoints(merit)}
                   min={type==="freebiePoints"?1:0}
-                  max={getRemainingPoints(awakened) < minCost?getMeritPoints(merit):type==="freebiePoints"?2:defineMeritRating(merit.rating).maxCost}
+                  max={type==="freebiePoints"?2:getRemainingPoints(awakened) < minCost?getMeritPoints(merit):defineMeritRating(merit.rating).maxCost}
                   step={step}
-                  disabled={(getRemainingPoints(awakened) < minCost && getMeritPoints(merit)===0) || (type==="freebiePoints" && awakened.order === "Apostate")}
+                  disabled={(getRemainingPoints(awakened) < minCost && getMeritPoints(merit)===0)  || (type==="freebiePoints" && awakened.order === "Apostate") || (merit.name === "High Speech" && awakened.order !== "Apostate")}
                   onChange={(val:number) => {
                     handleMeritChange(awakened, setAwakened, merit, type, val)
                   }}

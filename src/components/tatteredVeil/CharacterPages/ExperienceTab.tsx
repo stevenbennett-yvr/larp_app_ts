@@ -1,16 +1,16 @@
 //technical imports
 import React, { useState, forwardRef, useEffect } from "react";
-import { useMantineTheme, Alert, Avatar, Button, Card, Center, Grid, Group, Image, Input, Select, Stack, Table, Text, Title, Accordion } from "@mantine/core";
+import { useMantineTheme, Alert, Avatar, Button, Card, Center, Grid, Group, Image, Input, Select, Stack, Table, Text, Accordion } from "@mantine/core";
 import { globals } from "../../../globals";
 
 //data imports
 import { Awakened } from "../data/Awakened";
 import { Paths } from "../data/Path";
-import { findMaxAttribute, handleXpAttributeChange, AttributeNames, currentAttributeLevel } from "../data/Attributes";
-import { removeSpeciality, addSpeciality, findMaxSkill, handleXpSkillChange, SkillNames, currentSkillLevel} from "../data/Skills"
+import { AttributeCategory, findMaxAttribute, handleXpAttributeChange, AttributeNames, currentAttributeLevel } from "../data/Attributes";
+import { SkillCategory, removeSpeciality, addSpeciality, findMaxSkill, handleXpSkillChange, SkillNames, currentSkillLevel} from "../data/Skills"
 import { arcanaKeySchema, ArcanaKey, arcana, arcanaDescriptions, currentArcanumLevel, findMaxArcana, handleArcanumChange } from "../data/Arcanum";
 import { roteData, Rote, getFilteredRotes, handleRoteChange, calculatePool } from "../data/Rotes";
-import { getFilteredMerits, handleMeritChange, Merit, defineMeritRating, currentMeritLevel, findMaxMerit, handleXpMeritChange } from "../data/Merits";
+import { meritData, getFilteredMerits, handleMeritChange, Merit, defineMeritRating, currentMeritLevel, findMaxMerit, handleXpMeritChange } from "../data/Merits";
 import { currentGnosisLevel, handleGnosisChange, findMaxGnosis, Gnoses } from "../data/Gnosis";
 import { handleWisdomChange, currentWisdomLevel, Wisdoms, findMaxWisdom } from "../data/Wisdom";
 import { currentExperience } from "../data/Experience"
@@ -23,10 +23,19 @@ type AwakenedSheetProps = {
 
 const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
 
-
     //ATTRIBUTE SECTION
 
-    const attributeXpInputs = Object.entries(awakened.attributes).map(([category, attributesInfo]) => {
+    const orderedCategories = ['mental', 'physical', 'social'];
+    const orderedAttributes = {
+      'mental': ['intelligence', 'wits', 'resolve'],
+      'physical': ['strength', 'dexterity', 'stamina'],
+      'social': ["presence", 'manipulation', 'composure']
+    } 
+    const attributeXpInputs = orderedCategories.map((category) => {
+        let categoryKey = category as AttributeCategory
+        const attributesInfo = awakened.attributes[categoryKey]
+        const orderedAttributesForCategory = orderedAttributes[categoryKey];
+
         return (
         <Grid.Col 
             span={globals.isPhoneScreen ? 8 : 4} 
@@ -36,13 +45,18 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
             {category.charAt(0).toUpperCase() + category.slice(1)}
             </Text>
             <hr />
-            {Object.entries(attributesInfo).map(([attribute, attributeInfo]) => {
+            {Object.entries(attributesInfo)
+                .sort(([a], [b]) => orderedAttributesForCategory.indexOf(a) - orderedAttributesForCategory.indexOf(b))
+                .map(([attribute, attributeInfo]) => {
             const attributeName = attribute as AttributeNames;
-            const { level } = currentAttributeLevel(awakened, attribute);
+            const { level, totalXpNeeded } = currentAttributeLevel(awakened, attribute);
             return (
                 <Center>
                 <Group key={`${attribute} input`}>
-                    <Input.Wrapper label={`${attribute.charAt(0).toUpperCase() + attribute.slice(1)} ${level}`}>
+                    <Input.Wrapper 
+                        label={`${attribute.charAt(0).toUpperCase() + attribute.slice(1)} ${level}`}
+                        description={`Total XP for Next: ${totalXpNeeded}`}
+                        >
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Button
                             size="xs"
@@ -87,25 +101,33 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
 
     const [specialitiesState, setSpecialitiesState] = useState<{ [key in SkillNames]?: string }>({});
 
-    const skillXpInputs = Object.entries(awakened.skills).map(([category, skillsInfo]) => {
+    const skillXpInputs = orderedCategories.map((category) => {
+        let categoryKey = category as SkillCategory
+        const skillsInfo = awakened.skills[categoryKey]
+
         return (
         <Grid.Col span={globals.isPhoneScreen ? 8 : 4} key={`${category} Skills`}>
             <Text fs="italic" fw={700} ta="center">
             {category.charAt(0).toUpperCase() + category.slice(1)}
             </Text>
             <hr />
-            {Object.entries(skillsInfo).map(([skill, skillInfo]) => {
-            const skillName = skill as SkillNames;
-            const { level } = currentSkillLevel(awakened, skill);
-            const specialities = skillInfo.specialities.map((spec) => spec.name);
-            const selectedSpeciality = specialitiesState[skillName];
+            {Object.entries(skillsInfo)
+                .sort(([skillA], [skillB]) => skillA.localeCompare(skillB))
+                .map(([skill, skillInfo]) => {
+                const skillName = skill as SkillNames;
+                const { level, totalXpNeeded } = currentSkillLevel(awakened, skill);
+                const specialities = skillInfo.specialities.map((spec) => spec.name);
+                const selectedSpeciality = specialitiesState[skillName];
 
             return (
                 <Center style={{ paddingBottom: '5px'}}>
                     <Alert color="gray">
                     <Stack>
                         <Group key={`${skill} input`}>
-                            <Input.Wrapper label={`${skillInfo.roteSkill ? '☑️' : '☐'} ${skill.charAt(0).toUpperCase() + skill.slice(1)} ${level}`}>
+                            <Input.Wrapper 
+                            label={`${skillInfo.roteSkill ? '🔷' : '☐'} ${skill.charAt(0).toUpperCase() + skill.slice(1)} ${level}`}
+                            description={`Total XP for Next: ${totalXpNeeded}`}
+                            >
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Button
                                 size="xs"
@@ -196,11 +218,10 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
     const inferiorArcana = Paths[awakened.path].inferiorArcana
     const otherArcana = arcana.filter((arcanaName) => !rulingArcana.includes(arcanaName));
 
-    const getColorByArcanum = (arcanum: ArcanaKey) => {
-        return arcanaDescriptions[arcanum].color;
-    };
 
-    const arcanumXpInputs = (arcanum: ArcanaKey, c2: string) => {
+
+    const arcanumXpInputs = (arcanum: ArcanaKey) => {
+        const c2 = arcanaDescriptions[arcanum].color
         const bgColor = theme.fn.linearGradient(0, c1, c2)
         const isRuling = rulingArcana.includes(arcanum); 
         const isInferior =  inferiorArcana.includes(arcanum)
@@ -227,11 +248,11 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
                             />
                         </Center>
                         <Center>
-                            <Title h={30} size="sm" color="dimmed" ta="center">
-                                {arcanaDescriptions[arcanum].name} : {currentArcanumLevel(awakened, arcanum).level} {isInferior? "Inferior" : isRuling? "Ruling" : ""}
-                            </Title>
-                        </Center>
-                        <Center>
+                        <Group>
+                        <Input.Wrapper 
+                            label={`${arcanaDescriptions[arcanum].name} : ${currentArcanumLevel(awakened, arcanum).level} ${isInferior? "Inferior" : isRuling? "Ruling" : ""}`}
+                            description={`Total XP Needed ${currentArcanumLevel(awakened, arcanum).totalXpNeeded}`}
+                            >
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Button
                             size="xs"
@@ -263,6 +284,8 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
                             +
                         </Button>
                         </div>
+                        </Input.Wrapper>
+                        </Group>
                         </Center>
                     </Card.Section>
                 </Card>
@@ -274,6 +297,7 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
 
     const [learnableRotes, setLearnableRotes] = useState<Rote[]>(getFilteredRotes(awakened, roteData));
     const [selectedRote, setSelectedRote] = useState<string | null>("");
+    const [showAllRotes, setShowAllRotes] = useState(false)
 
     useEffect(() => {
         setLearnableRotes(getFilteredRotes(awakened, roteData))
@@ -290,14 +314,35 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
             }
             return a.name.localeCompare(b.name);
           });
-          
       
         // Filter out the rotes that also appear in awakened.rotes
         const filteredRotes = sortedRotes.filter((rote) => {
             return !awakened.rotes.some((existingRote) => existingRote.name === rote.name);
         });
 
+        const allRotes = roteData.sort((a, b) => {
+            const arcanumComparison = a.arcanum.localeCompare(b.arcanum);
+            if (arcanumComparison !== 0) {
+              return arcanumComparison;
+            }
+            if (a.level !== b.level) {
+              return a.level - b.level;
+            }
+            return a.name.localeCompare(b.name);
+        })
+
+        const allFilteredRotes = allRotes.filter((rote) => {
+            return !awakened.rotes.some((existingRote) => existingRote.name === rote.name);
+        });
+
         const selectData = filteredRotes.map((rote) => ({
+            value: `${rote.name}`,
+            label: `${rote.arcanum} ${rote.level} - ${rote.name}`,
+            image: `${arcanaDescriptions[rote.arcanum.toLowerCase() as ArcanaKey].logo}`,
+            bgc: `${arcanaDescriptions[rote.arcanum.toLowerCase() as ArcanaKey]?.color}`
+        }));
+
+        const allData = allFilteredRotes.map((rote) => ({
             value: `${rote.name}`,
             label: `${rote.arcanum} ${rote.level} - ${rote.name}`,
             image: `${arcanaDescriptions[rote.arcanum.toLowerCase() as ArcanaKey].logo}`,
@@ -327,7 +372,7 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
         const getSelectedRoteData = () => {
           if (selectedRote) {
             // Find the rote in the sortedRotes array that matches the selectedRote
-            const selectedRoteData = sortedRotes.find((rote) => rote.name === selectedRote);
+            const selectedRoteData = roteData.find((rote) => rote.name === selectedRote);
             if (selectedRoteData) {
               return (
                 <Table>
@@ -351,7 +396,10 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
                                     style={{ filter: "brightness(0)" }}
                                 />
                                 <p style={{ color: "white" }}>{selectedRoteData.arcanum} {selectedRoteData.level} {selectedRoteData.otherArcana ? `+ ${selectedRoteData.otherArcana}` : ""}</p>
-                                <Button color="gray" onClick={() => {
+                                <Button 
+                                    color="gray" 
+                                    disabled={!selectedRote || !learnableRotes.some(rote => rote.name === selectedRote)}
+                                    onClick={() => {
                                     let xpCost = selectedRoteData.level * 2;
                                     handleRoteChange(awakened,setAwakened,selectedRoteData, "experiencePoints", xpCost)
                                     setSelectedRote("")
@@ -437,15 +485,26 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
         }
         return (
           <div>
-            <Select
-                data={selectData} 
-                value={selectedRote}
-                onChange={(val) => setSelectedRote(val)} 
-                placeholder="Select Rote to Buy"
-                itemComponent={SelectItem}
-                searchable
-                allowDeselect
-            />
+            <Group>
+                <Button
+                    color="gray"
+                    style={{ margin: "5px" }}
+                    onClick={() => setShowAllRotes((prevShowAllRotes) => !prevShowAllRotes)}
+                    >
+                        {showAllRotes ? "Hide All" : "Show All"}
+                </Button>
+
+                <Select
+                    data={showAllRotes? allData: selectData} 
+                    value={selectedRote}
+                    onChange={(val) => setSelectedRote(val)} 
+                    placeholder="Select Rote to Buy"
+                    itemComponent={SelectItem}
+                    searchable
+                    allowDeselect
+                    style={{width:'70%'}}
+                />
+            </Group>
             {getSelectedRoteData()}
 
             <Text>Known Rotes</Text>
@@ -462,7 +521,8 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
 
     const [buyableMerits, setBuyableMerits] = useState<Merit[]>(getFilteredMerits(awakened));
     const [selectedMerit, setSelectedMerit] = useState<string | null>("");
-    
+    const [showAllMerits, setShowAllMerits] = useState(false)
+
     useEffect(() => {
         setBuyableMerits(getFilteredMerits(awakened))
     }, [awakened])
@@ -485,13 +545,35 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
             return merit.rating.includes("mult") || (!merit.description.includes("Character Creation only") && !awakened.merits.some((existingMerit) => existingMerit.name === merit.name))
           });
           
-          //merit.description.includes("Character Creation only") || !merit.rating.includes("multi") || 
-
         const selectData = filteredMerits.map((merit) => ({
             value: `${merit.name}`,
             label: `${merit.name} ${merit.rating}`,
             bgc: `${merit.type==="Mental merits"? theme.fn.rgba(theme.colors.blue[8], 0.90): merit.type==="Physical merits"?theme.fn.rgba(theme.colors.red[8], 0.90):merit.type==="Social merits"?theme.fn.rgba(theme.colors.grape[8], 0.90):merit.type==="Mage merits"?theme.fn.rgba(theme.colors.green[9], 0.90):merit.type==="Sanctum merits"?theme.fn.rgba(theme.colors.gray[6], 0.90):""}` 
         }))
+
+
+        const allSortedMerits = meritData.sort((a, b) => {
+            // Compare the order of types defined in customMeritOrder
+            const typeOrderA = customMeritOrder.indexOf(a.type);
+            const typeOrderB = customMeritOrder.indexOf(b.type);
+            // Sort by type order first, and then by name if the types are the same
+            if (typeOrderA !== typeOrderB) {
+                return typeOrderA - typeOrderB;
+            } else {
+                return a.name.localeCompare(b.name);
+            }
+        });
+
+        const allFilteredMerits = allSortedMerits.filter((merit) => {
+            return merit.rating.includes("mult") || (!merit.description.includes("Character Creation only") && !awakened.merits.some((existingMerit) => existingMerit.name === merit.name))
+          });
+          
+        const allSelectData = allFilteredMerits.map((merit) => ({
+            value: `${merit.name}`,
+            label: `${merit.name} ${merit.rating}`,
+            bgc: `${merit.type==="Mental merits"? theme.fn.rgba(theme.colors.blue[8], 0.90): merit.type==="Physical merits"?theme.fn.rgba(theme.colors.red[8], 0.90):merit.type==="Social merits"?theme.fn.rgba(theme.colors.grape[8], 0.90):merit.type==="Mage merits"?theme.fn.rgba(theme.colors.green[9], 0.90):merit.type==="Sanctum merits"?theme.fn.rgba(theme.colors.gray[6], 0.90):""}` 
+        }))
+
         interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
             label: string;
             bgc: string;
@@ -528,7 +610,7 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
 
         const getSelectedMeritData = () => {
             if (selectedMerit) {
-                const selectedMeritData = sortedMerits.find((merit) => merit.name === selectedMerit);
+                const selectedMeritData = meritData.find((merit) => merit.name === selectedMerit);
                 if (selectedMeritData) {
                     return (
                         <Table>
@@ -554,7 +636,10 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
                                     <Text color="white">{selectedMeritData.name}</Text>
                                     <Text color="white">{selectedMeritData.rating}</Text>
                                     <Text color="white">{selectedMeritData.prerequisites? `PreReq: ${selectedMeritData.prerequisites}`: ''}</Text>
-                                    <Button color="gray" onClick={() => {
+                                    <Button 
+                                        color="gray" 
+                                        disabled={!selectedMerit || !buyableMerits.some(merit => merit.name === selectedMerit)}
+                                        onClick={() => {
                                         handleMeritBuy(selectedMeritData)
                                     }}>Buy</Button>                         </td>
                                     <td dangerouslySetInnerHTML={{ __html: `${selectedMeritData.description}` }} />
@@ -685,15 +770,25 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
 
         return (
             <div>
-                <Select
-                    data={selectData}
-                    value={selectedMerit}
-                    onChange={(val) => setSelectedMerit(val)}
-                    placeholder="Select Merit to Buy"
-                    itemComponent={SelectItem}
-                    searchable
-                    allowDeselect
-                />
+                <Group>
+                    <Button
+                        color="gray"
+                        style={{ margin: "5px" }}
+                        onClick={() => setShowAllMerits((prevShowAllMerits) => !prevShowAllMerits)}
+                    >
+                        {showAllMerits ? "Hide All" : "Show All"}
+                    </Button>
+                    <Select
+                        data={showAllMerits? allSelectData: selectData}
+                        value={selectedMerit}
+                        onChange={(val) => setSelectedMerit(val)}
+                        placeholder="Select Merit to Buy"
+                        itemComponent={SelectItem}
+                        searchable
+                        allowDeselect
+                        style={{width:'70%'}}
+                    />
+                </Group>
                 {getSelectedMeritData()}
                 <Text>Owned Merits</Text>
                 <Accordion>
@@ -712,7 +807,10 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
         return (
             <div>
                 <Center>
-                    <Input.Wrapper label={`Gnosis ${currentGnosisLevel(awakened).level}`}>
+                    <Input.Wrapper 
+                        label={`Gnosis ${currentGnosisLevel(awakened).level}`}
+                        description={`Total XP for Next: ${currentGnosisLevel(awakened).totalXpNeeded}`}
+                        >
                         <Group>
                             <Button
                                 size="xs"
@@ -793,7 +891,10 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
         return(
             <div>
                 <Center>
-                    <Input.Wrapper label={`Wisdom ${currentWisdomLevel(awakened).level}`}>
+                    <Input.Wrapper 
+                        label={`Wisdom ${currentWisdomLevel(awakened).level}`}
+                        description={`Total XP for Next: ${currentWisdomLevel(awakened).totalXpNeeded}`}
+                        >
                         <Group>
                             <Button
                                 size="xs"
@@ -877,9 +978,9 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
                 <hr style={{width:"50%"}}/>
                     <Grid columns={10} grow m={0}>
                         {
-                            rulingArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => arcanumXpInputs(arcanum, getColorByArcanum(arcanum)))
+                            rulingArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => arcanumXpInputs(arcanum))
                         }{
-                            otherArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => arcanumXpInputs(arcanum, getColorByArcanum(arcanum)))
+                            otherArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => arcanumXpInputs(arcanum))
                         }
                     </Grid>
                 

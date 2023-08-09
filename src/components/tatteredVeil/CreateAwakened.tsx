@@ -17,6 +17,8 @@ import { useLocalStorage } from "@mantine/hooks";
 import { useMageDb } from "../../contexts/MageContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { useUser } from "../../contexts/UserContext";
+import { useState, useEffect } from "react";
 
 // TODO: PRIORITY: Finish the character creator
 
@@ -28,6 +30,28 @@ const GenerateAwakened = () => {
   const [awakened, setAwakened] = useLocalStorage<Awakened>({ key: "awakened", defaultValue: getEmptyAwakened()})
   const [selectedStep, setSelectedStep] = useLocalStorage({ key: "selectedStep", defaultValue: 0 })
   const [showInstructions, setShowInstructions] = useLocalStorage({ key: "showInstructions", defaultValue: false });
+  const { getUser } = useUser();
+  const [userData, setUserData] = useState(() => {
+    const savedUserData = localStorage.getItem('userData');
+    return savedUserData ? JSON.parse(savedUserData) : '';
+  });
+
+  useEffect(() => {
+    if (!userData) { // Check if userData is not set
+      const fetchUserData = async () => {
+        const fetchedUserData = await getUser();
+        if (fetchedUserData) {
+          setUserData(fetchedUserData);
+          localStorage.setItem('userData', JSON.stringify(fetchedUserData));
+        } else {
+          console.log("User data not found");
+        }
+      };
+
+      fetchUserData();
+    }
+  }, [userData, getUser]);
+
 
   async function handleSubmit() {
     try {
@@ -42,6 +66,7 @@ const GenerateAwakened = () => {
         ...awakened,
         uid: currentUser.uid,
         email: currentUser.email,
+        domain: userData.domain,
         changeLogs: {
           ...awakened.changeLogs,
           [new Date().toISOString()]: logChanges(emptyAwakened, awakened),

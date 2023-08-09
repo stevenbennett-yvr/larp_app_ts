@@ -15,10 +15,12 @@ import PropTypes from "prop-types";
 import { Awakened } from "../components/tatteredVeil/data/Awakened";
 
 type AwakenedContextValue = {
-  awakenedList: Awakened[];
+  userAwakenedList: Awakened[];
+  domainAwakenedList: Awakened[];
+  fetchDomainAwakened: () => void;
   onSubmitAwakened: (newAwakened: Awakened) => void;
   updateAwakened: (id: string, updatedAwakened: Awakened) => void;
-  fetchAwakened: () => void;
+  fetchUserAwakened: () => void;
   getAwakenedById: (id: string) => Awakened;
 };
 
@@ -49,13 +51,61 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
     }
   }, [currentUser, getUser]);
 
-  const [awakenedList, setAwakenedList] = useState<any>([]);
+  const [userAwakenedList, setUserAwakenedList] = useState<any[]>([]);
 
-  const charactersCollectionRef = useMemo(() => {
+  const userCollectionRef = useMemo(() => {
     if (!currentUser || !userData) return null;
-  
       return query(collectionRef, where("uid", "==", currentUser.uid));
   }, [collectionRef, currentUser, userData]);
+
+  const fetchUserAwakened = useCallback(async () => {
+    if (!userCollectionRef) {
+      // Handle the case when charactersCollectionRef is null (not available yet)
+      return;
+    }
+  
+    try {
+      const snapshot = await getDocs(userCollectionRef);
+      const filteredData = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setUserAwakenedList(filteredData);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [userCollectionRef]);
+
+
+  const [domainAwakenedList, setDomainAwakenedList] = useState<any[]>([]);
+
+
+  const domainAwakenedCollectionRef = useMemo(() => {
+    if (!currentUser || !userData) return null;
+    return query(collectionRef,
+      where("domain", "==", userData.domain),
+      where("background.showPublic", "==", true)
+    )
+  }, [collectionRef, currentUser, userData])
+
+  const fetchDomainAwakened = useCallback(async () => {
+    if (!domainAwakenedCollectionRef) {
+      // Handle the case when charactersCollectionRef is null (not available yet)
+      return;
+    }
+  
+    try {
+      const snapshot = await getDocs(domainAwakenedCollectionRef);
+      const filteredData = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setDomainAwakenedList(filteredData);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [domainAwakenedCollectionRef]);
+
 
 
   const onSubmitAwakened = useCallback(
@@ -66,7 +116,7 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
         console.log(err);
         return
       }
-    }, []
+    }, [collectionRef]
   )
 
   const updateAwakened = useCallback(
@@ -82,38 +132,23 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
     []
   );
 
-  const fetchAwakened = useCallback(async () => {
-    if (!charactersCollectionRef) {
-      // Handle the case when charactersCollectionRef is null (not available yet)
-      return;
-    }
-  
-    try {
-      const snapshot = await getDocs(charactersCollectionRef);
-      const filteredData = snapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setAwakenedList(filteredData);
-    } catch (err) {
-      console.error(err);
-    }
-  }, [charactersCollectionRef]);
-  
-
   const getAwakenedById = useCallback((id:string) => {
-    return awakenedList.find((character:any) => character.id === id)
-  }, [awakenedList])
+    return userAwakenedList.find((character:any) => character.id === id)
+  }, [userAwakenedList])
+
+
 
   const value = useMemo(() => {
     return {
-      awakenedList,
+      userAwakenedList,
+      domainAwakenedList,
+      fetchDomainAwakened,
       onSubmitAwakened,
       updateAwakened,
-      fetchAwakened,
+      fetchUserAwakened,
       getAwakenedById,
     };
-  }, [awakenedList, onSubmitAwakened, updateAwakened, fetchAwakened, getAwakenedById]);
+  }, [userAwakenedList, domainAwakenedList, fetchDomainAwakened, onSubmitAwakened, updateAwakened, fetchUserAwakened, getAwakenedById]);
 
   return <MageContext.Provider value={value}>{children}</MageContext.Provider>;
 }
