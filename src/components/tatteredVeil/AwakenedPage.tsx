@@ -4,9 +4,10 @@ import { useLocalStorage } from "@mantine/hooks";
 import { Awakened, getEmptyAwakened } from "./data/Awakened";
 import { useEffect } from "react";
 import { Tabs, Center } from "@mantine/core";
-import AwakenedSheet from './CharacterPages/ExperienceTab'
-import BackgroundPage from './CharacterPages/BackgroundTab'
-import ChangeLogTab from './CharacterPages/ChangeLogTab'
+import AwakenedSheet from './CharacterTabs/ExperienceTab'
+import BackgroundPage from './CharacterTabs/BackgroundTab'
+import ChangeLogTab from './CharacterTabs/ChangeLogTab'
+import CabalTab from "./CharacterTabs/CabalTab";
 import { globals } from "../../globals";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -52,13 +53,15 @@ const AwakenedPage = () => {
 
     return (
       <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
-        <Tabs style={{width:"60%"}} defaultValue="experience">
+        <Tabs defaultValue="experience">
+          <Center>
         <Tabs.List>
           <Tabs.Tab value="experience">Character Sheet</Tabs.Tab>
           <Tabs.Tab value="background">Background</Tabs.Tab>
-          <Tabs.Tab value="coterie">Coterie</Tabs.Tab>
+          <Tabs.Tab value="cabal">Cabal</Tabs.Tab>
           <Tabs.Tab value="change log">Change Log</Tabs.Tab>
         </Tabs.List>
+        </Center>
   
         <Tabs.Panel value="experience" pt="xs">
           {awakened?
@@ -72,8 +75,10 @@ const AwakenedPage = () => {
           :null}
         </Tabs.Panel>
   
-        <Tabs.Panel value="coterie" pt="xs">
-          Settings tab content
+        <Tabs.Panel value="cabal" pt="xs">
+            {awakened?
+            <CabalTab awakened={awakened} setAwakened={setAwakened}/>
+            :null}
         </Tabs.Panel>
 
         <Tabs.Panel value="change log" pt="xs">

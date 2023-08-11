@@ -6,6 +6,7 @@ import { globals } from "../../../globals";
 //data imports
 import { Awakened } from "../data/Awakened";
 import { Paths } from "../data/Path";
+import { Orders } from "../data/Order";
 import { AttributeCategory, findMaxAttribute, handleXpAttributeChange, AttributeNames, currentAttributeLevel } from "../data/Attributes";
 import { SkillCategory, removeSpeciality, addSpeciality, findMaxSkill, handleXpSkillChange, SkillNames, currentSkillLevel} from "../data/Skills"
 import { arcanaKeySchema, ArcanaKey, arcana, arcanaDescriptions, currentArcanumLevel, findMaxArcana, handleArcanumChange } from "../data/Arcanum";
@@ -14,7 +15,7 @@ import { meritData, getFilteredMerits, handleMeritChange, Merit, defineMeritRati
 import { currentGnosisLevel, handleGnosisChange, findMaxGnosis, Gnoses } from "../data/Gnosis";
 import { handleWisdomChange, currentWisdomLevel, Wisdoms, findMaxWisdom } from "../data/Wisdom";
 import { currentExperience } from "../data/Experience"
-
+import ExperienceAside from "./components/experienceAside";
 
 type AwakenedSheetProps = {
     awakened: Awakened,
@@ -22,6 +23,105 @@ type AwakenedSheetProps = {
 }
 
 const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
+
+    const topSection = () => {
+        return(
+            <Grid columns={9}>
+                <Grid.Col span={3} style={{ borderRight: "1px solid #ccc" }}>
+                    <Center>
+                        <Avatar
+                            src={awakened.background.profilePic}
+                            size={150}
+                            style={{
+                                backgroundImage: `linear-gradient(to bottom right, ${Paths[awakened.path].color}, ${Orders[awakened.order].color})`,
+                            }}
+                        />
+                    </Center>
+                </Grid.Col>
+                <Grid.Col span={3} style={{ borderRight: "1px solid #ccc" }}>
+                    <Stack>
+                        <Text>Shadow Name: {awakened.name}</Text>
+                        <Text>Concept: {awakened.concept}</Text>
+                        <Group>
+                            <Text>Order: {awakened.order}</Text>
+                            <Image
+                            fit="contain"
+                            height={40}
+                            width={40}
+                            src={Orders[awakened.order].rune}
+                            style={{
+                                opacity: 0.6, // Adjust the opacity here (0.5 = 50% transparent)
+                            }}
+                            />
+                        </Group>
+                    </Stack>
+                </Grid.Col>
+                <Grid.Col span={3} >
+                    <Stack>
+                        <Text>Virtue: {awakened.virtue}</Text>
+                        <Text>Vice: {awakened.vice}</Text>
+                        <Group>
+                            <Text>Path: {awakened.path}</Text>
+                            <Image
+                                fit="contain"
+                                height={40}
+                                width={40}
+                                src={Paths[awakened.path].rune}
+                                style={{
+                                    opacity: 0.6, // Adjust the opacity here (0.5 = 50% transparent)
+                                  }}
+                            />
+                        </Group>
+                    </Stack>
+                </Grid.Col>
+            </Grid>
+        )
+    }
+
+    //OHTER SECTION
+
+    const otherSection = () => {
+        const dexterityLevel = currentAttributeLevel(awakened, 'dexterity').level;
+        const strengthLevel = currentAttributeLevel(awakened, 'strength').level;
+        const fleetOfFootMerit = awakened.merits.find(merit => merit.name === 'Fleet of Foot');
+        const fleetOfFootLevel = fleetOfFootMerit ? currentMeritLevel(fleetOfFootMerit).level : 0;
+        const calculatedSpeed = dexterityLevel + strengthLevel + 5 + fleetOfFootLevel;
+        const calculateDefense = Math.min(currentAttributeLevel(awakened, 'dexterity').level, currentAttributeLevel(awakened, 'wits').level)
+
+        const fastReflexMerit = awakened.merits.find(merit => merit.name === 'Fast Reflexes');
+        const fastReflexLevel = fastReflexMerit ? currentMeritLevel(fastReflexMerit).level : 0;
+        const calculateInit = currentAttributeLevel(awakened, 'dexterity').level + currentAttributeLevel(awakened, 'composure').level + fastReflexLevel
+
+        return (
+            <Center>
+            <Table striped withBorder style={{ maxWidth: "400px" }}>
+            <thead>
+                <th>Size</th>
+                <th>Speed</th>
+                <th>Defense</th>
+                <th>Init Mod</th>
+            </thead>
+            <tbody>
+                <tr>
+                <td style={{ textAlign: 'center' }}>
+                    {awakened.merits.some(merit => merit.name === "Giant") ? 6 : 5}
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                    {calculatedSpeed}
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                    {calculateDefense}
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                    {calculateInit}
+                </td>
+                </tr>
+            </tbody>
+            </Table>
+            </Center>
+        )
+    }
+
 
     //ATTRIBUTE SECTION
 
@@ -962,6 +1062,11 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
             <Stack>
+
+                {topSection()}
+
+                {otherSection()}
+
                 <Text mt={"xl"} ta="center" fz="xl" fw={700}>Attributes</Text>
                 <hr style={{width:"50%"}}/>
                     <Grid gutter="lg" justify="center">
@@ -1009,6 +1114,8 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
             </Group>
             </Alert>
             </Stack>
+            <ExperienceAside awakened={awakened}></ExperienceAside>
+
         </Center>
     )
 }

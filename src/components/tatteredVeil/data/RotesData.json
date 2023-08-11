@@ -41,19 +41,6 @@
   {
     "arcanum": "Death",
     "level": 1,
-    "name": "Instill Mortality",
-    "source": "TotM pg.130",
-    "cost": "None",
-    "duration": "Lasting",
-    "practice": "",
-    "description": "<p>Reliquish a Spell without Willpower by Instilling Morality in the Enchanted Object. (starts @0)<br /><br /></p>\n<p>When user fails on roll with Object, add 1 Mortality</p>\n<p>Roll Mortality when used; Success=Structure Damage. Structure<Durability, Object malfunctions  .</p>\nse the item malfunctions. None of its powers or enhancements can be used until it is repaired. If all Structure points are lost to damage, the item is destroyed.</p>\n<p>On an exceptional success, the object is destroyed.</p>",
-    "aspect": "",
-    "otherArcana": "",
-    "rotePool": "Intelligence + Crafts + Death"
-  },
-  {
-    "arcanum": "Death",
-    "level": 1,
     "name": "Pain Harvest",
     "source": "TotM pg.131",
     "cost": "None",
@@ -7785,19 +7772,6 @@
     "aspect": "Vulgar",
     "otherArcana": "",
     "rotePool": "Intelligence + Occult + Time vs Composure + Gnosis"
-  },
-  {
-    "arcanum": "Time",
-    "level": 5,
-    "name": "Temporal Lifeline",
-    "source": "FC pg.113",
-    "cost": "",
-    "duration": "",
-    "practice": "",
-    "description": "<ul>\n  <li>The mage forges a temporal connection with the moment of the spell's casting</li>\n  <li>At a later time, the mage can choose to return to that moment</li>\n  <li>Upon returning, the mage has knowledge of what \"happened\" in the future</li>\n</ul>",
-    "aspect": "Vulgar",
-    "otherArcana": "",
-    "rotePool": "Wits + Science + Time"
   },
   {
     "arcanum": "Time",

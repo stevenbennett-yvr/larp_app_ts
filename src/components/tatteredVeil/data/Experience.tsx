@@ -1,7 +1,7 @@
 import { Awakened } from "./Awakened";
 
     const getChronicleStartDate = () => {
-        return new Date(2023, 7, 1); // July 1st, 2023
+        return new Date(2023, 6, 1); // July 1st, 2023
     };
 
     const getStartDate = (awakened: Awakened) => {
@@ -12,7 +12,7 @@ import { Awakened } from "./Awakened";
         return awakenedStartDate
     }
 
-    const calculateMaxXp = () => {
+    export const calculateMaxXp = () => {
         const chronicleStart = getChronicleStartDate();
         const currentDate = new Date();
         const monthsSinceStart = (currentDate.getFullYear() - chronicleStart.getFullYear()) * 12 + (currentDate.getMonth() - chronicleStart.getMonth());
@@ -20,17 +20,15 @@ import { Awakened } from "./Awakened";
         return maxXp < 0 ? 0 : maxXp;
       };
       
-      const calculateEarnedXp = (awakened: Awakened) => {
-        const firstLogDate = getStartDate(awakened);
-        const chronStartDate = getChronicleStartDate();
-        const startDate = chronStartDate < firstLogDate ? firstLogDate : chronStartDate;
+      export const calculateEarnedXp = (awakened: Awakened) => {
+        const startDate = new Date(getStartDate(awakened));
         const currentDate = new Date();
         const monthsSinceStart = (currentDate.getFullYear() - startDate.getFullYear()) * 12 + (currentDate.getMonth() - startDate.getMonth());
         const earnedXp = monthsSinceStart * 6;
         return earnedXp < 0 ? 0 : Math.min(earnedXp, calculateMaxXp());
       };
       
-      const calculateFloorXp = () => {
+      export const calculateFloorXp = () => {
         const startDate = getChronicleStartDate();
         const currentDate = new Date();
         const monthsSinceStart = (currentDate.getFullYear() - startDate.getFullYear()) * 12 + (currentDate.getMonth() - startDate.getMonth());
@@ -40,7 +38,8 @@ import { Awakened } from "./Awakened";
 
       export const totalExperience = (awakened: Awakened) => {
         const total = 50 + calculateFloorXp() + calculateEarnedXp(awakened);
-        return total;
+        const ceiling = 50 + calculateMaxXp()
+        return Math.min(total, ceiling)
       };
 
       export const attributeExperience = (awakened: Awakened): number => {
