@@ -20,9 +20,10 @@ import ExperienceAside from "./components/experienceAside";
 type AwakenedSheetProps = {
     awakened: Awakened,
     setAwakened: (awakened: Awakened) => void
+    handleUpdate: () => void
 }
 
-const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
+const AwakenedSheet = ({awakened, setAwakened, handleUpdate}: AwakenedSheetProps) => {
 
     const topSection = () => {
         return(
@@ -1105,10 +1106,16 @@ const AwakenedSheet = ({awakened, setAwakened}: AwakenedSheetProps) => {
                 <hr style={{width:"50%"}}/>
                     {wisdomInput()}
 
-                    <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
+            <Alert color="dark" variant="outline" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
               <Group>
                 <Button.Group>
-                    
+                <Button 
+                style={{ margin: "5px" }}
+                color="gray"
+                disabled={0 > currentExperience(awakened)} 
+                onClick={() => handleUpdate()}>
+                  Update
+                </Button>    
                    <Text fz={globals.smallerFontSize} style={{ margin: "10px"}}>Remaining Experience: {currentExperience(awakened)}</Text>
               </Button.Group>
             </Group>

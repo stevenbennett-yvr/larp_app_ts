@@ -22,12 +22,15 @@ const backgroundSchema = z.object({
 })
 
 export const awakenedSchema = z.object({
-    name: z.string(),
-    concept: z.string(),
+    id: z.optional(z.string()),
     email: z.string(),
     uid: z.string(),
     domain: z.string(),
-    id: z.optional(z.string()),
+    cabalId: z.string(),
+
+    name: z.string(),
+    concept: z.string(),
+
     background: backgroundSchema,
     virtue: virtueNameSchema,
     vice: viceNameSchema,
@@ -58,6 +61,7 @@ export const getEmptyAwakened = (): Awakened => {
     email: "",
     uid: "",
     domain: "",
+    cabalId: "",
 
     background: {
       history: "",

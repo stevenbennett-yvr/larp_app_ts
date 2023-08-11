@@ -11,18 +11,44 @@ import CabalTab from "./CharacterTabs/CabalTab";
 import { globals } from "../../globals";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { logChanges } from "./Generator/utils/Logging";
+
 
 const AwakenedPage = () => {
     const { characterId } = useParams();
-    const { getAwakenedById } = useMageDb();
+    const { domainAwakenedList, getAwakenedById, fetchDomainAwakened, updateAwakened } = useMageDb();
     const { currentUser } = useAuth();
     const navigate = useNavigate();
-  
+
+    const [initialAwakened, setInitialAwakened] = useLocalStorage<Awakened>({
+      key: `unmod id ${characterId}`,
+      defaultValue: getEmptyAwakened(),
+    });
     const [awakened, setAwakened] = useLocalStorage<Awakened>({
       key: `id ${characterId}`, // Use a different key for local storage
       defaultValue: getEmptyAwakened(),
     });
   
+
+    const handleUpdate = () => {
+      if (awakened.id && (awakened !== initialAwakened)) {
+      
+
+      const updatedAwakened = {
+        ...awakened,
+        changeLogs: {
+          ...awakened.changeLogs,
+          [new Date().toISOString()]: logChanges(initialAwakened, awakened),
+        },
+      }
+
+      updateAwakened(awakened.id, updatedAwakened)
+      setAwakened(updatedAwakened)
+      setInitialAwakened(updatedAwakened)
+    }
+  }
+
+
     useEffect(() => {
       if (characterId && currentUser) {
         const fetchAwakenedCharacter = async () => {
@@ -40,6 +66,7 @@ const AwakenedPage = () => {
             if (character && currentUser && character.uid === currentUser.uid) {
               setAwakened(character);
               localStorage.setItem(`id ${characterId}`, JSON.stringify(character));
+              setInitialAwakened(character)
             } else {
               localStorage.removeItem(`id ${characterId}`)
               navigate('/')
@@ -50,6 +77,10 @@ const AwakenedPage = () => {
         fetchAwakenedCharacter();
       }
     }, [characterId, currentUser, getAwakenedById, setAwakened, navigate]);  
+
+    useEffect(() => {
+        fetchDomainAwakened()
+      }, [fetchDomainAwakened]);
 
     return (
       <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
@@ -65,19 +96,19 @@ const AwakenedPage = () => {
   
         <Tabs.Panel value="experience" pt="xs">
           {awakened?
-            <AwakenedSheet awakened={awakened} setAwakened={setAwakened} />
+            <AwakenedSheet awakened={awakened} setAwakened={setAwakened} handleUpdate={handleUpdate} />
           :null}
           </Tabs.Panel>
   
         <Tabs.Panel value="background" pt="xs">
           {awakened?
-          <BackgroundPage awakened={awakened} setAwakened={setAwakened} />
+          <BackgroundPage awakened={awakened} setAwakened={setAwakened} handleUpdate={handleUpdate} />
           :null}
         </Tabs.Panel>
   
         <Tabs.Panel value="cabal" pt="xs">
             {awakened?
-            <CabalTab awakened={awakened} setAwakened={setAwakened}/>
+            <CabalTab awakened={awakened} setAwakened={setAwakened} domainAwakenedList={domainAwakenedList}/>
             :null}
         </Tabs.Panel>
 

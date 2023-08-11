@@ -13,7 +13,7 @@ import { roteData, Rote, getFilteredRotes, handleRoteChange, calculatePool } fro
 import { meritData, getFilteredMerits, handleMeritChange, Merit, defineMeritRating, currentMeritLevel, findMaxMerit, handleXpMeritChange } from "../data/Merits";
 import { currentGnosisLevel, handleGnosisChange, findMaxGnosis, Gnoses } from "../data/Gnosis";
 import { handleWisdomChange, currentWisdomLevel, Wisdoms, findMaxWisdom } from "../data/Wisdom";
-import { currentExperience } from "../data/Experience"
+import { currentExperience, spentExperience } from "../data/Experience"
 
 type ExperienceAssignerProps = {
     awakened: Awakened,
@@ -1039,7 +1039,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                         style={{ margin: "5px" }}
                         color="gray"
                         onClick={nextStep}
-                        disabled={!(currentExperience(awakened) < 10) || 0 > currentExperience(awakened)}
+                        disabled={!(spentExperience(awakened) >= 50) || 0 > currentExperience(awakened)}
                     >
                         Next
                     </Button>

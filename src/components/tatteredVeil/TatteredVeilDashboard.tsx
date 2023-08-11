@@ -26,9 +26,6 @@ export default function TatteredVeilVenueDashboard() {
                     </Card>
                 </Group>
                 <CharacterCard awakenedList={userAwakenedList}/>
-                <Group>
-                    {/* Cabal shit */}
-                </Group>
                 
             </Stack>
         </Center>

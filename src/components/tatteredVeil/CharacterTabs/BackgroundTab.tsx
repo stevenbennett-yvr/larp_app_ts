@@ -7,17 +7,19 @@ import { Awakened } from "../data/Awakened";
 import { storage } from '../../../contexts/firebase';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 
-//css imports
 import { Paths } from "../data/Path";
 import { Orders } from "../data/Order";
 import { getAuth } from "firebase/auth";
 
+import { currentExperience } from "../data/Experience";
+
 type BackgroundPageProps = {
     awakened: Awakened,
-    setAwakened: (awakened: Awakened) => void
+    setAwakened: (awakened: Awakened) => void,
+    handleUpdate: () => void,
 }
 
-const BackgroundPage = ({awakened, setAwakened}: BackgroundPageProps) => {
+const BackgroundPage = ({awakened, setAwakened, handleUpdate}: BackgroundPageProps) => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
   const {currentUser} = getAuth()
 
@@ -242,7 +244,13 @@ const BackgroundPage = ({awakened, setAwakened}: BackgroundPageProps) => {
       <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
           <Group>
               <Button.Group>
-
+              <Button 
+                style={{ margin: "5px" }}
+                color="gray"
+                disabled={0 > currentExperience(awakened)} 
+                onClick={() => handleUpdate()}>
+                  Update
+              </Button>                  
               </Button.Group>
           </Group>
       </Alert>

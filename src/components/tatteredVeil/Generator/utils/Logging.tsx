@@ -415,144 +415,131 @@ export const logChanges = (initialAwakened: Awakened, awakened: Awakened): any[]
     }
   }
 
-  const initialRotes = initialAwakened.rotes as any
-  const currentRotes = awakened.rotes as any
+  const initialRotes = initialAwakened.rotes as any;
+  const currentRotes = awakened.rotes as any;
+  
+  for (const currentRote of currentRotes) {
+    const initialRote = initialRotes.find((rote: any) => rote.name === currentRote.name);
+  
+    if (!initialRote) {
 
-  if (initialRotes !== currentRotes) {
-    for (let i = 0; i < Math.max(initialRotes.length, currentRotes.length); i++) {
-      if (i >= initialRotes.length) {
-        // New specialty added
-        if (currentRotes[i].creationPoints === 0) {
-          continue;
-        } else {
-          changes.push({
-            field: `rote[${currentRotes[i].name}]`,
-            type: "Creation Points",
-            oldValue: 0,
-            newValue: currentRotes[i].creationPoints,
-          });
-        }
-        if (currentRotes[i].experiencePoints === 0) {
-          continue;
-        } else {
-          changes.push({
-            field: `rote[${currentRotes[i].name}]`,
-            type: "Experience Points",
-            oldValue: 0,
-            newValue: currentRotes[i].experiencePoints,
-          });
-        } if (currentRotes[i].freebiePoints === 0) {
-          continue;
-        } else {
-          changes.push({
-            field: `rote[${currentRotes[i].name}]`,
-            type: "Freebie Points",
-            oldValue: 0,
-            newValue: currentRotes[i].freebiePoints,
-          });
-        }
-      } else if (i >= currentRotes.length) {
-        // Specialty removed
-        if (initialRotes[i].creationPoints === 0) {
-          continue;
-        } else {
-          changes.push({
-            field: `rote[${initialRotes[i].name}]`,
-            type: "Creation Points",
-            oldValue: initialRotes[i].creationPoints,
-            newValue: 0,
-          });
-        }
-        if (initialRotes[i].experiencePoints === 0) {
-          continue;
-        } else {
-          changes.push({
-            field: `rote[${initialRotes[i].name}]`,
-            type: "Experience Points",
-            oldValue: initialRotes[i].experiencePoints,
-            newValue: 0,
-          });
-        } if (initialRotes[i].freebiePoints === 0) {
-          continue;
-        } else {
-          changes.push({
-            field: `rote[${initialRotes[i].name}]`,
-            type: "Freebie Points",
-            oldValue: initialRotes[i].freebiePoints,
-            newValue: 0,
-          });
-        }
+    if (currentRote.creationPoints > 0) {
+      changes.push({
+        field: `rote[${currentRote.name}]`,
+        type: "Creation Points",
+        oldValue: 0,
+        newValue: currentRote.creationPoints,
+      });
+    } else if (currentRote.experiencePoints > 0) {
+      changes.push({
+        field: `rote[${currentRote.name}]`,
+        type: "Experience Points",
+        oldValue: 0,
+        newValue: currentRote.experiencePoints,
+      });
+    } else if (currentRote.freebiePoints > 0) {
+      changes.push({
+        field: `rote[${currentRote.name}]`,
+        type: "Freebie Points",
+        oldValue: 0,
+        newValue: currentRote.freebiePoints,
+      });
+    }
+  }
+  }
+  
+  for (const initialRote of initialRotes) {
+    const currentRote = currentRotes.find((rote: any) => rote.name === initialRote.name);
+  
+    if (!currentRote) {
+
+      // Rote removed
+      if (initialRote.creationPoints > 0) {
+        changes.push({
+          field: `rote[${initialRote.name}]`,
+          type: "Creation Points",
+          oldValue: initialRote.creationPoints,
+          newValue: 0,
+        });
+      } else if (initialRote.experiencePoints > 0) {
+        changes.push({
+          field: `rote[${initialRote.name}]`,
+          type: "Experience Points",
+          oldValue: initialRote.experiencePoints,
+          newValue: 0,
+        });
+      } else if (initialRote.freebiePoints > 0) {
+        changes.push({
+          field: `rote[${initialRote.name}]`,
+          type: "Freebie Points",
+          oldValue: initialRote.freebiePoints,
+          newValue: 0,
+        });
       }
     }
   }
 
-  const initialMerits = initialAwakened.rotes as any
-  const currentMerits = awakened.rotes as any
 
-  if (initialMerits !== currentMerits) {
-    for (let i = 0; i < Math.max(initialMerits.length, currentMerits.length); i++) {
-      if (i >= initialMerits.length) {
-        // New specialty added
-        if (currentMerits[i].creationPoints === 0) {
-          continue;
-        } else {
-          changes.push({
-            field: `merit[${currentMerits[i].name}]`,
-            type: "Creation Points",
-            oldValue: 0,
-            newValue: currentMerits[i].creationPoints,
-          });
-        }
-        if (currentMerits[i].experiencePoints === 0) {
-          continue;
-        } else {
-          changes.push({
-            field: `merit[${currentMerits[i].name}]`,
-            type: "Experience Points",
-            oldValue: 0,
-            newValue: currentMerits[i].experiencePoints,
-          });
-        } if (currentMerits[i].freebiePoints === 0) {
-          continue;
-        } else {
-          changes.push({
-            field: `merit[${currentMerits[i].name}]`,
-            type: "Freebie Points",
-            oldValue: 0,
-            newValue: currentMerits[i].freebiePoints,
-          });
-        }
-      } else if (i >= currentMerits.length) {
-        // Specialty removed
-        if (initialMerits[i].creationPoints === 0) {
-          continue;
-        } else {
-          changes.push({
-            field: `merit[${initialMerits[i].name}]`,
-            type: "Creation Points",
-            oldValue: initialMerits[i].creationPoints,
-            newValue: 0,
-          });
-        }
-        if (initialMerits[i].experiencePoints === 0) {
-          continue;
-        } else {
-          changes.push({
-            field: `merit[${initialMerits[i].name}]`,
-            type: "Experience Points",
-            oldValue: initialMerits[i].experiencePoints,
-            newValue: 0,
-          });
-        } if (initialMerits[i].freebiePoints === 0) {
-          continue;
-        } else {
-          changes.push({
-            field: `merit[${initialMerits[i].name}]`,
-            type: "Freebie Points",
-            oldValue: initialMerits[i].freebiePoints,
-            newValue: 0,
-          });
-        }
+
+  const initialMerits = initialAwakened.merits as any
+  const currentMerits = awakened.merits as any
+
+  for (const currentMerit of currentMerits) {
+    const initialMerit = initialMerits.find((merit: any) => merit.name === currentMerit.name);
+  
+    if (!initialMerit) {
+
+    if (currentMerit.creationPoints > 0) {
+      changes.push({
+        field: `merit[${currentMerit.name}]`,
+        type: "Creation Points",
+        oldValue: 0,
+        newValue: currentMerit.creationPoints,
+      });
+    } else if (currentMerit.experiencePoints > 0) {
+      changes.push({
+        field: `merit[${currentMerit.name}]`,
+        type: "Experience Points",
+        oldValue: 0,
+        newValue: currentMerit.experiencePoints,
+      });
+    } else if (currentMerit.freebiePoints > 0) {
+      changes.push({
+        field: `merit[${currentMerit.name}]`,
+        type: "Freebie Points",
+        oldValue: 0,
+        newValue: currentMerit.freebiePoints,
+      });
+    }
+  }
+  }
+  
+  for (const initialMerit of initialMerits) {
+    const currentMerit = currentMerits.find((merit: any) => merit.name === initialMerit.name);
+  
+    if (!currentMerit) {
+      // Rote removed
+      if (initialMerit.creationPoints > 0) {
+        changes.push({
+          field: `rote[${initialMerit.name}]`,
+          type: "Creation Points",
+          oldValue: initialMerit.creationPoints,
+          newValue: 0,
+        });
+      } else if (initialMerit.experiencePoints > 0) {
+        changes.push({
+          field: `rote[${initialMerit.name}]`,
+          type: "Experience Points",
+          oldValue: initialMerit.experiencePoints,
+          newValue: 0,
+        });
+      } else if (initialMerit.freebiePoints > 0) {
+        changes.push({
+          field: `rote[${initialMerit.name}]`,
+          type: "Freebie Points",
+          oldValue: initialMerit.freebiePoints,
+          newValue: 0,
+        });
       }
     }
   }

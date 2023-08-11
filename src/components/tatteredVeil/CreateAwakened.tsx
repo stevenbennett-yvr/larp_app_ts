@@ -79,7 +79,7 @@ const GenerateAwakened = () => {
       // Clear local storage and navigate
       localStorage.removeItem("selectedStep");
       localStorage.removeItem("attributeSettings");
-      // ... (remove other items)
+      // TODO: ... (remove other items)
       navigate("/tattered-veil");
     } catch {
       console.log("Failed to create character");
