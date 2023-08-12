@@ -54,20 +54,23 @@ export function UserProvider({ children }: { children: React.ReactNode}): JSX.El
     if (!currentUser || !userData) return null;
 
     if (userData.role?.title === "vst") {
+      console.log('charactersCollectionRef VST query')
       return query(collectionRef, 
         where("chronicle", "==", userData.role.venue),
         where("domain", "==", userData.role.domain)
       );
     } else {
+      console.log('characterCollectionRef query')
       return query(collectionRef, where("uid", "==", currentUser.uid));
     }
-  }, [collectionRef, currentUser, userData]);
+  }, []);
 
   const [characterList, setCharacterList] = useState<{ id: string }[]>([]);
   const [loading, setLoading] = useState(true);
 
   const unsubscribe = useMemo(() => {
     if (!charactersCollectionRef) return;
+    console.log("unsubscribe onSnapshot")
     const unsubscribe = onSnapshot(charactersCollectionRef, (snapshot) => {
       const filteredData = snapshot.docs.map((doc) => ({
         ...doc.data(),
@@ -76,12 +79,13 @@ export function UserProvider({ children }: { children: React.ReactNode}): JSX.El
       setCharacterList(filteredData);
     });
     return unsubscribe;
-  }, [charactersCollectionRef]);
+  }, []);
 
   const getUser = useCallback(async () => {
     if (!currentUser) return null;
     const userDocRef = doc(db, "users", currentUser.uid);
     try {
+      console.log('getUser getDoc')
       const userSnapshot = await getDoc(userDocRef);
       if (userSnapshot.exists()) {
         return userSnapshot.data() as User;
@@ -99,6 +103,7 @@ export function UserProvider({ children }: { children: React.ReactNode}): JSX.El
     async (id: string, updatedUser: Partial<User>) => {
       const userDoc = doc(db, "users", id);
       try {
+        console.log("updateUser updateDoc")
         await updateDoc(userDoc, updatedUser);
       } catch (err) {
         console.error(err);

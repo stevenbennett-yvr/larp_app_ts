@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useMageDb } from "../../contexts/MageContext";
 import { useLocalStorage } from "@mantine/hooks";
-import { Awakened, getEmptyAwakened } from "./data/Awakened";
+import { Awakened, getEmptyAwakened, fetchAwakenedCharacter } from "./data/Awakened";
 import { useEffect } from "react";
 import { Tabs, Center } from "@mantine/core";
 import AwakenedSheet from './CharacterTabs/ExperienceTab'
@@ -12,75 +12,97 @@ import { globals } from "../../globals";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { logChanges } from "./Generator/utils/Logging";
-
+import { useCabalDb } from "../../contexts/CabalContext";
+import { emptyCabal, Cabal, fetchCabalData, fetchInviteData } from "./data/Cabals";
 
 const AwakenedPage = () => {
     const { characterId } = useParams();
     const { domainAwakenedList, getAwakenedById, fetchDomainAwakened, updateAwakened } = useMageDb();
+    const { updateCabal, getCabalData, getCabalInvitations } = useCabalDb()
     const { currentUser } = useAuth();
     const navigate = useNavigate();
 
     const [initialAwakened, setInitialAwakened] = useLocalStorage<Awakened>({
-      key: `unmod id ${characterId}`,
+      key: `initAwakened id ${characterId}`,
       defaultValue: getEmptyAwakened(),
     });
     const [awakened, setAwakened] = useLocalStorage<Awakened>({
-      key: `id ${characterId}`, // Use a different key for local storage
+      key: `awakened id ${characterId}`,
       defaultValue: getEmptyAwakened(),
     });
-  
-
-    const handleUpdate = () => {
-      if (awakened.id && (awakened !== initialAwakened)) {
-      
-
-      const updatedAwakened = {
-        ...awakened,
-        changeLogs: {
-          ...awakened.changeLogs,
-          [new Date().toISOString()]: logChanges(initialAwakened, awakened),
-        },
-      }
-
-      updateAwakened(awakened.id, updatedAwakened)
-      setAwakened(updatedAwakened)
-      setInitialAwakened(updatedAwakened)
-    }
-  }
-
+    const [cabalData, setCabalData] = useLocalStorage<Cabal>({
+      key: `cabalMember id ${characterId}`,
+      defaultValue: emptyCabal(),
+    });
+    const [inviteData, setInviteData] = useLocalStorage<Cabal>({
+      key: `inviteFor id ${characterId}`,
+      defaultValue: emptyCabal(),
+    });
 
     useEffect(() => {
       if (characterId && currentUser) {
-        const fetchAwakenedCharacter = async () => {
-          const localStorageCharacter = localStorage.getItem(`id ${characterId}`);
-          if (localStorageCharacter) {
-            let awakened = JSON.parse(localStorageCharacter)
-            if (awakened.uid === currentUser.uid) {
-              setAwakened(JSON.parse(localStorageCharacter));
-            } else {
-              localStorage.removeItem(`id ${characterId}`)
-              navigate('/')
-            }
-          } else {
-            const character = await getAwakenedById(characterId);
-            if (character && currentUser && character.uid === currentUser.uid) {
-              setAwakened(character);
-              localStorage.setItem(`id ${characterId}`, JSON.stringify(character));
-              setInitialAwakened(character)
-            } else {
-              localStorage.removeItem(`id ${characterId}`)
-              navigate('/')
-            }
-          }
-        };
-  
-        fetchAwakenedCharacter();
+        fetchAwakenedCharacter(characterId, currentUser, setAwakened, setInitialAwakened, getAwakenedById, navigate);
       }
-    }, [characterId, currentUser, getAwakenedById, setAwakened, navigate]);  
+    }, [characterId, currentUser, setInitialAwakened, getAwakenedById, setAwakened, navigate]);  
 
     useEffect(() => {
         fetchDomainAwakened()
-      }, [fetchDomainAwakened]);
+      }, [domainAwakenedList, fetchDomainAwakened]);
+
+    useEffect(() => {
+      if (characterId) {
+        fetchCabalData(awakened, cabalData, setCabalData, getCabalData);
+      }
+    }, [awakened, cabalData, characterId, getCabalData, setCabalData])
+
+    useEffect(() => {
+      if (characterId) {
+        fetchInviteData(awakened, setInviteData, getCabalInvitations);
+      }
+    }, [awakened, setInviteData, getCabalInvitations, characterId])
+
+    const handleUpdate = () => {
+      if (awakened.id && awakened !== initialAwakened) {
+        const updatedAwakened = {
+          ...awakened,
+          changeLogs: {
+            ...awakened.changeLogs,
+            [new Date().toISOString()]: logChanges(initialAwakened, awakened),
+          },
+        };
+    
+        updateAwakened(awakened.id, updatedAwakened);
+        setAwakened(updatedAwakened);
+        setInitialAwakened(updatedAwakened);
+    
+        // Update member in the cabalData.members array
+        if (cabalData.id) {
+          const updatedMembers = cabalData.members.map(member =>
+            member.id === awakened.id
+              ? {
+                  ...member,
+                  name: awakened.name,
+                  concept: awakened.concept,
+                  path: awakened.path,
+                  order: awakened.order,
+                  merits: awakened.merits,
+                  background: awakened.background,
+                }
+              : member
+          );
+    
+          const updatedCabalData = {
+            ...cabalData,
+            members: updatedMembers,
+          };
+    
+          updateCabal(cabalData.id, updatedCabalData);
+          setCabalData(updatedCabalData);
+          localStorage.setItem(`cabalMember id ${characterId}`, JSON.stringify(updatedCabalData));
+        }
+      }
+    };
+
 
     return (
       <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
@@ -108,7 +130,7 @@ const AwakenedPage = () => {
   
         <Tabs.Panel value="cabal" pt="xs">
             {awakened?
-            <CabalTab awakened={awakened} setAwakened={setAwakened} domainAwakenedList={domainAwakenedList}/>
+            <CabalTab awakened={awakened} setAwakened={setAwakened} domainAwakenedList={domainAwakenedList} cabalData={cabalData} setCabalData={setCabalData} inviteData={inviteData} setInviteData={setInviteData}/>
             :null}
         </Tabs.Panel>
 

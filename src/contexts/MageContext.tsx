@@ -55,6 +55,7 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
 
   const userCollectionRef = useMemo(() => {
     if (!currentUser || !userData) return null;
+      console.log("userCollectionRef query")
       return query(collectionRef, where("uid", "==", currentUser.uid));
   }, [collectionRef, currentUser, userData]);
 

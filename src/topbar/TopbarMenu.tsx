@@ -24,12 +24,7 @@ export function LogoutButton() {
 
   const handleLogout = async () => {
     try {
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key !== null) {
-          localStorage.removeItem(key);
-        }
-      }
+      localStorage.clear();
       await logout();
       navigate("/login");
     } catch {

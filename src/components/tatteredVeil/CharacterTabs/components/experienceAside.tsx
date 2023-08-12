@@ -22,9 +22,11 @@ const ExperienceAside = ({awakened}: ExperienceAsideProps) => {
             <Stack>
             <Table>
                 <thead>
+                    <tr>
                     <th>Category</th>
                     <th>Spent</th>
                     <th></th>
+                    </tr>
                 </thead>
                 <tbody>
                 <tr>
@@ -81,9 +83,11 @@ const ExperienceAside = ({awakened}: ExperienceAsideProps) => {
             </Table>
             <Table>
                 <thead>
+                    <tr>
                     <th>Category</th>
                     <th>Ammount</th>
                     <th></th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr>

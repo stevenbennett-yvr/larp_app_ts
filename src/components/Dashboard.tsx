@@ -27,6 +27,7 @@ export default function Dashboard() {
     if (!userData) { // Check if userData is not set
       const fetchUserData = async () => {
         const fetchedUserData = await getUser();
+        console.log("fetch userData")
         if (fetchedUserData) {
           setUserData(fetchedUserData);
           setShowDomainSelector(!userData.domain);
@@ -38,11 +39,7 @@ export default function Dashboard() {
   
       fetchUserData();
     }
-  }, [userData, getUser]);
-
-/*   const handleNavigateChronicle = () => {
-    navigate("/choose-chronicle");
-  }; */
+  }, []);
 
   return (
     <Center h={"100%"}>

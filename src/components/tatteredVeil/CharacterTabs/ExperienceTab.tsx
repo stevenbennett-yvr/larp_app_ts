@@ -97,10 +97,12 @@ const AwakenedSheet = ({awakened, setAwakened, handleUpdate}: AwakenedSheetProps
             <Center>
             <Table striped withBorder style={{ maxWidth: "400px" }}>
             <thead>
+                <tr>
                 <th>Size</th>
                 <th>Speed</th>
                 <th>Defense</th>
                 <th>Init Mod</th>
+                </tr>
             </thead>
             <tbody>
                 <tr>

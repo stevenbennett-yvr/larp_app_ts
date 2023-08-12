@@ -11,7 +11,7 @@ import { roteSchema } from "./Rotes";
 import { gnosisSchema } from "./Gnosis";
 import { wisdomSchema } from "./Wisdom";
 
-const backgroundSchema = z.object({
+export const backgroundSchema = z.object({
   history: z.string(),
   goals: z.string(),
   description: z.string(),
@@ -26,7 +26,6 @@ export const awakenedSchema = z.object({
     email: z.string(),
     uid: z.string(),
     domain: z.string(),
-    cabalId: z.string(),
 
     name: z.string(),
     concept: z.string(),
@@ -61,7 +60,6 @@ export const getEmptyAwakened = (): Awakened => {
     email: "",
     uid: "",
     domain: "",
-    cabalId: "",
 
     background: {
       history: "",
@@ -157,3 +155,27 @@ export const getEmptyAwakened = (): Awakened => {
 }
 
 export type Awakened = z.infer<typeof awakenedSchema>
+
+
+export const fetchAwakenedCharacter = async (characterId:string, currentUser:any, setAwakened:Function, setInitialAwakened:Function, getAwakenedById:Function, navigate:Function) => {
+  const localStorageCharacter = localStorage.getItem(`awakened id ${characterId}`);
+  if (localStorageCharacter) {
+    let awakened = JSON.parse(localStorageCharacter)
+    if (awakened.uid === currentUser.uid) {
+      setAwakened(JSON.parse(localStorageCharacter));
+    } else {
+      localStorage.clear()
+      navigate('/')
+    }
+  } else {
+    const character = await getAwakenedById(characterId);
+    if (character && currentUser && character.uid === currentUser.uid) {
+      setAwakened(character);
+      localStorage.setItem(`awakened id ${characterId}`, JSON.stringify(character));
+      setInitialAwakened(character)
+    } else {
+      localStorage.clear()
+      navigate('/')
+    }
+  }
+};
