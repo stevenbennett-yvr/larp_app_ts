@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { Awakened } from "./Awakened";
 import {currentGnosisLevel} from './Gnosis'
-import { getNumberBelow } from "./utils";
+import { getNumberBelow } from "../../../utils/getNumberBelow";
 
 import { ArcanumDeath, ArcanumFate, ArcanumForces, ArcanumLife, ArcanumMatter, ArcanumMind, ArcanumPrime, ArcanumSpace, ArcanumSpirit, ArcanumTime } from "../../../assets/images/TatteredVeil";
 

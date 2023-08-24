@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { mageLogo } from "../../../../../assets/images/TatteredVeil";
-import { v5Logo } from "../../../../../assets/images/GoodIntentions";
+import { mageLogo } from "../../../assets/images/TatteredVeil";
+import { v5Logo } from "../../../assets/images/GoodIntentions";
 
 export const chronicleNameSchema = z.union([
     z.literal('Tattered Veil'),

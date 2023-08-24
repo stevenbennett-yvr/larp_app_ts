@@ -1,8 +1,7 @@
 import { Grid, Card, Center, Image, useMantineTheme, Title } from '@mantine/core'
-import { Chronciles, ChronicleName, chronicleNameSchema } from './data/Chronicles'
+import { Chronciles, ChronicleName, chronicleNameSchema } from '../../../data/CaM/types/Chronicles'
 import { useNavigate } from 'react-router-dom';
-import domains from '../domain/data/domains.json'
-
+import domains from '../../../data/CaM/source/domains.json'
 
 const ChroncileSelector = (userData: any) => {
     const theme = useMantineTheme();

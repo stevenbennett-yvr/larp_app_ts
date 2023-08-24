@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Awakened } from "./Awakened";
-import { getNumberBelow } from "./utils";
+import { getNumberBelow } from "../../../utils/getNumberBelow";
 import { currentGnosisLevel } from "./Gnosis";
 
 const specialitySchema = z.object({

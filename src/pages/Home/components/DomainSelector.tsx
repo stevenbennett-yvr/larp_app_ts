@@ -1,9 +1,9 @@
 import { Modal, Select, Button } from "@mantine/core"
 import { useState } from 'react'
-import { MapComponent, getGeolocation, parseLocation } from "./components/MapComponent"
-import { useUser } from "../../../../contexts/UserContext"
-import { useAuth } from "../../../../contexts/AuthContext"
-import domains from './data/domains.json'
+import { MapComponent, getGeolocation, parseLocation } from "./MapComponent"
+import { useUser } from "../../../contexts/UserContext"
+import { useAuth } from "../../../contexts/AuthContext"
+import domains from '../../../data/CaM/source/domains.json'
 
 type DomainSelectorProps = {
     showDomainSelector: boolean,

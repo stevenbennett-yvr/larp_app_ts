@@ -1,6 +1,6 @@
 import {z} from "zod";
 import { Awakened } from "./Awakened";
-import { getNumberBelow } from "./utils";
+import { getNumberBelow } from "../../../utils/getNumberBelow";
 
 export const wisdomSchema = z.object({
     creationPoints: z.number().default(7),

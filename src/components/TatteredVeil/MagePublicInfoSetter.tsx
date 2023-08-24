@@ -1,0 +1,195 @@
+//Technical Imports
+import { Center, Avatar, Checkbox, TextInput, Alert, Textarea, Grid, Stack, Button, Text, Image, Group } from "@mantine/core"
+import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone';
+import { useState } from "react";
+import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+//Context Imports
+import { storage } from "../../contexts/firebase";
+import { User } from "firebase/auth";
+//Data Imports
+import { Awakened } from "../../data/TatteredVeil/types/Awakened"
+import { Paths } from "../../data/TatteredVeil/types/Path"
+import { Orders } from "../../data/TatteredVeil/types/Order"
+
+type MagePublicInfoSetterProps = {
+    awakened: Awakened,
+    setAwakened: (awakened: Awakened) => void
+    currentUser: User | null
+}
+
+const MagePublicInfoSetter = ({awakened, setAwakened, currentUser}: MagePublicInfoSetterProps) => {
+    const [files, setFiles] = useState<FileWithPath[]>([]);
+    const conStatus = awakened.merits.filter((merit) => merit.name === "Status (Consilium)")
+
+    const previews = files.map((file, index) => {
+        const imageUrl = URL.createObjectURL(file);
+        return (
+          <Avatar
+            key={index}
+            src={imageUrl}
+            imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
+            size={250}
+            radius="xl"
+          />
+        );
+      });
+
+      const uploadImage = async() => {
+        await Promise.all(
+          files.map(image=>{
+            const imageRef = ref(storage, `mage/${currentUser?.uid}/${image.path}`);
+            uploadBytes(imageRef, image, {contentType: 'image/jpeg'}).then(async()=> {
+              const downloadURL = await getDownloadURL(imageRef)
+              setAwakened({
+                ...awakened,
+                background: { ...awakened.background, profilePic: downloadURL },
+                })
+            })
+          })
+        )
+        setFiles([])
+      }
+
+    return (
+        <>
+        <Center>
+        <Alert color="gray" title="Public Info" style={{ width: "400px" }}>
+            <Checkbox
+              checked={awakened.background.showPublic}
+              label="Create and display Public Info card?"
+              onChange={(event) =>
+                setAwakened({
+                  ...awakened,
+                  background: {
+                    ...awakened.background,
+                    showPublic: event.currentTarget.checked,
+                  },
+                })
+              }
+            />
+          {awakened.background.showPublic? 
+          <div>
+          <TextInput
+              value={awakened.background.publicTitle}
+              onChange={(event) =>
+                setAwakened({
+                ...awakened,
+                background: { ...awakened.background, publicTitle: event.target.value },
+                })
+            }
+              label="Public Title"
+          /> 
+
+          <Textarea
+              label="Public Intro"
+              placeholder="Max Characters (280)"
+              autosize
+              minRows={2}
+              maxRows={4}
+              maxLength={280}
+              value={awakened.background.publicIntro}
+              onChange={(event) =>
+                  setAwakened({
+                  ...awakened,
+                  background: { ...awakened.background, publicIntro: event.target.value },
+                  })
+              }
+          />
+          </div>
+          :<></>}
+        </Alert>
+        </Center>
+
+        {awakened.background.showPublic?
+          <Center>
+              <Alert color="gray" style={{ width: "400px" }}>
+              <Grid>
+                <Grid.Col span={3}>
+                  <Center>
+                    <Stack>
+                      <Text weight={700}>{awakened.name}</Text>
+                      <Avatar 
+                      src={awakened.background.profilePic} 
+                      size="70px" 
+                      radius="xl"
+                      style={{
+                        backgroundImage: `linear-gradient(to bottom right, ${Paths[awakened.path].color}, ${Orders[awakened.order].color})`,
+                      }}
+                    />
+                        <div className="avatar-container">
+                          <div className="dots-container" style={{textAlign:"center"}}>
+                            {Array.from({ length: 5 }, (_, index) => (
+                              <span
+                                key={index}
+                                style={{
+
+                                  color: index + 1 <= conStatus[0]?.freebiePoints ? "gold" : "",
+                                }}
+                              >
+                                ●
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                    </Stack>
+                  </Center>
+                </Grid.Col>
+                <Grid.Col span={9}>
+                  <Stack>
+                    {awakened.background.publicTitle? <Text fs="italic">{awakened.background.publicTitle}</Text>: <></>}
+                    {awakened.background.publicIntro? <Text>{awakened.background.publicIntro}</Text>: <></>}
+                    <Group>
+                      <Center>
+                      <Image
+                        fit="contain"
+                        height={40}
+                        width={40}
+                        src={Paths[awakened.path].rune}
+                        style={{
+                            opacity: 0.6, // Adjust the opacity here (0.5 = 50% transparent)
+                          }}
+                      />
+                        <Image
+                        fit="contain"
+                        height={40}
+                        width={40}
+                          src={Orders[awakened.order].rune}
+                          style={{
+                            opacity: 0.6, // Adjust the opacity here (0.5 = 50% transparent)
+                          }}
+                        />
+                      </Center>
+                  </Group>
+                </Stack>
+                </Grid.Col>
+              </Grid>
+            </Alert>
+            </Center>
+            : <></>}
+
+
+        {awakened.background.showPublic?
+          <Center> 
+              <Alert color="gray" title="Profile Pic" style={{width:"400px"}}>
+              <Dropzone accept={IMAGE_MIME_TYPE} onDrop={setFiles}>
+              <Text align="center">Drop images here</Text>
+              </Dropzone>
+              <Button
+                disabled={files.length === 0}
+                onClick={uploadImage}
+              >
+                upload
+              </Button>
+
+              <Center>
+                {previews}
+              </Center>
+              </Alert>
+              </Center>
+              :<></>}
+
+        </>
+    )
+}
+
+export default MagePublicInfoSetter

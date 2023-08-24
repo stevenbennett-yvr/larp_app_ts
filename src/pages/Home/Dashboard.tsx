@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useUser } from '../../contexts/UserContext';
 import { Alert, Card, Center, Text, Group, Stack, Grid, Title } from '@mantine/core';
 import { globals } from "../../assets/globals"
-import DomainSelector from './components/domain/DomainSelector';
-import ChroncileSelector from './components/chronicle/ChronicleSelector';
-import {domainCard} from './components/domain/DomainDisplay';
+import DomainSelector from './components/DomainSelector';
+import ChroncileSelector from './components/ChronicleSelector';
+import {domainCard} from './components/DomainDisplay';
 
 /* 
   TODO: 

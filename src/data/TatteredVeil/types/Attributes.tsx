@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { Awakened } from "./Awakened";
 import {currentGnosisLevel} from "./Gnosis"
-import {getNumberBelow} from './utils'
+import {getNumberBelow} from '../../../utils/getNumberBelow'
 
 const attributeSchema = z.object({
   creationPoints: z.number().min(1).max(6).int(),

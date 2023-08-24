@@ -4,7 +4,7 @@ import { allAttributes, currentAttributeLevel, AttributeNames } from "./Attribut
 import { SkillNames, allSkills, currentSkillLevel } from "./Skills";
 import { currentGnosisLevel } from "./Gnosis"
 import meritDataJson from '../source/mageMerits.json'
-import { getNumberBelow } from "./utils";
+import { getNumberBelow } from "../../../utils/getNumberBelow";
 
 export const meritSchema = z.object({
     type: z.string(),

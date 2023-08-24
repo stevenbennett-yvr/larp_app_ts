@@ -1,6 +1,6 @@
 import { Card, Text, Button } from "@mantine/core"
-import { globals } from "../../../../assets/globals"
-import domains from "./data/domains.json"
+import { globals } from "../../../assets/globals"
+import domains from '../../../data/CaM/source/domains.json'
 
 export const domainCard = (userData: any) => {
 
