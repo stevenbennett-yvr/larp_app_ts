@@ -21,9 +21,10 @@ type AwakenedSheetProps = {
     awakened: Awakened,
     setAwakened: (awakened: Awakened) => void
     handleUpdate: () => void
+    setShowRetire: any
 }
 
-const AwakenedSheet = ({awakened, setAwakened, handleUpdate}: AwakenedSheetProps) => {
+const AwakenedSheet = ({awakened, setAwakened, handleUpdate, setShowRetire}: AwakenedSheetProps) => {
 
     const topSection = () => {
         return(
@@ -1108,7 +1109,7 @@ const AwakenedSheet = ({awakened, setAwakened, handleUpdate}: AwakenedSheetProps
                 <hr style={{width:"50%"}}/>
                     {wisdomInput()}
 
-            <Alert color="dark" variant="outline" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
+            <Alert color={0 > currentExperience(awakened)?"red":"dark"} variant="outline" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
               <Group>
                 <Button.Group>
                 <Button 
@@ -1118,7 +1119,13 @@ const AwakenedSheet = ({awakened, setAwakened, handleUpdate}: AwakenedSheetProps
                 onClick={() => handleUpdate()}>
                   Update
                 </Button>    
-                   <Text fz={globals.smallerFontSize} style={{ margin: "10px"}}>Remaining Experience: {currentExperience(awakened)}</Text>
+                   <Text fz={globals.smallerFontSize} style={{ margin: "10px"}} color={0 > currentExperience(awakened)?"#FF6B6B":"white"}>Remaining Experience: {currentExperience(awakened)}</Text>
+                <Button 
+                style={{ margin: "5px" }}
+                color="gray"
+                onClick={() => setShowRetire(true)}>
+                  Retire
+              </Button>
               </Button.Group>
             </Group>
             </Alert>

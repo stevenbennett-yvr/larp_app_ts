@@ -49,9 +49,6 @@ function App() {
   );
 }
 
-
-// TODO: Setup the side bar to display character levels. This will be difficult
-
 function AuthenticatedApp() {
   const { currentUser } = useAuth();
   const showHeader = currentUser != null;
@@ -68,9 +65,9 @@ function AuthenticatedApp() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/create-mage" element={<GenerateAwakened/>}/>
-          <Route path="/tattered-veil" element={<TatteredVeilVenueDashboard/>}/>
-          <Route path="/awakened-sheet/:characterId" element={<AwakenedPage/>}/>
+          <Route path="/create-mage" element={<PrivateRoute><GenerateAwakened/></PrivateRoute>}/>
+          <Route path="/tattered-veil" element={<PrivateRoute><TatteredVeilVenueDashboard/></PrivateRoute>}/>
+          <Route path="/awakened-sheet/:characterId" element={<PrivateRoute><AwakenedPage/></PrivateRoute>}/>
         </Routes>
       </Container>
     </AppShell>

@@ -4,7 +4,7 @@ import { Awakened } from "../data/Awakened";
 
 import React, { useState, forwardRef } from "react";
 import { useCabalDb } from "../../../contexts/CabalContext";
-import { CabalMember, Cabal, handleAcceptInvite, handleRejectInvite, handleCreateCabal } from "../data/Cabals";
+import { CabalMember, Cabal, handleAcceptInvite, handleRejectInvite, handleCreateCabal, handleLeaveCabal } from "../data/Cabals";
 import { globals } from "../../../globals";
 import { Orders } from "../data/Order";
 import { Paths } from "../data/Path";
@@ -379,7 +379,20 @@ const meritsAccordion = () => {
               onClick={handleUpdateCabal}
               >
                 Update Cabal
-              </Button>   
+              </Button>
+              <Button
+                style={{ margin: "5px" }}
+                color="gray"
+                onClick={() => {
+                  if (awakened.id) {
+                    handleLeaveCabal(awakened.id, cabalData, updateCabal, setCabalData);
+                  } else {
+                    console.log("Awakened ID is undefined");
+                  }
+                }}
+              >
+                Leave Cabal
+              </Button>
             </Button.Group>
           </Group>
         </Alert>

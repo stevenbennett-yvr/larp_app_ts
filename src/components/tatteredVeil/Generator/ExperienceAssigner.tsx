@@ -1025,7 +1025,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                 <hr style={{width:"50%"}}/>
                     {wisdomInput()}
 
-                    <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
+                    <Alert color={0 > currentExperience(awakened)?"red":"dark"} variant="outline" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
               <Group>
                 <Button.Group>
                     <Button
@@ -1043,7 +1043,7 @@ const ExperienceAssigner = ({awakened, setAwakened, nextStep, backStep, showInst
                     >
                         Next
                     </Button>
-                  <Text fz={globals.smallerFontSize} style={{ margin: "10px"}}>Remaining Experience: {currentExperience(awakened)}</Text>
+                    <Text fz={globals.smallerFontSize} style={{ margin: "10px"}} color={0 > currentExperience(awakened)?"#FF6B6B":"white"}>Remaining Experience: {currentExperience(awakened)}</Text>
               </Button.Group>
             </Group>
             </Alert>

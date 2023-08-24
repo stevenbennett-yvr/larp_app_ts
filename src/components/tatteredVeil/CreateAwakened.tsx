@@ -72,20 +72,16 @@ const GenerateAwakened = () => {
           [new Date().toISOString()]: logChanges(emptyAwakened, awakened),
         },
       };
-  
-      // Submit the updated awakened
+        // Submit the updated awakened
       await onSubmitAwakened(updatedAwakened);
   
       // Clear local storage and navigate
-      localStorage.removeItem("selectedStep");
-      localStorage.removeItem("attributeSettings");
-      // TODO: ... (remove other items)
+      localStorage.clear();
       navigate("/tattered-veil");
     } catch {
       console.log("Failed to create character");
     }
   }
-    
 
     const getStepComponent = () => {
     switch (selectedStep) {

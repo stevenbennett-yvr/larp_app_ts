@@ -5,11 +5,12 @@ import { Awakened } from "./Awakened";
     };
 
     const getStartDate = (awakened: Awakened) => {
-        const creationDate = awakened.startDate
-        const chronicleStartDate = getChronicleStartDate()
+        const creationDate = new Date(awakened.startDate);
+        
+        const chronicleStartDate = getChronicleStartDate();
         const awakenedStartDate = creationDate < chronicleStartDate ? chronicleStartDate : creationDate;
-
-        return awakenedStartDate
+    
+        return new Date(awakenedStartDate).toISOString();
     }
 
     export const calculateMaxXp = () => {
@@ -37,7 +38,7 @@ import { Awakened } from "./Awakened";
       };
 
       export const totalExperience = (awakened: Awakened) => {
-        const total = 50 + calculateFloorXp() + calculateEarnedXp(awakened);
+        const total = 50 + calculateFloorXp() + calculateEarnedXp(awakened)
         const ceiling = 50 + calculateMaxXp()
         return Math.min(total, ceiling)
       };
@@ -74,9 +75,9 @@ import { Awakened } from "./Awakened";
                 skillInfo.specialities.forEach((speciality) =>
                 specialityXp += speciality.experiencePoints
                 )
-                return null; // Explicit return statement (can return any value, even null)
+                return null;
             });
-            return null; // Explicit return statement (can return any value, even null)
+            return null;
         });
         return specialityXp;
     };
@@ -133,6 +134,7 @@ import { Awakened } from "./Awakened";
 
     export const currentExperience = (awakened: Awakened) => {
         const experience = totalExperience(awakened);
+
         const currentExperience = experience - (spentExperience(awakened));
         return currentExperience;
       };

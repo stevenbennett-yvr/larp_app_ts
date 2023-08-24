@@ -54,25 +54,23 @@ export const emptyCabal = (): Cabal => {
 }
 
   // get Invite Data
-export const fetchInviteData = async (
+  export const fetchInviteData = async (
     awakened: Awakened,
+    inviteData: Cabal,
     setInviteData: Function,
     getCabalInvitations: Function
   ) => {
-    const cacheKey = `inviteData_${awakened.id}`;
-  
-    const cachedInviteData = localStorage.getItem(cacheKey);
-  
-    if (cachedInviteData) {
+    const cachedInviteData = localStorage.getItem(`inviteFor id ${awakened.id}`);
+    if (cachedInviteData !== null) {
       const parsedInviteData = JSON.parse(cachedInviteData);
       setInviteData(parsedInviteData);
     } else {
       try {
         console.log("fetchInvite")
         const retrievedInviteData = await getCabalInvitations(awakened.id);
-        const updatedInviteData = retrievedInviteData || null;
+        const updatedInviteData = retrievedInviteData || inviteData;
         setInviteData(updatedInviteData);
-        localStorage.setItem(cacheKey, JSON.stringify(updatedInviteData));
+        localStorage.setItem(`inviteFor id ${awakened.id}`, JSON.stringify(updatedInviteData));
       } catch (error) {
         console.error("Error retrieving invite data:", error);
       }
@@ -80,43 +78,26 @@ export const fetchInviteData = async (
   };
 
     // get Cabal Data
-export const fetchCabalData = async (awakened: Awakened, cabalData:Cabal, setCabalData:Function, getCabalData:Function ) => {
+    export const fetchCabalData = async (awakened: Awakened, cabalData:Cabal, setCabalData:Function, getCabalData:Function ) => {
 
-    const cachedCabalData = localStorage.getItem(`cabalMember id ${awakened.id}`);
-
-    if (cachedCabalData) {
-      const parsedCabalData = JSON.parse(cachedCabalData);
-      setCabalData(parsedCabalData);
-    } else {
-
-    try {
-        console.log('fetch Cabal')
-        const retrievedCabalData = await getCabalData(awakened.id);
-        const updatedCabalData = retrievedCabalData || cabalData;
-        setCabalData(updatedCabalData);
-        localStorage.setItem(`cabalMember id ${awakened.id}`, JSON.stringify(updatedCabalData));
-    } catch (error) {
-        console.error("Error retrieving cabal data:", error);
+      const cachedCabalData = localStorage.getItem(`cabalMember id ${awakened.id}`);
+  
+      if (cachedCabalData !== null) {
+        const parsedCabalData = JSON.parse(cachedCabalData);
+        setCabalData(parsedCabalData);
+      } else {
+  
+      try {
+          console.log('fetch Cabal')
+          const retrievedCabalData = await getCabalData(awakened.id);
+          const updatedCabalData = retrievedCabalData || cabalData;
+          setCabalData(updatedCabalData);
+          localStorage.setItem(`cabalMember id ${awakened.id}`, JSON.stringify(updatedCabalData));
+      } catch (error) {
+          console.error("Error retrieving cabal data:", error);
+      }
     }
   }
-
-    // Update Member Merit section Data.
-/*     if (awakened.id && cabalData?.id) {
-        const characterMemberData = cabalData.members.find(member => member.id === awakened.id);
-    
-        if (characterMemberData && (characterMemberData.merits !== awakened.merits || characterMemberData.background !== awakened.background)) {
-        const updatedMember = { ...characterMemberData, merits: awakened.merits, background: awakened.background };
-        const updatedMembers = cabalData.members.map(member => (member.id === awakened.id ? updatedMember : member));
-
-        const updatedCabal = { ...cabalData, members: updatedMembers };
-
-        updateCabal(cabalData.id, updatedCabal);
-        setCabalData(updatedCabal);
-        localStorage.setItem(`cabal ${cabalData.id}`, JSON.stringify(updatedCabal));
-
-        }
-    } */
-    };
 
     // Create Cabal Function
 export async function handleCreateCabal(awakened:Awakened, cabalData:Cabal, setCabalData:Function, onSubmitCabal:Function) {
@@ -201,7 +182,7 @@ export const handleRejectInvite = (awakened:Awakened, inviteData:Cabal, setInvit
       invitations: updatedInvitations,
     };
     updateCabal(inviteData.id, updatedCabalData);
-    fetchInviteData(awakened, setInviteData, getCabalInvitations)
+    fetchInviteData(awakened, inviteData, setInviteData, getCabalInvitations)
     }
   };
 
@@ -209,8 +190,9 @@ export const handleLeaveCabal = async (characterId:string, cabalData:Cabal, upda
     if (cabalData && cabalData.id && cabalData.ownerId){
       let updatedCabalData;
       if (characterId === cabalData.ownerId) {
-      const newOwnerIndex = Math.floor(Math.random() * cabalData.memberIds.length);
-      const newOwnerId = cabalData.memberIds[newOwnerIndex];
+        const newOwnerIds = cabalData.memberIds.filter((member) => member !== characterId)
+        const newOwnerIndex = Math.floor(Math.random() * newOwnerIds.length);
+        const newOwnerId = newOwnerIds[newOwnerIndex];
       
       updatedCabalData = {
         ...cabalData,

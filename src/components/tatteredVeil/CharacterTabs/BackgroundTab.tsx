@@ -1,7 +1,12 @@
+
 //technical imports
 import { useState } from "react";
 import { Alert, Avatar, Button, Center, Checkbox, Grid, Group, Image, Stack, Text, TextInput, Textarea } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone';
+import { RichTextEditor } from '@mantine/rte';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookOpen, faBullseye, faMask } from "@fortawesome/free-solid-svg-icons";
+
 import { globals } from "../../../globals";
 import { Awakened } from "../data/Awakened";
 import { storage } from '../../../contexts/firebase';
@@ -17,11 +22,15 @@ type BackgroundPageProps = {
     awakened: Awakened,
     setAwakened: (awakened: Awakened) => void,
     handleUpdate: () => void,
+    setShowRetire: any,
+    richTextValue: any,
+    setRichTextValue: (richTextValue: any) => void,
 }
 
-const BackgroundPage = ({awakened, setAwakened, handleUpdate}: BackgroundPageProps) => {
+const BackgroundPage = ({awakened, setAwakened, handleUpdate, setShowRetire, richTextValue, setRichTextValue}: BackgroundPageProps) => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
   const {currentUser} = getAuth()
+
 
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
@@ -54,60 +63,56 @@ const BackgroundPage = ({awakened, setAwakened, handleUpdate}: BackgroundPagePro
 
   const conStatus = awakened.merits.filter((merit) => merit.name === "Status (Consilium)")
 
+  const handleRichTextChange = (field:string, value:string) => {
+    setRichTextValue({
+        ...richTextValue,
+        [field]: value,
+    });
+};
+
   return (
     <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
       <Stack>
 
-          <Alert color="gray" title="ST Info" style={{width:"400px"}}>
+        <Center>
+        <Alert color="gray" title="ST Info">
 
-          <Textarea
-              label="Character Backstory"
-              placeholder="Autosize with 4 rows max"
-              autosize
-              minRows={2}
-              maxRows={4}
-              value={awakened.background.history}
-              onChange={(event) =>
-                  setAwakened({
-                  ...awakened,
-                  background: { ...awakened.background, history: event.target.value },
-                  })
-              }
-          />
+        <Text fz="lg" color="dimmed">
+            <FontAwesomeIcon icon={faBookOpen} /> History
+        </Text>
+        <RichTextEditor
+            id="rte-history"
+            placeholder="How did your character come to be?"
+            value={richTextValue.history}
+            style={{ padding: '5px' }}
+            onChange={val => handleRichTextChange('history', val)}
+        />
 
-          <Textarea
-              label="Character Goals"
-              placeholder="Autosize with 4 rows max"
-              autosize
-              minRows={2}
-              maxRows={4}
-              value={awakened.background.goals}
-              onChange={(event) =>
-                  setAwakened({
-                  ...awakened,
-                  background: { ...awakened.background, goals: event.target.value },
-                  })
-              }
-          />
+        <Text fz="lg" color="dimmed">
+            <FontAwesomeIcon icon={faBullseye} /> Goals
+        </Text>
+        <RichTextEditor
+            id="rte-goals"
+            placeholder="What does your character want to achieve?"
+            value={richTextValue.goals}
+            style={{ padding: '5px' }}
+            onChange={val => handleRichTextChange('goals', val)}
+        />
 
-          <Textarea
-              label="Character Description"
-              placeholder="Autosize with 4 rows max"
-              autosize
-              minRows={2}
-              maxRows={4}
-              value={awakened.background.description}
-              onChange={(event) =>
-                  setAwakened({
-                  ...awakened,
-                  background: { ...awakened.background, description: event.target.value },
-                  })
-              }
-          />
+        <Text fz="lg" color="dimmed">
+            <FontAwesomeIcon icon={faMask} /> Description
+        </Text>
+        <RichTextEditor
+            id="rte-description"
+            placeholder="What does your character look like?"
+            value={richTextValue.description}
+            style={{ padding: '5px' }}
+            onChange={val => handleRichTextChange('description', val)}
+        />
+        </Alert>
+        </Center>
 
-          </Alert>
-
-
+      <Center>
         <Alert color="gray" title="Public Info" style={{ width: "400px" }}>
             <Checkbox
               checked={awakened.background.showPublic}
@@ -153,8 +158,10 @@ const BackgroundPage = ({awakened, setAwakened, handleUpdate}: BackgroundPagePro
           </div>
           :<></>}
         </Alert>
+        </Center>
 
-        {awakened.background.showPublic? 
+        {awakened.background.showPublic?
+          <Center>
               <Alert color="gray" style={{ width: "400px" }}>
               <Grid>
                 <Grid.Col span={3}>
@@ -217,10 +224,12 @@ const BackgroundPage = ({awakened, setAwakened, handleUpdate}: BackgroundPagePro
                 </Grid.Col>
               </Grid>
             </Alert>
+            </Center>
             : <></>}
 
 
-        {awakened.background.showPublic? 
+        {awakened.background.showPublic?
+          <Center> 
               <Alert color="gray" title="Profile Pic" style={{width:"400px"}}>
               <Dropzone accept={IMAGE_MIME_TYPE} onDrop={setFiles}>
               <Text align="center">Drop images here</Text>
@@ -236,6 +245,7 @@ const BackgroundPage = ({awakened, setAwakened, handleUpdate}: BackgroundPagePro
                 {previews}
               </Center>
               </Alert>
+              </Center>
               :<></>}
 
 
@@ -250,7 +260,13 @@ const BackgroundPage = ({awakened, setAwakened, handleUpdate}: BackgroundPagePro
                 disabled={0 > currentExperience(awakened)} 
                 onClick={() => handleUpdate()}>
                   Update
-              </Button>                  
+              </Button>
+              <Button 
+                style={{ margin: "5px" }}
+                color="gray"
+                onClick={() => setShowRetire(true)}>
+                  Retire
+              </Button>
               </Button.Group>
           </Group>
       </Alert>

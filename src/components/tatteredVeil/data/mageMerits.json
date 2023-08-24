@@ -596,7 +596,7 @@
       "name": "High Speech",
       "rating": "•",
       "prerequisites": "",
-      "description": "allows use of Words of Power",
+      "description": "<ul><li>Your character can use Atlantean High Speech in spellcasting for power and duration.</li><li>Chanting in Atlantean adds +2 dice to the next spell.</li><li>Chanting requires audible whisper; silence or noise affects audibility.</li><li>Instant Casting: Requires a Turn of chanting, no Defense, limited movement.</li><li>Extended Casting: Requires 30 mins of chanting prior to casting.</li><li>Atlantean Runes can extend spell duration by +1, if inscribed on targets.</li><li>Runes must be handmade, not pre-made; don't affect lasting/concentration spells.</li><li>Mages with High Speech recognize runes.</li><li>Rune removal makes spell inert; redoing rune reactivates spell.</li><li>Action for inscribing: Instant or Extended</li><li>Dice Pool for inscribing: Dexterity + Crafts Skill</li></ul>",
       "source": "M:tA p84"
     },
     {

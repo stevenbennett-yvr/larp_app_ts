@@ -6,11 +6,15 @@ import { globals } from "../../../globals";
 import { Awakened } from "../data/Awakened";
 import { storage } from '../../../contexts/firebase';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import { RichTextEditor } from '@mantine/rte'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useLocalStorage } from "@mantine/hooks";
 
 //css imports
 import { Paths } from "../data/Path";
 import { Orders } from "../data/Order";
 import { getAuth } from "firebase/auth";
+import { faBookOpen, faBullseye, faMask } from "@fortawesome/free-solid-svg-icons";
 
 type FinalTouchesProps = {
     awakened: Awakened,
@@ -24,6 +28,22 @@ type FinalTouchesProps = {
 const FinalTouches = ({awakened, setAwakened, backStep, nextStep, showInstructions, setShowInstructions}: FinalTouchesProps) => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
   const {currentUser} = getAuth()
+
+  const [richTextValue, setRichTextValue] = useLocalStorage({ 
+    key: "Background",
+    defaultValue: {
+    history: awakened.background.history,
+    goals: awakened.background.goals,
+    description: awakened.background.description,
+    }
+  });
+
+  const handleRichTextChange = (field:string, value:string) => {
+    setRichTextValue({
+        ...richTextValue,
+        [field]: value,
+    });
+  };
 
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
@@ -82,52 +102,40 @@ const FinalTouches = ({awakened, setAwakened, backStep, nextStep, showInstructio
       </Alert>
 
       <Center>
-      <Alert color="gray" title="ST Info" style={{width:"400px"}}>
+      <Alert color="gray" title="ST Info">
 
-          <Textarea
-              label="Character Backstory"
-              placeholder="Autosize with 4 rows max"
-              autosize
-              minRows={2}
-              maxRows={4}
-              value={awakened.background.history}
-              onChange={(event) =>
-                  setAwakened({
-                  ...awakened,
-                  background: { ...awakened.background, history: event.target.value },
-                  })
-              }
-          />
+        <Text fz="lg" color="dimmed">
+            <FontAwesomeIcon icon={faBookOpen} /> History
+        </Text>
+        <RichTextEditor
+            id="rte-history"
+            placeholder="How did your character come to be?"
+            value={richTextValue.history}
+            style={{ padding: '5px' }}
+            onChange={val => handleRichTextChange('history', val)}
+        />
 
-          <Textarea
-              label="Character Goals"
-              placeholder="Autosize with 4 rows max"
-              autosize
-              minRows={2}
-              maxRows={4}
-              value={awakened.background.goals}
-              onChange={(event) =>
-                  setAwakened({
-                  ...awakened,
-                  background: { ...awakened.background, goals: event.target.value },
-                  })
-              }
-          />
+        <Text fz="lg" color="dimmed">
+            <FontAwesomeIcon icon={faBullseye} /> Goals
+        </Text>
+        <RichTextEditor
+            id="rte-goals"
+            placeholder="What does your character want to achieve?"
+            value={richTextValue.goals}
+            style={{ padding: '5px' }}
+            onChange={val => handleRichTextChange('goals', val)}
+        />
 
-          <Textarea
-              label="Character Description"
-              placeholder="Autosize with 4 rows max"
-              autosize
-              minRows={2}
-              maxRows={4}
-              value={awakened.background.description}
-              onChange={(event) =>
-                  setAwakened({
-                  ...awakened,
-                  background: { ...awakened.background, description: event.target.value },
-                  })
-              }
-          />
+        <Text fz="lg" color="dimmed">
+            <FontAwesomeIcon icon={faMask} /> Description
+        </Text>
+        <RichTextEditor
+            id="rte-description"
+            placeholder="What does your character look like?"
+            value={richTextValue.description}
+            style={{ padding: '5px' }}
+            onChange={val => handleRichTextChange('description', val)}
+        />
 
           </Alert>
           </Center>
@@ -274,9 +282,8 @@ const FinalTouches = ({awakened, setAwakened, backStep, nextStep, showInstructio
               </Alert>
               </Center>
               :<></>}
-
-
       </Stack>
+
       <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
           <Group>
               <Button.Group>
@@ -290,7 +297,18 @@ const FinalTouches = ({awakened, setAwakened, backStep, nextStep, showInstructio
                   <Button
                       style={{ margin: "5px" }}
                       color="gray"
-                      onClick={nextStep}
+                      onClick={() => {
+                        setAwakened({
+                          ...awakened,
+                          background: {
+                              ...awakened.background,
+                              history: richTextValue.history,
+                              goals: richTextValue.goals,
+                              description: richTextValue.description,
+                          },
+                      });
+                      nextStep()
+                      }}
                   >
                       Next
                   </Button>

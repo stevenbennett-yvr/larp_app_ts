@@ -48,7 +48,7 @@ export const awakenedSchema = z.object({
     gnosis: gnosisSchema,
     wisdom: wisdomSchema,
 
-    startDate: z.date(),
+    startDate: z.string().datetime(),
     changeLogs: z.object({
     })
 })
@@ -62,7 +62,7 @@ export const getEmptyAwakened = (): Awakened => {
     domain: "",
 
     background: {
-      history: "",
+      history: "<p>Your initial <b>html value</b> or an empty string to init editor without value</p>",
       goals: "",
       description: "",
       profilePic: "https://firebasestorage.googleapis.com/v0/b/larp-app-5a526.appspot.com/o/mage%2FcenteredSkullMTAw.png?alt=media&token=e4d6fccf-42ea-4f1a-9573-13a8b197d059",
@@ -148,7 +148,7 @@ export const getEmptyAwakened = (): Awakened => {
 
     wisdom: {creationPoints: 7, freebiePoints: 0, experiencePoints: 0},
 
-    startDate: new Date(Date.now()),
+    startDate: new Date().toISOString(),
     changeLogs: {},
 
   }
