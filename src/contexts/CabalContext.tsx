@@ -13,7 +13,7 @@ import {
   getDoc
 } from "firebase/firestore";
 import PropTypes from "prop-types";
-import { Cabal } from "../components/tatteredVeil/data/Cabals";
+import { Cabal } from "../data/TatteredVeil/types/Cabals";
 
 type CabalContextValue = {
     getCabalData: (id:string) => Promise<Cabal | null>;

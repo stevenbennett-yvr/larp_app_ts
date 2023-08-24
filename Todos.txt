@@ -1,0 +1,17 @@
+
+
+Project Restructure:
+
+    src: root 
+        assets: images, globals, css
+        components: form components, ui components
+        context: context items, database
+        data: json data and constants
+        pages: different pages.
+        features: seperate major features, types.
+        utils: utility functions (pure functions)
+        layouts:
+        services: service based api calls.
+
+
+

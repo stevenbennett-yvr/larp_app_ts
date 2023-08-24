@@ -12,7 +12,7 @@ import {
   where,
 } from "firebase/firestore";
 import PropTypes from "prop-types";
-import { Awakened } from "../components/tatteredVeil/data/Awakened";
+import { Awakened } from "../data/TatteredVeil/types/Awakened";
 
 type AwakenedContextValue = {
   userAwakenedList: Awakened[];

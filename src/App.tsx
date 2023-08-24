@@ -8,15 +8,15 @@ import { CabalProvider } from './contexts/CabalContext';
 
 import PrivateRoute from './PrivateRoute';
 
-import './App.css';
-import Login from './components/Login'
-import Dashboard from './components/Dashboard';
+import './assets/css/App.css';
+import Login from './pages/Login/Login'
+import Dashboard from './pages/Home/Dashboard';
 import Topbar from './topbar/Topbar';
-import GenerateAwakened from './components/tatteredVeil/CreateAwakened'
-import TatteredVeilVenueDashboard from './components/tatteredVeil/TatteredVeilDashboard'
-import AwakenedPage from './components/tatteredVeil/AwakenedPage';
+import GenerateAwakened from './pages/TatteredVeilGenerator/CreateAwakened'
+import TatteredVeilVenueDashboard from './pages/TatteredVeilDashboard/TatteredVeilDashboard'
+import AwakenedPage from './pages/TatteredVeilEditor/AwakenedPage';
 
-import { globals } from './globals';
+import { globals } from './assets/globals';
 import { UserProvider } from './contexts/UserContext';
 
 

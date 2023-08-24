@@ -1,6 +1,6 @@
 import { Burger, Center, Grid, Stack, Text, Title, Anchor } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { globals } from "../globals";
+import { globals } from "../assets/globals";
 import { HomeButton, LogoutButton } from "./TopbarMenu";
 
 const Topbar = () => {
