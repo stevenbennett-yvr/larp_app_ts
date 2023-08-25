@@ -308,31 +308,33 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
       };
 
       return (
-        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '100px' : '100px'}}>
-        <Stack>
+        <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
+          <Stack mt={"xl"} align="center" spacing="xl">
           <Alert color="gray">
-          <Text mt={"xl"} ta="center" fz="xl" fw={700}>Arcana</Text>
-              {showInstructions && (
-              <div>
-                <p>{`
-                  Arcana are the ten spheres of magical influence. By improving their knowledge of the Arcana, a mage improves their skill at altering reality.  
-                `}</p>
-                <p>{`
-                  A mages Ruling Arcana, and the limits of their understanding, is determined by the Path.
-                `}</p>
-                <p>{`
-                  A mage can learn up to the fifth dot in their Ruling Arcana. Without aid, they can learn up to the fourth dot in other Arcana. Of their Inferior Arcanum, in which a mage is particularly weak, they can only learn the first two dots before needing assistance. Assistance comes from mages of other Paths with ruling Arcnaa of which the user wishes to learn.
-                `}</p>
-                <p>
-                  {`At creation, you gain 2 dots in one Arcanum, 2 dots in a second Arcanum and 1 dot in a third Arcanum. two of these Arcana must be in your character's Path's Ruling Arcana. Finally you gain 1 dot you can place anywhere.`}
-                </p>
-                </div>
-                )}
-          <Center>
-          <Button variant="outline" color="gray" onClick={toggleInstructions}>
-              {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
-          </Button>
-          </Center>
+            <Stack>
+            <Text mt={"xl"} ta="center" fz="xl" fw={700} style={{marginTop:"0px"}}>Arcana</Text>
+                {showInstructions && (
+                <div>
+                  <p>{`
+                    Arcana are the ten spheres of magical influence. By improving their knowledge of the Arcana, a mage improves their skill at altering reality.  
+                  `}</p>
+                  <p>{`
+                    A mages Ruling Arcana, and the limits of their understanding, is determined by the Path.
+                  `}</p>
+                  <p>{`
+                    A mage can learn up to the fifth dot in their Ruling Arcana. Without aid, they can learn up to the fourth dot in other Arcana. Of their Inferior Arcanum, in which a mage is particularly weak, they can only learn the first two dots before needing assistance. Assistance comes from mages of other Paths with ruling Arcnaa of which the user wishes to learn.
+                  `}</p>
+                  <p>
+                    {`At creation, you gain 2 dots in one Arcanum, 2 dots in a second Arcanum and 1 dot in a third Arcanum. two of these Arcana must be in your character's Path's Ruling Arcana. Finally you gain 1 dot you can place anywhere.`}
+                  </p>
+                  </div>
+                  )}
+            <Center>
+            <Button variant="outline" color="gray" onClick={toggleInstructions}>
+                {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+            </Button>
+            </Center>
+          </Stack>
           </Alert>
             <Grid columns={isPhoneScreen? 4 : 5} grow m={0}>
                 {
@@ -346,7 +348,8 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
             </Grid>
             {countArcanaWithCreationPoints() > 0 || showAllRotes? 
             <Alert color="gray">
-              <Text mt={"xl"} ta="center" fz="xl" fw={700}>Rotes</Text>
+              <Stack>
+              <Text mt={"xl"} ta="center" fz="xl" fw={700} style={{marginTop:"0px"}}>Rotes</Text>
                 {showInstructions && (
                   <div>
                     <p>{`Rotes are magical feats simplified into a recipe. They provide an easier and safer way for mages to perform magic compared to improvisational spells. `}</p>
@@ -358,6 +361,7 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
                     {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
                 </Button>
                 </Center>
+              </Stack>
             </Alert>
             : <></> }
               <Center>

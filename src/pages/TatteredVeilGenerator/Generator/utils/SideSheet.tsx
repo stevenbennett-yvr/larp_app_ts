@@ -1,33 +1,17 @@
+//Technical Imports
 import { Navbar, Center, ScrollArea, Stack, Grid, Title, Text } from '@mantine/core';
-import { Awakened } from "../../../../data/TatteredVeil/types/Awakened"
 import { useEffect, useState} from 'react'
+//Asset Imports
 import { globals } from '../../../../assets/globals';
-import { IconTallymark1, IconTallymark2, IconTallymark3, IconTallymark4, IconTallymarks } from "@tabler/icons-react"
+//Data Imports
+import { Awakened } from "../../../../data/TatteredVeil/types/Awakened"
 import { currentAttributeLevel, attributesCreationPointsCheck } from '../../../../data/TatteredVeil/types/Attributes';
 import { currentSkillLevel, SkillCreationPointsCheck } from '../../../../data/TatteredVeil/types/Skills';
 import { currentArcanumLevel, ArcanaKey, checkArcanaCreationPointsTotal } from '../../../../data/TatteredVeil/types/Arcanum';
 import { checkRoteCreationPoints } from '../../../../data/TatteredVeil/types/Rotes';
 import { checkMeritCreationPoints, currentMeritLevel } from '../../../../data/TatteredVeil/types/Merits';
-
-export type TallyProps = {
-    n: number
-}
-
-const Tally = ({ n }: TallyProps) => {
-    const style: React.CSSProperties = {
-        verticalAlign: "middle"
-    }
-
-    switch (n) {
-        case 0: return <></>
-        case 1: return <IconTallymark1 style={style} />
-        case 2: return <IconTallymark2 style={style} />
-        case 3: return <IconTallymark3 style={style} />
-        case 4: return <IconTallymark4 style={style} />
-        case 5: return <IconTallymarks style={style} />
-        default: return <Text color="red">{`Invalid tally number: ${n}`}</Text>
-    }
-}
+//Util Imports
+import Tally from '../../../../utils/talley';
 
 export type SideSheetProps = {
     awakened: Awakened

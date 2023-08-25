@@ -82,12 +82,14 @@ const PathPicker = ({ awakened, setAwakened, nextStep, backStep, showInstruction
       };
 
     return (
-        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '60px' : undefined}}>
-            <Stack>
+        <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
+          <Stack mt={"xl"} align="center" spacing="xl">
                 <Center>
                     <Alert color="gray">
-                    <Text mt={"xl"} ta="center" fz="xl" fw={700}>Path</Text>
-
+                        <Stack>
+                        <Text mt={"xl"} ta="center" fz="xl" fw={700} style={{marginTop:"0px"}}>
+                            Path
+                        </Text>
                         {showInstructions && (
                             <div>
                             <p>{`Mages are not born to magic, they Awaken to it. The process is different for each individual, but it always involves a Journey, a Tower, and the writing of a Name.`}</p>
@@ -96,11 +98,12 @@ const PathPicker = ({ awakened, setAwakened, nextStep, backStep, showInstruction
                             {` represents their magical connection to the supernal world. It is through this connection that the mage draws the laws of that Realm into the mundane world, performing magic.`}</p>
                             </div>
                         )}
-                    <Center>
-                        <Button variant="outline" color="gray" onClick={toggleInstructions}>
-                        {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
-                        </Button>
-                    </Center>
+                        <Center>
+                            <Button variant="outline" color="gray" onClick={toggleInstructions}>
+                            {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+                            </Button>
+                        </Center>
+                        </Stack>
                     </Alert>
                 </Center>
             <Grid grow m={0}>

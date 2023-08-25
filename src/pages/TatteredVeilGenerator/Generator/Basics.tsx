@@ -1,9 +1,11 @@
 import { Alert, Grid, Center, Button, Tooltip, Select, Stack, Text, TextInput } from "@mantine/core"
-import { useState } from "react"
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened";
 import { VirtueName, Virtue, Virtues } from "../../../data/TatteredVeil/types/Virtues"
 import { ViceName, Vice, Vices } from "../../../data/TatteredVeil/types/Vices"
 import { globals } from "../../../assets/globals"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSignature, faLightbulb, faDove, faSyringe } from '@fortawesome/free-solid-svg-icons'
+
 
 type BasicsPickerProps = {
     awakened: Awakened,
@@ -15,13 +17,8 @@ type BasicsPickerProps = {
 
 const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInstructions }: BasicsPickerProps) => {
 
-    const [name, setName] = useState(awakened.name)
-    const [concept, setConcept] = useState(awakened.concept)
-    const [virtue, setVirtue] = useState<VirtueName>(awakened.virtue);
-    const [vice, setVice] = useState<ViceName>(awakened.vice);
-
-    const selectedVice: Vice | undefined = Vices[vice];
-    const selectedVirtue: Virtue | undefined = Virtues[virtue];
+    const selectedVice: Vice | undefined = Vices[awakened.vice];
+    const selectedVirtue: Virtue | undefined = Virtues[awakened.virtue];
     
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
@@ -29,14 +26,15 @@ const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInst
     const toggleInstructions = () => {
         setShowInstructions(!showInstructions);
       };
-
+    
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
             <Stack mt={"xl"} align="center" spacing="xl">
                 
 
             <Alert color="gray">
-                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Basics</Text>
+                <Stack>
+                <Text mt={"xl"} ta="center" fz="xl" fw={700} style={{marginTop:"0px"}}>Basics</Text>
                 {showInstructions && (
                 <div>
                     <p>{`With this, you are building a character to act as your persona in `}<u>Tattered Veil</u>{`. It is more important to craft the character around your vision of their personality, background, and quirks rather than putting together the perfect wizard based on some tactical scheme.`}</p>
@@ -56,26 +54,38 @@ const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInst
                     {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
                 </Button>
                 </Center>
+                </Stack>
             </Alert>
 
                 <Grid columns={globals.isPhoneScreen?4:8}>
                     <Grid.Col span={4}>
                         <Center>
-                        <Tooltip 
+                        <Stack>
+                        <div>
+                        <Tooltip
                             multiline
-                            width={200} 
-                            position="bottom" 
-                            withArrow 
+                            inline
+                            width={200}
+                            withArrow
+                            events={{ hover: true, focus: true, touch: true }}
                             label={`Mages rarely use their given name (its harder to work magic against someone whose given name you don't know), insead adopting a Shadow Name. This is a general moniker or call sign. Feel free to provide one or the other or both below.`}
-                            events={{ hover: false, focus: true, touch: false }}
-                            >
-                                <TextInput
-                                    style={{ width: "300px" }}
-                                    value={name}
-                                    onChange={(event) => setName(event.currentTarget.value)}
-                                    label="Shadow Name"
-                                /> 
+                        >
+                        <TextInput
+                            style={{ width: "300px" }}
+                            value={awakened.name}
+                            label={
+                                <Text
+                                fz="lg"
+                                color="dimmed"
+                                >
+                                <FontAwesomeIcon icon={faSignature} /> Shadow Name
+                                </Text>
+                            }
+                            onChange={(event) => setAwakened({ ...awakened, name:event.currentTarget.value})}
+                        />
                         </Tooltip>
+                        </div>
+                        </Stack>
                         </Center>
                     </Grid.Col>
                     <Grid.Col span={4}>
@@ -83,16 +93,22 @@ const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInst
                         <Tooltip 
                             multiline
                             width={200} 
-                            position="bottom" 
-                            withArrow 
+                            withArrow
                             label={`A concept is generally an adjective and a noun that describes your character...`}
-                            events={{ hover: false, focus: true, touch: true }}
+                            events={{ hover: true, focus: true, touch: true }}
                             >
                                 <TextInput
                                     style={{ width: "300px" }}
-                                    value={concept}
-                                    onChange={(event) => setConcept(event.currentTarget.value)}
-                                    label="Concept"
+                                    value={awakened.concept}
+                                    onChange={(event) => setAwakened({...awakened, concept:event.currentTarget.value})}
+                                    label={
+                                        <Text
+                                        fz="lg"
+                                        color="dimmed"
+                                        >
+                                        <FontAwesomeIcon icon={faLightbulb} /> Concept
+                                        </Text>
+                                    }
                                 />
                         </Tooltip>
                         </Center>
@@ -106,7 +122,7 @@ const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInst
                             position="top" 
                             withArrow 
                             label={`When creating your character, choose one of the seven Virtues detailed here...`}
-                            events={{ hover: false, focus: true, touch: true }}
+                            events={{ hover: true, focus: true, touch: true }}
                             >
                                 <Center>
                                 <Select
@@ -125,9 +141,16 @@ const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInst
                                         }
                                     })}
                                     style={{ width: "300px" }}
-                                    value={virtue}
-                                    onChange={(value: VirtueName | null) => setVirtue(value || "")}
-                                    label="Virtue"
+                                    value={awakened.virtue}
+                                    onChange={(value: VirtueName | null) => setAwakened({...awakened, virtue:value || ""})}
+                                    label={
+                                        <Text
+                                        fz="lg"
+                                        color="dimmed"
+                                        >
+                                        <FontAwesomeIcon icon={faDove} /> Virtue
+                                        </Text>
+                                    }
                                     placeholder='Pick one'
                                     data={[
                                         { value:"Charity", label:"Charity" },
@@ -159,7 +182,7 @@ const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInst
                             position="top"
                             withArrow 
                             label={`When creating your character, choose one of the seven Vices detailed below as her defining one...`}
-                            events={{ hover: false, focus: true, touch: false }}
+                            events={{ hover: true, focus: true, touch: true }}
                             >
                                 <Center>
                                 <Select
@@ -179,9 +202,16 @@ const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInst
                                     })}
                                     dropdownPosition="bottom"
                                     style={{ width: "300px" }}
-                                    value={vice}
-                                    onChange={(value: ViceName | null) => setVice(value || "")}
-                                    label="Vice"
+                                    value={awakened.vice}
+                                    onChange={(value: ViceName | null) => setAwakened({...awakened, vice:value || ""})}
+                                    label={
+                                        <Text
+                                        fz="lg"
+                                        color="dimmed"
+                                        >
+                                        <FontAwesomeIcon icon={faSyringe} /> Vice
+                                        </Text>
+                                    }
                                     placeholder='Pick one'
                                     data={[
                                         { value:"Envy", label:"Envy" },
@@ -213,9 +243,8 @@ const Basics = ({ awakened, setAwakened, nextStep, showInstructions, setShowInst
             <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px"}}>
                 <Button 
                     style={{ margin: "5px" }}
-                    disabled={!name || !concept || !virtue || !vice} 
+                    disabled={!awakened.name || !awakened.concept || !awakened.virtue || !awakened.vice} 
                     color="gray" onClick={() => {
-                    setAwakened({ ...awakened, name, concept, virtue, vice })
                     nextStep()}}
                 >
                 Next

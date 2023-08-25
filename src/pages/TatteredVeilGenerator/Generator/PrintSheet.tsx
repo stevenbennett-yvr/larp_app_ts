@@ -1,20 +1,22 @@
 //technical imports
-import { useState } from "react";
-import { Avatar, useMantineTheme, Alert, Button, Center, Grid, Group, Image, Select, Stack, Table, Text, Accordion } from "@mantine/core";
+import { Avatar, useMantineTheme, Alert, Button, Center, Grid, Group, Image, Stack, Table, Text, Accordion } from "@mantine/core";
+//Asset Imports
 import { globals } from "../../../assets/globals";
 
 //data imports
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened";
 import { Paths } from "../../../data/TatteredVeil/types/Path";
 import { Orders } from "../../../data/TatteredVeil/types/Order";
-import { currentAttributeLevel } from "../../../data/TatteredVeil/types/Attributes";
-import { SkillNames, currentSkillLevel} from "../../../data/TatteredVeil/types/Skills"
-import { arcanaKeySchema, ArcanaKey, arcana, arcanaDescriptions, currentArcanumLevel } from "../../../data/TatteredVeil/types/Arcanum";
+import { ArcanaKey, arcanaDescriptions, currentArcanumLevel } from "../../../data/TatteredVeil/types/Arcanum";
 import { Rote, calculatePool } from "../../../data/TatteredVeil/types/Rotes";
 import { Merit, currentMeritLevel } from "../../../data/TatteredVeil/types/Merits";
 import { currentGnosisLevel, Gnoses } from "../../../data/TatteredVeil/types/Gnosis";
 import { currentWisdomLevel, Wisdoms } from "../../../data/TatteredVeil/types/Wisdom";
 import { currentExperience } from "../../../data/TatteredVeil/types/Experience"
+//Component Imports
+import MageAttributesPrint from "../../../components/TatteredVeil/PrintSheet/MageAttributesPrint";
+import MageSkillsPrint from "../../../components/TatteredVeil/PrintSheet/MageSkillsPrint";
+import MageArcanaPrint from "../../../components/TatteredVeil/PrintSheet/MageArcanaPrint";
 
 type PrintSheetProps = {
     awakened: Awakened,
@@ -78,124 +80,10 @@ const PrintSheet = ({awakened, backStep, submit}: PrintSheetProps) => {
         )
     }
 
-    //ATTRIBUTE SECTION
-
-    const attributeDisplay = Object.entries(awakened.attributes).map(([category, attributesInfo]) => {
-        return (
-        <Grid.Col 
-            span={globals.isPhoneScreen ? 8 : 4} 
-            key={`${category} Attributes`}
-        >
-            <Text fs="italic" fw={700} ta="center">
-            {category.charAt(0).toUpperCase() + category.slice(1)}
-            </Text>
-            <hr />
-            {Object.entries(attributesInfo).map(([attribute]) => {
-            const { level } = currentAttributeLevel(awakened, attribute);
-            return (
-                <Group key={`${attribute} input`}>
-                    <Text>{`${attribute.charAt(0).toUpperCase() + attribute.slice(1)}`}</Text>
-                    {Array.from({ length: level }, (_, index) => (
-                            <span
-                                key={index}
-                            >
-                                ●
-                            </span>
-                        ))}
-                </Group>
-            );
-            })}
-        </Grid.Col>
-        );
-    });
-
-    //SKILL SECTION
-
-    const [specialitiesState] = useState<{ [key in SkillNames]?: string }>({});
-
-    const skillXpInputs = Object.entries(awakened.skills).map(([category, skillsInfo]) => {
-        return (
-        <Grid.Col span={globals.isPhoneScreen ? 8 : 4} key={`${category} Skills`}>
-            <Text fs="italic" fw={700} ta="center">
-            {category.charAt(0).toUpperCase() + category.slice(1)}
-            </Text>
-            <hr />
-            {Object.entries(skillsInfo).map(([skill, skillInfo]) => {
-            const skillName = skill as SkillNames;
-            const { level } = currentSkillLevel(awakened, skill);
-            const specialities = skillInfo.specialities.map((spec) => spec.name);
-            const selectedSpeciality = specialitiesState[skillName];
-
-            return (
-                <Center style={{ paddingBottom: '5px'}}>
-                    <Alert color="gray">
-                        <Stack>
-                        <Group key={`${skill} input`}>
-                            <Text>{`${skillInfo.roteSkill ? '🔷' : '☐'} ${skill.charAt(0).toUpperCase() + skill.slice(1)}`}</Text>
-                            {Array.from({ length: level }, (_, index) => (
-                            <span
-                                key={index}
-                            >
-                                ●
-                            </span>
-                            ))}
-                        </Group>
-                        <Select
-                            variant="unstyled"
-                            size="xs"
-                            data={specialities}
-                            allowDeselect
-                            defaultValue={specialities[0]}
-                            value={selectedSpeciality}
-                            />
-                        </Stack>
-                    </Alert>
-                </Center>
-            );
-            })}
-        </Grid.Col>
-        );
-    });
-      
     // ARCANA SECTION
 
     const theme = useMantineTheme()
-    const rulingArcana = Paths[awakened.path].rulingArcana
-    const otherArcana = arcana.filter((arcanaName) => !rulingArcana.includes(arcanaName));
 
-    const getColorByArcanum = (arcanum: ArcanaKey) => {
-        return arcanaDescriptions[arcanum].color;
-    };
-
-    const arcanumXpInputs = (arcanum: ArcanaKey, c2: string) => {
-        
-        return (
-            <Grid.Col key={arcanum} span={4}> {/* Adjust the span value as needed */}
-              <Center>
-                <Group>
-                  <Image
-                    fit="contain"
-                    withPlaceholder
-                    src={arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey].logo}
-                    height={30}
-                    width={30}
-                    alt="order"
-                    style={{ filter: 'brightness(0)' }}
-                  />
-                  <Text ta="center" color="white">
-                    {arcanaDescriptions[arcanum].name}
-                  </Text>
-                  {Array.from({ length: currentArcanumLevel(awakened, arcanum).level }, (_, index) => (
-                    <span key={index} style={{ color: c2 }}>
-                      ●
-                    </span>
-                  ))}
-                </Group>
-              </Center>
-            </Grid.Col>
-          );
-        
-    }
     
     // ROTES SECTION
 
@@ -465,29 +353,11 @@ const PrintSheet = ({awakened, backStep, submit}: PrintSheetProps) => {
 
                 {topSection()}
 
-                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Attributes</Text>
-                <hr style={{width:"50%"}}/>
-                    <Grid gutter="lg" justify="center">
-                        {attributeDisplay}
-                    </Grid>
+                <MageAttributesPrint awakened={awakened}/>
 
-                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Skills</Text>
-                <hr style={{width:"50%"}}/>
-                    <Grid gutter="lg" justify="center">
-                        {skillXpInputs}
-                    </Grid>
+                <MageSkillsPrint awakened={awakened}/>
 
-                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Arcana</Text>
-                <hr style={{width:"50%"}}/>
-                    <Grid columns={2} grow m={0}>
-                        {
-                            rulingArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => arcanumXpInputs(arcanum, getColorByArcanum(arcanum)))
-                        }{
-                            otherArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => {
-                                return currentArcanumLevel(awakened, arcanum).level > 0 ? arcanumXpInputs(arcanum, getColorByArcanum(arcanum)) : null;
-                            })                        
-                        }
-                    </Grid>
+                <MageArcanaPrint awakened={awakened}/>
                 
                 <Text mt={"xl"} ta="center" fz="xl" fw={700}>Rotes</Text>
                 <hr style={{width:"50%"}}/>

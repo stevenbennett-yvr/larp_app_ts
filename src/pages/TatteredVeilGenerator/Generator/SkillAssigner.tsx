@@ -5,6 +5,8 @@ import { ScrollArea, Indicator, Group, TextInput, Alert, Stack, Text, Select, Nu
 import { globals } from "../../../assets/globals";
 import { useLocalStorage } from "@mantine/hooks";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBrain, faComments, faHandFist } from "@fortawesome/free-solid-svg-icons";
 
 type SkillAssignerProps = {
     awakened: Awakened;
@@ -153,6 +155,11 @@ const SkillAssigner = ({
       const isPhoneScreen = globals.isPhoneScreen
       const isSmallScreen = globals.isSmallScreen
       const [visibilityState, setVisibilityState] = useState<{ [key in SkillNames]?: boolean }>({});
+      const priorityIcons = {
+        mental: faBrain,
+        physical: faHandFist,
+        social: faComments,
+      };
 
       const skillInputs = Object.entries(awakened.skills).map(
         ([category, skillsInfo]) => {
@@ -176,7 +183,8 @@ const SkillAssigner = ({
               span={globals.isPhoneScreen ? "content" : 4}
               key={`${category} Skills`}
             >
-              <Text fs="italic" fw={700} ta="center">
+              <Text fw={500} fz="lg" color="dimmed" ta="center">
+                <FontAwesomeIcon icon={priorityIcons[typedCategory]} /> {' '}
                 {category.charAt(0).toUpperCase() + category.slice(1)} 
                 : 
                 {priority === "primary"? ` 11/${remainingPonits}`: priority === "secondary"? ` 7/${remainingPonits}` : priority === 'tertiary'? ` 4/${remainingPonits}` : ''}
@@ -412,23 +420,25 @@ const SkillAssigner = ({
         };
 
       return (
-        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '60px' : undefined}}>
-        <Stack>
+        <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
+          <Stack mt={"xl"} align="center" spacing="xl">
             <Alert color="gray">
-              <Text mt={"xl"} ta="center" fz="xl" fw={700}>Skills</Text>
+              <Stack>
+              <Text mt={"xl"} ta="center" fz="xl" fw={700} style={{marginTop:"0px"}}>Skills</Text>
+                {showInstructions && (
+                  <div>
+                    <p>{`Character Skills reflect the education and training your character has aquired over their life in addition to whatever other interests they may carry.`}</p>
+                    <p>{`Like Attributes, Skills are broken down into three categoires. Mental, Physical and Social. Note that skills do not begin with one dot in Each, it is possible to be completely untrained in a particular skill.`}</p>
+                    <p>{`The fifth dot in any Skill, like with attributes before, cost two dots to purchase.`}</p>
+                  </div>
+                )}
                 <Center>
                 <Button variant="outline" color="gray" onClick={toggleInstructions}>
                     {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
                 </Button>
                 </Center>
-                    {showInstructions && (
-                      <div>
-                        <p>{`Character Skills reflect the education and training your character has aquired over their life in addition to whatever other interests they may carry.`}</p>
-                        <p>{`Like Attributes, Skills are broken down into three categoires. Mental, Physical and Social. Note that skills do not begin with one dot in Each, it is possible to be completely untrained in a particular skill.`}</p>
-                        <p>{`The fifth dot in any Skill, like with attributes before, cost two dots to purchase.`}</p>
-                      </div>
-                    )}
-              </Alert>
+              </Stack>  
+            </Alert>
 
               <Grid gutter="lg" justify="center">
                 {skillInputs}

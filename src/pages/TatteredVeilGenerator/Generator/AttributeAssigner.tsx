@@ -5,6 +5,8 @@ import { AttributeCategory, AttributeNames, attributeTooltips, handleAttributeCh
 import { Alert, Stack, Text, Select, NumberInput, Grid, Center, Button, Tooltip, Indicator } from "@mantine/core";
 import { globals } from "../../../assets/globals";
 import { useLocalStorage } from "@mantine/hooks";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBrain, faComments, faHandFist } from "@fortawesome/free-solid-svg-icons";
 
 type AttributeAssignerProps = {
   awakened: Awakened;
@@ -151,6 +153,11 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
   };
 
   const [visibilityState, setVisibilityState] = useState<{ [key in AttributeNames]?: boolean }>({});
+  const priorityIcons = {
+    mental: faBrain,
+    physical: faHandFist,
+    social: faComments,
+  };
 
   const attributeInputs = Object.entries(awakened.attributes).map(
     ([category, attributesInfo]) => {
@@ -174,7 +181,8 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
           span={globals.isPhoneScreen ? "content" : 4}
           key={`${category} Attributes`}
         >
-          <Text fs="italic" fw={700} ta="center">
+          <Text fw={500} fz="lg" color="dimmed" ta="center">
+            <FontAwesomeIcon icon={priorityIcons[typedCategory]} /> {' '}
             {category.charAt(0).toUpperCase() + category.slice(1)} 
               : 
             {priority === "primary"? ` 5/${remainingPonits}`: priority === "secondary"? ` 4/${remainingPonits}` : priority === 'tertiary'? ` 3/${remainingPonits}` : ''}
@@ -209,7 +217,7 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
                   label={attributeTooltips[typedCategory][attributeName as keyof typeof attributeTooltips[AttributeCategory]]}
                   position={globals.isPhoneScreen ? "bottom" : "top"}
                   opened={selectedAttribute}
-                  events={{ hover: false, focus: true, touch: false }}
+                  events={{ hover: true, focus: true, touch: true }}
                   >
                 <NumberInput
                 key={`${category}-${attributeName}`}
@@ -259,10 +267,12 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
 
   return (
 
-    <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : undefined, paddingBottom: globals.isPhoneScreen ? '60px' : undefined}}>
-    <Stack>
+    <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
+      <Stack mt={"xl"} align="center" spacing="xl">
+
         <Alert color="gray">
-          <Text mt={"xl"} ta="center" fz="xl" fw={700}>Attributes</Text>
+          <Stack>
+          <Text mt={"xl"} ta="center" fz="xl" fw={700} style={{marginTop:"0px"}}>Attributes</Text>
           {showInstructions && (
             <div>
             <p>{`How would you describe your character's natural capabilities? Are they scheming, sly, or sturdy? Attribute Points define these characteristics mechanically across three categories: Mental, Physical, and Social.`}</p>
@@ -276,6 +286,7 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
             {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
           </Button>
           </Center>
+          </Stack>
         </Alert>
 
         <Grid gutter="lg" justify="center">
