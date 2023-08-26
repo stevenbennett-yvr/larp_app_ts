@@ -1,22 +1,22 @@
 //technical imports
-import { Avatar, useMantineTheme, Alert, Button, Center, Grid, Group, Image, Stack, Table, Text, Accordion } from "@mantine/core";
+import { Avatar, Alert, Button, Center, Grid, Group, Image, Stack, Table, Text } from "@mantine/core";
 //Asset Imports
 import { globals } from "../../../assets/globals";
-
 //data imports
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened";
 import { Paths } from "../../../data/TatteredVeil/types/Path";
 import { Orders } from "../../../data/TatteredVeil/types/Order";
-import { ArcanaKey, arcanaDescriptions, currentArcanumLevel } from "../../../data/TatteredVeil/types/Arcanum";
-import { Rote, calculatePool } from "../../../data/TatteredVeil/types/Rotes";
-import { Merit, currentMeritLevel } from "../../../data/TatteredVeil/types/Merits";
-import { currentGnosisLevel, Gnoses } from "../../../data/TatteredVeil/types/Gnosis";
-import { currentWisdomLevel, Wisdoms } from "../../../data/TatteredVeil/types/Wisdom";
 import { currentExperience } from "../../../data/TatteredVeil/types/Experience"
+import { currentAttributeLevel } from "../../../data/TatteredVeil/types/Attributes";
+import { currentMeritLevel } from "../../../data/TatteredVeil/types/Merits";
+import { currentGnosisLevel } from "../../../data/TatteredVeil/types/Gnosis";
+import { currentWisdomLevel } from "../../../data/TatteredVeil/types/Wisdom";
 //Component Imports
 import MageAttributesPrint from "../../../components/TatteredVeil/PrintSheet/MageAttributesPrint";
 import MageSkillsPrint from "../../../components/TatteredVeil/PrintSheet/MageSkillsPrint";
 import MageArcanaPrint from "../../../components/TatteredVeil/PrintSheet/MageArcanaPrint";
+import MageRotePrint from "../../../components/TatteredVeil/PrintSheet/MageRotePrint";
+import MageMeritPrint from "../../../components/TatteredVeil/PrintSheet/MageMeritPrint";
 
 type PrintSheetProps = {
     awakened: Awakened,
@@ -80,266 +80,58 @@ const PrintSheet = ({awakened, backStep, submit}: PrintSheetProps) => {
         )
     }
 
-    // ARCANA SECTION
 
-    const theme = useMantineTheme()
+    //OHTER SECTION
 
-    
-    // ROTES SECTION
+    const otherSection = () => {
+        const dexterityLevel = currentAttributeLevel(awakened, 'dexterity').level;
+        const strengthLevel = currentAttributeLevel(awakened, 'strength').level;
+        const fleetOfFootMerit = awakened.merits.find(merit => merit.name === 'Fleet of Foot');
+        const fleetOfFootLevel = fleetOfFootMerit ? currentMeritLevel(fleetOfFootMerit).level : 0;
+        const calculatedSpeed = dexterityLevel + strengthLevel + 5 + fleetOfFootLevel;
+        const calculateDefense = Math.min(currentAttributeLevel(awakened, 'dexterity').level, currentAttributeLevel(awakened, 'wits').level)
 
-    const roteInputs = () => {  
-      
-        // Filter out the rotes that also appear in awakened.rotes
-
-        const roteArcanaSet = new Set(Object.values(awakened.rotes).map((rote) => rote.arcanum));
-        const roteArcana = Array.from(roteArcanaSet);
-        roteArcana.sort()
-        let isRoteOutOfOrder = (rote:Rote) => {
-            return rote.level > currentArcanumLevel(awakened, rote.arcanum.toLowerCase() as ArcanaKey).level
-        }
-        const knownCreateRoteAccordian = (arcanum: ArcanaKey) => {
-            const knownRotes = awakened.rotes.filter((rote) => rote.arcanum.toLowerCase() === arcanum.toLowerCase())
-
-            knownRotes.sort((a, b) => {
-                if (a.level !== b.level) {
-                return a.level - b.level;
-                }
-                return a.name.localeCompare(b.name); 
-            });
-            
-            let anyRoteOutOfOrder = knownRotes.some(
-                (rote) => isRoteOutOfOrder(rote)
-            );
-
-            return(
-                <div>
-                <Accordion.Item value={arcanum}>
-                <Accordion.Control icon={<Image height={20} width={20} src={arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey].logo} />} style={{ color: "white", border: anyRoteOutOfOrder? '2px solid red' : 'none', backgroundColor: arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey]?.color ?? "white" }}>{arcanum.toUpperCase()} {anyRoteOutOfOrder? "⚠️": ""}</Accordion.Control>
-                    <Accordion.Panel>
-                    <Table>
-                        <thead>
-                        <tr>
-                            <th>Rote</th>
-                            <th>Description</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            {knownRotes.map((rote) => {
-
-                                return(
-                                    <tr key={`${rote.name} ${rote.arcanum}`} style={{ border: isRoteOutOfOrder(rote) ? '2px solid red' : 'none' }}>
-                                        <td style={{ backgroundColor: arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey]?.color ?? "white" }}>
-                                        <Text fz={globals.smallerFontSize} style={{ color: "white" }}>{rote.name} {isRoteOutOfOrder(rote)? "⚠️": ""}</Text>
-                                        <Image
-                                            fit="contain"
-                                            withPlaceholder
-                                            src={arcanaDescriptions[rote.arcanum.toLowerCase() as ArcanaKey].logo}
-                                            height={30}
-                                            width={30}
-                                            alt="order"
-                                            style={{ filter: "brightness(0)" }}
-                                        />
-                                        <p style={{ color: "white" }}>{rote.arcanum} {rote.level} {rote.otherArcana ? `+ ${rote.otherArcana}` : ""}</p>
-                                        </td>
-                                        <td dangerouslySetInnerHTML={{ __html: `${rote.description} <p>Rote Pool: ${rote.rotePool} ${calculatePool(rote.rotePool, awakened)}</p>` }} />
-                                    </tr>
-                            )})}
-                        </tbody>
-                    </Table>    
-                    </Accordion.Panel>
-                </Accordion.Item>
-                </div>
-            )
-        }
-        return (
-          <div>
-            <Text>Known Rotes</Text>
-            <Accordion>
-                {
-                    (roteArcana as ArcanaKey[]).map((a) => knownCreateRoteAccordian(a))
-                }    
-                </Accordion>
-          </div>
-        );
-    };
-    
-    // MERIT SECTION
-    
-    const meritInput = () => {
-        const customMeritOrder = ["Mental merits", "Physical merits", "Social merits", "Mage merits", "Sanctum merits"];
-
-
-          
-          //merit.description.includes("Character Creation only") || !merit.rating.includes("multi") || 
-
-
-        const meritTypesSet = new Set(Object.values(awakened.merits).map((merit) => merit.type))
-        const meritTypes = Array.from(meritTypesSet)
-        meritTypes.sort((a, b) => {
-            // Compare the order of types defined in customMeritOrder
-            const typeOrderA = customMeritOrder.indexOf(a);
-            const typeOrderB = customMeritOrder.indexOf(b);
-            // Sort by type order first, and then by name if the types are the same
-            if (typeOrderA !== typeOrderB) {
-              return typeOrderA - typeOrderB;
-            } else {
-              return a.localeCompare(b);
-            }
-          });
-          
-
-        const createOwnedMeritAccordian = (type:string) => {
-            let bgc = ""
-            switch (type) {
-                case "Mental merits":
-                    bgc = theme.fn.rgba(theme.colors.blue[8], 0.90)
-                    break;
-                case "Physical merits":
-                    bgc = theme.fn.rgba(theme.colors.red[8], 0.90)
-                    break;
-                case "Social merits":
-                    bgc =theme.fn.rgba(theme.colors.grape[8], 0.90)
-                    break;
-                case "Mage merits":
-                    bgc = theme.fn.rgba(theme.colors.green[9], 0.90)
-                    break;
-                case "Sanctum merits":
-                    bgc = theme.fn.rgba(theme.colors.gray[6], 0.90)
-                    break;
-            }
-    
-        
-            const sortedMerits = awakened.merits.filter((merit) => merit.type.toLowerCase() === type.toLowerCase()).sort((a, b) => a.id.localeCompare(b.id))
-
-            return (
-                <div>
-                    <Accordion.Item value={type}>
-                        <Accordion.Control style={{ color: "white", backgroundColor: bgc }}>{type.toUpperCase()}</Accordion.Control>
-                        <Accordion.Panel>
-                            <Table>
-                            <thead>
-                                <tr>
-                                <th>Merit</th>
-                                <th>Description</th>
-                                <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {sortedMerits.map((merit: Merit) => {
-                                return (
-                                    <tr key={`${merit.name} ${merit.type}`}>
-                                        <td style={{ minWidth: "150px" }}>
-                                        <Text>{merit.name} {currentMeritLevel(merit).level}</Text>
-                                        <Text>{merit.rating}</Text>
-                                        <Text>{merit.prerequisites? `PreReq: ${merit.prerequisites}`: ''}</Text>
-                                        </td>
-                                        <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
-                                    </tr>
-                                )})}
-                            </tbody>
-                            </Table>
-                        </Accordion.Panel>
-                    </Accordion.Item> 
-                </div>
-            )
-        }
+        const fastReflexMerit = awakened.merits.find(merit => merit.name === 'Fast Reflexes');
+        const fastReflexLevel = fastReflexMerit ? currentMeritLevel(fastReflexMerit).level : 0;
+        const calculateInit = currentAttributeLevel(awakened, 'dexterity').level + currentAttributeLevel(awakened, 'composure').level + fastReflexLevel
 
         return (
-            <div>
-                <Text>Owned Merits</Text>
-                <Accordion>
-                    {
-                        (meritTypes).map((a) => createOwnedMeritAccordian(a))
-                    }
-                </Accordion>
-            </div>
-        )
-    }
-
-    // GNOSIS SECTION
-
-    const gnosisInput = () => {
-
-        return (
-            <div>
-                <Center>
-                    <Text>{`Gnosis ${currentGnosisLevel(awakened).level}`}</Text>
-                </Center>
-
-                <Table striped withColumnBorders fontSize="xs">
-                    <thead>
-                        <tr>
-                            <th>
-                                Mana Max/Per Turn  
-                            </th>
-                            <th>
-                                Active Spells
-                            </th>
-                            {Gnoses[currentGnosisLevel(awakened).level].aura!==""?<th>Aura</th>:<></>}
-                            <th>
-                                Paradox Pool
-                            </th>
-                            <th>
-                                Extended Casting Time/Breaks
-                            </th>
-                            {Gnoses[currentGnosisLevel(awakened).level].combinedSpells!==0?<th>Combined Spells</th>:<></>}
-                            <th>Aimed Spell <p/>(Short/Med -2/ Long -4)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{Gnoses[currentGnosisLevel(awakened).level].mana}</td>
-                            <td>{Gnoses[currentGnosisLevel(awakened).level].activeSpells}</td>
-                            {Gnoses[currentGnosisLevel(awakened).level].aura!==""?<td>{Gnoses[currentGnosisLevel(awakened).level].aura}</td>:<></>}
-                            <td>{Gnoses[currentGnosisLevel(awakened).level].paradoxPool}</td>
-                            <td>{Gnoses[currentGnosisLevel(awakened).level].extendedCasting}</td>
-                            {Gnoses[currentGnosisLevel(awakened).level].combinedSpells!==0?<td>{Gnoses[currentGnosisLevel(awakened).level].combinedSpells}</td>:<></>}
-                            <td>{Gnoses[currentGnosisLevel(awakened).level].aimedSpell}</td>
-                        </tr>
-                        <tr>
-                        <td colSpan={8}>Arcana Mastery: {Gnoses[currentGnosisLevel(awakened).level].arcanaMastery.join(" ● ")}</td>
-                        </tr>
-                    </tbody>
-                </Table>
-
-            </div>
-        )
-    }
-
-    // WISDOM Section
-
-    const wisdomInput = () => {
-        return(
-            <div>
-                <Center>
-                    <Text>{`Wisdom ${currentWisdomLevel(awakened).level}`}</Text>
-                </Center>
-
-                <Table striped withColumnBorders fontSize="xs">
-                    <thead>
-                        <tr>
-                            <th>Bedlam Duration</th>
-                            <th>Paradox Duration</th>
-                            <th>Spirit/Abyssal Modifier</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{Wisdoms[currentWisdomLevel(awakened).level].bedlamDuration}</td>
-                            <td>{Wisdoms[currentWisdomLevel(awakened).level].paradoxDuration}</td>
-                            <td>{Wisdoms[currentWisdomLevel(awakened).level].spiritMod}</td>
-                        </tr>
-                        {Object.entries(Wisdoms)
-                            .slice(0, currentWisdomLevel(awakened).level + 1)
-                            .reverse()
-                            .map(([level, wisdom]) => (
-                            <tr key={level}>
-                                <td colSpan={8}><u>Act of Hubris:</u> {wisdom.hubris} (Roll {wisdom.diceRoll} die)</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            </div>
+            <Center>
+            <Table striped withBorder withColumnBorders style={{ maxWidth: "400px" }}>
+            <thead>
+                <tr>
+                <th>Size</th>
+                <th>Speed</th>
+                <th>Defense</th>
+                <th>Initiative</th>
+                <th>Wisdom</th>
+                <th>Gnosis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td style={{ textAlign: 'center' }}>
+                    {awakened.merits.some(merit => merit.name === "Giant") ? 6 : 5}
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                    {calculatedSpeed}
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                    {calculateDefense}
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                    {calculateInit}
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                    {currentWisdomLevel(awakened).level}
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                    {currentGnosisLevel(awakened).level}
+                </td>
+                </tr>
+            </tbody>
+            </Table>
+            </Center>
         )
     }
 
@@ -353,27 +145,17 @@ const PrintSheet = ({awakened, backStep, submit}: PrintSheetProps) => {
 
                 {topSection()}
 
-                <MageAttributesPrint awakened={awakened}/>
+                {otherSection()}
 
-                <MageSkillsPrint awakened={awakened}/>
+                <MageAttributesPrint awakened={awakened} />
 
-                <MageArcanaPrint awakened={awakened}/>
+                <MageSkillsPrint awakened={awakened} />
+
+                <MageArcanaPrint awakened={awakened} />
                 
-                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Rotes</Text>
-                <hr style={{width:"50%"}}/>
-                    {roteInputs()}
+                <MageRotePrint awakened={awakened} />
 
-                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Merits</Text>
-                <hr style={{width:"50%"}}/>
-                    {meritInput()}
-
-                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Gnosis</Text>
-                <hr style={{width:"50%"}}/>
-                    {gnosisInput()}
-
-                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Wisdom</Text>
-                <hr style={{width:"50%"}}/>
-                    {wisdomInput()}
+                <MageMeritPrint awakened={awakened} />
 
                     <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
               <Group>

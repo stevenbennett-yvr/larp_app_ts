@@ -223,9 +223,119 @@ const MageBountyBoard = ({currentUser, userAwakenedList, domainAwakenedList}: Ma
         }
     }
 
-    const displayModal = (selectedBountyIndex:number) => {
+
+    const CommentSection = ({comments, selectedBountyIndex}: any) => {
+        const [editableComments, setEditableComments] = useState(
+          Array(comments.length).fill(false)
+        );
+        const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+        const [commentToDeleteIndex, setCommentToDeleteIndex] = useState(-1);
+
+
+        const toggleEdit = (index: number) => {
+          const newEditableComments = [...editableComments];
+          newEditableComments[index] = !newEditableComments[index];
+          setEditableComments(newEditableComments);
+        };
+      
+        const deleteComment = (index: number, selectedBountyIndex: number) => {
+            const updatedActivities = [...comments];
+            updatedActivities.splice(index, 1);
+
+            handleBountyEdit(selectedBountyIndex, {
+                ...bounties[selectedBountyIndex],
+                activity: updatedActivities,
+            });
+        };
+
+        return (
+          <div>
+            {comments.map((comment: any, index: number) => {
+
+
+            const openDeleteModal = (index: number) => {
+                setDeleteModalOpen(true);
+                setCommentToDeleteIndex(index);
+            };
+
+            const closeDeleteModal = () => {
+                setDeleteModalOpen(false);
+                setCommentToDeleteIndex(-1);
+            };
+
+            const matchingAwakened = domainAwakenedList.find(awakened => awakened.id === comment.owner.id);
+            return (
+            <div>
+              <Group key={index}>
+                <Tooltip label={matchingAwakened?.name} withArrow>
+                <Avatar
+                    src={matchingAwakened?.background.profilePic} radius="xl"  size="sm" style={{ backgroundImage: matchingAwakened? `linear-gradient(to bottom right, ${Paths[matchingAwakened.path]?.color}, ${Orders[matchingAwakened.order]?.color})` : 'none'}}
+                />
+                </Tooltip>
+                <Input.Wrapper
+                  id={`rte-commentDescription-${index}`}
+                  label={`${matchingAwakened?.name} ${moment(comment.timestamp).fromNow()}`}
+                  style={{ width: '94%' }}
+                >
+                    <RichTextEditor
+                      id={`rte-commentDescription-${index}`}
+                      value={comment.description}
+                      style={{ padding: '5px', width: '94%' }}
+                      readOnly={editableComments[index]}
+                    />
+                  <Button
+                    variant="link"
+                    size="sm"
+                    onClick={() => toggleEdit(index)}
+                  >
+                    {comment.owner.uid !== currentUser.uid?<></>:
+                    <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                        <Group>    
+                        {editableComments[index]?
+                            <Button variant='link' size='sm' onClick={() => toggleEdit(index)}>Edit</Button>:
+                            <Button variant='link' size='sm' onClick={() => toggleEdit(index)}>Save</Button>}
+                            <Button variant='link' size='sm' onClick={() => openDeleteModal(index)}>Delete</Button>
+                        </Group>
+                    </div>
+                    }
+                  </Button>
+                </Input.Wrapper>
+            </Group>
+            <Modal opened={deleteModalOpen} onClose={closeDeleteModal}>
+            <Modal.Title>Delete Comment</Modal.Title>
+            <Modal.Body>Are you sure you want to delete this comment?</Modal.Body>
+            <Button onClick={closeDeleteModal}>Cancel</Button>
+            <Button variant="error" onClick={() => deleteComment(commentToDeleteIndex, selectedBountyIndex)}>
+                Delete
+            </Button>
+            </Modal>
+            </div>
+            )}
+            )}
+        </div>
+        );
+      };
+
+    const DisplayModal = ({selectedBountyIndex}:any) => {
 
         const ownerProfile = domainAwakenedList.find(awakened => awakened.id === bounties[selectedBountyIndex].owner.id)
+
+        const [deleteModalOpen, setDeleteModalOpen] = useState(false); 
+
+        const deleteBounty = () => {
+            const updatedBounties = [...bounties];
+            updatedBounties.splice(selectedBountyIndex, 1);
+            setSelectedBountyIndex(null)
+            setBounties(updatedBounties)
+        };
+
+        const openDeleteModal = () => {
+            setDeleteModalOpen(true);
+        };
+
+        const closeDeleteModal = () => {
+            setDeleteModalOpen(false);
+        };
 
         return (
         <Modal opened onClose={() => {setSelectedBountyIndex(null); setShowNewCommentSection(false); setEditTitle(true); setEditDescription(true)}} size="50rem">
@@ -264,7 +374,7 @@ const MageBountyBoard = ({currentUser, userAwakenedList, domainAwakenedList}: Ma
                             <Tooltip label={ownerProfile?.name} withArrow>
                             <Avatar src={ownerProfile?.background.profilePic} radius="xl"  size="sm" style={{ backgroundImage: ownerProfile? `linear-gradient(to bottom right, ${Paths[ownerProfile.path]?.color}, ${Orders[ownerProfile.order]?.color})` : 'none'}}/>
                             </Tooltip>
-                            <Text>Posted: {moment(bounties[selectedBountyIndex].timestamp).fromNow()}</Text>
+                            <Text>Updated: {moment(bounties[selectedBountyIndex].timestamp).fromNow()}</Text>
                         </Group>
                         <RichTextEditor
                             id="rte-editDescription"
@@ -280,7 +390,10 @@ const MageBountyBoard = ({currentUser, userAwakenedList, domainAwakenedList}: Ma
                         />
                         {bounties[selectedBountyIndex].owner.uid !== currentUser.uid?<></>:
                         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                            {editDescription?<Button variant='link' size='sm' onClick={() => setEditDescription(false)}>Edit</Button>:<Button variant='link' size='sm' onClick={() => setEditDescription(true)}>Save</Button>}
+                            {editDescription?
+                                <Button variant='link' size='sm' onClick={() => setEditDescription(false)}>Edit</Button>:
+                                <Button variant='link' size='sm' onClick={() => setEditDescription(true)}>Save</Button>}
+                                <Button variant='link' size='sm' onClick={() => openDeleteModal()}>Delete</Button>
                         </div>
                         }
                         </div>
@@ -288,26 +401,8 @@ const MageBountyBoard = ({currentUser, userAwakenedList, domainAwakenedList}: Ma
                         <Text fz="lg" color="dimmed">
                         <FontAwesomeIcon icon={faList} /> Activity
                         </Text>
-                        {bounties[selectedBountyIndex].activity.map((comment, index) => {
-                        const matchingAwakened = domainAwakenedList.find(awakened => awakened.id === comment.owner.id);
-                        return (
-                            <Group>
-                                <Tooltip label={matchingAwakened?.name} withArrow>
-                                <Avatar
-                                    src={matchingAwakened?.background.profilePic} radius="xl"  size="sm" style={{ backgroundImage: matchingAwakened? `linear-gradient(to bottom right, ${Paths[matchingAwakened.path]?.color}, ${Orders[matchingAwakened.order]?.color})` : 'none'}}
-                                />
-                                </Tooltip>
-                                <Input.Wrapper id="rte-commentDescription" label={`${matchingAwakened?.name} ${moment(comment.timestamp).fromNow()}`} style={{width: '94%'}}>
-                                <RichTextEditor 
-                                    id="rte-commentDescription"
-                                    key={index}
-                                    readOnly
-                                    value={comment.description}
-                                    style={{ padding: '5px', width: '94%' }}
-                                />
-                                </Input.Wrapper>
-                            </Group>
-                        )})}</div>
+                        <CommentSection comments={bounties[selectedBountyIndex].activity} selectedBountyIndex={selectedBountyIndex} />
+                        </div>
                         {showNewCommentSection ? (
                             <div>
                                 <RichTextEditor
@@ -345,6 +440,14 @@ const MageBountyBoard = ({currentUser, userAwakenedList, domainAwakenedList}: Ma
                 </Stack>
             </Modal.Body>
         </Stack>
+        <Modal opened={deleteModalOpen} onClose={closeDeleteModal}>
+            <Modal.Title>Delete Comment</Modal.Title>
+            <Modal.Body>Are you sure you want to delete this comment?</Modal.Body>
+            <Button onClick={closeDeleteModal}>Cancel</Button>
+            <Button variant="error" onClick={() => deleteBounty()}>
+                Delete
+            </Button>
+            </Modal>
     </Modal>
         )
     }
@@ -381,7 +484,7 @@ const MageBountyBoard = ({currentUser, userAwakenedList, domainAwakenedList}: Ma
                     {createBountyModal()}
                     {selectedBountyIndex !== null && 
                     (
-                        displayModal(selectedBountyIndex)
+                        <DisplayModal selectedBountyIndex={selectedBountyIndex} />
                     )}
                 </Center>
             </Navbar>
