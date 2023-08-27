@@ -14,6 +14,7 @@ import CabalTab from "./CharacterTabs/CabalTab";
 import RetireModal from "./CharacterTabs/components/retireModal";
 import { globals } from "../../assets/globals";
 import { logChanges } from "../TatteredVeilGenerator/Generator/utils/Logging";
+import PrintTab from "./CharacterTabs/PrintTab";
 
 const AwakenedPage = () => {
     const { characterId } = useParams();
@@ -162,6 +163,7 @@ const AwakenedPage = () => {
           <Tabs.Tab value="background">Background</Tabs.Tab>
           <Tabs.Tab value="cabal">Cabal</Tabs.Tab>
           <Tabs.Tab value="change log">Change Log</Tabs.Tab>
+          <Tabs.Tab value="print sheet">Print Sheet</Tabs.Tab>
         </Tabs.List>
         </Center>
   
@@ -188,6 +190,13 @@ const AwakenedPage = () => {
           <ChangeLogTab awakened={awakened} />
           :null}
         </Tabs.Panel>
+
+        <Tabs.Panel value="print sheet" pt="xs">
+          {awakened?
+          <PrintTab awakened={awakened} />
+          :null}
+        </Tabs.Panel>
+
 
         <RetireModal
           awakened={awakened}

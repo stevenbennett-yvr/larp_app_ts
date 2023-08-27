@@ -48,7 +48,7 @@ const MageBountyBoard = ({currentUser, userAwakenedList, domainAwakenedList}: Ma
                 </Group>
             </div>
         )
-    );  
+    );
 
     const handleCreateBounty = () => {
         const selectedAwakened = userAwakenedList.find(

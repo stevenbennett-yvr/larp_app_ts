@@ -1,15 +1,14 @@
 //technical imports
-import { Accordion, Table, Textarea, Avatar, Image, Alert, Button, Center, Text, Modal, Group, TextInput, MultiSelect, Stack, Grid } from "@mantine/core";
+import { Accordion, Table, Textarea, Alert, Button, Center, Text, Modal, Group, TextInput, MultiSelect, Stack, Grid } from "@mantine/core";
 
 import React, { useState, forwardRef } from "react";
 import { useCabalDb } from "../../../contexts/CabalContext";
 import { globals } from "../../../assets/globals";
 
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened";
-import { Orders } from "../../../data/TatteredVeil/types/Order";
-import { Paths } from "../../../data/TatteredVeil/types/Path";
-import { CabalMember, Cabal, handleAcceptInvite, handleRejectInvite, handleCreateCabal, handleLeaveCabal } from "../../../data/TatteredVeil/types/Cabals";
+import { Cabal, handleAcceptInvite, handleRejectInvite, handleCreateCabal, handleLeaveCabal } from "../../../data/TatteredVeil/types/Cabals";
 import { currentMeritLevel, Merit } from "../../../data/TatteredVeil/types/Merits";
+import MageCard from "../../../components/TatteredVeil/MageCard";
 
 type CabalEditProps = {
     awakened: Awakened,
@@ -141,78 +140,6 @@ const CabalTab = ({awakened, domainAwakenedList, cabalData, setCabalData, invite
     )
   }
 
-  const memberCard = (character: CabalMember) => {
-    const conStatus = character.merits.filter(
-      (merit) => merit.name === "Status (Consilium)"
-    );
-    return (
-      <Center key={character.id}>
-        <Alert color="gray" style={{ width: '360px' }}>
-          <Grid>
-            <Grid.Col span={3}>
-                <Stack>
-                    <Stack>
-                    <div className="dots-container" style={{ textAlign: 'center', marginBottom: '-10px' }}>
-                      {Array.from({ length: 5 }, (_, index) => (
-                        <span
-                          key={index}
-                          style={{
-                            fontSize: '10px',
-                            color: index + 1 <= conStatus[0]?.freebiePoints ? 'gold' : '',
-                          }}
-                        >
-                          ●
-                        </span>
-                      ))}
-                    </div>
-                  <Center>
-                  <Avatar
-                    src={character.background.profilePic}
-                    size="50px"
-                    radius="xl"
-                    style={{
-                      backgroundImage: `linear-gradient(to bottom right, ${Paths[character.path].color}, ${Orders[character.order].color})`,
-                    }}
-                  />
-
-                  </Center>
-                  </Stack>
-                  <Group>
-                  <Center>
-                    <Image
-                      fit="contain"
-                      height={30}
-                      width={30}
-                      src={Paths[character.path].rune}
-                      style={{
-                        opacity: 0.6, // Adjust the opacity here (0.5 = 50% transparent)
-                      }}
-                    />
-                    <Image
-                      fit="contain"
-                      height={30}
-                      width={30}
-                      src={Orders[character.order].rune}
-                      style={{
-                        opacity: 0.6, // Adjust the opacity here (0.5 = 50% transparent)
-                      }}
-                    />
-                  </Center>
-                </Group>
-                </Stack>
-            </Grid.Col>
-            <Grid.Col span={9}>
-              <Stack>
-                <Group><Text size="sm" weight={700}>{character.name}</Text> <Text size='xs' fs="italic">{character.background.publicTitle}</Text></Group>
-                <Text size="xs">{character.background.publicIntro}</Text>
-              </Stack>
-            </Grid.Col>
-          </Grid>
-        </Alert>
-      </Center>
-    );
-  }
-
   const sharedMerits: Merit[] = cabalData.members
   .flatMap((member) => member.merits.filter((merit) => merit.name.includes("(Shared)")));
 
@@ -337,11 +264,17 @@ const meritsAccordion = () => {
           <Text mt={"xl"} ta="center" fz="xl" fw={700}>Members</Text>
           <Alert color="gray">
             <Grid columns={8}>
-            {cabalData.members.map((character) => (
-              <Grid.Col span={4}>
-              {memberCard(character)}
-              </Grid.Col>
-              ))}
+            {cabalData.members.map((character) => {
+              const matchingAwakened = domainAwakenedList.find(awakened => awakened.id === character.id);
+              if (matchingAwakened) {
+                return (
+                  <Grid.Col span={4} key={matchingAwakened.id}>
+                    <MageCard awakened={matchingAwakened} />
+                  </Grid.Col>
+                );
+              }
+              return null;
+            })}
             </Grid>
           </Alert>
 
