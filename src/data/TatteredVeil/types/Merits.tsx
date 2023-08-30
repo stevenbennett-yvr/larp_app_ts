@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { Awakened } from "./Awakened";
-import { allAttributes, currentAttributeLevel, AttributeNames } from "./Attributes";
-import { SkillNames, allSkills, currentSkillLevel } from "./Skills";
+import { allAttributes, nWoD1eCurrentAttributeLevel, AttributesKey } from "../../nWoD1e/nWoD1eAttributes";
+import { SkillsKey, nWoD1eCurrentSkillLevel, allSkills } from "../../nWoD1e/nWoD1eSkills";
 import { currentGnosisLevel } from "./Gnosis"
 import meritDataJson from '../source/mageMerits.json'
 import { getNumberBelow } from "../../../utils/getNumberBelow";
@@ -223,15 +223,15 @@ export const currentMeritLevel = (meritInfo: Merit) => {
                   if (item === merit.name.toLowerCase() && requiredValue <= currentMeritLevel(merit).level) 
                   { return; }
                 })
-                  if (allAttributes.includes(categoryValue as AttributeNames)) {
-                  if (requiredValue <= currentAttributeLevel(awakened, categoryValue).level) {
+                  if (allAttributes.includes(categoryValue as AttributesKey)) {
+                  if (requiredValue <= nWoD1eCurrentAttributeLevel(awakened, categoryValue as AttributesKey).level) {
                     return;
                   } else {
                     allRequirementsMet = false;
                   }
                 //check skill requirement
-                } if (allSkills.includes(categoryValue as SkillNames)) {
-                  if (requiredValue <= currentSkillLevel(awakened, categoryValue).level) {
+                } if (allSkills.includes(categoryValue as SkillsKey)) {
+                  if (requiredValue <= nWoD1eCurrentSkillLevel(awakened, categoryValue as SkillsKey).level) {
                     return;
                   } else {
                     allRequirementsMet = false;
@@ -260,15 +260,15 @@ export const currentMeritLevel = (meritInfo: Merit) => {
                   const requiredValue = (value.match(/•/g) || []).length + 1;
               
                   // Check attribute requirement
-                  if (allAttributes.includes(categoryValue as AttributeNames)) {
-                    if (requiredValue <= currentAttributeLevel(awakened, categoryValue).level) {
+                  if (allAttributes.includes(categoryValue as AttributesKey)) {
+                    if (requiredValue <= nWoD1eCurrentAttributeLevel(awakened, categoryValue as AttributesKey).level) {
                       reqsMet  = true;
                       break;
                     }
                   }
                   // Check skill requirement
-                  else if (allSkills.includes(categoryValue as SkillNames)) {
-                    if (requiredValue <= currentSkillLevel(awakened, categoryValue).level) {
+                  else if (allSkills.includes(categoryValue as SkillsKey)) {
+                    if (requiredValue <= nWoD1eCurrentSkillLevel(awakened, categoryValue as SkillsKey).level) {
                       reqsMet  = true;
                       break;
                     }

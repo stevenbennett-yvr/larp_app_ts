@@ -1,8 +1,8 @@
 import { z } from 'zod'
 import { Awakened } from './Awakened'
 import { ArcanaKey, currentArcanumLevel, arcana } from './Arcanum'
-import { currentAttributeLevel, allAttributes, AttributeNames } from './Attributes'
-import { currentSkillLevel, allSkills, SkillNames } from './Skills'
+import { AttributesKey, nWoD1eCurrentAttributeLevel, allAttributes } from '../../nWoD1e/nWoD1eAttributes'
+import { nWoD1eCurrentSkillLevel, allSkills, SkillsKey } from '../../nWoD1e/nWoD1eSkills'
 import roteDataJson from '../source/RotesData.json'
 
 export const roteSchema = z.object({
@@ -113,13 +113,15 @@ export const getFilteredRotes = (awakened: Awakened, roteData: Rote[]): Rote[] =
         items.forEach((item) => {
           let orValue = 0;
           if (item === "perception") {
-            orValue = currentAttributeLevel(awakened, 'wits').level + currentAttributeLevel(awakened, 'composure').level
+            orValue = nWoD1eCurrentAttributeLevel(awakened, 'wits').level + nWoD1eCurrentAttributeLevel(awakened, 'composure').level
           }
-          if (allAttributes.includes(item as AttributeNames)) {
-            orValue = Math.max(orValue, currentAttributeLevel(awakened, item).level);
+          if (allAttributes.includes(item as AttributesKey)) {
+            const attribute = item as AttributesKey
+            orValue = Math.max(orValue, nWoD1eCurrentAttributeLevel(awakened, attribute).level);
           }
-          else if (allSkills.includes(item as SkillNames)) {
-            orValue = Math.max(orValue, currentSkillLevel(awakened, item).level + (currentSkillLevel(awakened, item).roteSkill ? 1 : 0));
+          else if (allSkills.includes(item as SkillsKey)) {
+            const skill = item as SkillsKey
+            orValue = Math.max(orValue, nWoD1eCurrentSkillLevel(awakened, skill).level + (nWoD1eCurrentSkillLevel(awakened, skill).roteSkill ? 1 : 0));
           }
           else if (arcana.includes(item as ArcanaKey)) {
             let arcanumName = item as ArcanaKey
@@ -131,13 +133,15 @@ export const getFilteredRotes = (awakened: Awakened, roteData: Rote[]): Rote[] =
       } else {
         let item = variable.toLowerCase();
         if (item === "perception") {
-          pool += currentAttributeLevel(awakened, 'wits').level + currentAttributeLevel(awakened, 'composure').level
+          pool += nWoD1eCurrentAttributeLevel(awakened, 'wits').level + nWoD1eCurrentAttributeLevel(awakened, 'composure').level
         }
-        if (allAttributes.includes(item as AttributeNames)) {
-          pool += currentAttributeLevel(awakened, item).level;
+        if (allAttributes.includes(item as AttributesKey)) {
+          const attribute = item as AttributesKey
+          pool += nWoD1eCurrentAttributeLevel(awakened, attribute).level;
           }
-        else if (allSkills.includes(item as SkillNames)) {
-          pool +=  currentSkillLevel(awakened, item).level + (currentSkillLevel(awakened, item).roteSkill ? 1 : 0)
+        else if (allSkills.includes(item as SkillsKey)) {
+          const skill = item as SkillsKey
+          pool +=  nWoD1eCurrentSkillLevel(awakened, skill).level + (nWoD1eCurrentSkillLevel(awakened, skill).roteSkill ? 1 : 0)
         }
         else if (arcana.includes(item as ArcanaKey)) {
           let arcanumName = item as ArcanaKey

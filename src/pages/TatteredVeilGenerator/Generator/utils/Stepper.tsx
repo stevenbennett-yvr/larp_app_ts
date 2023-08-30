@@ -1,7 +1,7 @@
 import { Aside, Center, ScrollArea, Stepper } from "@mantine/core"
 import { Awakened } from "../../../../data/TatteredVeil/types/Awakened"
-import { attributesCreationPointsCheck } from "../../../../data/TatteredVeil/types/Attributes"
-import { SkillCreationPointsCheck } from "../../../../data/TatteredVeil/types/Skills"
+import { nWoD1eAttributesCheckTotalPoints } from "../../../../data/nWoD1e/nWoD1eAttributes"
+import { nWoD1eSkillsCreationPointsCheck } from "../../../../data/nWoD1e/nWoD1eSkills"
 import { checkArcanaCreationPointsTotal } from "../../../../data/TatteredVeil/types/Arcanum"
 import { checkRoteCreationPoints } from "../../../../data/TatteredVeil/types/Rotes"
 import { checkMeritCreationPoints } from "../../../../data/TatteredVeil/types/Merits"
@@ -26,13 +26,13 @@ const NavBar = ({ selectedStep, setSelectedStep, awakened}: StepperProps) => {
             }
         }
         if (step >= 2) {
-            value = !attributesCreationPointsCheck(awakened)
+            value = !nWoD1eAttributesCheckTotalPoints(awakened)
             if (value) {
                 return value
             }
         }
         if (step >= 3) {
-            value = !SkillCreationPointsCheck(awakened)
+            value = !nWoD1eSkillsCreationPointsCheck(awakened)
 
             if (value) {
                 return value

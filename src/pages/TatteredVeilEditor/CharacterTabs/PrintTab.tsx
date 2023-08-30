@@ -6,7 +6,7 @@ import { globals } from "../../../assets/globals";
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened";
 import { Paths } from "../../../data/TatteredVeil/types/Path";
 import { Orders } from "../../../data/TatteredVeil/types/Order";
-import { currentAttributeLevel } from "../../../data/TatteredVeil/types/Attributes";
+import { nWoD1eCurrentAttributeLevel } from "../../../data/nWoD1e/nWoD1eAttributes";
 import { currentMeritLevel } from "../../../data/TatteredVeil/types/Merits";
 import { currentGnosisLevel } from "../../../data/TatteredVeil/types/Gnosis";
 import { currentWisdomLevel } from "../../../data/TatteredVeil/types/Wisdom";
@@ -81,16 +81,16 @@ const PrintTab = ({awakened}: PrintSheetProps) => {
     //OHTER SECTION
 
     const otherSection = () => {
-        const dexterityLevel = currentAttributeLevel(awakened, 'dexterity').level;
-        const strengthLevel = currentAttributeLevel(awakened, 'strength').level;
+        const dexterityLevel = nWoD1eCurrentAttributeLevel(awakened, 'dexterity').level;
+        const strengthLevel = nWoD1eCurrentAttributeLevel(awakened, 'strength').level;
         const fleetOfFootMerit = awakened.merits.find(merit => merit.name === 'Fleet of Foot');
         const fleetOfFootLevel = fleetOfFootMerit ? currentMeritLevel(fleetOfFootMerit).level : 0;
         const calculatedSpeed = dexterityLevel + strengthLevel + 5 + fleetOfFootLevel;
-        const calculateDefense = Math.min(currentAttributeLevel(awakened, 'dexterity').level, currentAttributeLevel(awakened, 'wits').level)
+        const calculateDefense = Math.min(nWoD1eCurrentAttributeLevel(awakened, 'dexterity').level, nWoD1eCurrentAttributeLevel(awakened, 'wits').level)
 
         const fastReflexMerit = awakened.merits.find(merit => merit.name === 'Fast Reflexes');
         const fastReflexLevel = fastReflexMerit ? currentMeritLevel(fastReflexMerit).level : 0;
-        const calculateInit = currentAttributeLevel(awakened, 'dexterity').level + currentAttributeLevel(awakened, 'composure').level + fastReflexLevel
+        const calculateInit = nWoD1eCurrentAttributeLevel(awakened, 'dexterity').level + nWoD1eCurrentAttributeLevel(awakened, 'composure').level + fastReflexLevel
 
         return (
             <Center>

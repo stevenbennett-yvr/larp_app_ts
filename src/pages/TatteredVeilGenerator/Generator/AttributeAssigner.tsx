@@ -1,7 +1,7 @@
 import z from "zod";
 import { useState } from "react";
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened";
-import { AttributeCategory, AttributeNames, attributeTooltips, handleAttributeChange } from "../../../data/TatteredVeil/types/Attributes";
+import { AttributesKey, nWoD1eHandleAttributeChange, AttributeCategory, nWoD1eAttributeDescriptions } from '../../../data/nWoD1e/nWoD1eAttributes'
 import { Alert, Stack, Text, Select, NumberInput, Grid, Center, Button, Tooltip, Indicator } from "@mantine/core";
 import { globals } from "../../../assets/globals";
 import { useLocalStorage } from "@mantine/hooks";
@@ -61,23 +61,23 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
   }
   });
 
-  const [categoryCounts, setCategoryCounts] = useLocalStorage<Record<AttributeCategory, number>>({ key: "attributeCount", defaultValue: {
+  const [categoryCounts, setCategoryCounts] = useLocalStorage<Record<string, number>>({ key: "attributeCount", defaultValue: {
     mental: 0,
     social: 0,
     physical: 0,
   }});
 
-  const checkAttributesAssigned = (categoryCounts: Record<AttributeCategory, number>): boolean => {
+  const checkAttributesAssigned = (categoryCounts: Record<string, number>): boolean => {
     const values = Object.values(categoryCounts);
     return values.includes(5) && values.includes(4) && values.includes(3);
   };
 
   function changeCreationPoints(
-    category: AttributeCategory,
-    attributeName: AttributeNames,
+    attributeName: AttributesKey,
     newCreationPoints: number,
     prevCreationPoints: number,
   ): void {
+    let category = awakened.attributes[attributeName].category
     let totalPoints = categoryCounts[category];
     if (newCreationPoints === 5 && prevCreationPoints < newCreationPoints) {
       setCategoryCounts({
@@ -96,7 +96,9 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
       });
     }
   
-    handleAttributeChange(
+    console.log(awakened.attributes)
+
+    nWoD1eHandleAttributeChange(
       awakened,
       setAwakened,
       attributeName,
@@ -137,33 +139,42 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
         updatedCategorySettings.tertiary.category = "";
       }
     }
-    const updatedAttributes = {
-      ...awakened.attributes,
-      [category]: Object.fromEntries(
-        Object.entries(awakened.attributes[category]).map(([attribute, value]) => [
-          attribute,
-          { ...value, creationPoints: 1 },
-        ])
-      ),
-    };
+
+    const updatedAttributes = awakened.attributes;
+
+    for (const [attribute, value] of Object.entries(awakened.attributes)) {
+      if (value.category === category) {
+        updatedAttributes[attribute as AttributesKey] = {
+          ...value,
+          creationPoints: 1,
+          experiencePoints: 0,
+        };
+      } else {
+        updatedAttributes[attribute as AttributesKey] = value;
+      }
+    }
+
     const updatedAwakened = { ...awakened, attributes: updatedAttributes };
+    console.log(updatedAwakened)
     setAwakened(updatedAwakened);
     setCategoryCounts({ ...categoryCounts, [category]: 0 });
     setCategorySettings(updatedCategorySettings);
   };
 
-  const [visibilityState, setVisibilityState] = useState<{ [key in AttributeNames]?: boolean }>({});
+  const [visibilityState, setVisibilityState] = useState<{ [key in AttributesKey]?: boolean }>({});
   const priorityIcons = {
     mental: faBrain,
     physical: faHandFist,
     social: faComments,
   };
 
-  const attributeInputs = Object.entries(awakened.attributes).map(
-    ([category, attributesInfo]) => {
-      const typedCategory = category as AttributeCategory;
+  console.log(awakened.attributes)
+
+  const attributeCategories = ['mental', 'physical', 'social']
+  const attributeInputs = attributeCategories.map(category => {
+      let typedCategory = category as AttributeCategory
       const { priority, points } = getCategorySettings(typedCategory);
-      const categoryCount = categoryCounts[typedCategory];
+      const categoryCount = categoryCounts[category];
       const remainingPonits = points - categoryCount;
 
       const isPrimarySelected = Object.values(categorySettings).some(
@@ -175,7 +186,7 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
       const isTertiarySelected = Object.values(categorySettings).some(
         (setting) => setting.priority === "tertiary" && setting.category !== ""
       );
-      
+
       return (
         <Grid.Col
           span={globals.isPhoneScreen ? "content" : 4}
@@ -183,7 +194,7 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
         >
           <Text fw={500} fz="lg" color="dimmed" ta="center">
             <FontAwesomeIcon icon={priorityIcons[typedCategory]} /> {' '}
-            {category.charAt(0).toUpperCase() + category.slice(1)} 
+            {typedCategory.charAt(0).toUpperCase() + typedCategory.slice(1)} 
               : 
             {priority === "primary"? ` 5/${remainingPonits}`: priority === "secondary"? ` 4/${remainingPonits}` : priority === 'tertiary'? ` 3/${remainingPonits}` : ''}
           </Text>
@@ -202,56 +213,59 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
           />
           </Indicator>
           <hr/>
-          {Object.entries(attributesInfo).map(([attribute, attributeInfo]) => {
-          const attributeName = attribute as AttributeNames;
-          const selectedAttribute = visibilityState[attributeName];
-          return (
-              <div
-              key={`${attribute} input`}
-              >
-                <Tooltip
-                  multiline
-                  width={220}
-                  withArrow
-                  transitionProps={{ duration: 200 }}
-                  label={attributeTooltips[typedCategory][attributeName as keyof typeof attributeTooltips[AttributeCategory]]}
-                  position={globals.isPhoneScreen ? "bottom" : "top"}
-                  opened={selectedAttribute}
-                  events={{ hover: true, focus: true, touch: true }}
-                  >
-                <NumberInput
-                key={`${category}-${attributeName}`}
-                label={`${attribute.charAt(0).toUpperCase() + attribute.slice(1)}`}
-                min={
-                  1
-                }
-                max={remainingPonits <= 0 ? attributeInfo.creationPoints : remainingPonits === 1 && attributeInfo.creationPoints === 4 ? 4 : 5}
-                value={attributeInfo.creationPoints}
-                onChange={(val: number) =>
-                  changeCreationPoints(
-                    typedCategory,
-                    attributeName,
-                    val,
-                    attributeInfo.creationPoints
-                  )
-                }
-                onClick={() => {
-                  setVisibilityState((prevState) => ({
-                    ...prevState,
-                    [attributeName]: true,
-                  }));
-              }}
-                onBlur={() => {
-                  setVisibilityState((prevState) => ({
-                    ...prevState,
-                    [attributeName]: false, 
-                  }));
-              }} 
+          {Object.entries(awakened.attributes).map(([attribute, attributeInfo]) => {
+            const typedAttribute = attribute as AttributesKey
+            const selectedAttribute = visibilityState[typedAttribute];
+            if (attributeInfo.category === category) {
+            return (
+                <div
+                key={`${attribute} input`}
+                >
+                  <Tooltip
+                    multiline
+                    width={220}
+                    withArrow
+                    transitionProps={{ duration: 200 }}
+                    label={nWoD1eAttributeDescriptions[typedAttribute]}
+                    position={globals.isPhoneScreen ? "bottom" : "top"}
+                    opened={selectedAttribute}
+                    events={{ hover: true, focus: true, touch: true }}
+                    >
+                  <NumberInput
+                  key={`${category}-${attribute}`}
+                  label={`${attribute.charAt(0).toUpperCase() + attribute.slice(1)}`}
+                  min={
+                    1
+                  }
+                  max={remainingPonits <= 0 ? attributeInfo.creationPoints : remainingPonits === 1 && attributeInfo.creationPoints === 4 ? 4 : 5}
+                  value={attributeInfo.creationPoints}
+                  onChange={(val: number) =>
+                    changeCreationPoints(
+                      typedAttribute,
+                      val,
+                      attributeInfo.creationPoints
+                      )
+                  }
+                  onClick={() => {
+                    setVisibilityState((prevState) => ({
+                      ...prevState,
+                      [typedAttribute]: true,
+                    }));
+                }}
+                  onBlur={() => {
+                    setVisibilityState((prevState) => ({
+                      ...prevState,
+                      [typedAttribute]: false, 
+                    }));
+                }} 
 
-              />
-              </Tooltip>
-              </div>
-            );
+                />
+                </Tooltip>
+                </div>
+              )}
+              else {
+                return null
+              };
           })}
         </Grid.Col>
       );

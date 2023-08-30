@@ -45,12 +45,9 @@ import { Awakened } from "./Awakened";
 
       export const attributeExperience = (awakened: Awakened): number => {
         let attributeXp = 0;
-        Object.entries(awakened.attributes).map(([, attributesInfo]) => {
-            Object.entries(attributesInfo).map(([, attributeInfo]) => {
-                attributeXp += attributeInfo.experiencePoints;
-                return null; // Explicit return statement (can return any value, even null)
-            });
-            return null; // Explicit return statement (can return any value, even null)
+        Object.entries(awakened.attributes).map(([, attributeInfo]) => {
+            attributeXp += attributeInfo.experiencePoints;
+            return null;
         });
         return attributeXp;
     };
@@ -58,25 +55,19 @@ import { Awakened } from "./Awakened";
 
     export const skillExperience = (awakened: Awakened): number => {
         let skillXp = 0;
-        Object.entries(awakened.skills).map(([, skillsInfo]) => {
-            Object.entries(skillsInfo).map(([, skillInfo]) => {
+            Object.entries(awakened.skills).map(([, skillInfo]) => {
                 skillXp += skillInfo.experiencePoints;
                 return null; // Explicit return statement (can return any value, even null)
             });
-            return null; // Explicit return statement (can return any value, even null)
-        });
         return skillXp;
     };
 
     export const specialityExperience = (awakened: Awakened): number => {
         let specialityXp = 0;
-        Object.entries(awakened.skills).map(([, skillsInfo]) => {
-            Object.entries(skillsInfo).map(([, skillInfo]) => {
-                skillInfo.specialities.forEach((speciality) =>
-                specialityXp += speciality.experiencePoints
-                )
-                return null;
-            });
+        Object.entries(awakened.skills).map(([, skillInfo]) => {
+            skillInfo.specialities.forEach((speciality) =>
+            specialityXp += speciality.experiencePoints
+            )
             return null;
         });
         return specialityXp;

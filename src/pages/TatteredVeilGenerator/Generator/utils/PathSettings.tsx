@@ -47,8 +47,8 @@ const PathSettings = ({ awakened, setAwakened, path }: PathSettingsProps) => {
     const composureIncrement = Paths[path].resistanceAttribute === "Composure" ? 1 : 0;
     const resolveIncrement = Paths[path].resistanceAttribute === "Resolve" ? 1 : 0;
   
-    attributes["mental"]["resolve"].freebiePoints = resolveIncrement;
-    attributes["social"]["composure"].freebiePoints = composureIncrement;
+    attributes["resolve"].freebiePoints = resolveIncrement;
+    attributes["composure"].freebiePoints = composureIncrement;
   
     setAwakened({ ...awakened, arcana: updatedArcana})
   

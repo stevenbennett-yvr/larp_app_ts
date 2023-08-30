@@ -1,6 +1,6 @@
 import z from "zod";
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened";
-import { addSpeciality, removeSpeciality, skillSelect, SkillCategory, SkillNames, skillTooltips, handleSkillChange, Speciality, getSkillCategory, Skill, Skills } from "../../../data/TatteredVeil/types/Skills";
+import { skillSelect, SkillCategory, SkillsKey, nWoD1eHandleSkillChange, nWoD1eSkillDescriptions, nWoD1eAddSpeciality, nWoD1eRemoveSpeciality } from "../../../data/nWoD1e/nWoD1eSkills";
 import { ScrollArea, Indicator, Group, TextInput, Alert, Stack, Text, Select, NumberInput, Grid, Center, Button, Tooltip, Modal } from "@mantine/core";
 import { globals } from "../../../assets/globals";
 import { useLocalStorage } from "@mantine/hooks";
@@ -66,24 +66,24 @@ const SkillAssigner = ({
   }
   });
 
-  const [categoryCounts, setCategoryCounts] = useLocalStorage<Record<SkillCategory, number>>({ key: "skillCount", defaultValue: {
+  const [categoryCounts, setCategoryCounts] = useLocalStorage<Record<string, number>>({ key: "skillCount", defaultValue: {
     mental: 0,
     social: 0,
     physical: 0,
   }});
 
-    const checkSkillsAssigned = (categoryCounts: Record<SkillCategory, number>): boolean => {
+    const checkSkillsAssigned = (categoryCounts: Record<string, number>): boolean => {
         const values = Object.values(categoryCounts);
         return values.includes(11) && values.includes(7) && values.includes(4);
       };
 
 
     function changeCreationPoints(
-        category: SkillCategory,
-        skillName: SkillNames,
+        skillName: SkillsKey,
         newCreationPoints: number,
         prevCreationPoints: number,
     ): void {
+      let category = awakened.skills[skillName].category
         let totalPoints = categoryCounts[category];
         if (newCreationPoints === 5 && prevCreationPoints < newCreationPoints) {
             setCategoryCounts({
@@ -102,7 +102,7 @@ const SkillAssigner = ({
             });
           }
 
-          handleSkillChange(awakened, setAwakened, skillName, "creationPoints", newCreationPoints)
+          nWoD1eHandleSkillChange(awakened, setAwakened, skillName, "creationPoints", newCreationPoints)
     }
 
     const getCategorySettings = (
@@ -137,15 +137,19 @@ const SkillAssigner = ({
             updatedCategorySettings.tertiary.category = "";
           }
         }
-    const updatedSkills = {
-      ...awakened.skills,
-      [category]: Object.fromEntries(
-        Object.entries(awakened.skills[category]).map(([skill, value]) => [
-          skill,
-          { ...value, creationPoints: 0 },
-        ])
-      ),
-    };
+        const updatedSkills = awakened.skills;
+
+        for (const [skill, value] of Object.entries(awakened.skills)) {
+          if (value.category === category) {
+            updatedSkills[skill as SkillsKey] = {
+              ...value,
+              creationPoints: 0,
+              experiencePoints: 0,
+            };
+          } else {
+            updatedSkills[skill as SkillsKey] = value;
+          }
+        }
         const updatedAwakened = { ...awakened, skills: updatedSkills };
         setAwakened(updatedAwakened);
         setCategoryCounts({ ...categoryCounts, [category]: 0 });
@@ -154,15 +158,15 @@ const SkillAssigner = ({
     
       const isPhoneScreen = globals.isPhoneScreen
       const isSmallScreen = globals.isSmallScreen
-      const [visibilityState, setVisibilityState] = useState<{ [key in SkillNames]?: boolean }>({});
+      const [visibilityState, setVisibilityState] = useState<{ [key in SkillsKey]?: boolean }>({});
       const priorityIcons = {
         mental: faBrain,
         physical: faHandFist,
         social: faComments,
       };
 
-      const skillInputs = Object.entries(awakened.skills).map(
-        ([category, skillsInfo]) => {
+      const skillsCategories = ['mental', 'physical', 'social']
+      const skillInputs = skillsCategories.map(category => {
           const typedCategory = category as SkillCategory;
           const { priority, points } = getCategorySettings(typedCategory);
           const categoryCount = categoryCounts[typedCategory];
@@ -204,10 +208,10 @@ const SkillAssigner = ({
               />
               </Indicator>
               <hr/>
-              {Object.entries(skillsInfo).map(([skill, skillsInfo]) => {
-                const skillName = skill as SkillNames;
+              {Object.entries(awakened.skills).map(([skill, skillsInfo]) => {
+                const skillName = skill as SkillsKey;
                 const selectedSkill = visibilityState[skillName];
-      
+                if (skillsInfo.category === category) {
                 return (
                   <div
                   key={`${skill} input`}
@@ -217,7 +221,7 @@ const SkillAssigner = ({
                       width={220}
                       withArrow
                       transitionProps={{ duration: 200 }}
-                      label={skillTooltips[typedCategory][skillName as keyof typeof skillTooltips[SkillCategory]]}
+                      label={nWoD1eSkillDescriptions[skillName]}
                       opened={selectedSkill}
                       events={{ hover: false, focus: true, touch: false }}
                       position={globals.isPhoneScreen ? "bottom" : "top"}
@@ -232,7 +236,6 @@ const SkillAssigner = ({
                     value={skillsInfo.creationPoints}
                     onChange={(val: number) =>
                       changeCreationPoints(
-                        typedCategory,
                         skillName,
                         val,
                         skillsInfo.creationPoints
@@ -253,37 +256,38 @@ const SkillAssigner = ({
                   />
                   </Tooltip>
                   </div>
-                );
+                )}
+                else {
+                  return null
+                };
               })}
             </Grid.Col>
           );
         }
       );
     
-      const skillsArray: { skill: SkillNames; creationPoints: number }[] = [];
+      const skillsArray: { skill: SkillsKey; creationPoints: number }[] = [];
 
-      Object.entries(awakened.skills).forEach(([,categorySkills]) => {
-          Object.entries(categorySkills).forEach(([skill, currentSkill]) => {
+      Object.entries(awakened.skills).forEach(([skill, currentSkill]) => {
             skillsArray.push({
-              skill: skill as SkillNames,
+              skill: skill as SkillsKey,
               creationPoints: currentSkill.creationPoints,
             });
-          });
         });
 
       skillsArray.sort((a, b) => b.creationPoints - a.creationPoints);
 
       const topSkills = skillsArray.slice(0, 3);
 
-      const [firstSkill, setFirstSkill] = useLocalStorage<SkillNames>({
+      const [firstSkill, setFirstSkill] = useLocalStorage<SkillsKey>({
         key: "firstSkill",
         defaultValue: topSkills[0].skill,
       });
-      const [secondSkill, setSecondSkill] = useLocalStorage<SkillNames>({
+      const [secondSkill, setSecondSkill] = useLocalStorage<SkillsKey>({
         key: "secondSkill",
         defaultValue: topSkills[1].skill,
       });
-      const [thirdSkill, setThirdSkill] = useLocalStorage<SkillNames>({
+      const [thirdSkill, setThirdSkill] = useLocalStorage<SkillsKey>({
         key: "thirdSkill",
         defaultValue: topSkills[2].skill,
       });        
@@ -295,13 +299,12 @@ const SkillAssigner = ({
         const specialityInput = () => {
           
           const isSpecialityAdded = (
-            skillName: SkillNames,
+            skillName: SkillsKey,
             specialityName: string,
           ) => {
             const skills = awakened.skills
-            const skillCategory: SkillCategory = getSkillCategory(skillName);
-            let specialities = (skills[skillCategory as keyof Skills][skillName as keyof Skills[SkillCategory]] as Skill).specialities
-            return specialities.some((speciality: Speciality) => speciality.name === specialityName);
+            let specialities = (skills[skillName].specialities)
+            return specialities.some((speciality) => speciality.name === specialityName);
           };
 
           const inputW = globals.isPhoneScreen ? 140 : 200
@@ -328,7 +331,7 @@ const SkillAssigner = ({
                         dropdownPosition="bottom"
                         data={skillSelect}
                         value={firstSkill}
-                        onChange={(value) => setFirstSkill(value as SkillNames)}
+                        onChange={(value) => setFirstSkill(value as SkillsKey)}
                         maxDropdownHeight={150}
                         disabled={isSpecialityAdded(firstSkill, firstSpecialityName)}
                         />
@@ -339,9 +342,9 @@ const SkillAssigner = ({
                         onChange={(event) => setFirstSpecialityName(event.currentTarget.value)}
                       />
                       {isSpecialityAdded(firstSkill, firstSpecialityName) ? (
-                          <Button color="red" onClick={() => {removeSpeciality(awakened, setAwakened, firstSkill, firstSpecialityName); setFirstSpecialityName("")}}>Remove Speciality</Button>
+                          <Button color="red" onClick={() => {nWoD1eRemoveSpeciality(awakened, setAwakened, firstSkill, firstSpecialityName); setFirstSpecialityName("")}}>Remove Speciality</Button>
                       ) : (
-                          <Button disabled={firstSpecialityName === ""} onClick={() => addSpeciality(awakened, setAwakened, firstSkill, firstSpecialityName, "creationPoints")}>Add Speciality</Button>
+                          <Button disabled={firstSpecialityName === ""} onClick={() => nWoD1eAddSpeciality(awakened, setAwakened, firstSkill, firstSpecialityName, "creationPoints")}>Add Speciality</Button>
                       )}
                   </Group>
                   <Group>
@@ -351,7 +354,7 @@ const SkillAssigner = ({
                           dropdownPosition="bottom"
                           data={skillSelect}
                           value={secondSkill}
-                          onChange={(value) => setSecondSkill(value as SkillNames)}
+                          onChange={(value) => setSecondSkill(value as SkillsKey)}
                           maxDropdownHeight={150}
                           disabled={isSpecialityAdded(secondSkill, secondSpecialityName)}
                           />
@@ -362,9 +365,9 @@ const SkillAssigner = ({
                         onChange={(event) => setSecondSpecialityName(event.currentTarget.value)}
                       />
                       {isSpecialityAdded(secondSkill, secondSpecialityName) ? (
-                          <Button color="red" onClick={() => {removeSpeciality(awakened, setAwakened, secondSkill, secondSpecialityName); setSecondSpecialityName("")}}>Remove Speciality</Button>
+                          <Button color="red" onClick={() => {nWoD1eRemoveSpeciality(awakened, setAwakened, secondSkill, secondSpecialityName); setSecondSpecialityName("")}}>Remove Speciality</Button>
                       ) : (
-                          <Button disabled={secondSpecialityName === ""} onClick={() => addSpeciality(awakened, setAwakened, secondSkill, secondSpecialityName, "creationPoints")}>Add Speciality</Button>
+                          <Button disabled={secondSpecialityName === ""} onClick={() => nWoD1eAddSpeciality(awakened, setAwakened, secondSkill, secondSpecialityName, "creationPoints")}>Add Speciality</Button>
                       )}
                   </Group>
                   <Group>
@@ -374,7 +377,7 @@ const SkillAssigner = ({
                     dropdownPosition="bottom"
                     data={skillSelect}
                     value={thirdSkill}
-                    onChange={(value) => setThirdSkill(value as SkillNames)}
+                    onChange={(value) => setThirdSkill(value as SkillsKey)}
                     maxDropdownHeight={150}
                     disabled={isSpecialityAdded(thirdSkill, thirdSpecialityName)}
                     />
@@ -385,9 +388,9 @@ const SkillAssigner = ({
                         onChange={(event) => setThirdSpecialityName(event.currentTarget.value)}
                       />
                       {isSpecialityAdded(thirdSkill, thirdSpecialityName) ? (
-                          <Button color="red" onClick={() => {removeSpeciality(awakened, setAwakened, thirdSkill, thirdSpecialityName); setThirdSpecialityName("")}}>Remove Speciality</Button>
+                          <Button color="red" onClick={() => {nWoD1eRemoveSpeciality(awakened, setAwakened, thirdSkill, thirdSpecialityName); setThirdSpecialityName("")}}>Remove Speciality</Button>
                       ) : (
-                          <Button disabled={thirdSpecialityName === ""} onClick={() => addSpeciality(awakened, setAwakened, thirdSkill, thirdSpecialityName, "creationPoints")}>Add Speciality</Button>
+                          <Button disabled={thirdSpecialityName === ""} onClick={() => nWoD1eAddSpeciality(awakened, setAwakened, thirdSkill, thirdSpecialityName, "creationPoints")}>Add Speciality</Button>
                       )}
                   </Group>
                   <Button.Group>      

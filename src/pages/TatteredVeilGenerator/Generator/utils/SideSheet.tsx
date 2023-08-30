@@ -5,8 +5,8 @@ import { useEffect, useState} from 'react'
 import { globals } from '../../../../assets/globals';
 //Data Imports
 import { Awakened } from "../../../../data/TatteredVeil/types/Awakened"
-import { currentAttributeLevel, attributesCreationPointsCheck } from '../../../../data/TatteredVeil/types/Attributes';
-import { currentSkillLevel, SkillCreationPointsCheck } from '../../../../data/TatteredVeil/types/Skills';
+import { nWoD1eCurrentAttributeLevel, nWoD1eAttributesCheckTotalPoints, AttributesKey } from '../../../../data/nWoD1e/nWoD1eAttributes';
+import { SkillsKey, nWoD1eCurrentSkillLevel, nWoD1eSkillsCreationPointsCheck } from '../../../../data/nWoD1e/nWoD1eSkills';
 import { currentArcanumLevel, ArcanaKey, checkArcanaCreationPointsTotal } from '../../../../data/TatteredVeil/types/Arcanum';
 import { checkRoteCreationPoints } from '../../../../data/TatteredVeil/types/Rotes';
 import { checkMeritCreationPoints, currentMeritLevel } from '../../../../data/TatteredVeil/types/Merits';
@@ -30,26 +30,29 @@ const SideSheet = ({awakened}: SideSheetProps) => {
         <ScrollArea h={height - 60} type="never">
             <Stack style={{paddingBottom:"50px"}}>
                 <Stack>
-                    {attributesCreationPointsCheck(awakened)?
+                    {nWoD1eAttributesCheckTotalPoints(awakened)?
                     <>
                         <Title order={3}>Attributes</Title>
                             <Grid>
                                 <Grid.Col span={4}>
                                     <Title order={4}>Mental</Title>
                                     {["intelligence", "wits", "resolve"].map((attribute) => {
-                                        return (<Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: <Tally n={currentAttributeLevel(awakened, attribute).level} /></Text>)
+                                        const attributeName = attribute as AttributesKey
+                                        return (<Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: <Tally n={nWoD1eCurrentAttributeLevel(awakened, attributeName).level} /></Text>)
                                     })}
                                 </Grid.Col>
                                 <Grid.Col span={4}>
                                     <Title order={4}>Physical</Title>
                                     {["strength", "dexterity", "stamina"].map((attribute) => {
-                                        return (<Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: <Tally n={currentAttributeLevel(awakened, attribute).level} /></Text>)
+                                        const attributeName = attribute as AttributesKey
+                                        return (<Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: <Tally n={nWoD1eCurrentAttributeLevel(awakened, attributeName).level} /></Text>)
                                     })}
                                 </Grid.Col>
                                 <Grid.Col span={4}>
                                     <Title order={4}>Social</Title>
                                     {["presence", "manipulation", "composure"].map((attribute) => {
-                                        return (<Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: <Tally n={currentAttributeLevel(awakened, attribute).level} /></Text>)
+                                        const attributeName = attribute as AttributesKey
+                                        return (<Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: <Tally n={nWoD1eCurrentAttributeLevel(awakened, attributeName).level} /></Text>)
                                     })}
                                 </Grid.Col>
                             </Grid>
@@ -57,26 +60,29 @@ const SideSheet = ({awakened}: SideSheetProps) => {
                     : <></>}
                 </Stack>
                 <Stack>
-                    {SkillCreationPointsCheck(awakened)? 
+                    {nWoD1eSkillsCreationPointsCheck(awakened)? 
                     <>
                     <Title order={3}>Skills</Title>
                     <Grid>
                         <Grid.Col span={4}>
                             <Title order={4}>Mental</Title>
                             {["academics", "computer", "crafts", "investigation", "medicine", "occult", "politics", "science"].map((skill) => {
-                                return (<Text style={textStyle} key={skill}>{skill.slice(0, 4)}: <Tally n={currentSkillLevel(awakened, skill).level} /></Text>)
+                                let skillName = skill as SkillsKey
+                                return (<Text style={textStyle} key={skill}>{skill.slice(0, 4)}: <Tally n={nWoD1eCurrentSkillLevel(awakened, skillName).level} /></Text>)
                             })}
                         </Grid.Col>
                         <Grid.Col span={4}>
                             <Title order={4}>Physical</Title>
                             {["athletics", "brawl", "drive", "firearms", "weaponry", "larceny", "stealth", "survival"].map((skill) => {
-                                return (<Text style={textStyle} key={skill}>{skill.slice(0, 4)}: <Tally n={currentSkillLevel(awakened, skill).level} /></Text>)
+                                let skillName = skill as SkillsKey
+                                return (<Text style={textStyle} key={skill}>{skill.slice(0, 4)}: <Tally n={nWoD1eCurrentSkillLevel(awakened, skillName).level} /></Text>)
                             })}
                         </Grid.Col>
                         <Grid.Col span={4}>
                             <Title order={4}>Social</Title>
                             {["animal_ken", "socialize", "empathy", "intimidation", "expression", "persuasion", "streetwise", "subterfuge"].map((skill) => {
-                                return (<Text style={textStyle} key={skill}>{skill.slice(0, 4)}: <Tally n={currentSkillLevel(awakened, skill).level} /></Text>)
+                                let skillName = skill as SkillsKey
+                                return (<Text style={textStyle} key={skill}>{skill.slice(0, 4)}: <Tally n={nWoD1eCurrentSkillLevel(awakened, skillName).level} /></Text>)
                             })}
                         </Grid.Col>
                     </Grid>

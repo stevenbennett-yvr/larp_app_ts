@@ -1,9 +1,9 @@
 //Technical Imports
-import React from 'react'
-import { Title, Grid, Text, Group, Stack } from '@mantine/core'
+import React from 'react';
+import { Title, Grid, Text, Group, Stack } from '@mantine/core';
 //Util Imports
-import { Awakened } from '../../../data/TatteredVeil/types/Awakened'
-import { currentSkillLevel, SkillNames, getSkillCategory, Skill } from '../../../data/TatteredVeil/types/Skills'
+import { Awakened } from '../../../data/TatteredVeil/types/Awakened';
+import { nWoD1eCurrentSkillLevel, SkillsKey  } from '../../../data/nWoD1e/nWoD1eSkills';
 //Utils Imports
 import Dots from '../../../utils/dots'
 
@@ -19,9 +19,8 @@ const MageSkillsPrint = ({awakened}: MageSkillsPrintProps) => {
 
     const skillSpecialities: any[] = [];
 
-    Object.entries(awakened.skills).map(([,skillsInfo]) => {
-        Object.entries(skillsInfo).map(([skill, skillInfo]) => {
-            const skillName = skill as SkillNames;
+    Object.entries(awakened.skills).map(([skill,skillInfo]) => {
+            const skillName = skill as SkillsKey;
             const specialities = skillInfo.specialities.map((spec) => spec.name);
 
             // Add each speciality to the skillSpecialities array
@@ -29,15 +28,13 @@ const MageSkillsPrint = ({awakened}: MageSkillsPrintProps) => {
                 skillSpecialities.push({
                     skill: skillName,
                     speciality: speciality
-                });
             });
         })
     })
 
-    const isRoteSpecial = (awakened: Awakened, skill: string) => {
-        const skills = awakened.skills as any;
-        const category = getSkillCategory(skill as any) as string;
-        const skillData = skills[category][skill] as Skill; 
+    const isRoteSpecial = (awakened: Awakened, skill: SkillsKey) => {
+        const skills = awakened.skills;
+        const skillData = skills[skill];
         let { roteSkill } = skillData;
         return roteSkill
     }
@@ -50,19 +47,22 @@ const MageSkillsPrint = ({awakened}: MageSkillsPrintProps) => {
         <Grid.Col span={4}>
             <Title order={4}>Mental</Title>
             {["academics", "computer", "crafts", "investigation", "medicine", "occult", "politics", "science"].map((skill) => {
-                return (<Group><Text style={textStyle} key={skill}>{isRoteSpecial(awakened, skill)? '◈': '◇'} {skill.slice(0, 4)}: </Text><Dots n={currentSkillLevel(awakened, skill).level} /></Group>)
+                let skillName = skill as SkillsKey
+                return (<Group><Text style={textStyle} key={skill}>{isRoteSpecial(awakened, skillName)? '◈': '◇'} {skill.slice(0, 4)}: </Text><Dots n={nWoD1eCurrentSkillLevel(awakened, skillName).level} /></Group>)
             })}
         </Grid.Col>
         <Grid.Col span={4}>
             <Title order={4}>Physical</Title>
             {["athletics", "brawl", "drive", "firearms", "weaponry", "larceny", "stealth", "survival"].map((skill) => {
-                return (<Group><Text style={textStyle} key={skill}>{isRoteSpecial(awakened, skill)? '◈': '◇'} {skill.slice(0, 4)}: </Text><Dots n={currentSkillLevel(awakened, skill).level} /></Group>)
+                let skillName = skill as SkillsKey
+                return (<Group><Text style={textStyle} key={skill}>{isRoteSpecial(awakened, skillName)? '◈': '◇'} {skill.slice(0, 4)}: </Text><Dots n={nWoD1eCurrentSkillLevel(awakened, skillName).level} /></Group>)
             })}
         </Grid.Col>
         <Grid.Col span={4}>
             <Title order={4}>Social</Title>
             {["animal_ken", "socialize", "empathy", "intimidation", "expression", "persuasion", "streetwise", "subterfuge"].map((skill) => {
-                return (<Group><Text style={textStyle} key={skill}>{isRoteSpecial(awakened, skill)? '◈': '◇'} {skill.slice(0, 4)}: </Text><Dots n={currentSkillLevel(awakened, skill).level} /></Group>)
+                let skillName = skill as SkillsKey
+                return (<Group><Text style={textStyle} key={skill}>{isRoteSpecial(awakened, skillName)? '◈': '◇'} {skill.slice(0, 4)}: </Text><Dots n={nWoD1eCurrentSkillLevel(awakened, skillName).level} /></Group>)
             })}
         </Grid.Col>
     </Grid>

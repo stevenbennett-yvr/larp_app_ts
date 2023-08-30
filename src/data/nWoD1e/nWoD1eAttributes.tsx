@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import {getNumberBelow} from '../../../utils/getNumberBelow'
+import { getNumberBelow } from '../../utils/getNumberBelow';
 
 export const attributeCategoriesSchema = z.union([
     z.literal('mental'),
@@ -7,12 +7,23 @@ export const attributeCategoriesSchema = z.union([
     z.literal('social'),
 ])
 
+export type AttributeCategory = 'mental' | 'physical' | 'social';
+
+export const attributeTypeSchema = z.union([
+    z.literal('power'),
+    z.literal('finesse'),
+    z.literal('resistance'),
+])
+
 const attributeSchema = z.object({
     creationPoints: z.number().min(1).max(6).int(),
     freebiePoints: z.number().min(0).int(),
     experiencePoints: z.number().min(0).int(),
-    category: attributeCategoriesSchema
+    category: attributeCategoriesSchema,
+    type: attributeTypeSchema
 })
+
+export type nWoD1eAttribute = z.infer<typeof attributeSchema>;
 
 export const attributesSchema = z.object({
     intelligence: attributeSchema,
@@ -28,6 +39,17 @@ export const attributesSchema = z.object({
 export type nWoD1eAttributes = z.infer<typeof attributesSchema>
 export const attributesKeySchema = attributesSchema.keyof()
 export type AttributesKey = z.infer<typeof attributesKeySchema>
+export const allAttributes: AttributesKey[] = [
+    'intelligence',
+    'wits',
+    'resolve',
+    'strength',
+    'dexterity',
+    'stamina',
+    'presence',
+    'manipulation',
+    'composure'
+]
 
 export const nWoD1eAttributeDescriptions: Record<AttributesKey, string> = {
     strength: "Physical might. Sheer bodily power. The capacity to lift objects, move items, hit things and people, and do damage. Strength is a measure of muscle.",
@@ -99,8 +121,8 @@ export const nWoD1eFindMaxAttribute = (
     return max;
   };
 
-  type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
-  export const nWoD1eHandleAttributeChange = (
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
+export const nWoD1eHandleAttributeChange = (
     character: any,
     setCharacter: Function,
     attribute: AttributesKey,
@@ -110,11 +132,13 @@ export const nWoD1eFindMaxAttribute = (
 
     const updatedAttributes = {
         ...character.attributes,
-        attribute: {
+        [attribute]: {
             ...character.attributes[attribute],
             [variableKey]: value
         }
     }
+
+    console.log(updatedAttributes)
 
     const updatedCharacter = {
         ...character,
@@ -124,7 +148,7 @@ export const nWoD1eFindMaxAttribute = (
     setCharacter(updatedCharacter)
   }
 
-  export const nWoD1ehandleXpAttributeChange = (
+export const nWoD1ehandleXpAttributeChange = (
     character: any,
     setCharacter: Function,
     attribute: AttributesKey,
@@ -138,3 +162,43 @@ export const nWoD1eFindMaxAttribute = (
     nWoD1eHandleAttributeChange(character, setCharacter, attribute, "experiencePoints", xp)
     return xp
   }
+
+  export function nWoD1eAttributesCreationPointsCheck(
+    character: any
+  ): Record<string, number> {
+    const totalPointsByCategory: Record<string, number> = {
+        mental: 0,
+        physical: 0,
+        social: 0,
+    };
+    const attributes = character.attributes as nWoD1eAttributes;
+
+    for (const attribute in attributes) {
+        const attributeKey = attribute as AttributesKey
+        const attributeData = attributes[attributeKey]
+        const { category, creationPoints } = attributeData;
+        
+        if (category === 'mental') {
+            totalPointsByCategory.mental += creationPoints;
+        } else if (category === 'physical') {
+            totalPointsByCategory.physical += creationPoints;
+        } else if (category === 'social') {
+            totalPointsByCategory.social += creationPoints;
+        }
+    }
+
+    return totalPointsByCategory;
+}
+
+export function nWoD1eAttributesCheckTotalPoints(
+    character: any
+): boolean {
+    const totalPointsByCategory = nWoD1eAttributesCreationPointsCheck(character)
+    for (const category in totalPointsByCategory) {
+        const points = totalPointsByCategory[category];
+        if (points === 7 || points === 6 || points === 5) {
+            return true; // Found a category with the desired points
+        }
+    }
+    return false; // No category with the desired points found
+}

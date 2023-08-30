@@ -4,7 +4,8 @@ import { Grid, Text, Center, Group, Input, Button } from "@mantine/core";
 import { globals } from "../../../assets/globals";
 //Data Imports
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened";
-import { AttributeNames, AttributeCategory, currentAttributeLevel, handleXpAttributeChange, findMaxAttribute } from "../../../data/TatteredVeil/types/Attributes";
+//import { AttributeNames, AttributeCategory, currentAttributeLevel, handleXpAttributeChange, findMaxAttribute } from "../../../data/TatteredVeil/types/Attributes";
+import { AttributesKey, AttributeCategory, nWoD1eCurrentAttributeLevel, nWoD1ehandleXpAttributeChange, nWoD1eFindMaxAttribute } from "../../../data/nWoD1e/nWoD1eAttributes";
 
 type MageAttributeXpInputsProps = {
     awakened: Awakened,
@@ -27,7 +28,6 @@ const MageAttributeXpInputs = ({awakened, setAwakened}: MageAttributeXpInputsPro
         <Grid gutter="lg" justify="center">
             {orderedCategories.map((category) => {
                 let categoryKey = category as AttributeCategory
-                const attributesInfo = awakened.attributes[categoryKey]
                 const orderedAttributesForCategory = orderedAttributes[categoryKey];
                 return (
                 <Grid.Col 
@@ -38,24 +38,25 @@ const MageAttributeXpInputs = ({awakened, setAwakened}: MageAttributeXpInputsPro
                     {category.charAt(0).toUpperCase() + category.slice(1)}
                     </Text>
                     <hr />
-                    {Object.entries(attributesInfo)
+                    {Object.entries(awakened.attributes)
                     .sort(([a], [b]) => orderedAttributesForCategory.indexOf(a) - orderedAttributesForCategory.indexOf(b))
                     .map(([attribute, attributeInfo]) => {
-                    const attributeName = attribute as AttributeNames;
-                    const { level } = currentAttributeLevel(awakened, attribute);
+                    const attributeName = attribute as AttributesKey;
+                    const { level, totalXpNeeded } = nWoD1eCurrentAttributeLevel(awakened, attributeName);
+                    if ( attributeInfo.category === categoryKey ) {
                     return (
                         <Center>
                         <Group key={`${attribute} input`}>
                             <Input.Wrapper 
                                 label={`${attribute.charAt(0).toUpperCase() + attribute.slice(1)} ${level}`}
-                                description={`Total XP for Next: ${currentAttributeLevel(awakened, attribute).totalXpNeeded}`}
+                                description={`Total XP for Next: ${totalXpNeeded}`}
                                 >
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Button
                                     size="xs"
                                     variant='outline'
                                     color='gray'
-                                    onClick={() => handleXpAttributeChange(awakened, setAwakened, attributeName, attributeInfo.experiencePoints - 1)}
+                                    onClick={() => nWoD1ehandleXpAttributeChange(awakened, setAwakened, attributeName, attributeInfo.experiencePoints - 1)}
                                 >
                                     -
                                 </Button>
@@ -64,19 +65,19 @@ const MageAttributeXpInputs = ({awakened, setAwakened}: MageAttributeXpInputsPro
                                     type="number"
                                     key={`${category}-${attribute}`}
                                     min={0}
-                                    max={findMaxAttribute(awakened, attribute)}
+                                    max={nWoD1eFindMaxAttribute(awakened, attributeName)}
                                     value={attributeInfo.experiencePoints}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     const value = Number(e.target.value);
-                                    handleXpAttributeChange(awakened, setAwakened, attributeName, value);
+                                    nWoD1ehandleXpAttributeChange(awakened, setAwakened, attributeName, value);
                                     }}
                                 />
                                 <Button
                                     size="xs"
                                     variant='outline'
                                     color='gray'
-                                    disabled={findMaxAttribute(awakened, attribute) === attributeInfo.experiencePoints}
-                                    onClick={() => handleXpAttributeChange(awakened, setAwakened, attributeName, attributeInfo.experiencePoints + 1)}
+                                    disabled={nWoD1eFindMaxAttribute(awakened, attributeName) === attributeInfo.experiencePoints}
+                                    onClick={() => nWoD1ehandleXpAttributeChange(awakened, setAwakened, attributeName, attributeInfo.experiencePoints + 1)}
                                 >
                                     +
                                 </Button>
@@ -84,7 +85,10 @@ const MageAttributeXpInputs = ({awakened, setAwakened}: MageAttributeXpInputsPro
                             </Input.Wrapper>
                         </Group>
                         </Center>
-                    );
+                    ) }
+                    else {
+                        return null
+                    };
                     })}
                 </Grid.Col>
                 );
