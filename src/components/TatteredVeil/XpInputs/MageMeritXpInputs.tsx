@@ -3,7 +3,7 @@ import { useEffect, useState, forwardRef } from 'react'
 import { useMantineTheme, Accordion, Text, Group, Select, Table, Button, Input } from '@mantine/core'
 //Data Imports
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened"
-import { Merit, getFilteredMerits, meritData, defineMeritRating, handleMeritChange, currentMeritLevel, handleXpMeritChange, findMaxMerit } from '../../../data/TatteredVeil/types/Merits'
+import { MeritRef, getMeritByName, Merit, meritRefs, getFilteredMerits, meritData, defineMeritRating, handleMeritChange, currentMeritLevel, handleXpMeritChange, findMaxMerit } from '../../../data/TatteredVeil/types/Merits'
 
 type MageMeritXpInputsProps = {
     awakened: Awakened,
@@ -96,7 +96,11 @@ const MageMeritXpInputs = ({awakened, setAwakened}: MageMeritXpInputsProps) => {
               cost = cost + (i * 2)
             }      
           }
-          const newMerit = { ...meritData, id: `${meritData.id}-${Date.now()}`};
+
+          let newMeritRef = meritRefs.find((m) => m.name === meritData.name)
+          if (!newMeritRef){return}
+
+          const newMerit = { ...newMeritRef, id: `${meritData.id}-${Date.now()}`};
             handleMeritChange(awakened, setAwakened, newMerit, "experiencePoints", cost)        
             setSelectedMerit("");
         
@@ -146,7 +150,7 @@ const MageMeritXpInputs = ({awakened, setAwakened}: MageMeritXpInputsProps) => {
             return null;
         }
 
-        const meritTypesSet = new Set(Object.values(awakened.merits).map((merit) => merit.type))
+        const meritTypesSet = new Set(Object.values(awakened.merits).map((merit) => getMeritByName(merit.name).type))
         const meritTypes = Array.from(meritTypesSet)
         meritTypes.sort((a, b) => {
             // Compare the order of types defined in customMeritOrder
@@ -182,7 +186,7 @@ const MageMeritXpInputs = ({awakened, setAwakened}: MageMeritXpInputsProps) => {
             }
     
         
-            const sortedMerits = awakened.merits.filter((merit) => merit.type.toLowerCase() === type.toLowerCase()).sort((a, b) => a.id.localeCompare(b.id))
+            const sortedMerits = awakened.merits.filter((merit) => getMeritByName(merit.name).type.toLowerCase() === type.toLowerCase()).sort((a, b) => a.id.localeCompare(b.id))
 
             return (
                 <div>
@@ -198,11 +202,12 @@ const MageMeritXpInputs = ({awakened, setAwakened}: MageMeritXpInputsProps) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {sortedMerits.map((merit: Merit) => {
+                                {sortedMerits.map((meritRef: MeritRef) => {
+                                    const merit = getMeritByName(meritRef.name)
                                 return (
                                     <tr key={`${merit.name} ${merit.type}`}>
                                         <td style={{ minWidth: "150px" }}>
-                                        <Text>{merit.name} {currentMeritLevel(merit).level}</Text>
+                                        <Text>{merit.name} {currentMeritLevel(meritRef).level}</Text>
                                         <Text>{merit.rating}</Text>
                                         <Text>{merit.prerequisites? `PreReq: ${merit.prerequisites}`: ''}</Text>                                        
                                         {merit.name ==="Status (Consilium)" || merit.name ==="Status (Order)"? <></>:
@@ -212,7 +217,7 @@ const MageMeritXpInputs = ({awakened, setAwakened}: MageMeritXpInputsProps) => {
                                                     size="xs"
                                                     variant='outline'
                                                     color='gray'
-                                                    onClick={() => handleXpMeritChange(awakened, setAwakened, merit, merit.experiencePoints - 1)}
+                                                    onClick={() => handleXpMeritChange(awakened, setAwakened, meritRef, meritRef.experiencePoints - 1)}
                                                 >
                                                 -
                                                 </Button>
@@ -221,19 +226,19 @@ const MageMeritXpInputs = ({awakened, setAwakened}: MageMeritXpInputsProps) => {
                                                     type="number"
                                                     key={`${merit.name}`}
                                                     min={0}
-                                                    max={findMaxMerit(merit)}
-                                                    value={merit.experiencePoints}
+                                                    max={findMaxMerit(meritRef)}
+                                                    value={meritRef.experiencePoints}
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     const value = Number(e.target.value);
-                                                    handleXpMeritChange(awakened, setAwakened, merit, value);
+                                                    handleXpMeritChange(awakened, setAwakened, meritRef, value);
                                                     }}
                                                 />
                                                 <Button
                                                     size="xs"
                                                     variant='outline'
                                                     color='gray'
-                                                    disabled={findMaxMerit(merit) === merit.experiencePoints}
-                                                    onClick={() => handleXpMeritChange(awakened, setAwakened, merit, merit.experiencePoints + 1)}
+                                                    disabled={findMaxMerit(meritRef) === meritRef.experiencePoints}
+                                                    onClick={() => handleXpMeritChange(awakened, setAwakened, meritRef, meritRef.experiencePoints + 1)}
                                                 >
                                                     +
                                                 </Button>
@@ -241,7 +246,7 @@ const MageMeritXpInputs = ({awakened, setAwakened}: MageMeritXpInputsProps) => {
                                             </Group>
                                         }
                                         
-                                        { merit.creationPoints === 0 && merit.freebiePoints === 0 ?
+                                        { meritRef.creationPoints === 0 && meritRef.freebiePoints === 0 ?
                                             <Button
                                                 onClick={() => {
                                                     setAwakened({...awakened, merits: awakened.merits.filter((m) => !m.id.includes(merit.id))})

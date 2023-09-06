@@ -6,8 +6,8 @@ import { skillsSchema } from "../../nWoD1e/nWoD1eSkills";
 import { pathNameSchema } from "./Path";
 import { orderNameSchema } from "./Order";
 import { arcanaSchema } from './Arcanum'; 
-import { meritSchema } from "./Merits";
-import { roteSchema } from "./Rotes";
+import { meritRefSchema } from "./Merits";
+import { roteRefSchema } from "./Rotes";
 import { gnosisSchema } from "./Gnosis";
 import { wisdomSchema } from "./Wisdom";
 
@@ -41,9 +41,9 @@ export const awakenedSchema = z.object({
     order: orderNameSchema,
 
     arcana: arcanaSchema,
-    rotes: roteSchema.array(),
+    rotes: roteRefSchema.array(),
 
-    merits: meritSchema.array(),
+    merits: meritRefSchema.array(),
 
     gnosis: gnosisSchema,
     wisdom: wisdomSchema,
@@ -62,7 +62,7 @@ export const getEmptyAwakened = (): Awakened => {
     domain: "",
 
     background: {
-      history: "<p>Your initial <b>html value</b> or an empty string to init editor without value</p>",
+      history: "",
       goals: "",
       description: "",
       profilePic: "https://firebasestorage.googleapis.com/v0/b/larp-app-5a526.appspot.com/o/mage%2FcenteredSkullMTAw.png?alt=media&token=e4d6fccf-42ea-4f1a-9573-13a8b197d059",

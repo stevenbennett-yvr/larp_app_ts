@@ -1,5 +1,19 @@
 [
     {
+        "name": "Playtest Domain",
+        "id": "CND-000",
+        "location": "Jakarta, Indonesia",
+        "status": "active",
+        "currentChronicles": ["Tattered Veil", "Good Intentions"],
+        "coordinator": {
+            "name": "Steven Bennett",
+            "email": "stevenbennett90@gmail.com"
+        },
+        "links": {
+            "discord":"https://discord.gg/NeqSXv89rj"
+        }
+        },
+    {
         "name": "Vancouver - Nova Albion",
         "id": "CND-001",
         "location": "Vancouver, BC, Canada",
@@ -10,8 +24,7 @@
             "email": "dc.001@canadaatmidnight.com"
         },
         "links": {
-            "facebook": "https://www.facebook.com/groups/2249230082",
-            "discord": "https://discord.gg/ydR2DdTU"
+            "facebook": "https://www.facebook.com/groups/2249230082"
         }
         },
     {

@@ -7,7 +7,7 @@ import { globals } from "../../../assets/globals";
 
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened";
 import { Cabal, handleAcceptInvite, handleRejectInvite, handleCreateCabal, handleLeaveCabal } from "../../../data/TatteredVeil/types/Cabals";
-import { currentMeritLevel, Merit } from "../../../data/TatteredVeil/types/Merits";
+import { currentMeritLevel, MeritRef } from "../../../data/TatteredVeil/types/Merits";
 import MageCard from "../../../components/TatteredVeil/MageCard";
 
 type CabalEditProps = {
@@ -140,7 +140,7 @@ const CabalTab = ({awakened, domainAwakenedList, cabalData, setCabalData, invite
     )
   }
 
-  const sharedMerits: Merit[] = cabalData.members
+  const sharedMerits: MeritRef[] = cabalData.members
   .flatMap((member) => member.merits.filter((merit) => merit.name.includes("(Shared)")));
 
 const meritsAccordion = () => {

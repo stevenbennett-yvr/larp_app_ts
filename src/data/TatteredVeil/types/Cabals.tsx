@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { meritSchema } from './Merits'
+import { meritRefSchema } from './Merits'
 import { Awakened, backgroundSchema } from './Awakened'
 import { pathNameSchema } from './Path'
 import { orderNameSchema } from './Order'
@@ -10,7 +10,7 @@ export const cabalMemberSchema = z.object({
     concept: z.string(),
     path: pathNameSchema,
     order: orderNameSchema,
-    merits: z.array(meritSchema),
+    merits: z.array(meritRefSchema),
     background: backgroundSchema,
 })
 

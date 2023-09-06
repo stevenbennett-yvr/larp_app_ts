@@ -3,6 +3,7 @@ import { Title, Table } from '@mantine/core'
 //Data Import
 import { Awakened } from '../../../data/TatteredVeil/types/Awakened'
 import { currentMeritLevel } from '../../../data/TatteredVeil/types/Merits'
+import { getMeritByName } from '../../../data/TatteredVeil/types/Merits'
 import Dots from '../../../utils/dots'
 
 type MageMeritPrintProps = {
@@ -34,12 +35,13 @@ const MageMeritPrint = ({awakened}: MageMeritPrintProps) => {
             <tbody>
                 {
                 awakened.merits.map((merit) => {
+                    const meritData = getMeritByName(merit.name)
                     const htmlParser = new DOMParser();
-                    const doc = htmlParser.parseFromString(merit.description, 'text/html');
+                    const doc = htmlParser.parseFromString(meritData.description, 'text/html');
                     const firstLi = doc.querySelector('li');
                     const level = currentMeritLevel(merit).level
                     // Get the content of the first <li> element
-                    const firstLiContent = firstLi ? firstLi.textContent : merit.description;
+                    const firstLiContent = firstLi ? firstLi.textContent : meritData.description;
                     return (
                     <tr style={textStyle} key={merit.name}>
                         <td>{merit.name}</td>

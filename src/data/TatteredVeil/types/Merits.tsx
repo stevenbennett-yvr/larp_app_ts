@@ -6,6 +6,23 @@ import { currentGnosisLevel } from "./Gnosis"
 import meritDataJson from '../source/mageMerits.json'
 import { getNumberBelow } from "../../../utils/getNumberBelow";
 
+export const meritRefSchema = z.object({
+  id:z.string(),
+  name:z.string(),
+  creationPoints: z.number(),
+  freebiePoints: z.number(),
+  experiencePoints: z.number()
+})
+export type MeritRef = z.infer<typeof meritRefSchema>
+
+export const meritRefs: MeritRef[] = meritDataJson.map((merit) => ({
+  id: `merit_${merit.name}`,
+  name: merit.name,
+  creationPoints: 0,
+  freebiePoints: 0,
+  experiencePoints: 0,
+}))
+
 export const meritSchema = z.object({
     type: z.string(),
     name: z.string(),
@@ -14,19 +31,30 @@ export const meritSchema = z.object({
     prerequisites: z.string(),
     description: z.string(),
     source: z.string(),
-    creationPoints: z.number(),
-    freebiePoints: z.number(),
-    experiencePoints: z.number()
 })
 export type Merit = z.infer<typeof meritSchema>
 
 export const meritData: Merit[] = meritDataJson.map((merit, index) => ({
     ...merit,
     id: `merit_${index}`,
-    creationPoints: 0,
-    freebiePoints: 0,
-    experiencePoints: 0,
   }));
+
+export const getMeritByName = (name: string): Merit => {
+  let meritInfo = meritData.find((merit) => merit.name === name);
+  if (!meritInfo) {
+    return {
+      type: "",
+      name: "",
+      id: "",
+      rating: "",
+      prerequisites: "",
+      description: "",
+      source: "",
+    }
+  } else {
+    return meritInfo
+  }
+};
 
 export const defineMeritRating = (rating: string) => {
     let maxCost = 5;
@@ -81,13 +109,14 @@ export const defineMeritRating = (rating: string) => {
     return { minCost, maxCost, orBool, plusBool, orToBool }
   };
   
-export const currentMeritLevel = (meritInfo: Merit) => {
+export const currentMeritLevel = (meritRef: MeritRef) => {
     let totalXpNeeded = 0;
     let pastXpNeeded = [0];
-    let { experiencePoints, creationPoints, freebiePoints } = meritInfo;
-  
+    const meritInfo = getMeritByName(meritRef.name)
+    let { experiencePoints, creationPoints, freebiePoints } = meritRef;
+
     const { minCost, maxCost, orBool, plusBool, orToBool } = defineMeritRating(meritInfo.rating);
-    let level = Math.max(minCost, meritInfo.creationPoints + meritInfo.freebiePoints);
+    let level = Math.max(minCost, meritRef.creationPoints + meritRef.freebiePoints);
   
     if (level === maxCost && !orBool && !orToBool) {
       let xpNeeded = minCost * 2;
@@ -219,8 +248,10 @@ export const currentMeritLevel = (meritInfo: Merit) => {
                 const requiredValue = (value.match(/•/g) || []).length + 1;
                 //check attribute requirement
   
-                merits.forEach((merit) => {
-                  if (item === merit.name.toLowerCase() && requiredValue <= currentMeritLevel(merit).level) 
+                merits.forEach((meritRef) => {
+                  //getMerit data here based off reference
+                  let merit = getMeritByName(meritRef.name)
+                  if (item === merit.name.toLowerCase() && requiredValue <= currentMeritLevel(meritRef).level) 
                   { return; }
                 })
                   if (allAttributes.includes(categoryValue as AttributesKey)) {
@@ -300,7 +331,8 @@ export const currentMeritLevel = (meritInfo: Merit) => {
               if (!item.includes("•") && !item.includes(",") && !item.includes(" or ")) {
                 let meritMatch = false;
                 for (const key in merits) {
-                  if (item.toLowerCase() === merits[key].name.toLowerCase()) {
+                  let merit = getMeritByName(merits[key].name)
+                  if (item.toLowerCase() === merit.name.toLowerCase()) {
                     meritMatch = true;
                     break;
                   }
@@ -334,10 +366,11 @@ type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
 export const handleMeritChange = (
   awakened: Awakened,
   setAwakened: Function,
-  merit: Merit,
+  merit: MeritRef,
   type: VariableKeys,
   newPoints: number,
 ): void => {
+  console.log(merit)
   const existingMerit = awakened.merits.find((m) => m.id === merit.id);
     if (existingMerit) {
     if (newPoints === 0 && type !== "experiencePoints") {
@@ -358,9 +391,10 @@ export const handleMeritChange = (
 };
 
 
-export const findMaxMerit = (meritInfo:Merit) => {
-  const xp = meritInfo.experiencePoints;
-  const { level } = currentMeritLevel(meritInfo)
+export const findMaxMerit = (meritRef:MeritRef) => {
+  const xp = meritRef.experiencePoints;
+  const { level } = currentMeritLevel(meritRef)
+  let meritInfo = getMeritByName(meritRef.name)
 
   let max = undefined;
   if (level === 5 || level === defineMeritRating(meritInfo.rating).maxCost) {
@@ -370,15 +404,16 @@ export const findMaxMerit = (meritInfo:Merit) => {
 }
 
 // For the xp change buttons.
-export const handleXpMeritChange = (awakened:Awakened, setAwakened:Function, merit:Merit, value:number) => {
-  let { level, totalXpNeeded, pastXpNeeded } = currentMeritLevel(merit) 
-  let oldXp = merit.experiencePoints
-  if(level < defineMeritRating(merit.rating).maxCost) {
+export const handleXpMeritChange = (awakened:Awakened, setAwakened:Function, meritRef:MeritRef, value:number) => {
+  let { level, totalXpNeeded, pastXpNeeded } = currentMeritLevel(meritRef) 
+  let oldXp = meritRef.experiencePoints
+  let meritInfo = getMeritByName(meritRef.name)
+  if(level < defineMeritRating(meritInfo.rating).maxCost) {
     let xp = value > oldXp ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
-    handleMeritChange(awakened, setAwakened, merit, "experiencePoints", xp)
-  } else if (level > defineMeritRating(merit.rating).minCost) {
+    handleMeritChange(awakened, setAwakened, meritRef, "experiencePoints", xp)
+  } else if (level > defineMeritRating(meritInfo.rating).minCost) {
     let xp = value > oldXp ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
-    handleMeritChange(awakened, setAwakened, merit, "experiencePoints", xp)
+    handleMeritChange(awakened, setAwakened, meritRef, "experiencePoints", xp)
   }
 }
 

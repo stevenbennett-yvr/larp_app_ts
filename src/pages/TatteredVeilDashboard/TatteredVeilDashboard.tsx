@@ -2,7 +2,6 @@ import { Center, Group, Stack, Card } from '@mantine/core';
 import MageCarousel from './components/MageCarousel';
 import CharacterCard from './components/CharacterCard';
 import CastAside from './components/CastAside';
-import MageBountyBoard from './components/MageBountyBoard';
 import { useMageDb } from '../../contexts/MageContext';
 import { useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -31,7 +30,6 @@ export default function TatteredVeilVenueDashboard() {
                     </Card>
                 </Group>
                 <CharacterCard awakenedList={userAwakenedList}/>
-                <MageBountyBoard currentUser={currentUser} userAwakenedList={userAwakenedList} domainAwakenedList={domainAwakenedList}/>
             </Stack>
         </Center>
     )

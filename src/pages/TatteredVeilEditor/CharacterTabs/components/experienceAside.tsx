@@ -1,5 +1,5 @@
 import { Awakened } from "../../../../data/TatteredVeil/types/Awakened"
-import { attributeExperience, arcanaExperience, meritExperience, roteExperience, skillExperience, specialityExperience, spentExperience, currentExperience, totalExperience, calculateFloorXp, calculateMaxXp } from "../../../../data/TatteredVeil/types//Experience"
+import { attributeExperience, arcanaExperience, meritExperience, roteExperience, skillExperience, specialityExperience, spentExperience, currentExperience, totalExperience, calculateFloorXp, calculateMaxXp } from "../../../../data/TatteredVeil/types/Experience"
 import { Navbar, Table, Stack } from "@mantine/core"
 import { useEffect, useState } from "react"
 import { globals } from "../../../../assets/globals"

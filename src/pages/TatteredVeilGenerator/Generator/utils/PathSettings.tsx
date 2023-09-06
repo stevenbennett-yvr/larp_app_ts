@@ -1,6 +1,6 @@
 import { Awakened } from "../../../../data/TatteredVeil/types/Awakened"
 import { PathName, Paths } from "../../../../data/TatteredVeil/types/Path"
-import { Rote } from "../../../../data/TatteredVeil/types/Rotes"
+import { RoteRef } from "../../../../data/TatteredVeil/types/Rotes"
 
 type PathSettingsProps = {
     awakened: Awakened;
@@ -11,7 +11,7 @@ type PathSettingsProps = {
 const PathSettings = ({ awakened, setAwakened, path }: PathSettingsProps) => {
     const attributes = { ...awakened.attributes };
     const updatedArcana = awakened.arcana;
-    const rotes: Rote[] = [];
+    const rotes: RoteRef[] = [];
   
     const rulingArcana = Paths[path].rulingArcana;
     const inferiorArcana = Paths[path].inferiorArcana;

@@ -2,7 +2,7 @@
 import { Title, Table } from '@mantine/core'
 //Data Import
 import { Awakened } from '../../../data/TatteredVeil/types/Awakened'
-import { calculatePool } from '../../../data/TatteredVeil/types/Rotes'
+import { calculatePool, getRoteByName } from '../../../data/TatteredVeil/types/Rotes'
 
 type MageRotePrintProps = {
     awakened:Awakened
@@ -39,19 +39,20 @@ const MageRotePrint = ({awakened}: MageRotePrintProps) => {
             <tbody>
                 {
                 awakened.rotes.map((rote) => {
+                    const roteData = getRoteByName(rote.name)
                     const htmlParser = new DOMParser();
-                    const doc = htmlParser.parseFromString(rote.description, 'text/html');
+                    const doc = htmlParser.parseFromString(roteData.description, 'text/html');
                     const firstLi = doc.querySelector('li');
                   
                     // Get the content of the first <li> element
                     const firstLiContent = firstLi ? firstLi.textContent : '';
                     return (
                     <tr style={textStyle} key={rote.name}>
-                        <td>{rote.arcanum.slice(0, 3)} {rote.level}</td>
-                        <td>{rote.name}</td>
+                        <td>{roteData.arcanum.slice(0, 3)} {roteData.level}</td>
+                        <td>{roteData.name}</td>
                         <td>{firstLiContent}</td>
-                        <td>{rote.aspect}</td>
-                        <td>{rote.rotePool} : {calculatePool(rote.rotePool, awakened)}</td>
+                        <td>{roteData.aspect}</td>
+                        <td>{roteData.rotePool} : {calculatePool(roteData.rotePool, awakened)}</td>
                     </tr>
                     )
                 })

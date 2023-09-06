@@ -1,6 +1,6 @@
 import { Awakened } from '../../../data/TatteredVeil/types/Awakened'
 import { Group, Text, Center, Stack, Accordion, Button, Table, useMantineTheme, NumberInput, Alert } from '@mantine/core'
-import { getFilteredMerits, meritData, Merit, defineMeritRating, handleMeritChange } from '../../../data/TatteredVeil/types/Merits'
+import { getFilteredMerits, meritData, Merit, meritRefs, defineMeritRating, handleMeritChange, MeritRef } from '../../../data/TatteredVeil/types/Merits'
 import { currentGnosisLevel, Gnoses } from '../../../data/TatteredVeil/types/Gnosis'
 import { useState, useEffect } from 'react'
 import { globals } from '../../../assets/globals'
@@ -33,19 +33,19 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep, showInstructi
         const updatedMerits = [...awakened.merits];
   
         meritsToAdd.forEach((meritToAdd) => {
+          
           const existingMerit = updatedMerits.find((m) => m.name === meritToAdd.merit);
   
           if (!existingMerit) {
             const merit = filteredMerits.find((m) => m.name === meritToAdd.merit);
             if (merit) {
-              updatedMerits.push({ ...merit, freebiePoints: 1 });
+              updatedMerits.push({ name:merit.name, id:merit.id, creationPoints:0, experiencePoints:0, freebiePoints: 1 });
             }
           }
         });
-  
         setAwakened({...awakened, merits: updatedMerits});
       }
-    }, [awakened.order, filteredMerits]);
+    }, [awakened.order, filteredMerits, setAwakened, awakened]);
 
      const getRemainingPoints = (awakened: Awakened): number => {
         let totalCreationPoints = 0;
@@ -58,8 +58,11 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep, showInstructi
       };
 
 
-      const MeritInput = ( merit : Merit, type: any ) => {
-        const getMeritPoints = (merit: Merit) => {
+      const MeritInput = ( meritData : Merit, type: any ) => {
+        
+        const meritRef = awakened.merits.find((m) => m.name === meritData.name) || meritRefs.find((m) => m.name === meritData.name);
+        if(!meritRef){return}
+        const getMeritPoints = (merit: MeritRef) => {
           const meritInfo = awakened.merits.find((m) => m.name === merit.name);
           const creation = meritInfo ? meritInfo.creationPoints : 0
           const freebie = meritInfo ? meritInfo.freebiePoints : 0
@@ -67,9 +70,9 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep, showInstructi
           return total;
         };
 
-        const { minCost, maxCost, orBool, plusBool} = defineMeritRating(merit.rating)
+        const { minCost, maxCost, orBool, plusBool} = defineMeritRating(meritData.rating)
 
-        const getStep = (merit: Merit): number => {
+        const getStep = (merit: MeritRef): number => {
           if (minCost === maxCost) {
             return minCost;
           } else if (orBool && getMeritPoints(merit) < minCost) {
@@ -83,18 +86,19 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep, showInstructi
           }
         };
         
-        const step = getStep(merit)
+        const step = getStep(meritRef)
 
         return (
             <div>
                 <NumberInput
-                  value={getMeritPoints(merit)}
+                  value={getMeritPoints(meritRef)}
                   min={type==="freebiePoints"?1:0}
-                  max={type==="freebiePoints"?2:getRemainingPoints(awakened) < minCost?getMeritPoints(merit):defineMeritRating(merit.rating).maxCost}
+                  max={type==="freebiePoints"?2:getRemainingPoints(awakened) < minCost?getMeritPoints(meritRef):defineMeritRating(meritData.rating).maxCost}
                   step={step}
-                  disabled={(getRemainingPoints(awakened) < minCost && getMeritPoints(merit)===0)  || (type==="freebiePoints" && awakened.order === "Apostate") || (merit.name === "High Speech" && awakened.order !== "Apostate")}
+                  disabled={(getRemainingPoints(awakened) < minCost && getMeritPoints(meritRef)===0)  || (type==="freebiePoints" && awakened.order === "Apostate") || (meritData.name === "High Speech" && awakened.order !== "Apostate")}
                   onChange={(val:number) => {
-                    handleMeritChange(awakened, setAwakened, merit, type, val)
+
+                    handleMeritChange(awakened, setAwakened, meritRef, type, val)
                   }}
                 />
             </div>

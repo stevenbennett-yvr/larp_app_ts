@@ -5,7 +5,7 @@ import { forwardRef } from 'react'
 import { globals } from '../../../assets/globals'
 //Data Imports
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened"
-import { roteData, getFilteredRotes, Rote } from '../../../data/TatteredVeil/types/Rotes'
+import { roteData, getFilteredRotes, Rote, getRoteByName, RoteRef, roteRefs } from '../../../data/TatteredVeil/types/Rotes'
 import { arcanaDescriptions, ArcanaKey, currentArcanumLevel } from '../../../data/TatteredVeil/types/Arcanum'
 import { handleRoteChange, calculatePool } from '../../../data/TatteredVeil/types/Rotes'
 
@@ -14,7 +14,7 @@ type MageRotesXpInputsProps = {
     setAwakened: (awakened: Awakened) => void,
 }
 
-const MageRotesXpInputs = ({awakened, setAwakened}: MageRotesXpInputsProps) => {
+const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) => {
 
     const [learnableRotes, setLearnableRotes] = useState<Rote[]>(getFilteredRotes(awakened, roteData));
     const [selectedRote, setSelectedRote] = useState<string | null>("");
@@ -24,18 +24,18 @@ const MageRotesXpInputs = ({awakened, setAwakened}: MageRotesXpInputsProps) => {
         setLearnableRotes(getFilteredRotes(awakened, roteData))
     }, [awakened])
 
-    const roteInputs = (learnableRotes:Rote[]) => {      
+    const roteInputs = (learnableRotes: Rote[]) => {
         const sortedRotes = learnableRotes.sort((a, b) => {
             const arcanumComparison = a.arcanum.localeCompare(b.arcanum);
             if (arcanumComparison !== 0) {
-              return arcanumComparison;
+                return arcanumComparison;
             }
             if (a.level !== b.level) {
-              return a.level - b.level;
+                return a.level - b.level;
             }
             return a.name.localeCompare(b.name);
-          });
-      
+        });
+
         // Filter out the rotes that also appear in awakened.rotes
         const filteredRotes = sortedRotes.filter((rote) => {
             return !awakened.rotes.some((existingRote) => existingRote.name === rote.name);
@@ -44,10 +44,10 @@ const MageRotesXpInputs = ({awakened, setAwakened}: MageRotesXpInputsProps) => {
         const allRotes = roteData.sort((a, b) => {
             const arcanumComparison = a.arcanum.localeCompare(b.arcanum);
             if (arcanumComparison !== 0) {
-              return arcanumComparison;
+                return arcanumComparison;
             }
             if (a.level !== b.level) {
-              return a.level - b.level;
+                return a.level - b.level;
             }
             return a.name.localeCompare(b.name);
         })
@@ -69,179 +69,183 @@ const MageRotesXpInputs = ({awakened, setAwakened}: MageRotesXpInputsProps) => {
             image: `${arcanaDescriptions[rote.arcanum.toLowerCase() as ArcanaKey].logo}`,
             bgc: `${arcanaDescriptions[rote.arcanum.toLowerCase() as ArcanaKey]?.color}`
         }));
-      
+
         interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
             image: string;
             label: string;
             bgc: string;
-          }
-          
+        }
+
 
         const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
             ({ image, label, bgc, ...others }: ItemProps, ref) => (
-              <div ref={ref} {...others} style={{backgroundColor:bgc, border: '1px solid white'}}>
-                <Group noWrap>
-                  <Avatar size={'sm'} src={image} />
-                  <div>
-                    <Text size="sm" color="white">{label}</Text>
-                  </div>
-                </Group>
-              </div>
+                <div ref={ref} {...others} style={{ backgroundColor: bgc, border: '1px solid white' }}>
+                    <Group noWrap>
+                        <Avatar size={'sm'} src={image} />
+                        <div>
+                            <Text size="sm" color="white">{label}</Text>
+                        </div>
+                    </Group>
+                </div>
             )
-          ); 
+        );
 
         const getSelectedRoteData = () => {
-          if (selectedRote) {
-            // Find the rote in the sortedRotes array that matches the selectedRote
-            const selectedRoteData = roteData.find((rote) => rote.name === selectedRote);
-            if (selectedRoteData) {
-              return (
-                <Table>
-                    <thead>
-                        <tr>
-                            <th>Rote</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style={{ backgroundColor: arcanaDescriptions[selectedRoteData.arcanum.toLowerCase() as ArcanaKey]?.color ?? "white" }}>
-                                <Text fz={globals.smallerFontSize} style={{ color: "white" }}>{selectedRoteData.name}</Text>
-                                <Image
-                                    fit="contain"
-                                    withPlaceholder
-                                    src={arcanaDescriptions[selectedRoteData.arcanum.toLowerCase() as ArcanaKey].logo}
-                                    height={30}
-                                    width={30}
-                                    alt="order"
-                                    style={{ filter: "brightness(0)" }}
-                                />
-                                <p style={{ color: "white" }}>{selectedRoteData.arcanum} {selectedRoteData.level} {selectedRoteData.otherArcana ? `+ ${selectedRoteData.otherArcana}` : ""}</p>
-                                <Button 
-                                    color="gray" 
-                                    disabled={!selectedRote || !learnableRotes.some(rote => rote.name === selectedRote)}
-                                    onClick={() => {
-                                    let xpCost = selectedRoteData.level * 2;
-                                    handleRoteChange(awakened,setAwakened,selectedRoteData, "experiencePoints", xpCost)
-                                    setSelectedRote("")
-                                }}>Buy</Button>
-                            </td>
-                            <td dangerouslySetInnerHTML={{ __html: `${selectedRoteData.description} <p>Rote Pool: ${selectedRoteData.rotePool} ${calculatePool(selectedRoteData.rotePool, awakened)}</p>` }} />
-                        </tr>
-                    </tbody>
-                </Table>
-
-              );
-            }
-          }
-          return null;
-        };
-
-        const roteArcanaSet = new Set(Object.values(awakened.rotes).map((rote) => rote.arcanum));
-        const roteArcana = Array.from(roteArcanaSet);
-        roteArcana.sort()
-        let isRoteOutOfOrder = (rote:Rote) => {
-            return rote.level > currentArcanumLevel(awakened, rote.arcanum.toLowerCase() as ArcanaKey).level
-        }
-        const knownCreateRoteAccordian = (arcanum: ArcanaKey) => {
-            const knownRotes = awakened.rotes.filter((rote) => rote.arcanum.toLowerCase() === arcanum.toLowerCase())
-
-            knownRotes.sort((a, b) => {
-                if (a.level !== b.level) {
-                return a.level - b.level;
-                }
-                return a.name.localeCompare(b.name); 
-            });
-            
-            let anyRoteOutOfOrder = knownRotes.some(
-                (rote) => isRoteOutOfOrder(rote)
-            );
-
-            return(
-                <div>
-                <Accordion.Item value={arcanum}>
-                <Accordion.Control icon={<Image height={20} width={20} src={arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey].logo} />} style={{ color: "white", border: anyRoteOutOfOrder? '2px solid red' : 'none', backgroundColor: arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey]?.color ?? "white" }}>{arcanum.toUpperCase()} {anyRoteOutOfOrder? "⚠️": ""}</Accordion.Control>
-                    <Accordion.Panel>
-                    <Table>
-                        <thead>
-                        <tr>
-                            <th>Rote</th>
-                            <th>Description</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            {knownRotes.map((rote) => {
-
-                                return(
-                                    <tr key={`${rote.name} ${rote.arcanum}`} style={{ border: isRoteOutOfOrder(rote) ? '2px solid red' : 'none' }}>
-                                        <td style={{ backgroundColor: arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey]?.color ?? "white" }}>
-                                        <Text fz={globals.smallerFontSize} style={{ color: "white" }}>{rote.name} {isRoteOutOfOrder(rote)? "⚠️": ""}</Text>
+            if (selectedRote) {
+                // Find the rote in the sortedRotes array that matches the selectedRote
+                const selectedRoteData = roteData.find((rote) => rote.name === selectedRote);
+                if (selectedRoteData) {
+                    const selectedRoteRef = roteRefs.find((r) => r.name === selectedRoteData.name)
+                    if (!selectedRoteRef) { return }
+                    return (
+                        <Table>
+                            <thead>
+                                <tr>
+                                    <th>Rote</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style={{ backgroundColor: arcanaDescriptions[selectedRoteData.arcanum.toLowerCase() as ArcanaKey]?.color ?? "white" }}>
+                                        <Text fz={globals.smallerFontSize} style={{ color: "white" }}>{selectedRoteData.name}</Text>
                                         <Image
                                             fit="contain"
                                             withPlaceholder
-                                            src={arcanaDescriptions[rote.arcanum.toLowerCase() as ArcanaKey].logo}
+                                            src={arcanaDescriptions[selectedRoteData.arcanum.toLowerCase() as ArcanaKey].logo}
                                             height={30}
                                             width={30}
                                             alt="order"
                                             style={{ filter: "brightness(0)" }}
                                         />
-                                        <p style={{ color: "white" }}>{rote.arcanum} {rote.level} {rote.otherArcana ? `+ ${rote.otherArcana}` : ""}</p>
-                                        { rote.experiencePoints > 0?
-                                        <Button color="gray" onClick={() => {
-                                            handleRoteChange(awakened,setAwakened,rote, "experiencePoints", 0)
-                                        }}>Remove</Button>
-                                        :
-                                        <></>
-                                        }
-                                        </td>
-                                        <td dangerouslySetInnerHTML={{ __html: `${rote.description} <p>Rote Pool: ${rote.rotePool} ${calculatePool(rote.rotePool, awakened)}</p>` }} />
+                                        <p style={{ color: "white" }}>{selectedRoteData.arcanum} {selectedRoteData.level} {selectedRoteData.otherArcana ? `+ ${selectedRoteData.otherArcana}` : ""}</p>
+                                        <Button
+                                            color="gray"
+                                            disabled={!selectedRote || !learnableRotes.some(rote => rote.name === selectedRote)}
+                                            onClick={() => {
+                                                let xpCost = selectedRoteData.level * 2;
+                                                handleRoteChange(awakened, setAwakened, selectedRoteRef, "experiencePoints", xpCost)
+                                                setSelectedRote("")
+                                            }}>Buy</Button>
+                                    </td>
+                                    <td dangerouslySetInnerHTML={{ __html: `${selectedRoteData.description} <p>Rote Pool: ${selectedRoteData.rotePool} ${calculatePool(selectedRoteData.rotePool, awakened)}</p>` }} />
+                                </tr>
+                            </tbody>
+                        </Table>
+
+                    );
+                }
+            }
+            return null;
+        };
+
+        const roteArcanaSet = new Set(Object.values(awakened.rotes).map((rote) => getRoteByName(rote.name).arcanum));
+        const roteArcana = Array.from(roteArcanaSet);
+        roteArcana.sort()
+        let isRoteOutOfOrder = (roteRef: RoteRef) => {
+            let rote = getRoteByName(roteRef.name)
+            return rote.level > currentArcanumLevel(awakened, rote.arcanum.toLowerCase() as ArcanaKey).level
+        }
+        const knownCreateRoteAccordian = (arcanum: ArcanaKey) => {
+            const knownRotes = awakened.rotes.filter((rote) => getRoteByName(rote.name).arcanum.toLowerCase() === arcanum.toLowerCase())
+
+            knownRotes.sort((a, b) => {
+                if (getRoteByName(a.name).level !== getRoteByName(b.name).level) {
+                    return getRoteByName(a.name).level - getRoteByName(b.name).level;
+                }
+                return a.name.localeCompare(b.name);
+            });
+
+            let anyRoteOutOfOrder = knownRotes.some(
+                (rote) => isRoteOutOfOrder(rote)
+            );
+
+            return (
+                <div>
+                    <Accordion.Item value={arcanum}>
+                        <Accordion.Control icon={<Image height={20} width={20} src={arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey].logo} />} style={{ color: "white", border: anyRoteOutOfOrder ? '2px solid red' : 'none', backgroundColor: arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey]?.color ?? "white" }}>{arcanum.toUpperCase()} {anyRoteOutOfOrder ? "⚠️" : ""}</Accordion.Control>
+                        <Accordion.Panel>
+                            <Table>
+                                <thead>
+                                    <tr>
+                                        <th>Rote</th>
+                                        <th>Description</th>
                                     </tr>
-                            )})}
-                        </tbody>
-                    </Table>    
-                    </Accordion.Panel>
-                </Accordion.Item>
+                                </thead>
+                                <tbody>
+                                    {knownRotes.map((roteRef) => {
+                                        const rote = getRoteByName(roteRef.name)
+                                        return (
+                                            <tr key={`${rote.name} ${rote.arcanum}`} style={{ border: isRoteOutOfOrder(roteRef) ? '2px solid red' : 'none' }}>
+                                                <td style={{ backgroundColor: arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey]?.color ?? "white" }}>
+                                                    <Text fz={globals.smallerFontSize} style={{ color: "white" }}>{rote.name} {isRoteOutOfOrder(roteRef) ? "⚠️" : ""}</Text>
+                                                    <Image
+                                                        fit="contain"
+                                                        withPlaceholder
+                                                        src={arcanaDescriptions[rote.arcanum.toLowerCase() as ArcanaKey].logo}
+                                                        height={30}
+                                                        width={30}
+                                                        alt="order"
+                                                        style={{ filter: "brightness(0)" }}
+                                                    />
+                                                    <p style={{ color: "white" }}>{rote.arcanum} {rote.level} {rote.otherArcana ? `+ ${rote.otherArcana}` : ""}</p>
+                                                    {roteRef.experiencePoints > 0 ?
+                                                        <Button color="gray" onClick={() => {
+                                                            handleRoteChange(awakened, setAwakened, roteRef, "experiencePoints", 0)
+                                                        }}>Remove</Button>
+                                                        :
+                                                        <></>
+                                                    }
+                                                </td>
+                                                <td dangerouslySetInnerHTML={{ __html: `${rote.description} <p>Rote Pool: ${rote.rotePool} ${calculatePool(rote.rotePool, awakened)}</p>` }} />
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </Table>
+                        </Accordion.Panel>
+                    </Accordion.Item>
                 </div>
             )
         }
         return (
-          <div>
-            <Group>
-                <Button
-                    color="gray"
-                    style={{ margin: "5px" }}
-                    onClick={() => setShowAllRotes((prevShowAllRotes) => !prevShowAllRotes)}
+            <div>
+                <Group>
+                    <Button
+                        color="gray"
+                        style={{ margin: "5px" }}
+                        onClick={() => setShowAllRotes((prevShowAllRotes) => !prevShowAllRotes)}
                     >
                         {showAllRotes ? "Hide All" : "Show All"}
-                </Button>
+                    </Button>
 
-                <Select
-                    data={showAllRotes? allData: selectData} 
-                    value={selectedRote}
-                    onChange={(val) => setSelectedRote(val)} 
-                    placeholder="Select Rote to Buy"
-                    itemComponent={SelectItem}
-                    searchable
-                    allowDeselect
-                    style={{width:'70%'}}
-                />
-            </Group>
-            {getSelectedRoteData()}
+                    <Select
+                        data={showAllRotes ? allData : selectData}
+                        value={selectedRote}
+                        onChange={(val) => setSelectedRote(val)}
+                        placeholder="Select Rote to Buy"
+                        itemComponent={SelectItem}
+                        searchable
+                        allowDeselect
+                        style={{ width: '70%' }}
+                    />
+                </Group>
+                {getSelectedRoteData()}
 
-            <Text>Known Rotes</Text>
-            <Accordion>
-                {
-                    (roteArcana as ArcanaKey[]).map((a) => knownCreateRoteAccordian(a))
-                }    
+                <Text>Known Rotes</Text>
+                <Accordion>
+                    {
+                        (roteArcana as ArcanaKey[]).map((a) => knownCreateRoteAccordian(a))
+                    }
                 </Accordion>
-          </div>
+            </div>
         );
     };
 
-    return(
+    return (
         <>
-        <Text mt={"xl"} ta="center" fz="xl" fw={700}>Rotes</Text>
-        <hr style={{width:"50%"}}/>
+            <Text mt={"xl"} ta="center" fz="xl" fw={700}>Rotes</Text>
+            <hr style={{ width: "50%" }} />
             {roteInputs(learnableRotes)}
         </>
     )

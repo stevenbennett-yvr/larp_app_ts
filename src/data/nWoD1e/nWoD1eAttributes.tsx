@@ -68,35 +68,35 @@ export const nWoD1eAttributeDescriptions: Record<AttributesKey, string> = {
 export const nWoD1eCurrentAttributeLevel = (
     character: any,
     attribute: AttributesKey,
-) => { 
+) => {
     const attributes = character.attributes as nWoD1eAttributes;
     const attributeData = attributes[attribute]
     let { creationPoints, freebiePoints = 0, experiencePoints = 0 } = attributeData;
 
     let totalXpNeeded = 0;
     let pastXpNeeded = [0];
-  
+
     if (experiencePoints === 0) {
-      let level = creationPoints + freebiePoints;
-      let xpNeeded = (level + 1) * 5;
-      totalXpNeeded = xpNeeded;
-      pastXpNeeded.push(totalXpNeeded);
-      return { level, totalXpNeeded, pastXpNeeded };
+        let level = creationPoints + freebiePoints;
+        let xpNeeded = (level + 1) * 5;
+        totalXpNeeded = xpNeeded;
+        pastXpNeeded.push(totalXpNeeded);
+        return { level, totalXpNeeded, pastXpNeeded };
     } else {
-      let level = creationPoints + freebiePoints;
-      let xpNeeded = (level + 1) * 5;
-      totalXpNeeded += xpNeeded;
-      pastXpNeeded.push(totalXpNeeded);
-  
-      while (experiencePoints >= xpNeeded) {
-        level++;
-        experiencePoints -= xpNeeded;
-        xpNeeded = (level + 1) * 5;
+        let level = creationPoints + freebiePoints;
+        let xpNeeded = (level + 1) * 5;
         totalXpNeeded += xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
-      }
-  
-      return { level, totalXpNeeded, pastXpNeeded };
+
+        while (experiencePoints >= xpNeeded) {
+            level++;
+            experiencePoints -= xpNeeded;
+            xpNeeded = (level + 1) * 5;
+            totalXpNeeded += xpNeeded;
+            pastXpNeeded.push(totalXpNeeded);
+        }
+
+        return { level, totalXpNeeded, pastXpNeeded };
     }
 }
 
@@ -106,7 +106,7 @@ export const nWoD1eFindMaxAttribute = (
 ) => {
     const attributes = character.attributes as nWoD1eAttributes;
     const attributeData = attributes[attribute]
-    
+
     const { experiencePoints } = attributeData;
     const { level } = nWoD1eCurrentAttributeLevel(character, attribute);
 
@@ -114,12 +114,12 @@ export const nWoD1eFindMaxAttribute = (
 
     let max = undefined;
     if (powerStat <= 5 && level === 5) {
-      max = experiencePoints;
+        max = experiencePoints;
     } if (powerStat > 5 && level === powerStat) {
-      max = experiencePoints;
+        max = experiencePoints;
     }
     return max;
-  };
+};
 
 type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
 export const nWoD1eHandleAttributeChange = (
@@ -128,7 +128,7 @@ export const nWoD1eHandleAttributeChange = (
     attribute: AttributesKey,
     variableKey: VariableKeys,
     value: number,
-  ) => {
+) => {
 
     const updatedAttributes = {
         ...character.attributes,
@@ -138,34 +138,32 @@ export const nWoD1eHandleAttributeChange = (
         }
     }
 
-    console.log(updatedAttributes)
-
     const updatedCharacter = {
         ...character,
         attributes: updatedAttributes
     }
 
     setCharacter(updatedCharacter)
-  }
+}
 
 export const nWoD1ehandleXpAttributeChange = (
     character: any,
     setCharacter: Function,
     attribute: AttributesKey,
-    value:number) => {
+    value: number) => {
     const { totalXpNeeded, pastXpNeeded } = nWoD1eCurrentAttributeLevel(character, attribute)
     const attributes = character.attributes as nWoD1eAttributes;
     const attributeData = attributes[attribute]; // Get the attribute data
 
-    let xp = value > attributeData.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value) 
+    let xp = value > attributeData.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
 
     nWoD1eHandleAttributeChange(character, setCharacter, attribute, "experiencePoints", xp)
     return xp
-  }
+}
 
-  export function nWoD1eAttributesCreationPointsCheck(
+export function nWoD1eAttributesCreationPointsCheck(
     character: any
-  ): Record<string, number> {
+): Record<string, number> {
     const totalPointsByCategory: Record<string, number> = {
         mental: 0,
         physical: 0,
@@ -177,7 +175,7 @@ export const nWoD1ehandleXpAttributeChange = (
         const attributeKey = attribute as AttributesKey
         const attributeData = attributes[attributeKey]
         const { category, creationPoints } = attributeData;
-        
+
         if (category === 'mental') {
             totalPointsByCategory.mental += creationPoints;
         } else if (category === 'physical') {
@@ -194,11 +192,21 @@ export function nWoD1eAttributesCheckTotalPoints(
     character: any
 ): boolean {
     const totalPointsByCategory = nWoD1eAttributesCreationPointsCheck(character)
+    
     for (const category in totalPointsByCategory) {
-        const points = totalPointsByCategory[category];
-        if (points === 7 || points === 6 || points === 5) {
-            return true; // Found a category with the desired points
+        if (totalPointsByCategory[category] === 8) {
+          delete totalPointsByCategory[category];
+          for (const category in totalPointsByCategory) {
+            if (totalPointsByCategory[category] === 7) {
+              delete totalPointsByCategory[category];
+              const remainingCategory = Object.keys(totalPointsByCategory)[0]
+              if (totalPointsByCategory[remainingCategory] === 6) {
+                return true
+              }
+            }
+          }
         }
-    }
+      }
+    
     return false; // No category with the desired points found
 }
