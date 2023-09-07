@@ -11,7 +11,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 
-interface User {
+export interface User {
     name: string;
     domain: string;
     email: string;

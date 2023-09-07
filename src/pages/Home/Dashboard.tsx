@@ -4,7 +4,7 @@ import { Alert, Card, Center, Text, Group, Stack, Grid, Title } from '@mantine/c
 import { globals } from "../../assets/globals"
 import DomainSelector from './components/DomainSelector';
 import ChroncileSelector from './components/ChronicleSelector';
-import {domainCard} from './components/DomainDisplay';
+import { DomainCard } from './components/DomainDisplay';
 
 /* 
   TODO: 
@@ -15,13 +15,14 @@ import {domainCard} from './components/DomainDisplay';
 */
 
 export default function Dashboard() {
-    //const navigate = useNavigate();
-    const { getUser } = useUser();
-    const [userData, setUserData] = useState(() => {
-      const savedUserData = localStorage.getItem('userData');
-      return savedUserData ? JSON.parse(savedUserData) : '';
+  //const navigate = useNavigate();
+  const { getUser } = useUser();
+  const [userData, setUserData] = useState(() => {
+    const savedUserData = localStorage.getItem('userData');
+    return savedUserData ? JSON.parse(savedUserData) : '';
   });
-    const [showDomainSelector, setShowDomainSelector] = useState(false);
+  const [showDomainSelector, setShowDomainSelector] = useState(false);
+
 
   useEffect(() => {
     if (!userData) { // Check if userData is not set
@@ -36,7 +37,7 @@ export default function Dashboard() {
           console.log("User data not found");
         }
       };
-  
+
       fetchUserData();
     }
   }, []);
@@ -44,35 +45,34 @@ export default function Dashboard() {
   return (
     <Center h={"100%"}>
       <Stack>
-      <Group>
-        <Alert mt={globals.isPhoneScreen ? "75px" : "50px"} color='gray' variant='outline'>
-          <Group>
-            <Card shadow="sm" padding="lg" radius="md" withBorder>
-              <Text fz={globals.largeFontSize} mb={"lg"}>Profile</Text>
-              <Text fz={globals.smallerFontSize}>Email: {userData.email}</Text>
-              <Text fz={globals.smallerFontSize}>Cam Number: {userData.camNumber}</Text>
-              <Text fz={globals.smallerFontSize}>MC: {userData.mc}</Text>
-              <Text fz={globals.smallerFontSize}>Domain: {userData.domain}</Text>
-            </Card>
-            {domainCard(userData)}
-          </Group>
-        </Alert>
-      </Group>
-      <Title order={3}>Venue Portals</Title>
-      <Grid grow m={0}>
-        {ChroncileSelector(userData)}
-      </Grid>
-      {!userData.domain?
-      <DomainSelector
-        showDomainSelector={showDomainSelector}
-        setShowDomainSelector={setShowDomainSelector}
-        userData={userData}
-      />
-      :
-      <></>
-      }
+        <Group>
+          <Alert mt={globals.isPhoneScreen ? "75px" : "50px"} color='gray' variant='outline'>
+            <Group>
+              <Card shadow="sm" padding="lg" radius="md" withBorder>
+                <Text fz={globals.largeFontSize} mb={"lg"}>Profile</Text>
+                <Text fz={globals.smallerFontSize}>Email: {userData.email}</Text>
+                <Text fz={globals.smallerFontSize}>Cam Number: {userData.camNumber}</Text>
+                <Text fz={globals.smallerFontSize}>MC: {userData.mc}</Text>
+                <Text fz={globals.smallerFontSize}>Domain: {userData.domain}</Text>
+              </Card>
+              <DomainCard userData={userData}/>
+            </Group>
+          </Alert>
+        </Group>
+        <Title order={3}>Venue Portals</Title>
+        <Grid grow m={0}>
+          {ChroncileSelector(userData)}
+        </Grid>
+        {!userData.domain ?
+          <DomainSelector
+            showDomainSelector={showDomainSelector}
+            setShowDomainSelector={setShowDomainSelector}
+            userData={userData}
+          />
+          :
+          <></>
+        }
       </Stack>
     </Center>
   )
 }
-

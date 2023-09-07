@@ -317,7 +317,7 @@ const MeritAssigner = ({awakened, setAwakened, nextStep, backStep, showInstructi
                   >
                     {showAllMerits ? "Hide All" : "Show All"}
                   </Button>
-                  <Text fz={globals.smallerFontSize} style={{ margin: "10px"}}>Rote Points: 7/{getRemainingPoints(awakened)}</Text>
+                  <Text fz={globals.smallerFontSize} style={{ margin: "10px"}}>Merit Points: 7/{getRemainingPoints(awakened)}</Text>
               </Button.Group>
             </Group>
             </Alert>
