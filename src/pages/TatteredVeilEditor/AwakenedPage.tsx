@@ -1,12 +1,12 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Tabs, Center } from "@mantine/core";
+import { Tabs, Center, Stack } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { useMageDb } from "../../contexts/MageContext";
 import { useCabalDb } from "../../contexts/CabalContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { Awakened, getEmptyAwakened, fetchAwakenedCharacter } from "../../data/TatteredVeil/types/Awakened";
-import { emptyCabal, Cabal, fetchCabalData, fetchInviteData } from "../../data/TatteredVeil/types/Cabals";
+import { emptyCabal, Cabal } from "../../data/TatteredVeil/types/Cabals";
 import AwakenedSheet from './CharacterTabs/ExperienceTab'
 import BackgroundPage from './CharacterTabs/BackgroundTab'
 import ChangeLogTab from './CharacterTabs/ChangeLogTab'
@@ -18,7 +18,7 @@ import PrintTab from "./CharacterTabs/PrintTab";
 const AwakenedPage = () => {
   const { characterId } = useParams();
   const { domainAwakenedList, getAwakenedById, fetchDomainAwakened, updateAwakened } = useMageDb();
-  const { updateCabal, getCabalData, getCabalInvitations } = useCabalDb()
+  const { updateCabal } = useCabalDb()
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [showRetire, setShowRetire] = useState<boolean>(false);
@@ -35,10 +35,7 @@ const AwakenedPage = () => {
     key: `cabalMember id ${characterId}`,
     defaultValue: emptyCabal(),
   });
-  const [inviteData, setInviteData] = useLocalStorage<Cabal>({
-    key: `inviteFor id ${characterId}`,
-    defaultValue: emptyCabal(),
-  });
+
 
   useEffect(() => {
     if (characterId && currentUser) {
@@ -52,7 +49,7 @@ const AwakenedPage = () => {
     }
   }, [domainAwakenedList, fetchDomainAwakened]);
 
-  useEffect(() => {
+/*   useEffect(() => {
     if (characterId) {
       fetchCabalData(awakened, cabalData, setCabalData, getCabalData);
     }
@@ -63,56 +60,20 @@ const AwakenedPage = () => {
       fetchInviteData(awakened, inviteData, setInviteData, getCabalInvitations);
     }
   }, [awakened, inviteData, setInviteData, getCabalInvitations, characterId]);
-
+ */
 
   /* 
   history, goals, and description need to be set seperately and fed into the background tab.
   This is fucking stupid but with how the RichTextEditor appears to run constantly without change this is required in order for the app to not crash.
   */
 
-  const [richTextValue, setRichTextValue] = useState({
-    history: '',
-    goals: '',
-    description: '',
-  });
-
-  useEffect(() => {
-    if (awakened.background.history !== getEmptyAwakened().background.history) {
-      setRichTextValue({
-        history: awakened.background.history,
-        goals: awakened.background.goals,
-        description: awakened.background.description
-      })
-    }
-  }, [awakened.background.description, awakened.background.goals, awakened.background.history]);
 
 
   const handleUpdate = () => {
-    if (awakened.id && awakened === initialAwakened && (richTextValue.history !== initialAwakened.background.history || richTextValue.goals !== initialAwakened.background.goals || richTextValue.description !== initialAwakened.background.description)) {
-      const updatedAwakened = {
-        ...awakened,
-        background: {
-          ...awakened.background,
-          history: richTextValue.history,
-          goals: richTextValue.goals,
-          description: richTextValue.description,
-        }
-      };
-      updateAwakened(awakened.id, updatedAwakened);
-      setAwakened(updatedAwakened);
-      setInitialAwakened(updatedAwakened);
-      return
-    }
 
     if (awakened.id && awakened !== initialAwakened) {
       const updatedAwakened = {
         ...awakened,
-        background: {
-          ...awakened.background,
-          history: richTextValue.history,
-          goals: richTextValue.goals,
-          description: richTextValue.description,
-        },
         changeLogs: {
           ...awakened.changeLogs,
           [new Date().toISOString()]: logChanges(initialAwakened, awakened),
@@ -151,12 +112,15 @@ const AwakenedPage = () => {
 
   return (
     <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
-      <Tabs defaultValue="experience">
+      <Tabs defaultValue="experience" orientation={globals.isPhoneScreen?"vertical":"horizontal"}>
+        <Stack spacing="0">
         <Center>
-          <Tabs.List>
+          <Tabs.List style={{ paddingBottom: "10px"}}>
             <Tabs.Tab value="experience">Character Sheet</Tabs.Tab>
             <Tabs.Tab value="background">Background</Tabs.Tab>
+            {!globals.isPhoneScreen?
             <Tabs.Tab value="change log">Change Log</Tabs.Tab>
+            :<></>}
             <Tabs.Tab value="print sheet">Print Sheet</Tabs.Tab>
           </Tabs.List>
         </Center>
@@ -169,7 +133,7 @@ const AwakenedPage = () => {
 
         <Tabs.Panel value="background" pt="xs">
           {awakened ?
-            <BackgroundPage awakened={awakened} setAwakened={setAwakened} handleUpdate={handleUpdate} setShowRetire={setShowRetire} richTextValue={richTextValue} setRichTextValue={setRichTextValue} />
+            <BackgroundPage awakened={awakened} setAwakened={setAwakened} handleUpdate={handleUpdate} setShowRetire={setShowRetire} />
             : null}
         </Tabs.Panel>
 
@@ -194,6 +158,7 @@ const AwakenedPage = () => {
           setCabalData={setCabalData}
           updateCabal={updateCabal}
         />
+        </Stack>
       </Tabs>
     </Center>
   );

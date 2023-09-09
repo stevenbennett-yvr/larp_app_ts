@@ -27,7 +27,7 @@ const MageArcanaXpInputs = ({awakened, setAwakened}: MageArcanaXpInputsProps) =>
             <Grid.Col key={arcanum} span={2}>
                 <Card
                     shadow="sm"
-                    padding="lg"
+                    padding="xs"
                     radius="md"
                     style={{ background: bgColor }}
                 >
@@ -93,7 +93,7 @@ const MageArcanaXpInputs = ({awakened, setAwakened}: MageArcanaXpInputsProps) =>
         <>
         <Text mt={"xl"} ta="center" fz="xl" fw={700}>Arcana</Text>
         <hr style={{width:"50%"}}/>
-        <Grid columns={10} grow m={0}>
+        <Grid grow m={0}>
             {
                 rulingArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => arcanumXpInputs(arcanum))
             }{

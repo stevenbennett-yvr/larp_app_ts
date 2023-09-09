@@ -1,5 +1,5 @@
 //Technical Imports
-import { Alert, Button, Center, Group, Stack } from "@mantine/core";
+import { Alert, Button, Center, Group, Stack, Text } from "@mantine/core";
 //Asset Imports
 import { globals } from "../../../assets/globals";
 //Context Imports
@@ -16,42 +16,40 @@ type BackgroundPageProps = {
     setAwakened: (awakened: Awakened) => void,
     handleUpdate: () => void,
     setShowRetire: any,
-    richTextValue: any,
-    setRichTextValue: (richTextValue: any) => void,
 }
 
-const BackgroundPage = ({awakened, setAwakened, handleUpdate, setShowRetire, richTextValue, setRichTextValue}: BackgroundPageProps) => {
+const BackgroundPage = ({awakened, setAwakened, handleUpdate, setShowRetire}: BackgroundPageProps) => {
   const {currentUser} = getAuth()
 
   return (
     <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
       <Stack>
 
-      <MageBackground richTextValue={richTextValue} setRichTextValue={setRichTextValue}/>
-
+      <MageBackground awakened={awakened} setAwakened={setAwakened}/>
       <MagePublicInfoSetter awakened={awakened} setAwakened={setAwakened} currentUser={currentUser}/>
 
       </Stack>
 
-      <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
-          <Group>
-              <Button.Group>
-              <Button 
-                style={{ margin: "5px" }}
-                color="gray"
-                disabled={0 > currentExperience(awakened)} 
-                onClick={() => handleUpdate()}>
-                  Update
-              </Button>
-              <Button 
-                style={{ margin: "5px" }}
-                color="gray"
-                onClick={() => setShowRetire(true)}>
-                  Retire
-              </Button>
-              </Button.Group>
-          </Group>
-      </Alert>
+      <Alert color={0 > currentExperience(awakened) ? "red" : "dark"} variant="outline" radius="xs" style={{ zIndex: 9999, padding: "0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen ? "15%" : "30%" }}>
+                    <Group>
+                        <Button.Group>
+                            <Button
+                                style={{ margin: "5px" }}
+                                color="gray"
+                                disabled={0 > currentExperience(awakened)}
+                                onClick={() => handleUpdate()}>
+                                Update
+                            </Button>
+                            <Text fz={globals.smallerFontSize} style={{ margin: "10px" }} color={0 > currentExperience(awakened) ? "#FF6B6B" : "white"}>Remaining Experience: {currentExperience(awakened)}</Text>
+                            <Button
+                                style={{ margin: "5px" }}
+                                color="gray"
+                                onClick={() => setShowRetire(true)}>
+                                Retire
+                            </Button>
+                        </Button.Group>
+                    </Group>
+                </Alert>
     </Center>
     )
 }

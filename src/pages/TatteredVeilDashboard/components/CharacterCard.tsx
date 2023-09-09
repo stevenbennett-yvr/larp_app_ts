@@ -34,7 +34,7 @@ const CharacterCard = ({ awakenedList }: CharacterCardProps) => {
       <Modal
         opened={modalOpen}
         onClose={handleCloseModal}
-        size={'55%'}        
+        size="auto"
         >
           <Center>
             <Stack>
@@ -66,8 +66,8 @@ const CharacterCard = ({ awakenedList }: CharacterCardProps) => {
       {awakenedList.map((character) => {
         const conStatus = character.merits.filter((merit) => merit.name === 'Status (Consilium)');
         return (
-          <Center>
-          <Alert color="gray" style={{ width: '400px' }} key={character.uid}>
+          <Center key={character.name}>
+          <Alert color="gray" style={{ maxWidth: '400px' }} key={character.uid}>
             <Grid>
               <Grid.Col span={3}>
                 <Center>

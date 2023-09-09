@@ -27,7 +27,7 @@ const MageSkillXpInputs = ({awakened, setAwakened}: MageSkillXpInputsProps) => {
             return (
             <Grid.Col 
                 span={globals.isPhoneScreen ? 8 : 4} 
-                key={`${category} Skills`}
+                key={`${category}-Skills`}
             >
                 <Text fs="italic" fw={700} ta="center">
                 {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -42,7 +42,7 @@ const MageSkillXpInputs = ({awakened, setAwakened}: MageSkillXpInputsProps) => {
                     const selectedSpeciality = specialitiesState[skillName];
                     if ( skillInfo.category === categoryKey ) {
                     return (
-                        <Center style={{ paddingBottom: '5px'}}>
+                        <Center style={{ paddingBottom: '5px'}} key={skill}>
                             <Alert color="gray">
                             <Stack>
                                 <Group key={`${skill} input`}>

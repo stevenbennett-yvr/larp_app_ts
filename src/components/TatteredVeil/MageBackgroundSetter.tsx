@@ -1,64 +1,56 @@
 //Technical Imports
 import { Center, Alert, Text } from '@mantine/core'
-import RichTextEditor from '@mantine/rte'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBookOpen, faBullseye, faMask } from '@fortawesome/free-solid-svg-icons'
+import { faBookOpen, faList, faMask } from '@fortawesome/free-solid-svg-icons'
+import { Awakened } from '../../data/TatteredVeil/types/Awakened'
+
+import { TipTapRTE } from '../TipTapRTE'
+//import { getEmptyAwakened } from '../../data/TatteredVeil/types/Awakened'
 
 type MageBackgroundProps = {
-    richTextValue: any,
-    setRichTextValue: (richTextValue: object) => void
+    awakened: Awakened,
+    setAwakened: (awakened: Awakened) => void
 }
 
-const MageBackground = ({richTextValue, setRichTextValue}: MageBackgroundProps) => {
+const MageBackground = ({ awakened, setAwakened }: MageBackgroundProps) => {
+    // Define a function to update a specific editor's content
 
-    const handleRichTextChange = (field:string, value:string) => {
-        setRichTextValue({
-            ...richTextValue,
-            [field]: value,
-        });
-      };
-
-    return(
+    return (
         <Center>
-        <Alert color="gray" title="ST Info">
-  
-          <Text fz="lg" color="dimmed">
-              <FontAwesomeIcon icon={faBookOpen} /> History
-          </Text>
-          <RichTextEditor
-              id="rte-history"
-              placeholder="How did your character come to be?"
-              value={richTextValue.history}
-              style={{ padding: '5px' }}
-              onChange={val => handleRichTextChange('history', val)}
-          />
-  
-          <Text fz="lg" color="dimmed">
-              <FontAwesomeIcon icon={faBullseye} /> Goals
-          </Text>
-          <RichTextEditor
-              id="rte-goals"
-              placeholder="What does your character want to achieve?"
-              value={richTextValue.goals}
-              style={{ padding: '5px' }}
-              onChange={val => handleRichTextChange('goals', val)}
-          />
-  
-          <Text fz="lg" color="dimmed">
-              <FontAwesomeIcon icon={faMask} /> Description
-          </Text>
-          <RichTextEditor
-              id="rte-description"
-              placeholder="What does your character look like?"
-              value={richTextValue.description}
-              style={{ padding: '5px' }}
-              onChange={val => handleRichTextChange('description', val)}
-          />
-  
+            <Alert color="gray" title="ST Info">
+                <Text fz="lg" color="dimmed">
+                    <FontAwesomeIcon icon={faBookOpen} /> History
+                </Text>
+                {awakened.name !== "" ? <TipTapRTE html={awakened.background.history} setHTML={(val) => setAwakened({
+                    ...awakened,
+                    background: {
+                        ...awakened.background,
+                        history: val,
+                    },
+                })} /> : <></>}
+                <Text fz="lg" color="dimmed">
+                    <FontAwesomeIcon icon={faList} /> Goals
+                </Text>
+                {awakened.name !== "" ? <TipTapRTE html={awakened.background.goals} setHTML={(val) => setAwakened({
+                    ...awakened,
+                    background: {
+                        ...awakened.background,
+                        goals: val,
+                    },
+                })} /> : <></>}
+                <Text fz="lg" color="dimmed">
+                    <FontAwesomeIcon icon={faMask} /> Description
+                </Text>
+                {awakened.name !== "" ? <TipTapRTE html={awakened.background.description} setHTML={(val) => setAwakened({
+                    ...awakened,
+                    background: {
+                        ...awakened.background,
+                        description: val,
+                    },
+                })} /> : <></>}
             </Alert>
-            </Center>
-  
-    )
-}
+        </Center>
+    );
+};
 
 export default MageBackground

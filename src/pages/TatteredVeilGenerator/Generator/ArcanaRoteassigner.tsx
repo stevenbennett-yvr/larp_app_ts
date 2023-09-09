@@ -137,7 +137,7 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
             shadow="sm"
             padding="lg"
             radius="md"
-            style={{ background: bgColor }}
+            style={{ background: !isDisabled ? bgColor : `linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), ${bgColor}` }}
           >
             <Card.Section>
               <Center>
@@ -215,40 +215,44 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
           <Accordion.Panel>
             {isPhoneScreen ? (
               <Table>
-                <thead>
-                  <tr>
-                    <th>Rote</th>
-                    <th>Description</th>
-                  </tr>
-                </thead>
                 <tbody>
                   {filteredRotes.map((rote) => {
                     return (
-                      <tr key={`${rote.name} ${rote.arcanum} phone`}>
-                        <td style={{ backgroundColor: arcanaDescriptions[arcanum]?.color ?? "white" }}>
-                          <Text fz={globals.smallerFontSize} style={{ color: "white" }}>{rote.name}</Text>
-                          <Image
-                            fit="contain"
-                            withPlaceholder
-                            src={arcanaDescriptions[rote.arcanum.toLowerCase() as ArcanaKey].logo}
-                            height={30}
-                            width={30}
-                            alt="order"
-                            style={{ filter: "brightness(0)" }}
-                          />
-                          <p style={{ color: "white" }}>{rote.arcanum} {rote.level} {rote.otherArcana ? `+ ${rote.otherArcana}` : ""}</p>
-                          {awakened.rotes.some((selectedRote) => (selectedRote.name === rote.name && getRoteByName(selectedRote.name).arcanum === rote.arcanum)) ? null :
-                            rotePoints < rote.level || !learnableRotes.some(lr => lr.name === rote.name) ? <Button disabled>Select</Button> :
-                              (
-                                <Button color="gray" onClick={() => { handleSelect(rote); getRotePoints(); }}>Select</Button>
+                      <>
+                        <tr>
+                          <td style={{ backgroundColor: arcanaDescriptions[arcanum]?.color ?? "white" }}>
+                            <Group grow>
+                              <Stack spacing="xs" align="flex-start">
+                                <Text fz={globals.smallerFontSize} style={{ color: "white" }}>{rote.name}</Text>
+                                <Image
+                                  fit="contain"
+                                  withPlaceholder
+                                  src={arcanaDescriptions[rote.arcanum.toLowerCase() as ArcanaKey].logo}
+                                  height={30}
+                                  width={30}
+                                  alt="order"
+                                  style={{ filter: "brightness(0)" }}
+                                />
+                                <p style={{ color: "white" }}>{rote.arcanum} {rote.level} {rote.otherArcana ? `+ ${rote.otherArcana}` : ""}</p>
+                              </Stack>
 
+                              {awakened.rotes.some((selectedRote) => (selectedRote.name === rote.name && getRoteByName(selectedRote.name).arcanum === rote.arcanum)) ? null :
+                                rotePoints < rote.level || !learnableRotes.some(lr => lr.name === rote.name) ? <Button disabled>Select</Button> :
+                                  (
+                                    <Button color="gray" onClick={() => { handleSelect(rote); getRotePoints(); }}>Select</Button>
+
+                                  )}
+                              {awakened.rotes.some((selectedRote) => (selectedRote.name === rote.name && getRoteByName(selectedRote.name).arcanum === rote.arcanum)) && (
+                                <Button color="red" onClick={() => { handleDeselect(rote); getRotePoints(); }}>Deselect</Button>
                               )}
-                          {awakened.rotes.some((selectedRote) => (selectedRote.name === rote.name && getRoteByName(selectedRote.name).arcanum === rote.arcanum)) && (
-                            <Button color="red" onClick={() => { handleDeselect(rote); getRotePoints(); }}>Deselect</Button>
-                          )}
-                        </td>
-                        <td dangerouslySetInnerHTML={{ __html: `${rote.description} <p>Rote Pool: ${rote.rotePool}  (${calculatePool(rote.rotePool, awakened)})</p>` }} />
-                      </tr>
+                            </Group>
+                          </td>
+                        </tr>
+                        <tr key={`${rote.name} ${rote.arcanum} phone`}>
+
+                          <td dangerouslySetInnerHTML={{ __html: `${rote.description} <p>Rote Pool: ${rote.rotePool}  (${calculatePool(rote.rotePool, awakened)})</p>` }} />
+                        </tr>
+                      </>
                     )
                   })}
                 </tbody>
@@ -313,7 +317,7 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
   };
 
   return (
-    <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
+    <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '120px' : '60px' }}>
       <Stack mt={"xl"} align="center" spacing="xl">
         <Alert color="gray">
           <Stack>

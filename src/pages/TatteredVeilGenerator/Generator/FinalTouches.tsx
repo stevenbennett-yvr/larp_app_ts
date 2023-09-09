@@ -1,5 +1,4 @@
 //Technical Imports
-import { useLocalStorage } from "@mantine/hooks";
 import { Alert, Button, Center, Group, Stack, Text } from "@mantine/core";
 //Asset Imports
 import { globals } from "../../../assets/globals";
@@ -10,6 +9,8 @@ import MageBackground from "../../../components/TatteredVeil/MageBackgroundSette
 import MagePublicInfoSetter from "../../../components/TatteredVeil/MagePublicInfoSetter";
 //Data Imports
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened";
+
+
 
 type FinalTouchesProps = {
     awakened: Awakened,
@@ -22,15 +23,6 @@ type FinalTouchesProps = {
 
 const FinalTouches = ({awakened, setAwakened, backStep, nextStep, showInstructions, setShowInstructions}: FinalTouchesProps) => {
   const {currentUser} = getAuth()
-
-  const [richTextValue, setRichTextValue] = useLocalStorage<any>({ 
-    key: "Background",
-    defaultValue: {
-    history: awakened.background.history,
-    goals: awakened.background.goals,
-    description: awakened.background.description,
-    }
-  });
 
   const toggleInstructions = () => {
     setShowInstructions(!showInstructions)
@@ -58,13 +50,13 @@ const FinalTouches = ({awakened, setAwakened, backStep, nextStep, showInstructio
             </Center>
         </Alert>
 
-        <MageBackground richTextValue={richTextValue} setRichTextValue={setRichTextValue}/>
+        <MageBackground awakened={awakened} setAwakened={setAwakened} />
 
         <MagePublicInfoSetter awakened={awakened} setAwakened={setAwakened} currentUser={currentUser}/>
 
       </Stack>
 
-      <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
+      <Alert color="dark" variant="filled" radius="xs" style={{ zIndex:9999, padding:"0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen? "15%" : "30%"}}>
           <Group>
               <Button.Group>
                   <Button
@@ -78,15 +70,6 @@ const FinalTouches = ({awakened, setAwakened, backStep, nextStep, showInstructio
                       style={{ margin: "5px" }}
                       color="gray"
                       onClick={() => {
-                        setAwakened({
-                          ...awakened,
-                          background: {
-                              ...awakened.background,
-                              history: richTextValue.history,
-                              goals: richTextValue.goals,
-                              description: richTextValue.description,
-                          },
-                      });
                       nextStep()
                       }}
                   >

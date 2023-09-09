@@ -25,7 +25,7 @@ const MageCarousel = () => {
         type: 'loop',
         drag   : 'free',
         focus  : 'center',
-        perPage: 3,
+        perPage: 4,
         perMove: 1,
         gap: '1rem', // Adjust this as needed
         arrows: false, // Hide left and right arrows
@@ -41,7 +41,7 @@ const MageCarousel = () => {
       {images.map((image, index) => (
         <SplideSlide key={index} className="enlarged-slide">
           <a href={links[index]} target="_blank" rel="noopener noreferrer">
-            <img height={250} src={image} alt={`Image ${index + 1}`} />
+            <img width={160} src={image} alt={`Image ${index + 1}`} />
           </a>
         </SplideSlide>
       ))}

@@ -1,10 +1,11 @@
 //Technical Imports
-import { Stack, Title, Grid, Text, Group } from "@mantine/core";
+import { Stack, Title, Grid, Text, Group, Center } from "@mantine/core";
 //Data Imports
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened"
 import { nWoD1eCurrentAttributeLevel, AttributesKey } from "../../../data/nWoD1e/nWoD1eAttributes";
 //Utils Imports
 import Dots from "../../../utils/dots";
+import { globals } from "../../../assets/globals";
 
 type Props = {
     awakened: Awakened;
@@ -17,24 +18,24 @@ const MageAttributesPrint = ({awakened}: Props) => {
     return (
     <Stack>
         <hr style={{width:"50%"}} />
-        <Title order={3}>Attributes</Title>
-        <Grid>
+        <Title order={3} align="center">Attributes</Title>
+        <Grid columns={globals.isPhoneScreen? 4:12}>
             <Grid.Col span={4}>
-                <Title order={4}>Mental</Title>
+                <Title order={4} align="center">Mental</Title>
                 {["intelligence", "wits", "resolve"].map((attribute) => {
-                    return (<Group><Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: </Text><Dots n={nWoD1eCurrentAttributeLevel(awakened, attribute as AttributesKey).level} /> </Group>)
+                    return (<Center><Group key={attribute} align="center"><Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: </Text><Dots n={nWoD1eCurrentAttributeLevel(awakened, attribute as AttributesKey).level} /> </Group></Center>)
                 })}
             </Grid.Col>
             <Grid.Col span={4}>
-                <Title order={4}>Physical</Title>
+                <Title order={4} align="center">Physical</Title>
                 {["strength", "dexterity", "stamina"].map((attribute) => {
-                    return (<Group><Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: </Text><Dots n={nWoD1eCurrentAttributeLevel(awakened, attribute as AttributesKey).level} /> </Group>)
+                    return (<Center><Group key={attribute}><Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: </Text><Dots n={nWoD1eCurrentAttributeLevel(awakened, attribute as AttributesKey).level} /> </Group></Center>)
                 })}
             </Grid.Col>
             <Grid.Col span={4}>
-                <Title order={4}>Social</Title>
+                <Title order={4} align="center">Social</Title>
                 {["presence", "manipulation", "composure"].map((attribute) => {
-                    return (<Group><Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: </Text><Dots n={nWoD1eCurrentAttributeLevel(awakened, attribute as AttributesKey).level} /> </Group>)
+                    return (<Center><Group key={attribute}><Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: </Text><Dots n={nWoD1eCurrentAttributeLevel(awakened, attribute as AttributesKey).level} /> </Group></Center>)
                 })}
             </Grid.Col>
         </Grid>

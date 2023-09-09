@@ -32,7 +32,7 @@ const MageAttributeXpInputs = ({awakened, setAwakened}: MageAttributeXpInputsPro
                 return (
                 <Grid.Col 
                     span={globals.isPhoneScreen ? 8 : 4} 
-                    key={`${category} Attributes`}
+                    key={`${category}-Attributes`}
                 >
                     <Text fs="italic" fw={700} ta="center">
                     {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -45,8 +45,8 @@ const MageAttributeXpInputs = ({awakened, setAwakened}: MageAttributeXpInputsPro
                     const { level, totalXpNeeded } = nWoD1eCurrentAttributeLevel(awakened, attributeName);
                     if ( attributeInfo.category === categoryKey ) {
                     return (
-                        <Center>
-                        <Group key={`${attribute} input`}>
+                        <Center key={`${attribute}-Input`}>
+                        <Group>
                             <Input.Wrapper 
                                 label={`${attribute.charAt(0).toUpperCase() + attribute.slice(1)} ${level}`}
                                 description={`Total XP for Next: ${totalXpNeeded}`}

@@ -101,8 +101,8 @@ const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) =>
                         <Table>
                             <thead>
                                 <tr>
-                                    <th>Rote</th>
-                                    <th>Description</th>
+                                    <td>Rote</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -161,15 +161,15 @@ const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) =>
             );
 
             return (
-                <div>
+                <div key={arcanum}>
                     <Accordion.Item value={arcanum}>
                         <Accordion.Control icon={<Image height={20} width={20} src={arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey].logo} />} style={{ color: "white", border: anyRoteOutOfOrder ? '2px solid red' : 'none', backgroundColor: arcanaDescriptions[arcanum.toLowerCase() as ArcanaKey]?.color ?? "white" }}>{arcanum.toUpperCase()} {anyRoteOutOfOrder ? "⚠️" : ""}</Accordion.Control>
                         <Accordion.Panel>
                             <Table>
                                 <thead>
                                     <tr>
-                                        <th>Rote</th>
-                                        <th>Description</th>
+                                        <td>Rote</td>
+                                        <td>Description</td>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -74,7 +74,7 @@ const MageMeritXpInputs = ({awakened, setAwakened}: MageMeritXpInputsProps) => {
         }
         const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
             ({ label, bgc, ...others }: ItemProps, ref) => (
-                <div ref={ref} {...others} style={{backgroundColor:bgc, border: '1px solid white'}}>
+                <div id={`${label}`} ref={ref} {...others} style={{backgroundColor:bgc, border: '1px solid white'}}>
                     <Group noWrap>
                     <div>
                         <Text size="sm" color="white">{label}</Text>
@@ -165,7 +165,7 @@ const MageMeritXpInputs = ({awakened, setAwakened}: MageMeritXpInputsProps) => {
           });
           
 
-        const createOwnedMeritAccordian = (type:string) => {
+        const createOwnedMeritAccordian = (type:string, key:string) => {
             let bgc = ""
             switch (type) {
                 case "Mental merits":
@@ -189,7 +189,7 @@ const MageMeritXpInputs = ({awakened, setAwakened}: MageMeritXpInputsProps) => {
             const sortedMerits = awakened.merits.filter((merit) => getMeritByName(merit.name).type.toLowerCase() === type.toLowerCase()).sort((a, b) => a.id.localeCompare(b.id))
 
             return (
-                <div>
+                <div key={key}>
                     <Accordion.Item value={type}>
                         <Accordion.Control style={{ color: "white", backgroundColor: bgc }}>{type.toUpperCase()}</Accordion.Control>
                         <Accordion.Panel>
@@ -198,14 +198,13 @@ const MageMeritXpInputs = ({awakened, setAwakened}: MageMeritXpInputsProps) => {
                                 <tr>
                                 <th>Merit</th>
                                 <th>Description</th>
-                                <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {sortedMerits.map((meritRef: MeritRef) => {
                                     const merit = getMeritByName(meritRef.name)
                                 return (
-                                    <tr key={`${merit.name} ${merit.type}`}>
+                                    <tr key={`${merit.name} ${merit.type}`} id={`${merit.name} ${merit.type}`}>
                                         <td style={{ minWidth: "150px" }}>
                                         <Text>{merit.name} {currentMeritLevel(meritRef).level}</Text>
                                         <Text>{merit.rating}</Text>
@@ -292,7 +291,7 @@ const MageMeritXpInputs = ({awakened, setAwakened}: MageMeritXpInputsProps) => {
                 <Text>Owned Merits</Text>
                 <Accordion>
                     {
-                        (meritTypes).map((a) => createOwnedMeritAccordian(a))
+                        (meritTypes).map((a) => createOwnedMeritAccordian(a, a))
                     }
                 </Accordion>
             </div>
