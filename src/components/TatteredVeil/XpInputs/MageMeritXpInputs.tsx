@@ -1,6 +1,6 @@
 //Technical Imports
 import { useEffect, useState, forwardRef } from 'react'
-import { useMantineTheme, Accordion, Text, Group, Select, Table, Button, Input, Stack } from '@mantine/core'
+import { useMantineTheme, Accordion, Text, Group, Select, Table, Button, Input, Stack, TextInput } from '@mantine/core'
 //Data Imports
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened"
 import { getMeritByName, Merit, meritRefs, getFilteredMerits, meritData, defineMeritRating, handleMeritChange, currentMeritLevel, handleXpMeritChange, findMaxMerit } from '../../../data/TatteredVeil/types/Merits'
@@ -114,10 +114,10 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                     return (
                         <>
                             {globals.isPhoneScreen ?
-                                <Table>
+                                <Table key={'selectedMerit phonescreen'}>
                                     <tbody>
                                         <tr>
-                                            <td style={{ minWidth: "150px", backgroundColor: `${selectedMeritData.type === "Mental merits" ? theme.fn.rgba(theme.colors.blue[8], 0.90) : selectedMeritData.type === "Physical merits" ? theme.fn.rgba(theme.colors.red[8], 0.90) : selectedMeritData.type === "Social merits" ? theme.fn.rgba(theme.colors.grape[8], 0.90) : selectedMeritData.type === "Mage merits" ? theme.fn.rgba(theme.colors.green[9], 0.90) : selectedMeritData.type === "Sanctum merits" ? theme.fn.rgba(theme.colors.gray[6], 0.90) : ""}`}}>
+                                            <td style={{ minWidth: "150px", backgroundColor: `${selectedMeritData.type === "Mental merits" ? theme.fn.rgba(theme.colors.blue[8], 0.90) : selectedMeritData.type === "Physical merits" ? theme.fn.rgba(theme.colors.red[8], 0.90) : selectedMeritData.type === "Social merits" ? theme.fn.rgba(theme.colors.grape[8], 0.90) : selectedMeritData.type === "Mage merits" ? theme.fn.rgba(theme.colors.green[9], 0.90) : selectedMeritData.type === "Sanctum merits" ? theme.fn.rgba(theme.colors.gray[6], 0.90) : ""}` }}>
                                                 <Stack>
                                                     <Text align='center' style={{ color: "white" }}>{selectedMeritData.name} {selectedMeritData.rating}</Text>
                                                     <Text align='center' style={{ color: "white" }}>{selectedMeritData.prerequisites ? `PreReq: ${selectedMeritData.prerequisites}` : ''}</Text>
@@ -129,15 +129,14 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                         }}>Buy</Button>
                                                 </Stack>
                                             </td></tr>
-                                        <tr key={`${selectedMeritData.name} ${selectedMeritData.type}`}>
-
+                                        <tr>
                                             <td dangerouslySetInnerHTML={{ __html: `${selectedMeritData.description}` }} />
                                         </tr>
 
                                     </tbody>
                                 </Table>
                                 :
-                                <Table>
+                                <Table key={'selectedMerit desktop'}>
                                     <thead>
                                         <tr>
                                             <th>Merit</th>
@@ -146,7 +145,7 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
 
                                     </thead>
                                     <tbody>
-                                        <tr key={`${selectedMeritData.name} ${selectedMeritData.type}`}>
+                                        <tr>
                                             <td
                                                 style={{
                                                     minWidth: "150px",
@@ -225,77 +224,73 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                         <Accordion.Panel>
 
                             {globals.isPhoneScreen ?
-                                <Table>
-                                    <tbody>
-                                        {sortedMerits.map((meritRef) => {
-                                            const merit = getMeritByName(meritRef.name)
-                                            return (
-                                                <>
-                                                    <tr>
-                                                        <td style={{ minWidth: "150px" }}>
-                                                            <Text align='center'>{merit.name} {merit.rating}</Text>
-                                                            <Text align='center'>{merit.prerequisites ? `PreReq: ${merit.prerequisites}` : ''}</Text>
-                                                            {merit.name === "Status (Consilium)" || merit.name === "Status (Order)" ? <></> :
-                                                                <Group grow spacing='xl'>
-                                                                    <Group key={`${merit.name} input`}>
-                                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                            <Button
-                                                                                size="xs"
-                                                                                variant='outline'
-                                                                                color='gray'
-                                                                                onClick={() => handleXpMeritChange(awakened, setAwakened, meritRef, meritRef.experiencePoints - 1)}
-                                                                            >
-                                                                                -
-                                                                            </Button>
-                                                                            <Input
-                                                                                style={{ width: '60px', margin: '0 8px' }}
-                                                                                type="number"
-                                                                                key={`${merit.name}`}
-                                                                                min={0}
-                                                                                max={findMaxMerit(meritRef)}
-                                                                                value={meritRef.experiencePoints}
-                                                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                                    const value = Number(e.target.value);
-                                                                                    handleXpMeritChange(awakened, setAwakened, meritRef, value);
-                                                                                }}
-                                                                            />
-                                                                            <Button
-                                                                                size="xs"
-                                                                                variant='outline'
-                                                                                color='gray'
-                                                                                disabled={findMaxMerit(meritRef) === meritRef.experiencePoints}
-                                                                                onClick={() => handleXpMeritChange(awakened, setAwakened, meritRef, meritRef.experiencePoints + 1)}
-                                                                            >
-                                                                                +
-                                                                            </Button>
-                                                                        </div>
-                                                                    </Group>
-                                                                    {meritRef.creationPoints === 0 && meritRef.freebiePoints === 0 ?
+                                sortedMerits.map((meritRef) => {
+                                    const merit = getMeritByName(meritRef.name)
+                                    return (
+                                        <Table key={`${meritRef.id} phoneScreen`}>
+                                            <tbody>
+                                                <tr>
+                                                    <td style={{ minWidth: "150px" }}>
+                                                        <Text align='center'>{merit.name} {merit.rating}</Text>
+                                                        <Text align='center'>{merit.prerequisites ? `PreReq: ${merit.prerequisites}` : ''}</Text>
+                                                        {merit.name === "Status (Consilium)" || merit.name === "Status (Order)" ? <></> :
+                                                            <Group grow spacing='xl'>
+                                                                <Group key={`${merit.id} group`}>
+                                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
                                                                         <Button
-                                                                            onClick={() => {
-                                                                                setAwakened({ ...awakened, merits: awakened.merits.filter((m) => !m.id.includes(merit.id)) })
+                                                                            size="xs"
+                                                                            variant='outline'
+                                                                            color='gray'
+                                                                            onClick={() => handleXpMeritChange(awakened, setAwakened, meritRef, meritRef.experiencePoints - 1)}
+                                                                        >
+                                                                            -
+                                                                        </Button>
+                                                                        <Input
+                                                                            style={{ width: '60px', margin: '0 8px' }}
+                                                                            type="number"
+                                                                            key={`${merit.id} input`}
+                                                                            min={0}
+                                                                            max={findMaxMerit(meritRef)}
+                                                                            value={meritRef.experiencePoints}
+                                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                                                const value = Number(e.target.value);
+                                                                                handleXpMeritChange(awakened, setAwakened, meritRef, value);
                                                                             }}
-                                                                        >Remove Merit</Button>
-                                                                        :
-                                                                        <></>
-                                                                    }
+                                                                        />
+                                                                        <Button
+                                                                            size="xs"
+                                                                            variant='outline'
+                                                                            color='gray'
+                                                                            disabled={findMaxMerit(meritRef) === meritRef.experiencePoints}
+                                                                            onClick={() => handleXpMeritChange(awakened, setAwakened, meritRef, meritRef.experiencePoints + 1)}
+                                                                        >
+                                                                            +
+                                                                        </Button>
+                                                                    </div>
                                                                 </Group>
-                                                            }
+                                                                {meritRef.creationPoints === 0 && meritRef.freebiePoints === 0 ?
+                                                                    <Button
+                                                                        onClick={() => {
+                                                                            console.log(meritRef.id)
+                                                                            setAwakened({ ...awakened, merits: awakened.merits.filter((m) => !m.id.includes(meritRef.id)) })
+                                                                        }}
+                                                                    >Remove Merit</Button>
+                                                                    :
+                                                                    <></>
+                                                                }
+                                                            </Group>
+                                                        }
+                                                    </td></tr>
+                                                <tr key={`${merit.name} ${merit.type}`}>
 
-
-
-                                                        </td></tr>
-                                                    <tr key={`${merit.name} ${merit.type}`}>
-
-                                                        <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
-                                                    </tr>
-                                                </>
-                                            )
-                                        })}
-                                    </tbody>
-                                </Table>
+                                                    <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
+                                                </tr>
+                                            </tbody>
+                                        </Table>
+                                    )
+                                })
                                 :
-                                <Table>
+                                <Table key={`desktopDisplay`}>
                                     <thead>
                                         <tr>
                                             <th>Merit</th>
@@ -350,7 +345,8 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                         {meritRef.creationPoints === 0 && meritRef.freebiePoints === 0 ?
                                                             <Button
                                                                 onClick={() => {
-                                                                    setAwakened({ ...awakened, merits: awakened.merits.filter((m) => !m.id.includes(merit.id)) })
+                                                                    console.log(meritRef.id)
+                                                                    setAwakened({ ...awakened, merits: awakened.merits.filter((m) => !m.id.includes(meritRef.id)) })
                                                                 }}
                                                             >Remove Merit</Button>
                                                             :
@@ -358,6 +354,15 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                         }
                                                     </td>
                                                     <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
+                                                    <td>
+                                                        <TextInput
+                                                            value={meritRef.note ? meritRef.note : ""}
+                                                            onChange={(event) =>
+                                                                handleMeritChange(awakened, setAwakened, meritRef, "note", event.target.value)
+                                                            }
+                                                            label="Merit Notes"
+                                                        />
+                                                    </td>
                                                 </tr>
                                             )
 

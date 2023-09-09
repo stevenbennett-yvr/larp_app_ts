@@ -18,7 +18,7 @@ const MageRotePrint = ({ awakened }: MageRotePrintProps) => {
         <>
             <hr style={{ width: "50%" }} />
             <Title order={3} align='center'>Rotes</Title>
-            <Table fontSize="xs">
+            <Table striped fontSize="xs">
                 <thead>
                     <tr>
                         <th>
@@ -34,29 +34,43 @@ const MageRotePrint = ({ awakened }: MageRotePrintProps) => {
                 </thead>
                 <tbody>
                     {
-                        awakened.rotes.map((rote) => {
-                            const roteData = getRoteByName(rote.name)
-                            const htmlParser = new DOMParser();
-                            const doc = htmlParser.parseFromString(roteData.description, 'text/html');
-                            const firstLi = doc.querySelector('li');
-
-                            // Get the content of the first <li> element
-                            const firstLiContent = firstLi ? firstLi.textContent : '';
-                            return (
+                        awakened.rotes
+                            .map((rote) => {
+                                const roteData = getRoteByName(rote.name);
+                                const htmlParser = new DOMParser();
+                                const doc = htmlParser.parseFromString(roteData.description, 'text/html');
+                                const firstLi = doc.querySelector('li');
+                                const firstLiContent = firstLi ? firstLi.textContent : '';
+                                return {
+                                    arcanum: roteData.arcanum.slice(0, 3),
+                                    level: roteData.level,
+                                    name: roteData.name,
+                                    rotePool: roteData.rotePool,
+                                    description: firstLiContent,
+                                };
+                            })
+                            .sort((a, b) => {
+                                // Compare first by arcanum, then by level
+                                if (a.arcanum === b.arcanum) {
+                                    return a.level - b.level;
+                                }
+                                return a.arcanum.localeCompare(b.arcanum);
+                            })
+                            .map((roteData) => (
                                 <>
-                                    <tr style={textStyle} key={rote.name}>
-                                        <td>{roteData.arcanum.slice(0, 3)} {roteData.level}</td>
+                                    <tr style={textStyle} key={roteData.name}>
+                                        <td>{roteData.arcanum} {roteData.level}</td>
                                         <td>{roteData.name}</td>
                                         <td>{roteData.rotePool} : {calculatePool(roteData.rotePool, awakened)}</td>
                                     </tr>
                                     <tr>
                                         <td>Description: </td>
-                                        <td colSpan={8}>{firstLiContent}</td>
+                                        <td colSpan={8}>{roteData.description}</td>
                                     </tr>
                                 </>
-                            )
-                        })
+                            ))
                     }
+
                 </tbody>
             </Table>
         </>

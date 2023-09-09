@@ -374,7 +374,6 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
           </Alert>
           : <></>}
         <Center>
-
           <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
             {showAllRotes ? (
               // Render all rotes
@@ -385,6 +384,7 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
             )}
           </Accordion>
         </Center>
+        </Stack>
         <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
           <Group>
             <Button.Group>
@@ -403,18 +403,19 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
               >
                 Next
               </Button>
-              <Button
-                color="gray"
-                style={{ margin: "5px" }}
-                onClick={() => setShowAllRotes((prevShowAllRotes) => !prevShowAllRotes)}
-              >
-                {showAllRotes ? "Hide All" : "Show All"}
-              </Button>
+              {globals.isPhoneScreen ? <></> :
+                <Button
+                  color="gray"
+                  style={{ margin: "5px" }}
+                  onClick={() => setShowAllRotes((prevShowAllRotes) => !prevShowAllRotes)}
+                >
+                  {showAllRotes ? "Hide All" : "Show All"}
+                </Button>
+              }
+              <Text fz={globals.smallerFontSize} style={{ margin: "10px" }}>Rote Points: 6/{rotePoints}</Text>
             </Button.Group>
-            <Text fz={globals.smallerFontSize} style={{ marginRight: "10px" }}>Rote Points: 6/{rotePoints}</Text>
           </Group>
         </Alert>
-      </Stack>
     </Center>
   )
 }

@@ -11,7 +11,8 @@ export const meritRefSchema = z.object({
   name:z.string(),
   creationPoints: z.number(),
   freebiePoints: z.number(),
-  experiencePoints: z.number()
+  experiencePoints: z.number(),
+  note: z.string()
 })
 export type MeritRef = z.infer<typeof meritRefSchema>
 
@@ -21,6 +22,7 @@ export const meritRefs: MeritRef[] = meritDataJson.map((merit) => ({
   creationPoints: 0,
   freebiePoints: 0,
   experiencePoints: 0,
+  note: ""
 }))
 
 export const meritSchema = z.object({
@@ -361,14 +363,14 @@ export const currentMeritLevel = (meritRef: MeritRef) => {
     return filteredMerits
 }
 
-type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "note";
 
 export const handleMeritChange = (
   awakened: Awakened,
   setAwakened: Function,
   merit: MeritRef,
   type: VariableKeys,
-  newPoints: number,
+  newPoints: number|string,
 ): void => {
   console.log(merit)
   const existingMerit = awakened.merits.find((m) => m.id === merit.id);

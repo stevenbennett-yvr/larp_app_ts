@@ -39,7 +39,7 @@ const MeritAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstruct
         if (!existingMerit) {
           const merit = filteredMerits.find((m) => m.name === meritToAdd.merit);
           if (merit) {
-            updatedMerits.push({ name: merit.name, id: merit.id, creationPoints: 0, experiencePoints: 0, freebiePoints: 1 });
+            updatedMerits.push({ name: merit.name, id: merit.id, creationPoints: 0, experiencePoints: 0, freebiePoints: 1, note: "" });
           }
         }
       });
@@ -361,6 +361,7 @@ const MeritAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstruct
             >
               Next
             </Button>
+            {globals.isPhoneScreen? <></>:
             <Button
               color="gray"
               style={{ margin: "5px" }}
@@ -368,6 +369,7 @@ const MeritAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstruct
             >
               {showAllMerits ? "Hide All" : "Show All"}
             </Button>
+            }
             <Text fz={globals.smallerFontSize} style={{ margin: "10px" }}>Merit Points: 7/{getRemainingPoints(awakened)}</Text>
           </Button.Group>
         </Group>
