@@ -10,5 +10,5 @@ export const globals = {
 
     largeFontSize: "30px",
     smallFontSize: "25px",
-    smallerFontSize: "16px",
+    smallerFontSize: "sm",
 }

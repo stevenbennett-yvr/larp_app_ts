@@ -17,7 +17,7 @@ const MageBackground = ({ awakened, setAwakened }: MageBackgroundProps) => {
 
     return (
         <Center>
-            <Alert color="gray" title="ST Info">
+            <Alert color="gray" title="ST Info" style={{maxWidth:"700px"}}>
                 <Text fz="lg" color="dimmed">
                     <FontAwesomeIcon icon={faBookOpen} /> History
                 </Text>
