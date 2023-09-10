@@ -1,5 +1,4 @@
 import z from "zod";
-import { useState } from "react";
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened";
 import { AttributesKey, nWoD1eHandleAttributeChange, AttributeCategory, nWoD1eAttributeDescriptions } from '../../../data/nWoD1e/nWoD1eAttributes'
 import { Alert, Stack, Text, Select, NumberInput, Grid, Center, Button, Tooltip, Indicator } from "@mantine/core";
@@ -161,7 +160,6 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
     setCategorySettings(updatedCategorySettings);
   };
 
-  const [visibilityState, setVisibilityState] = useState<{ [key in AttributesKey]?: boolean }>({});
   const priorityIcons = {
     mental: faBrain,
     physical: faHandFist,
@@ -215,7 +213,6 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
           <hr/>
           {Object.entries(awakened.attributes).map(([attribute, attributeInfo]) => {
             const typedAttribute = attribute as AttributesKey
-            const selectedAttribute = visibilityState[typedAttribute];
             if (attributeInfo.category === category) {
             return (
                 <div
@@ -225,11 +222,11 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
                     multiline
                     width={220}
                     withArrow
+                    offset={20}
                     transitionProps={{ duration: 200 }}
                     label={nWoD1eAttributeDescriptions[typedAttribute]}
                     position={globals.isPhoneScreen ? "bottom" : "top"}
-                    opened={selectedAttribute}
-                    events={{ hover: true, focus: true, touch: true }}
+                    events={{ hover: true, focus: false, touch: false }}
                     >
                   <NumberInput
                   key={`${category}-${attribute}`}
@@ -246,18 +243,6 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
                       attributeInfo.creationPoints
                       )
                   }
-                  onClick={() => {
-                    setVisibilityState((prevState) => ({
-                      ...prevState,
-                      [typedAttribute]: true,
-                    }));
-                }}
-                  onBlur={() => {
-                    setVisibilityState((prevState) => ({
-                      ...prevState,
-                      [typedAttribute]: false, 
-                    }));
-                }} 
 
                 />
                 </Tooltip>

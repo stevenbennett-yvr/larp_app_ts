@@ -158,7 +158,6 @@ const SkillAssigner = ({
     
       const isPhoneScreen = globals.isPhoneScreen
       const isSmallScreen = globals.isSmallScreen
-      const [visibilityState, setVisibilityState] = useState<{ [key in SkillsKey]?: boolean }>({});
       const priorityIcons = {
         mental: faBrain,
         physical: faHandFist,
@@ -210,7 +209,6 @@ const SkillAssigner = ({
               <hr/>
               {Object.entries(awakened.skills).map(([skill, skillsInfo]) => {
                 const skillName = skill as SkillsKey;
-                const selectedSkill = visibilityState[skillName];
                 if (skillsInfo.category === category) {
                 return (
                   <div
@@ -219,11 +217,11 @@ const SkillAssigner = ({
                     <Tooltip
                       multiline
                       width={220}
+                      offset={20}
                       withArrow
                       transitionProps={{ duration: 200 }}
                       label={nWoD1eSkillDescriptions[skillName]}
-                      opened={selectedSkill}
-                      events={{ hover: false, focus: true, touch: false }}
+                      events={{ hover: true, focus: true, touch: true }}
                       position={globals.isPhoneScreen ? "bottom" : "top"}
                     >              
                     <NumberInput
@@ -241,18 +239,6 @@ const SkillAssigner = ({
                         skillsInfo.creationPoints
                       )
                     }
-                    onClick={() => {
-                      setVisibilityState((prevState) => ({
-                        ...prevState,
-                        [skillName]: true,
-                      }));
-                  }}
-                    onBlur={() => {
-                      setVisibilityState((prevState) => ({
-                        ...prevState,
-                        [skillName]: false, 
-                      }));
-                  }} 
                   />
                   </Tooltip>
                   </div>
