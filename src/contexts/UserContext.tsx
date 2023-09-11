@@ -24,6 +24,14 @@ export interface User {
     };
 }
 
+export const emptyUser = {
+  name: "",
+  domain: "",
+  email: "",
+  mc: 0,
+  uid: "",
+}
+
 interface UserContextProps {
   characterList: { id: string }[];
   getUser: () => Promise<User | null>;
