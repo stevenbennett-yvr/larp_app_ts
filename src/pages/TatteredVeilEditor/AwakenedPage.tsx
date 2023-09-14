@@ -36,7 +36,6 @@ const AwakenedPage = () => {
     defaultValue: emptyCabal(),
   });
 
-
   useEffect(() => {
     if (characterId && currentUser) {
       fetchAwakenedCharacter(characterId, currentUser, setAwakened, setInitialAwakened, getAwakenedById, navigate);

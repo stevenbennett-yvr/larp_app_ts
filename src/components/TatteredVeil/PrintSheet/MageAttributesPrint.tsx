@@ -23,19 +23,19 @@ const MageAttributesPrint = ({awakened}: Props) => {
             <Grid.Col span={4}>
                 <Title order={4} align="center">Mental</Title>
                 {["intelligence", "wits", "resolve"].map((attribute) => {
-                    return (<Center><Group key={attribute} align="center"><Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: </Text><Dots n={nWoD1eCurrentAttributeLevel(awakened, attribute as AttributesKey).level} /> </Group></Center>)
+                    return (<Center key={attribute}><Group align="center"><Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: </Text><Dots n={nWoD1eCurrentAttributeLevel(awakened, attribute as AttributesKey).level} /> </Group></Center>)
                 })}
             </Grid.Col>
             <Grid.Col span={4}>
                 <Title order={4} align="center">Physical</Title>
                 {["strength", "dexterity", "stamina"].map((attribute) => {
-                    return (<Center><Group key={attribute}><Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: </Text><Dots n={nWoD1eCurrentAttributeLevel(awakened, attribute as AttributesKey).level} /> </Group></Center>)
+                    return (<Center key={attribute}><Group align="center"><Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: </Text><Dots n={nWoD1eCurrentAttributeLevel(awakened, attribute as AttributesKey).level} /> </Group></Center>)
                 })}
             </Grid.Col>
             <Grid.Col span={4}>
                 <Title order={4} align="center">Social</Title>
                 {["presence", "manipulation", "composure"].map((attribute) => {
-                    return (<Center><Group key={attribute}><Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: </Text><Dots n={nWoD1eCurrentAttributeLevel(awakened, attribute as AttributesKey).level} /> </Group></Center>)
+                    return (<Center key={attribute}><Group align="center"><Text style={textStyle} key={attribute}>{attribute.slice(0, 3)}: </Text><Dots n={nWoD1eCurrentAttributeLevel(awakened, attribute as AttributesKey).level} /> </Group></Center>)
                 })}
             </Grid.Col>
         </Grid>

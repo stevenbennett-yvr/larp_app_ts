@@ -1,5 +1,6 @@
 //Technical Imports
 import { Title, Table } from '@mantine/core'
+import React from 'react'
 //Data Import
 import { Awakened } from '../../../data/TatteredVeil/types/Awakened'
 import { calculatePool, getRoteByName } from '../../../data/TatteredVeil/types/Rotes'
@@ -57,8 +58,8 @@ const MageRotePrint = ({ awakened }: MageRotePrintProps) => {
                                 return a.arcanum.localeCompare(b.arcanum);
                             })
                             .map((roteData) => (
-                                <>
-                                    <tr style={textStyle} key={roteData.name}>
+                                <React.Fragment key={roteData.name}>
+                                    <tr style={textStyle}>
                                         <td>{roteData.arcanum} {roteData.level}</td>
                                         <td>{roteData.name}</td>
                                         <td>{roteData.rotePool} : {calculatePool(roteData.rotePool, awakened)}</td>
@@ -67,7 +68,7 @@ const MageRotePrint = ({ awakened }: MageRotePrintProps) => {
                                         <td>Description: </td>
                                         <td colSpan={8}>{roteData.description}</td>
                                     </tr>
-                                </>
+                                </React.Fragment>
                             ))
                     }
 

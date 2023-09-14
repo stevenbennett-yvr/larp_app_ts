@@ -28,8 +28,8 @@ const MageArcanaPrint = ({awakened}: Props) => {
                     const currentLevel = currentArcanumLevel(awakened, arcanumName).level;
                     
                     return (
-                        <Grid.Col span={4}>
-                        <Center><Group key={arcanum}><Text style={textStyle} key={arcanum}>{arcanum.slice(0, 4)}: </Text><Dots n={currentLevel} /> </Group></Center>
+                        <Grid.Col span={4} key={arcanum}>
+                        <Center><Group><Text style={textStyle}>{arcanum.slice(0, 4)}: </Text><Dots n={currentLevel} /> </Group></Center>
                         </Grid.Col>
                     );
                 })}

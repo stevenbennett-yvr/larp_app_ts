@@ -1,5 +1,6 @@
 //Technical Imports
 import { Title, Table } from '@mantine/core'
+import React from 'react'
 //Data Import
 import { Awakened } from '../../../data/TatteredVeil/types/Awakened'
 import { currentMeritLevel } from '../../../data/TatteredVeil/types/Merits'
@@ -66,15 +67,15 @@ const MageMeritPrint = ({ awakened }: MageMeritPrintProps) => {
                                 return categoryIndexA - categoryIndexB;
                             })
                             .map((meritData) => (
-                                <>
-                                    <tr style={textStyle} key={meritData.name}>
+                                <React.Fragment key={meritData.name}>
+                                    <tr style={textStyle}>
                                         <td>{meritData.name}</td>
                                         <td><Dots n={meritData.level} /></td>
                                     </tr>
                                     <tr>
                                         <td colSpan={2}>{meritData.description}</td>
                                     </tr>
-                                </>
+                                </React.Fragment>
                             ))
                     }
                 </tbody>

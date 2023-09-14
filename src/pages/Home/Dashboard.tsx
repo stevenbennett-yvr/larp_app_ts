@@ -55,7 +55,7 @@ export default function Dashboard() {
                 <Text fz={globals.smallerFontSize}>MC: {userData.mc}</Text>
                 <Text fz={globals.smallerFontSize}>Domain: {userData.domain}</Text>
               </Card>
-              <DomainCard userData={userData}/>
+              <DomainCard userData={userData} />
             </Group>
           </Alert>
         </Group>

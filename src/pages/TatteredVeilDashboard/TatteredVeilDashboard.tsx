@@ -15,23 +15,20 @@ export default function TatteredVeilVenueDashboard() {
 
     useEffect(() => {
         // Fetch the character list when the component mounts
-        if (userAwakenedList.length === 0) {
+        if (userAwakenedList.length === 0 && domainAwakenedList.length === 0) {
             fetchUserAwakened();
-        }
-        if (domainAwakenedList.length === 0) {
             fetchDomainAwakened();
         }
-      }, [fetchUserAwakened, userAwakenedList.length, fetchDomainAwakened, domainAwakenedList.length]);
+    }, [userAwakenedList.length, domainAwakenedList.length, fetchUserAwakened, fetchDomainAwakened]);
 
     return (
-        
         <Center h={"100%"}>
-            {showAsideBar ? <CastAside domainAwakenedList={domainAwakenedList} currentUser={currentUser}/> : <></>}
+            {showAsideBar ? <CastAside domainAwakenedList={domainAwakenedList} currentUser={currentUser} /> : <></>}
             <Stack>
                 <Group>
-                        {showAsideBar ? <Card style={{ maxWidth: 600 }}><MageCarousel/></Card> : <></>}
+                    {showAsideBar ? <Card style={{ maxWidth: 600 }}><MageCarousel /></Card> : <></>}
                 </Group>
-                <CharacterCard awakenedList={userAwakenedList}/>
+                <CharacterCard awakenedList={userAwakenedList} />
             </Stack>
         </Center>
     )

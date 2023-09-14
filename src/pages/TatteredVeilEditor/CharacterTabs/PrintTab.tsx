@@ -1,5 +1,9 @@
 //technical imports
-import { Alert, Center, Stack, Table } from "@mantine/core";
+import { Alert, Button, Center, Stack, Table, Text } from "@mantine/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faFileExport } from "@fortawesome/free-solid-svg-icons"
+import { useState } from "react";
+import { IconAlertCircle } from "@tabler/icons-react"
 //Asset Imports
 import { globals } from "../../../assets/globals";
 //data imports
@@ -15,6 +19,7 @@ import MageArcanaPrint from "../../../components/TatteredVeil/PrintSheet/MageArc
 import MageRotePrint from "../../../components/TatteredVeil/PrintSheet/MageRotePrint";
 import MageMeritPrint from "../../../components/TatteredVeil/PrintSheet/MageMeritPrint";
 import { TopSection } from "../../../components/TatteredVeil/TopSection";
+import { downloadCharacterSheet } from "../../../components/TatteredVeil/pdfMage";
 
 type PrintSheetProps = {
     awakened: Awakened
@@ -22,8 +27,9 @@ type PrintSheetProps = {
 
 const PrintTab = ({ awakened }: PrintSheetProps) => {
 
-
     //OHTER SECTION
+
+    const [downloadError, setDownloadError] = useState<Error | undefined>()
 
     const otherSection = () => {
         const dexterityLevel = nWoD1eCurrentAttributeLevel(awakened, 'dexterity').level;
@@ -141,7 +147,14 @@ const PrintTab = ({ awakened }: PrintSheetProps) => {
                 </Alert>
 
                 <TopSection awakened={awakened} />
-
+                <Center>
+                <Button leftIcon={<FontAwesomeIcon icon={faFileExport} />} size="lg" color="gray" style={{maxWidth:"250px"}}
+                    onClick={() => {
+                        downloadCharacterSheet(awakened).catch((e) => { console.error(e); setDownloadError(e as Error) })
+                    }}>
+                    Download PDF
+                </Button>
+                </Center>
                 {otherSection()}
 
                 <MageAttributesPrint awakened={awakened} />
@@ -155,6 +168,15 @@ const PrintTab = ({ awakened }: PrintSheetProps) => {
                 <MageMeritPrint awakened={awakened} />
 
             </Stack>
+
+            {downloadError
+                ? <Alert mt={"50px"} icon={<IconAlertCircle size="1rem" />} color="red" variant="outline" bg={"rgba(0, 0, 0, 0.6)"}>
+                    <Text fz={"xl"} ta={"center"}>There was a download-error: {downloadError.message}</Text>
+                    <Text fz={"lg"} ta={"center"} mb={"xl"}>Send a screenshot of this to me on <a target="_blank" rel="noreferrer" href="https://twitter.com/Odin68092534">Twitter</a> to help me fix it</Text>
+                    <Text fz={"xs"} ta={"center"}>{downloadError.stack}</Text>
+                </Alert>
+                : null
+            }
         </Center>
     )
 }
