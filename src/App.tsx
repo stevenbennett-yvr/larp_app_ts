@@ -15,6 +15,7 @@ import Topbar from './topbar/Topbar';
 import GenerateAwakened from './pages/TatteredVeilGenerator/CreateAwakened'
 import TatteredVeilVenueDashboard from './pages/TatteredVeilDashboard/TatteredVeilDashboard'
 import AwakenedPage from './pages/TatteredVeilEditor/AwakenedPage';
+import GoodIntentionsDashboard from './pages/GoodIntentionsDashboard/GoodIntentionsDashboard';
 
 import { globals } from './assets/globals';
 import { UserProvider } from './contexts/UserContext';
@@ -68,6 +69,7 @@ function AuthenticatedApp() {
           <Route path="/create-mage" element={<PrivateRoute><GenerateAwakened/></PrivateRoute>}/>
           <Route path="/tattered-veil" element={<PrivateRoute><TatteredVeilVenueDashboard/></PrivateRoute>}/>
           <Route path="/awakened-sheet/:characterId" element={<PrivateRoute><AwakenedPage/></PrivateRoute>}/>
+          <Route path="/good-intentions" element={<PrivateRoute><GoodIntentionsDashboard/></PrivateRoute>}/>
         </Routes>
       </Container>
     </AppShell>

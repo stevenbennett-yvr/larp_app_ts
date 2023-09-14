@@ -8,6 +8,7 @@ import { currentMeritLevel } from '../../data/TatteredVeil/types/Merits';
 import { Gnoses, currentGnosisLevel } from '../../data/TatteredVeil/types/Gnosis';
 import { currentWisdomLevel } from '../../data/TatteredVeil/types/Wisdom';
 import { calculatePool, getRoteByName } from '../../data/TatteredVeil/types/Rotes';
+import { notifications } from '@mantine/notifications';
 
 const loadTemplate = async (pdf = base64Pdf) => {
     return fetch(pdf)
@@ -24,7 +25,6 @@ export const testTemplate = async (basePdf: string) => {
         return { success: false, error: new Error("Can't get form from pdf - is it a fillable pdf?") }
     }
 }
-
 
 function base64ToArrayBuffer(base64: string) {
     const binary_string = window.atob(base64);
@@ -273,7 +273,12 @@ export const createPdf = async (awakened: Awakened) => {
 
 export const downloadCharacterSheet = async (awakened: Awakened) => {
     const pdfBytes = await createPdf(awakened)
-
+    notifications.show({
+        title: "PDF base produced by MrGone!",
+        message: "https://mrgone.rocksolidshells.com/",
+        autoClose: 10000,
+        color: "grape",
+    })
 
     downloadPdf(`tatteredVeil_${awakened.name}.pdf`, pdfBytes)
 }
