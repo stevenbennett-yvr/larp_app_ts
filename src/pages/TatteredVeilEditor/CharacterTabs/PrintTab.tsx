@@ -155,6 +155,14 @@ const PrintTab = ({ awakened }: PrintSheetProps) => {
                     Download PDF
                 </Button>
                 </Center>
+
+                {downloadError
+                ? <Alert mt={"50px"} icon={<IconAlertCircle size="1rem" />} color="red" variant="outline" bg={"rgba(0, 0, 0, 0.6)"}>
+                    <Text fz={"xl"} ta={"center"}>There was a download-error: {downloadError.message}</Text>
+                </Alert>
+                : null
+            }
+
                 {otherSection()}
 
                 <MageAttributesPrint awakened={awakened} />
@@ -168,15 +176,6 @@ const PrintTab = ({ awakened }: PrintSheetProps) => {
                 <MageMeritPrint awakened={awakened} />
 
             </Stack>
-
-            {downloadError
-                ? <Alert mt={"50px"} icon={<IconAlertCircle size="1rem" />} color="red" variant="outline" bg={"rgba(0, 0, 0, 0.6)"}>
-                    <Text fz={"xl"} ta={"center"}>There was a download-error: {downloadError.message}</Text>
-                    <Text fz={"lg"} ta={"center"} mb={"xl"}>Send a screenshot of this to me on <a target="_blank" rel="noreferrer" href="https://twitter.com/Odin68092534">Twitter</a> to help me fix it</Text>
-                    <Text fz={"xs"} ta={"center"}>{downloadError.stack}</Text>
-                </Alert>
-                : null
-            }
         </Center>
     )
 }
