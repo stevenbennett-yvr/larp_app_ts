@@ -125,7 +125,16 @@ export const createPdf = async (awakened: Awakened) => {
     };
 
 
-    (["athletics",
+    (["academics",
+        "computer",
+        "crafts",
+        "investigation",
+        "medicine",
+        "occult",
+        "politics",
+        "science",
+
+        "athletics",
         "brawl",
         "drive",
         "firearms",
@@ -143,26 +152,19 @@ export const createPdf = async (awakened: Awakened) => {
         "streetwise",
         "subterfuge",
 
-        "academics",
-        "computer",
-        "crafts",
-        "investigation",
-        "medicine",
-        "occult",
-        "politics",
-        "science",].map((a) => skillsKeySchema.parse(a))).forEach((attr) => {
-            const lvl = nWoD1eCurrentSkillLevel(awakened, attr).level;
-            const number = skillNumbers[attr];
-            for (let i = 1; i <= lvl; i++) {
-                form.getCheckBox(`dot${number + i}`).check();
-            }
-            if (awakened.skills[attr].roteSkill) {
-                form.getCheckBox(`rotecheck${j}`).check()
-            }
-            j += 1
-        });
+    ].map((a) => skillsKeySchema.parse(a))).forEach((attr) => {
+        const lvl = nWoD1eCurrentSkillLevel(awakened, attr).level;
+        const number = skillNumbers[attr];
+        for (let i = 1; i <= lvl; i++) {
+            form.getCheckBox(`dot${number + i}`).check();
+        }
+        if (awakened.skills[attr].roteSkill) {
+            form.getCheckBox(`rotecheck${j}`).check()
+        }
+        j += 1
+    });
 
-        let a = 1
+    let a = 1
     // Arcana
     const arcanaLocals = {
         "death": 264,
@@ -183,7 +185,7 @@ export const createPdf = async (awakened: Awakened) => {
         for (let i = 1; i <= lvl; i++) {
             form.getCheckBox(`dot${attrNumber + i}`).check();
         }
-        if (awakened.arcana[attr].type === 'Ruling' || awakened.arcana[attr].type === 'Inferior'){
+        if (awakened.arcana[attr].type === 'Ruling' || awakened.arcana[attr].type === 'Inferior') {
             form.getTextField(`arcana${a}`).setText(awakened.arcana[attr].type)
         }
         a += 1
@@ -195,7 +197,7 @@ export const createPdf = async (awakened: Awakened) => {
     let md = 344
     merits.map((m, index) => {
         const lvl = currentMeritLevel(m).level;
-        form.getDropdown(`merits${1+index}`).select(m.name)
+        form.getDropdown(`merits${1 + index}`).select(m.name)
         console.log(md)
         for (let i = 1; i <= lvl; i++) {
             form.getCheckBox(`dot${md + i}`).check()
@@ -228,7 +230,7 @@ export const createPdf = async (awakened: Awakened) => {
     // Wisdom
     const wisdom = currentWisdomLevel(awakened).level;
     for (let i = 1; i <= wisdom; i++) {
-        form.getCheckBox(`humandot${11-i}`).check();
+        form.getCheckBox(`humandot${11 - i}`).check();
     }
 
     //Size
@@ -256,15 +258,15 @@ export const createPdf = async (awakened: Awakened) => {
     //Rotes
     const rotes = awakened.rotes
     rotes.map((r, index) => {
-        const roteData = getRoteByName(r.name) 
-        form.getDropdown(`rotearcana${1+index}`).select(roteData.arcanum)
-        form.getTextField(`rotelevel${1+index}`).setText(`${roteData.level}`)
-        form.getDropdown(`rotenames${1+index}`).select(`${roteData.name}`)
-        form.getTextField(`rotesdp${1+index}`).setText(`${calculatePool(roteData.rotePool,awakened)}`)
-        form.getTextField(`rotespage${1+index}`).setText(`${roteData.source}`)
+        const roteData = getRoteByName(r.name)
+        form.getDropdown(`rotearcana${1 + index}`).select(roteData.arcanum)
+        form.getTextField(`rotelevel${1 + index}`).setText(`${roteData.level}`)
+        form.getDropdown(`rotenames${1 + index}`).select(`${roteData.name}`)
+        form.getTextField(`rotesdp${1 + index}`).setText(`${calculatePool(roteData.rotePool, awakened)}`)
+        form.getTextField(`rotespage${1 + index}`).setText(`${roteData.source}`)
     })
 
-    
+
     form.acroForm.dict.set(PDFName.of('NeedAppearances'), PDFBool.True)
     return await pdfDoc.save()
 }
