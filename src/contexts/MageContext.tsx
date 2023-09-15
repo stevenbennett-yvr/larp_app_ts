@@ -21,7 +21,7 @@ type AwakenedContextValue = {
   onSubmitAwakened: (newAwakened: Awakened) => void;
   updateAwakened: (id: string, updatedAwakened: Awakened) => void;
   fetchUserAwakened: () => void;
-  getAwakenedById: (id: string) => Awakened;
+  getAwakenedById: (id: string) => void;
 };
 
 const MageContext = React.createContext<AwakenedContextValue | null>(null);
@@ -83,8 +83,7 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
   const domainAwakenedCollectionRef = useMemo(() => {
     if (!currentUser || !userData) return null;
     return query(collectionRef,
-      where("domain", "==", userData.domain),
-      where("background.showPublic", "==", true)
+      where("domain", "==", userData.domain)
     )
   }, [collectionRef, currentUser, userData])
 
@@ -133,8 +132,8 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
   );
 
   const getAwakenedById = useCallback((id:string) => {
-    return userAwakenedList.find((character:any) => character.id === id)
-  }, [userAwakenedList])
+    return domainAwakenedList.find((character:any) => character.id === id)
+  }, [domainAwakenedList])
 
 
 

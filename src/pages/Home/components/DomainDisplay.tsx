@@ -2,7 +2,7 @@ import { Card, Text, Button, Avatar } from "@mantine/core"
 import { globals } from "../../../assets/globals"
 import domains from '../../../data/CaM/source/domains.json'
 import { FacebookLogo, DiscordLogo, WebLogo } from "../../../assets/images/CaM"
-import { User } from "../../../contexts/UserContext"
+import { User } from "../../../data/CaM/types/User"
 import { useUser } from "../../../contexts/UserContext"
 import { useAuth } from "../../../contexts/AuthContext"
 

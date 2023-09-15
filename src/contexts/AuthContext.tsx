@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { doc, setDoc, query, getDocs, collection, where, deleteDoc } from "firebase/firestore";
 import { auth, db } from "./firebase";
-import { emptyUser } from "./UserContext";
+import { getEmptyUser } from "../data/CaM/types/User";
 
 interface Auth {
   uid: string;
@@ -42,7 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }): JSX.E
         // User doesn't exist, add the user to the database
         const userDocRef = doc(db, "users", uid);
         try {
-          await setDoc(userDocRef, { ...emptyUser, uid, email });
+          await setDoc(userDocRef, { ...getEmptyUser(), uid, email });
           console.log("User added to the database");
         } catch (error) {
           console.error("Error adding user to the database:", error);

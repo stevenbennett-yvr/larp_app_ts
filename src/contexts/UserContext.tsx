@@ -10,27 +10,8 @@ import {
   onSnapshot,
   getDoc,
 } from "firebase/firestore";
+import { User } from "../data/CaM/types/User";
 
-export interface User {
-    name: string;
-    domain: string;
-    email: string;
-    mc: number;
-    uid: string;
-    role?: {
-        title: string;
-        domain: string;
-        venue: string;
-    };
-}
-
-export const emptyUser = {
-  name: "",
-  domain: "",
-  email: "",
-  mc: 0,
-  uid: "",
-}
 
 interface UserContextProps {
   characterList: { id: string }[];
@@ -61,11 +42,12 @@ export function UserProvider({ children }: { children: React.ReactNode}): JSX.El
   const charactersCollectionRef = useMemo(() => {
     if (!currentUser || !userData) return null;
 
-    if (userData.role?.title === "vst") {
+    if (userData.roles?.some(role => role.title === "vst")) {
       console.log('charactersCollectionRef VST query')
+      const vstRole = userData.roles.find(role => role.title === "vst");
       return query(collectionRef, 
-        where("chronicle", "==", userData.role.venue),
-        where("domain", "==", userData.role.domain)
+        where("chronicle", "==", vstRole?.venue),
+        where("domain", "==", vstRole?.domain)
       );
     } else {
       console.log('characterCollectionRef query')

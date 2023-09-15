@@ -4,7 +4,6 @@ import { Tabs, Center, Stack } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { useMageDb } from "../../contexts/MageContext";
 import { useCabalDb } from "../../contexts/CabalContext";
-import { useAuth } from "../../contexts/AuthContext";
 import { Awakened, getEmptyAwakened, fetchAwakenedCharacter } from "../../data/TatteredVeil/types/Awakened";
 import { emptyCabal, Cabal } from "../../data/TatteredVeil/types/Cabals";
 import AwakenedSheet from './CharacterTabs/ExperienceTab'
@@ -14,14 +13,38 @@ import RetireModal from "./CharacterTabs/components/retireModal";
 import { globals } from "../../assets/globals";
 import { logChanges } from "../TatteredVeilGenerator/Generator/utils/Logging";
 import PrintTab from "./CharacterTabs/PrintTab";
+import { useUser } from "../../contexts/UserContext";
+import { User } from "../../data/CaM/types/User";
 
 const AwakenedPage = () => {
   const { characterId } = useParams();
   const { domainAwakenedList, getAwakenedById, fetchDomainAwakened, updateAwakened } = useMageDb();
   const { updateCabal } = useCabalDb()
-  const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [showRetire, setShowRetire] = useState<boolean>(false);
+
+  const { getUser } = useUser();
+  const [userData, setUserData] = useState<User>(() => {
+      const savedUserData = localStorage.getItem('userData');
+      return savedUserData ? JSON.parse(savedUserData) : '';
+  });
+  useEffect(() => {
+      if (!userData) { // Check if userData is not set
+          const fetchUserData = async () => {
+              const fetchedUserData = await getUser();
+              console.log("fetch userData")
+              if (fetchedUserData) {
+                  setUserData(fetchedUserData);
+                  localStorage.setItem('userData', JSON.stringify(fetchedUserData));
+              } else {
+                  console.log("User data not found");
+              }
+          };
+
+          fetchUserData();
+      }
+  }, []);
+
 
   const [initialAwakened, setInitialAwakened] = useLocalStorage<Awakened>({
     key: `initAwakened id ${characterId}`,
@@ -37,10 +60,10 @@ const AwakenedPage = () => {
   });
 
   useEffect(() => {
-    if (characterId && currentUser) {
-      fetchAwakenedCharacter(characterId, currentUser, setAwakened, setInitialAwakened, getAwakenedById, navigate);
+    if (characterId && userData) {
+      fetchAwakenedCharacter(characterId, userData, setAwakened, setInitialAwakened, getAwakenedById, navigate);
     }
-  }, [characterId, currentUser, setInitialAwakened, getAwakenedById, setAwakened, navigate]);
+  }, [characterId, userData, setInitialAwakened, getAwakenedById, setAwakened, navigate]);
 
   useEffect(() => {
     if (domainAwakenedList.length === 0) {

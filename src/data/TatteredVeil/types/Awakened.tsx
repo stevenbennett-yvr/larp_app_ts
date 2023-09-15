@@ -10,6 +10,7 @@ import { meritRefSchema } from "./Merits";
 import { roteRefSchema } from "./Rotes";
 import { gnosisSchema } from "./Gnosis";
 import { wisdomSchema } from "./Wisdom";
+import { User } from "../../CaM/types/User";
 
 export const backgroundSchema = z.object({
   history: z.string(),
@@ -149,7 +150,7 @@ export const getEmptyAwakened = (): Awakened => {
 export type Awakened = z.infer<typeof awakenedSchema>
 
 
-export const fetchAwakenedCharacter = async (characterId:string, currentUser:any, setAwakened:Function, setInitialAwakened:Function, getAwakenedById:Function, navigate:Function) => {
+export const fetchAwakenedCharacter = async (characterId:string, currentUser:User, setAwakened:Function, setInitialAwakened:Function, getAwakenedById:Function, navigate:Function) => {
   const localStorageCharacter = localStorage.getItem(`awakened id ${characterId}`);
   if (localStorageCharacter) {
     let awakened = JSON.parse(localStorageCharacter)
@@ -161,7 +162,7 @@ export const fetchAwakenedCharacter = async (characterId:string, currentUser:any
     }
   } else {
     const character = await getAwakenedById(characterId);
-    if (character && currentUser && character.uid === currentUser.uid) {
+    if (character && currentUser && (character.uid === currentUser.uid || currentUser.roles?.some(role => role.title === "vst" && role.venue === 'tattered veil'))) {
       setAwakened(character);
       localStorage.setItem(`awakened id ${characterId}`, JSON.stringify(character));
       setInitialAwakened(character)

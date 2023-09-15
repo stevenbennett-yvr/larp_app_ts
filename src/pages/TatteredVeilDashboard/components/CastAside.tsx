@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import {
   Aside,
-  ScrollArea
+  ScrollArea,
+  Stack
 } from "@mantine/core";
 import { globals } from "../../../assets/globals";
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened";
@@ -14,7 +15,7 @@ type CastAsideProps = {
 
 const CastAside = ({ domainAwakenedList, currentUser }: CastAsideProps) => {
   const filteredAwakenedList = domainAwakenedList.filter(
-    (character) => character.uid !== currentUser.uid
+    (character) => character.uid !== currentUser.uid && character.background.showPublic
   );
 
   const [showAsideBar, setShowAsideBar] = useState(!globals.isSmallScreen)
@@ -26,10 +27,12 @@ const CastAside = ({ domainAwakenedList, currentUser }: CastAsideProps) => {
       {showAsideBar ? (
         <Aside p="md" hiddenBreakpoint="sm" width={{ xs: 400 }} style={{ zIndex: 0 }}>
         <ScrollArea h={height - 100}>
-
-        {filteredAwakenedList.map((character) => (
+        <Stack>
+        {filteredAwakenedList.map((character) => {
+          return(
           <MageCard awakened={character} key={character.id} />
-        ))}
+        )})}
+        </Stack>
         </ScrollArea>
         </Aside>
       ) : (

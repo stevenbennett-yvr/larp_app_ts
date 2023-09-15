@@ -62,11 +62,11 @@ const CharacterCard = ({ awakenedList }: CharacterCardProps) => {
   }
   
   return (
-    <>
+    <Grid columns={awakenedList.length === 1 ? 3 : 6}>
       {awakenedList.map((character) => {
         const conStatus = character.merits.filter((merit) => merit.name === 'Status (Consilium)');
         return (
-          <Center key={character.name}>
+          <Grid.Col span={3} key={character.name}>
           <Alert color="gray" style={{ maxWidth: '400px' }} key={character.uid}>
             <Grid>
               <Grid.Col span={3}>
@@ -134,10 +134,10 @@ const CharacterCard = ({ awakenedList }: CharacterCardProps) => {
               </Grid.Col>
             </Grid>
           </Alert>
-          </Center>
+          </Grid.Col>
         );
       })}
-    </>
+    </Grid>
   );
 };
 

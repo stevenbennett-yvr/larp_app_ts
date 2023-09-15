@@ -174,12 +174,12 @@ export const createPdf = async (awakened: Awakened) => {
         "matter": 296,
         "mind": 304,
         "prime": 312,
-        "space": 320,
-        "spirit": 328,
+        "space": 328,
+        "spirit": 320,
         "time": 336,
     };
 
-    (["death", "fate", "forces", "life", "matter", "mind", "prime", "space", "spirit", "time"].map((a) => arcanaKeySchema.parse(a))).forEach((attr) => {
+    (["death", "fate", "forces", "life", "matter", "mind", "prime", "spirit", "space", "time"].map((a) => arcanaKeySchema.parse(a))).forEach((attr) => {
         const lvl = currentArcanumLevel(awakened, attr).level;
         const attrNumber = arcanaLocals[attr];
         for (let i = 1; i <= lvl; i++) {
