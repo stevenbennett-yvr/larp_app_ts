@@ -84,13 +84,6 @@ const AwakenedPage = () => {
   }, [awakened, inviteData, setInviteData, getCabalInvitations, characterId]);
  */
 
-  /* 
-  history, goals, and description need to be set seperately and fed into the background tab.
-  This is fucking stupid but with how the RichTextEditor appears to run constantly without change this is required in order for the app to not crash.
-  */
-
-
-
   const handleUpdate = () => {
 
     if (awakened.id && awakened !== initialAwakened) {

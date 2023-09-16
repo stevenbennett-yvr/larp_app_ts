@@ -4,7 +4,7 @@ import { ArcanaKey, arcanaDescriptions, arcanaKeySchema, arcana } from "../../..
 import { globals } from "../../../assets/globals";
 import { Paths } from "../../../data/TatteredVeil/types/Path";
 import { useState, useEffect } from 'react';
-import { roteRefs, Rote, roteData, getFilteredRotes, handleRoteChange, calculatePool, getRoteByName } from "../../../data/TatteredVeil/types/Rotes";
+import { removeRote, roteRefs, Rote, roteData, getFilteredRotes, handleRoteChange, calculatePool, getRoteByName } from "../../../data/TatteredVeil/types/Rotes";
 
 type ArcanaRoteAssignerProps = {
   awakened: Awakened,
@@ -38,13 +38,13 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
     setRotePoints(newTotal);
   };
 
-  const [learnableRotes, setLearnableRotes] = useState<Rote[]>(getFilteredRotes(awakened, roteData));
+  const [learnableRotes, setLearnableRotes] = useState<Rote[]>(getFilteredRotes(awakened));
 
   useEffect(() => {
     // When the component mounts or whenever the awakened.arcana state changes,
     // update the learnableRotes state with the filtered rotes
     getRotePoints()
-    setLearnableRotes(getFilteredRotes(awakened, roteData));
+    setLearnableRotes(getFilteredRotes(awakened));
   }, [awakened]);
 
   const [rulingDots, setRulingDots] = useState<{ first: [ArcanaKey | string, number]; second: [ArcanaKey | string, number] }>({
@@ -202,7 +202,7 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
     const handleDeselect = (rote: Rote) => {
       const roteRef = roteRefs.find((r) => r.name === rote.name)
       if (roteRef) {
-        handleRoteChange(awakened, setAwakened, roteRef, "creationPoints", 0)
+        removeRote(awakened, setAwakened, roteRef)
       }
     };
 

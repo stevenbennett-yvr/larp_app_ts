@@ -278,6 +278,46 @@ export const nWoD1eAddSpeciality = (
   nWoD1eHandleSkillChange(character, setCharacter, skill, "specialities", specialityArray);
 };
 
+type SpecialityVariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
+export const nWoD1eHandleSpeciality = (
+  character: any,
+  setCharacter: Function,
+  skill: SkillsKey,
+  speciality: Speciality,
+  valueKey: SpecialityVariableKeys,
+  value: number,
+) => {
+  let specialities = nWoD1eGetSpecialities(character, skill);
+
+  // Find the index of the speciality in the specialities array
+  const specialityIndex = specialities.findIndex(
+    (s: Speciality) => s.name === speciality.name
+  );
+
+  if (specialityIndex !== -1) {
+    // Create a copy of the speciality with the updated value
+    const updatedSpeciality: Speciality = {
+      ...speciality,
+      [valueKey]: value,
+    };
+
+    // Update the speciality in the specialities array
+    specialities[specialityIndex] = updatedSpeciality;
+
+    // Update the character object with the modified specialities
+    const updatedCharacter = {
+      ...character,
+      [skill]: {
+        ...character[skill],
+        specialities: specialities,
+      },
+    };
+
+    // Call setCharacter to update the character object in the component
+    setCharacter(updatedCharacter);
+  }
+};
+
 export const nWoD1eRemoveSpeciality = (
   character: any,
   setAwakened: Function,

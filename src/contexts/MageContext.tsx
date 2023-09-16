@@ -83,7 +83,7 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
   const domainAwakenedCollectionRef = useMemo(() => {
     if (!currentUser || !userData) return null;
     return query(collectionRef,
-      where("domain", "==", userData.domain)
+      where("domain", "==", userData.domain),
     )
   }, [collectionRef, currentUser, userData])
 

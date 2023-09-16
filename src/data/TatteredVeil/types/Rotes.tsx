@@ -60,7 +60,7 @@ export const getRoteByName = (name: string): Rote => {
   }
 }
 
-export const getFilteredRotes = (awakened: Awakened, roteData: Rote[]): Rote[] => {
+export const getFilteredRotes = (awakened: Awakened): Rote[] => {
   const userArcana = [] as { arcana: ArcanaKey; number: number }[];
   for (const arcanum in awakened.arcana) {
     if (currentArcanumLevel(awakened, arcanum as ArcanaKey).level !== 0) {
@@ -209,6 +209,15 @@ export const handleRoteChange = (
     });
   }
 };
+
+export const removeRote = (
+  awakened: Awakened,
+  setAwakened: Function,
+  rote: RoteRef,
+): void => {
+  const updatedRotes = awakened.rotes.filter((r) => r.name !== rote.name);
+  setAwakened({ ...awakened, rotes: updatedRotes });
+}
 
 
 export const checkRoteCreationPoints = (awakened: Awakened) => {

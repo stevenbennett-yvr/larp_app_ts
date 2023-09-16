@@ -17,7 +17,7 @@ type AwakenedSheetProps = {
     awakened: Awakened,
     setAwakened: (awakened: Awakened) => void
     handleUpdate: () => void
-    setShowRetire: any
+    setShowRetire: (show: boolean) => void, // Specify the argument type here
 }
 
 const AwakenedSheet = ({ awakened, setAwakened, handleUpdate, setShowRetire }: AwakenedSheetProps) => {

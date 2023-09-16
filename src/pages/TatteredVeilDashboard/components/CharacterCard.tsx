@@ -7,10 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import { globals } from '../../../assets/globals';
 
 type CharacterCardProps = {
-  awakenedList: Awakened[];
+  awakenedList: Awakened[],
+  isSt: boolean,
 };
 
-const CharacterCard = ({ awakenedList }: CharacterCardProps) => {
+const CharacterCard = ({ awakenedList, isSt }: CharacterCardProps) => {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -65,6 +66,7 @@ const CharacterCard = ({ awakenedList }: CharacterCardProps) => {
     <Grid columns={awakenedList.length === 1 ? 3 : 6}>
       {awakenedList.map((character) => {
         const conStatus = character.merits.filter((merit) => merit.name === 'Status (Consilium)');
+        if ( character.uid === '0' ) { return null }
         return (
           <Grid.Col span={3} key={character.name}>
           <Alert color="gray" style={{ maxWidth: '400px' }} key={character.uid}>
@@ -128,6 +130,14 @@ const CharacterCard = ({ awakenedList }: CharacterCardProps) => {
                         >
                           Update Character
                         </Button>
+                        {isSt?
+                        <Button
+                          variant='link'
+                          onClick={() => { navigate(`/awakened-full-edit/${character.id}`) }}
+                        >
+                          ST Editor
+                        </Button>
+                        : <></>}
                     </Center>
                   </Group>
                 </Stack>

@@ -5,7 +5,7 @@ import { forwardRef } from 'react'
 import { globals } from '../../../assets/globals'
 //Data Imports
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened"
-import { roteData, getFilteredRotes, Rote, getRoteByName, RoteRef, roteRefs } from '../../../data/TatteredVeil/types/Rotes'
+import { removeRote, roteData, getFilteredRotes, Rote, getRoteByName, RoteRef, roteRefs } from '../../../data/TatteredVeil/types/Rotes'
 import { arcanaDescriptions, ArcanaKey, currentArcanumLevel } from '../../../data/TatteredVeil/types/Arcanum'
 import { handleRoteChange, calculatePool } from '../../../data/TatteredVeil/types/Rotes'
 
@@ -16,12 +16,12 @@ type MageRotesXpInputsProps = {
 
 const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) => {
 
-    const [learnableRotes, setLearnableRotes] = useState<Rote[]>(getFilteredRotes(awakened, roteData));
+    const [learnableRotes, setLearnableRotes] = useState<Rote[]>(getFilteredRotes(awakened));
     const [selectedRote, setSelectedRote] = useState<string | null>("");
     const [showAllRotes, setShowAllRotes] = useState(false)
 
     useEffect(() => {
-        setLearnableRotes(getFilteredRotes(awakened, roteData))
+        setLearnableRotes(getFilteredRotes(awakened))
     }, [awakened])
 
     const roteInputs = (learnableRotes: Rote[]) => {
@@ -236,7 +236,7 @@ const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) =>
                                                                 </Stack>
                                                                 {roteRef.experiencePoints > 0 ?
                                                                     <Button color="gray" onClick={() => {
-                                                                        handleRoteChange(awakened, setAwakened, roteRef, "experiencePoints", 0)
+                                                                        removeRote(awakened, setAwakened, roteRef)
                                                                     }}>Remove</Button>
                                                                     :
                                                                     <></>

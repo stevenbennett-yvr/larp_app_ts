@@ -38,6 +38,7 @@ export default function TatteredVeilVenueDashboard() {
     const [showAsideBar, setShowAsideBar] = useState(!globals.isSmallScreen)
     useEffect(() => { setShowAsideBar(!globals.isSmallScreen) }, [globals.isSmallScreen])
 
+    const isVst = userData.roles?.some(role => role.title === "vst" && role.venue === "tattered veil")
     useEffect(() => {
         // Fetch the character list when the component mounts
         if (userAwakenedList.length === 0 && domainAwakenedList.length === 0) {
@@ -53,9 +54,9 @@ export default function TatteredVeilVenueDashboard() {
                 <Center>
                     {showAsideBar ? <Card style={{ maxWidth: 600 }}><MageCarousel /></Card> : <></>}
                 </Center>
-                {userData.roles?.some(role => role.title === "vst" && role.venue === "tattered veil") ? <CharacterCard awakenedList={domainAwakenedList} /> :
+                {isVst ? <CharacterCard awakenedList={domainAwakenedList} isSt={isVst} /> :
                     <Center>
-                        <CharacterCard awakenedList={userAwakenedList} />
+                        <CharacterCard awakenedList={userAwakenedList} isSt={false} />
                     </Center>
                 }
             </Stack>

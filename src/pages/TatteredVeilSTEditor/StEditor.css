@@ -1,0 +1,6 @@
+#vertical-text {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    padding: 0 5px;
+}
