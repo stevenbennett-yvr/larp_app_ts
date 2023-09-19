@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { clanNameSchema } from "./V5Clans";
+import { clanNameSchema, ClanName } from "./V5Clans";
 
 import * as logos from "../../../assets/images/GoodIntentions";
 
@@ -289,4 +289,8 @@ export const Rituals: Ritual[] = [
 
 export const powerIsRitual = (p: Power | Ritual): p is Ritual => {
     return (p as Ritual)["ingredients"] !== undefined
+}
+
+export const getDisciplinesForClan = (clan: ClanName) => {
+    return Object.fromEntries(Object.entries(disciplines).filter(([, value]) => value.clans.includes(clan)))
 }

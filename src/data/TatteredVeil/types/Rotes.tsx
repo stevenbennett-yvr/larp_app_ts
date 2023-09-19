@@ -74,6 +74,7 @@ export const getFilteredRotes = (awakened: Awakened): Rote[] => {
     const level = rote.level
     const matchingArcana = userArcana.find((a) => a.arcana === requiredArcanum)
     let matchingOtherArcana = false;
+    let matchingOrder = false;
 
     if (!rote.otherArcana) {
       matchingOtherArcana = true;
@@ -125,7 +126,22 @@ export const getFilteredRotes = (awakened: Awakened): Rote[] => {
         }
       }
     }
-    return matchingArcana && matchingOtherArcana && matchingArcana.number >= level;
+
+    if (rote.source.includes("M:tA"||"TotM")) {
+      matchingOrder = true;
+    } if (rote.source.includes("AA") && awakened.order === "The Adamantine Arrow") {
+      matchingOrder = true;
+    } if (rote.source.includes("FC") && awakened.order === "The Free Council") {
+      matchingOrder = true;
+    } if (rote.source.includes("Myst") && awakened.order === "The Mysterium") {
+      matchingOrder = true;
+    } if (rote.source.includes("SL") && awakened.order === "The Silver Ladder") {
+      matchingOrder = true;
+    } if (rote.source.includes("GotV") && awakened.order === "The Guardians of the Veil") {
+      matchingOrder = true;
+    }
+
+    return matchingArcana && matchingOtherArcana && matchingOrder && matchingArcana.number >= level;
   })
 
   return filteredRotes
