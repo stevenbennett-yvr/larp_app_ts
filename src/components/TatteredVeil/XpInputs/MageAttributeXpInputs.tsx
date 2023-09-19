@@ -49,8 +49,10 @@ const MageAttributeXpInputs = ({awakened, setAwakened}: MageAttributeXpInputsPro
                         <Group>
                             <Input.Wrapper 
                                 label={`${attribute.charAt(0).toUpperCase() + attribute.slice(1)} ${level}`}
-                                description={`Total XP for Next: ${totalXpNeeded}`}
                                 >
+                                <Text size="12px" color="gray.6">Xp for Next: {totalXpNeeded - attributeInfo.experiencePoints}</Text>
+                                <Text size="12px" color="gray.6">Total XP Needed {totalXpNeeded}</Text>
+
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Button
                                     size="xs"

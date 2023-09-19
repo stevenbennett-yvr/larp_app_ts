@@ -118,6 +118,7 @@ const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) =>
                                                             style={{ filter: "brightness(0)" }}
                                                         />
                                                         <p style={{ color: "white" }}>{selectedRoteData.arcanum} {selectedRoteData.level} {selectedRoteData.otherArcana ? `+ ${selectedRoteData.otherArcana}` : ""}</p>
+                                                        <i style={{ color: "white" }}>{selectedRoteData.source}</i>
                                                     </Stack>
 
                                                     <Button
@@ -160,6 +161,7 @@ const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) =>
                                                     style={{ filter: "brightness(0)" }}
                                                 />
                                                 <p style={{ color: "white" }}>{selectedRoteData.arcanum} {selectedRoteData.level} {selectedRoteData.otherArcana ? `+ ${selectedRoteData.otherArcana}` : ""}</p>
+                                                <i style={{ color: "white" }}>{selectedRoteData.source}</i>
                                             </td>
                                             <td dangerouslySetInnerHTML={{ __html: `${selectedRoteData.description} <p>Rote Pool: ${selectedRoteData.rotePool}  (${calculatePool(selectedRoteData.rotePool, awakened)})</p>` }} />
                                             <td>
@@ -233,6 +235,7 @@ const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) =>
                                                                         style={{ filter: "brightness(0)" }}
                                                                     />
                                                                     <p style={{ color: "white" }}>{rote.arcanum} {rote.level} {rote.otherArcana ? `+ ${rote.otherArcana}` : ""}</p>
+                                                                    <i style={{ color: "white" }}>{rote.source}</i>
                                                                 </Stack>
                                                                 {roteRef.experiencePoints > 0 ?
                                                                     <Button color="gray" onClick={() => {
@@ -277,6 +280,7 @@ const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) =>
                                                             style={{ filter: "brightness(0)" }}
                                                         />
                                                         <p style={{ color: "white" }}>{rote.arcanum} {rote.level} {rote.otherArcana ? `+ ${rote.otherArcana}` : ""}</p>
+                                                        <i style={{ color: "white" }}>{rote.source}</i>
                                                         {roteRef.experiencePoints > 0 ?
                                                             <Button color="gray" onClick={() => {
                                                                 handleRoteChange(awakened, setAwakened, roteRef, "experiencePoints", 0)

@@ -9,16 +9,17 @@ type MageWisdomXpInputsProps = {
     setAwakened: (awakened: Awakened) => void,
 }
 
-export default function MageWisdomXpInputs({awakened, setAwakened}: MageWisdomXpInputsProps) {
-    return(
+export default function MageWisdomXpInputs({ awakened, setAwakened }: MageWisdomXpInputsProps) {
+    return (
         <div>
             <Text mt={"xl"} ta="center" fz="xl" fw={700}>Wisdom</Text>
-            <hr style={{width:"50%"}}/>
+            <hr style={{ width: "50%" }} />
             <Center>
-                <Input.Wrapper 
+                <Input.Wrapper
                     label={`Wisdom ${currentWisdomLevel(awakened).level}`}
-                    description={`Total XP for Next: ${currentWisdomLevel(awakened).totalXpNeeded}`}
-                    >
+                >
+                    <Text size="12px" color="gray.6">Xp for Next: {currentWisdomLevel(awakened).totalXpNeeded - awakened.wisdom.experiencePoints}</Text>
+                    <Text size="12px" color="gray.6">Total XP Needed {currentWisdomLevel(awakened).totalXpNeeded}</Text>
                     <Group>
                         <Button
                             size="xs"
@@ -36,15 +37,15 @@ export default function MageWisdomXpInputs({awakened, setAwakened}: MageWisdomXp
                             max={findMaxWisdom(awakened)}
                             value={awakened.wisdom.experiencePoints}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            const value = Number(e.target.value);
-                            handleWisdomChange(awakened, setAwakened, "experiencePoints", value);
+                                const value = Number(e.target.value);
+                                handleWisdomChange(awakened, setAwakened, "experiencePoints", value);
                             }}
                         />
                         <Button
                             size="xs"
                             variant='outline'
                             color='gray'
-                            disabled={currentWisdomLevel(awakened).level >=10}
+                            disabled={currentWisdomLevel(awakened).level >= 10}
                             onClick={() => handleWisdomChange(awakened, setAwakened, "experiencePoints", awakened.wisdom.experiencePoints + 1)}
                         >
                             +
@@ -71,10 +72,10 @@ export default function MageWisdomXpInputs({awakened, setAwakened}: MageWisdomXp
                         .slice(0, currentWisdomLevel(awakened).level + 1)
                         .reverse()
                         .map(([level, wisdom]) => (
-                        <tr key={level}>
-                            <td colSpan={8}><u>Act of Hubris:</u> {wisdom.hubris} (Roll {wisdom.diceRoll} die)</td>
-                        </tr>
-                    ))}
+                            <tr key={level}>
+                                <td colSpan={8}><u>Act of Hubris:</u> {wisdom.hubris} (Roll {wisdom.diceRoll} die)</td>
+                            </tr>
+                        ))}
                 </tbody>
             </Table>
         </div>

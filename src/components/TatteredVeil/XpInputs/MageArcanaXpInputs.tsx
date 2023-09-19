@@ -47,8 +47,9 @@ const MageArcanaXpInputs = ({awakened, setAwakened}: MageArcanaXpInputsProps) =>
                         <Group>
                         <Input.Wrapper 
                             label={`${arcanaDescriptions[arcanum].name} : ${currentArcanumLevel(awakened, arcanum).level} ${isInferior? "Inferior" : isRuling? "Ruling" : ""}`}
-                            description={`Total XP Needed ${currentArcanumLevel(awakened, arcanum).totalXpNeeded}`}
                             >
+                                <Text size="12px" color="gray.6">Xp for Next: {currentArcanumLevel(awakened, arcanum).totalXpNeeded - awakened.arcana[arcanum].experiencePoints}</Text>
+                                <Text size="12px" color="gray.6">Total XP Needed {currentArcanumLevel(awakened, arcanum).totalXpNeeded}</Text>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Button
                             size="xs"

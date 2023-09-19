@@ -1,5 +1,5 @@
 import { Awakened } from '../../../data/TatteredVeil/types/Awakened'
-import { Group, Text, Center, Stack, Accordion, Button, Table, useMantineTheme, NumberInput, Alert } from '@mantine/core'
+import { Group, Text, Center, Stack, Accordion, Button, Table, useMantineTheme, NumberInput, Alert, ScrollArea } from '@mantine/core'
 import { getFilteredMerits, meritData, Merit, meritRefs, defineMeritRating, handleMeritChange, MeritRef } from '../../../data/TatteredVeil/types/Merits'
 import { currentGnosisLevel, Gnoses } from '../../../data/TatteredVeil/types/Gnosis'
 import { useState, useEffect } from 'react'
@@ -300,10 +300,12 @@ const MeritAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstruct
   const toggleInstructions = () => {
     setShowInstructions(!showInstructions);
   };
+  const height = globals.viewportHeightPx
 
   return (
-    <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '100px' : '100px' }}>
+    <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px' }}>
       <Stack>
+      <ScrollArea h={height-140} pb={20}>
         <Alert color='gray'>
           <Text mt={"xl"} ta="center" fz="xl" fw={700}>Merits</Text>
           {showInstructions && (
@@ -341,6 +343,7 @@ const MeritAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstruct
             }
           </Accordion>
         </Center>
+      </ScrollArea>
       </Stack>
 
       <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>

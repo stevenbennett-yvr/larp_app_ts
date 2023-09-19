@@ -4,7 +4,7 @@ import { globals } from "../../../assets/globals";
 
 //data imports
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened";
-import { currentExperience, spentExperience } from "../../../data/TatteredVeil/types/Experience"
+import { spentExperience } from "../../../data/TatteredVeil/types/Experience"
 import { MageAttributeXpInputs, MageSkillXpInputs, MageArcanaXpInputs, MageRotesXpInputs, MageMeritXpInputs, MageGnosisXpInputs, MageWisdomXpInputs } from "../../../components/TatteredVeil/XpInputs";
 
 type ExperienceAssignerProps = {
@@ -70,7 +70,7 @@ const ExperienceAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
                 <MageWisdomXpInputs awakened={awakened} setAwakened={setAwakened} />
 
 
-                <Alert color={0 > currentExperience(awakened) ? "red" : "dark"} variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen ? "15%" : "30%" }}>
+                <Alert color={0 > 50 - spentExperience(awakened) ? "red" : "dark"} variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen ? "15%" : "30%" }}>
                     <Group>
                         <Button.Group>
                             <Button
@@ -84,11 +84,11 @@ const ExperienceAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
                                 style={{ margin: "5px" }}
                                 color="gray"
                                 onClick={nextStep}
-                                disabled={!(spentExperience(awakened) >= 50) || 0 > currentExperience(awakened)}
+                                disabled={!(spentExperience(awakened) >= 50) || 0 > 50 - spentExperience(awakened)}
                             >
                                 Next
                             </Button>
-                            <Text fz={globals.smallerFontSize} style={{ margin: "10px" }} color={0 > currentExperience(awakened) ? "black" : "white"}>Remaining Experience: {currentExperience(awakened)}</Text>
+                            <Text fz={globals.smallerFontSize} style={{ margin: "10px" }} color={0 > 50 - spentExperience(awakened)? "black" : "white"}>Remaining Experience: {50 - spentExperience(awakened)}</Text>
                         </Button.Group>
                     </Group>
                 </Alert>

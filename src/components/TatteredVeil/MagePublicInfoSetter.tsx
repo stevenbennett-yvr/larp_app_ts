@@ -1,5 +1,5 @@
 //Technical Imports
-import { Center, Avatar, Checkbox, TextInput, Alert, Textarea, Button, Text } from "@mantine/core"
+import { Center, Avatar, Checkbox, TextInput, Alert, Textarea, Button, Text, Stack } from "@mantine/core"
 import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone';
 import { useState } from "react";
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
@@ -66,7 +66,12 @@ const MagePublicInfoSetter = ({ awakened, setAwakened, currentUser }: MagePublic
             }
           />
           {awakened.background.showPublic ?
-            <div>
+            <Stack>
+
+              <Text>
+                The Public Info card will be displayed in the Cast Aside of the Venue Page of the domain along with the rest of the Mages in your domain.
+              </Text>
+
               <TextInput
                 value={awakened.background.publicTitle}
                 onChange={(event) =>
@@ -93,7 +98,7 @@ const MagePublicInfoSetter = ({ awakened, setAwakened, currentUser }: MagePublic
                   })
                 }}
               />
-            </div>
+            </Stack>
             : <></>}
         </Alert>
       </Center>
