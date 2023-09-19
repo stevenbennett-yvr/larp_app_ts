@@ -3,6 +3,8 @@ import { useLocalStorage } from "@mantine/hooks"
 
 
 import ClanPicker from "./Generator/ClanPicker"
+import AttributePicker from "./Generator/AttributePicker"
+
 import { Center } from "@mantine/core"
 
 
@@ -17,6 +19,10 @@ const GenerateKindred = () => {
                 return (
                     <ClanPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} />
                 );
+            case 1:
+                return (
+                    <AttributePicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                )
             default:
                 return null;
         }

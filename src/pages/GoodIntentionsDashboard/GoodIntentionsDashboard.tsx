@@ -3,6 +3,7 @@ import { DiscordLogo } from "../../assets/images/CaM"
 import SoftCoverV5 from '../../assets/images/GoodIntentions/core/Soft_Cover_3d__88604.png'
 
 export default function GoodIntentionsDashboard() {
+
     return (
         <Center h={"100%"}>
             <Card>
@@ -18,6 +19,7 @@ export default function GoodIntentionsDashboard() {
                             <img width={200} src={SoftCoverV5} alt="Laws of the Night v5" />
                         </a>
                     </Center>
+
                     <Button variant='link' onClick={() => window.open('https://discord.gg/rvGtygKkyq')}>
                         <Avatar radius="xs" size="sm" src={DiscordLogo} /> Discord
                     </Button>
