@@ -21,16 +21,16 @@ export const kindredSchema = z.object({
 
     name: z.string(),
 
-    background: v5BackgroundSchema,
-
-    attributes: v5AttributesSchema,
-    skills: v5skillsSchema,
-
     clan: clanNameSchema,
     predatorType: z.object({
         name: predatorTypeNameSchema,
         pickedSpecialities: specialtySchema.array(),
     }),
+
+    background: v5BackgroundSchema,
+
+    attributes: v5AttributesSchema,
+    skills: v5skillsSchema,
 
     disciplines: disciplineSchema.array(),
 
