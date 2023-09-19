@@ -17,6 +17,7 @@ import TatteredVeilVenueDashboard from './pages/TatteredVeilDashboard/TatteredVe
 import AwakenedPage from './pages/TatteredVeilEditor/AwakenedPage';
 import GoodIntentionsDashboard from './pages/GoodIntentionsDashboard/GoodIntentionsDashboard';
 import AwakenedSTEditor from './pages/TatteredVeilSTEditor/AwakenedSTEditor';
+import GenerateKindred from './pages/GoodIntentionsGenerator/GoodIntentionsGenerator';
 
 import { globals } from './assets/globals';
 import { UserProvider } from './contexts/UserContext';
@@ -72,6 +73,7 @@ function AuthenticatedApp() {
           <Route path="/awakened-sheet/:characterId" element={<PrivateRoute><AwakenedPage/></PrivateRoute>}/>
           <Route path="/good-intentions" element={<PrivateRoute><GoodIntentionsDashboard/></PrivateRoute>}/>
           <Route path='/awakened-full-edit/:characterId' element={<PrivateRoute><AwakenedSTEditor></AwakenedSTEditor></PrivateRoute>}/>
+          <Route path='/create-kindred' element={<PrivateRoute><GenerateKindred/></PrivateRoute>}/>
         </Routes>
       </Container>
     </AppShell>

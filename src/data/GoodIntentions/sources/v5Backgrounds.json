@@ -1,0 +1,167 @@
+[
+    {
+        "class": "Mortal Connections",
+        "name": "Allies",
+        "description": "<ul><li>You can cultivate mortal Allies who help you unknowingly as a vampire.</li><li>Allies may assist you occasionally, but maintain their own lives.</li><li>Build a balanced relationship; help them in return for better support.</li><li>Each Ally can be used once per game session.</li><li>Ally levels: <ul><li>Level 1: Weak mortal - pool of 3 in specialization, 4 Health levels.</li><li>Level 2: Average mortal - pool of 5 in specialization, 5 Health levels.</li><li>Level 3: Gifted mortal - pool of 7 in specialization, 6 Health levels.</li></ul></li></ul>",
+        "source": "",
+        "advantages": [
+            {
+                "name": "At Arm's Length",
+                "description": "<ul><li>Operate indirectly with your Ally using various measures.</li><li>Attempts to uncover your connection require a Downtime Action and an Intelligence + Investigation test (Difficulty 5).</li><li>Cannot combine this Advantage with the Retainer Advantage.</li></ul>",
+                "cost": [
+                    1
+                ],
+                "type": "advantage"
+            },
+            {
+                "name": "Diversity",
+                "description": "<ul><li>Ally's diverse interests expand expertise across multiple Spheres of Influence.</li><li>Level 1: Ally can help in two Spheres of Influence.</li><li>Level 2: Ally can help in three Spheres of Influence.</li></ul>",
+                "cost": [
+                    1,
+                    2
+                ],
+                "type": "advantage"
+            },
+            {
+                "name": "Reliable",
+                "description": "<ul><li>Cultivated Allies are more reliable, prioritize you, and expect favors in return.</li><li>Level 1: Ally takes half the time of a standard Ally for tasks (time determined by Storyteller).</li><li>Level 2: Ally prioritizes you over others, completes tasks in one-third the time (time determined by Storyteller).</li></ul>",
+                "cost": [
+                    1,
+                    2
+                ],
+                "type": "advantage"
+            },
+            {
+                "name": "Retainer",
+                "description": "<ul><li>Your Ally becomes a ghoul, fully Blood Bound to you.</li><li>They no longer request favors in return for their services.</li><li>They can perform tasks within the supernatural world and don't breach the Masquerade.</li><li>They gain two level-one Discipline powers from your in-clan Disciplines.</li><li>If purchased by another character as an Ally, that character loses access to the NPC.</li></ul>",
+                "cost": [
+                    2
+                ],
+                "type": "advantage"
+            },
+            {
+                "name": "Flaky",
+                "description": "<ul><li>Your Ally is skilled but unreliable, often failing to meet deadlines.</li><li>Level 1: Ally takes twice as long as a standard Ally to complete tasks.</li><li>Level 2: Ally demands payment and may renegotiate for increased payment mid-task.</li></ul>",
+                "cost": [
+                    1,
+                    2
+                ],
+                "type": "disadvantage"
+            },
+            {
+                "name": "Conspiracy Theorist",
+                "description": "<ul><li>Your Ally is a conspiracy theorist, often believing in the unbelievable.</li><li>They may share unusual theories, including supernatural creatures.</li><li>Caution is needed to avoid Masquerade breaches, as they are watchful for evidence of their theories.</li></ul>",
+                "cost": [
+                    1
+                ],
+                "type": "disadvantage"
+            }
+        ]
+    },
+    {
+        "class": "Mortal Connections",
+        "name": "Familiar",
+        "description": "<ul><li>Your Familiar is a ghoul animal, controlled through Animalism or training.</li><li>Size and traits depend on the Familiar's level: <ul><li>Level 1: Small (bird or cat), 2 Health levels, Physical test pools of 3, Mental and Social test pools of 1.</li><li>Level 2: Medium-sized (dog or wolf), 4 Health levels, Physical test pools of 5, Mental and Social test pools of 1.</li><li>Level 3: Large (bear or tiger), 6 Health levels, Physical test pools of 7, Mental and Social test pools of 1.</li></ul></li><li>You can choose a higher-level companion of a smaller size.</li><li>Choose one Discipline (Celerity, Potence, or Fortitude) for your Familiar, which gains both level-one powers of that Discipline.</li></ul>",
+        "source": ""
+    },
+    {
+        "class": "Mortal Connections",
+        "name": "Contacts",
+        "description": "<ul><li>Contacts are professional connections for information.</li><li>They share insider knowledge and rarely ask for favors.</li><li>Use them for insights within their Sphere(s) or receive calls about intriguing matters.</li><li>Level 1: Low-level employee, general insider knowledge.</li><li>Level 2: Middle management, access to hidden information, some influence.</li><li>Level 3: Senior management, access to sensitive information, significant influence.</li></ul>",
+        "source": "",
+        "advantages": [
+            {
+                "name": "At Arm's Length",
+                "description": "<ul><li>Operate indirectly with your Contact using various measures.</li><li>Attempts to uncover your connection require a Downtime Action and an Intelligence + Investigation test (Difficulty 5).</li><li>Cannot combine this Advantage with the Retainer Advantage.</li></ul>",
+                "cost": [
+                    1
+                ],
+                "type": "advantage"
+            },
+            {
+                "name": "Diversity",
+                "description": "<ul><li>Contact's diverse interests expand expertise across multiple Spheres of Influence.</li><li>Level 1: Contact can help in two Spheres of Influence.</li><li>Level 2: Ally can help in three Spheres of Influence.</li></ul>",
+                "cost": [
+                    1,
+                    2
+                ],
+                "type": "advantage"
+            },
+            {
+                "name": "Paranoid",
+                "description": "<ul><li>Paranoid Disadvantage affects your Contact's behavior.</li><li>Level 1: Contact frequently changes phones, causing a minimum 2-day delay in communication.</li><li>Level 2: Contact insists on in-person meetings at different locations, causing at least a 2-week delay in communication.</li></ul>",
+                "cost": [
+                    1,
+                    2
+                ],
+                "type": "disadvantage"
+            }
+        ]
+    },
+    {
+        "class": "Mortal Connections",
+        "name": "Fame",
+        "description": "<ul><li>Famous in a specific Sphere of Influence.</li><li>Recognition and favors likely within that Sphere.</li><li>+1 to mundane Social challenges per Fame dot.</li><li>Increased visibility but also potential drawbacks.</li><li>Levels: Level 1 - Some recognition; Level 2 - Local following; Level 3 - Citywide recognition.</li></ul>",
+        "source": "",
+        "advantages": [
+            {
+                "name": "Fan Club",
+                "description": "<ul><li>You have a dedicated Fan Club who assists when encountered.</li><li>Once per session, you can request a reasonable favor from them.</li><li>Encounters are at the Storyteller's discretion and depend on your rising Fame level.</li></ul>",
+                "cost": [
+                    2
+                ],
+                "type": "advantage"
+            },
+            {
+                "name": "Star Power",
+                "description": "<ul><li>Additional Fame extension for broader recognition.</li><li>Requires Fame level 3 and Storyteller approval.</li><li>Level 1: Recognized in your state or region.</li><li>Level 2: Globally famous, with worldwide recognition.</li></ul>",
+                "cost": [
+                    1,
+                    2
+                ],
+                "type": "advantage"
+            },
+            {
+                "name": "Jealousy",
+                "description": "<ul><li>Fame brings envy and enemies who want to see you fail.</li><li>Level 1: A group dislikes you in one Sphere of Influence, no Contacts or Allies allowed.</li><li>Level 2: In addition to Level 1, those outside your Connections hate you and act negatively; enemies are always available.</li></ul>",
+                "cost": [
+                    1,
+                    2
+                ],
+                "type": "disadvantage"
+            },
+            {
+                "name": "Paparazzi",
+                "description": "<ul><li>Overzealous fan clubs create persistent followers who track your every move.</li><li>They take photos for magazines, causing complications when staying under the radar.</li><li>Storyteller determines specific issues and complications arising from this Disadvantage.</li></ul>",
+                "cost": [
+                    2
+                ],
+                "type": "disadvantage"
+            }
+        ]
+    },
+    {
+        "class": "Mortal Connections",
+        "name": "Haven",
+        "description": "",
+        "source": ""
+    },
+    {
+        "class": "Mortal Connections",
+        "name": "Herd",
+        "description": "",
+        "source": ""
+    },
+    {
+        "class": "Mortal Connections",
+        "name": "Mask",
+        "description": "",
+        "source": ""
+    },
+    {
+        "class": "Mortal Connections",
+        "name": "Resources",
+        "description": "",
+        "source": ""
+    }
+]

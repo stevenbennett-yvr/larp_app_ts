@@ -413,24 +413,26 @@ const AwakenedStTab = ({ awakened, setAwakened, handleUpdate }: AwakenedStTabPro
             <Center>
                 <Table style={{ maxWidth: "400px" }}>
                     <thead>
-                        <th>
-                            Arcana
-                        </th>
-                        <th>
-                            Type
-                        </th>
-                        <th id='vertical-text'>
-                            level
-                        </th>
-                        <th id='vertical-text'>
-                            Creation Points
-                        </th>
-                        <th id='vertical-text'>
-                            Freebie Points
-                        </th>
-                        <th id='vertical-text'>
-                            XP Points
-                        </th>
+                        <tr>
+                            <th>
+                                Arcana
+                            </th>
+                            <th>
+                                Type
+                            </th>
+                            <th id='vertical-text'>
+                                level
+                            </th>
+                            <th id='vertical-text'>
+                                Creation Points
+                            </th>
+                            <th id='vertical-text'>
+                                Freebie Points
+                            </th>
+                            <th id='vertical-text'>
+                                XP Points
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
                         {Object.entries(awakened.arcana)

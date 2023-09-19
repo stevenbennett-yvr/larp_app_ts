@@ -71,7 +71,7 @@ export const nWoD1eCurrentAttributeLevel = (
 ) => {
     const attributes = character.attributes as nWoD1eAttributes;
     const attributeData = attributes[attribute]
-    let { creationPoints, freebiePoints = 0, experiencePoints = 0 } = attributeData;
+    let { creationPoints, freebiePoints, experiencePoints } = attributeData;
 
     let totalXpNeeded = 0;
     let pastXpNeeded = [0];

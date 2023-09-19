@@ -1,4 +1,32 @@
 //Core
 import v5Logo from './core/VampireMasqueradeV5Logo.webp'
 
-export {v5Logo}
+import alchemyLogo from './rombo_disciplines/rombo_Alchemy.svg'
+import animalismLogo from './rombo_disciplines/rombo_Animalism.svg'
+import auspexLogo from './rombo_disciplines/rombo_Auspex.svg'
+import bloodSorceryLogo from './rombo_disciplines/rombo_BloodSorcery.svg'
+import celerityLogo from './rombo_disciplines/rombo_Celerity.svg'
+import dominateLogo from './rombo_disciplines/rombo_Dominate.svg'
+import fortitudeLogo from './rombo_disciplines/rombo_Fortitude.svg'
+import obfuscateLogo from './rombo_disciplines/rombo_Obfuscate.svg'
+import oblivionLogo from './rombo_disciplines/rombo_Oblivion.svg'
+import potenceLogo from './rombo_disciplines/rombo_Potence.svg'
+import presenceLogo from './rombo_disciplines/rombo_Presence.svg'
+import proteanLogo from './rombo_disciplines/rombo_Protean.svg'
+
+import banuHaqimLogo from './clans/BanuHaqim.webp'
+import brujahLogo from './clans/Brujah.webp'
+import gangrelLogo from './clans/Gangrel.webp'
+import hecataLogo from './clans/Hecata.webp'
+import lasombraLogo from './clans/Lasombra.webp'
+import malkavianLogo from './clans/Malkavian.webp'
+import ministryLogo from './clans/Ministry.webp'
+import nosferatuLogo from './clans/Nosferatu.webp'
+import ravnosLogo from './clans/Ravnos.webp'
+import salubriLogo from './clans/Salubri.webp'
+import toreadorLogo from './clans/Toreador.webp'
+import tremereLogo from './clans/Tremere.webp'
+import tzimisceLogo from './clans/Tzimisce.webp'
+import ventrueLogo from './clans/Ventrue.webp'
+
+export {v5Logo, alchemyLogo, animalismLogo, auspexLogo, bloodSorceryLogo, celerityLogo, dominateLogo, fortitudeLogo, obfuscateLogo, oblivionLogo, potenceLogo, presenceLogo, proteanLogo, banuHaqimLogo, brujahLogo, gangrelLogo, hecataLogo, lasombraLogo, malkavianLogo, ministryLogo, nosferatuLogo, ravnosLogo, salubriLogo, toreadorLogo, tremereLogo, tzimisceLogo, ventrueLogo}

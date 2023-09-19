@@ -20,8 +20,6 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useUser } from "../../contexts/UserContext";
 import { useState, useEffect } from "react";
 
-// TODO: PRIORITY: Finish the character creator
-
 const GenerateAwakened = () => {
   const navigate = useNavigate();
   const emptyAwakened = getEmptyAwakened()

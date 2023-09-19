@@ -22,7 +22,7 @@ const skillSchema = z.object({
   creationPoints: z.number().min(0).max(6).int(),
   freebiePoints: z.number().min(0).int(),
   experiencePoints: z.number().min(0).int(),
-  roteSkill: z.boolean().default(false),
+  roteSkill: z.boolean().default(false).optional(),
   specialities: z.array(specialitySchema),
   category: skillCategoriesSchema,
 });
