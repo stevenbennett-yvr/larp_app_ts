@@ -145,6 +145,14 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
     const isCategoryCreationPointsZero = awakened.arcana[arcanum].creationPoints === 0;
     const isArcanaWithCreationPointsMoreThan4 = countArcanaWithCreationPoints() >= 4;
 
+    const levelsArray = getArcanaLevels(awakened)
+    const firstTwoSet = !(levelsArray[0] >= 2)
+    const secondTwoSet = !(levelsArray[1] >= 2)
+    const oneSet = !(levelsArray[2] >= 1)
+
+    const isInferiorDisabled = (
+      firstTwoSet || secondTwoSet || oneSet
+    )
 
     const isDisabled =
       (!isRuling &&
@@ -195,7 +203,7 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
                 onChange={(val: number) =>
                   handleArcanumCreationPointChange(arcanum, val)
                 }
-                disabled={isDisabled}
+                disabled={isInferior?isInferiorDisabled||isDisabled:isDisabled}
               >
               </NumberInput>
             </Card.Section>
@@ -346,6 +354,11 @@ const ArcanaRoteAssigner = ({ awakened, setAwakened, nextStep, backStep, showIns
   const toggleInstructions = () => {
     setShowInstructions(!showInstructions);
   };
+
+
+  arcana.sort((a, b) => {
+    return a.localeCompare(b);
+  });
 
   return (
     <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '120px' : '60px' }}>

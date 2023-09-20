@@ -127,7 +127,9 @@ export const getFilteredRotes = (awakened: Awakened): Rote[] => {
       }
     }
 
-    if (rote.source.includes("M:tA"||"TotM")) {
+    if (rote.source.includes("M:tA")) {
+      matchingOrder = true;
+    } if (rote.source.includes("TotM")) {
       matchingOrder = true;
     } if (rote.source.includes("AA") && awakened.order === "The Adamantine Arrow") {
       matchingOrder = true;

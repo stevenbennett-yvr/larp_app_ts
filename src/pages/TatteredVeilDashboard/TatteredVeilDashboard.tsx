@@ -8,6 +8,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { globals } from '../../assets/globals';
 import { useUser } from '../../contexts/UserContext';
 import { User } from '../../data/CaM/types/User';
+import debounce from 'lodash/debounce';
 
 export default function TatteredVeilVenueDashboard() {
     let { userAwakenedList, fetchUserAwakened, domainAwakenedList, fetchDomainAwakened } = useMageDb()
@@ -39,13 +40,20 @@ export default function TatteredVeilVenueDashboard() {
     useEffect(() => { setShowAsideBar(!globals.isSmallScreen) }, [globals.isSmallScreen])
 
     const isVst = userData.roles?.some(role => role.title === "vst" && role.venue === "tattered veil")
+    // Define the debounced version of your fetch function with a 10-second delay
+    const debouncedFetchUserAwakened = debounce(fetchUserAwakened, 300); // Adjust the delay (300 milliseconds) as needed
+    const debouncedFetchDomainAwakened = debounce(fetchDomainAwakened, 300); // Adjust the delay (300 milliseconds) as needed
+    
+    // Use the debounced function in your useEffect block without relying on userAwakenedList.length
     useEffect(() => {
-        // Fetch the character list when the component mounts
-        if (userAwakenedList.length === 0 && domainAwakenedList.length === 0) {
-            fetchUserAwakened();
-            fetchDomainAwakened();
-        }
-    }, [userAwakenedList.length, domainAwakenedList.length, fetchUserAwakened, fetchDomainAwakened]);
+        // Fetch the user awakened list when the component mounts
+        debouncedFetchUserAwakened();
+    }, [debouncedFetchUserAwakened]);
+
+    useEffect(() => {
+        // Fetch the domain awakened list when the component mounts
+        debouncedFetchDomainAwakened()
+    }, [debouncedFetchDomainAwakened]);
 
     return (
         <Center h={"100%"}>
