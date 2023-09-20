@@ -1,9 +1,10 @@
-import { Button, Divider, Grid, Group, Text, Tooltip, Alert } from "@mantine/core"
-import { useState } from "react"
-import { V5AttributesKey, attributeDescriptions, v5attributesKeySchema } from "../../../data/GoodIntentions/types/V5Attributes"
+import { Button, Text, Alert, Center, Grid, Tooltip, NumberInput, Stack, Group } from "@mantine/core"
+import { V5AttributesKey, attributeDescriptions, getV5AttributeCPArray, AttributeCategory } from "../../../data/GoodIntentions/types/V5Attributes"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { globals } from "../../../assets/globals"
 import { upcase } from "../../../utils/case"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBrain, faComment, faHandFist } from "@fortawesome/free-solid-svg-icons"
 
 type AttributePickerProps = {
     kindred: Kindred,
@@ -12,138 +13,176 @@ type AttributePickerProps = {
     backStep: () => void,
 }
 
-type AttributeSetting = {
-    strongest: V5AttributesKey | null,
-    weakest: V5AttributesKey | null,
-    medium: V5AttributesKey[],
-}
-
 const AttributePicker = ({ kindred, setKindred, nextStep, backStep }: AttributePickerProps) => {
-    const phoneScreen = globals.isPhoneScreen
+    const isPhoneScreen = globals.isPhoneScreen
+    const isSmallScreen = globals.isSmallScreen
 
-    const [pickedAttributes, setPickedAttributes] = useState<AttributeSetting>({ strongest: null, weakest: null, medium: [] })
+    const pointsArray = getV5AttributeCPArray(kindred)
+    const checkAttributeArray = (pointsArray: number[]) => {
+        // Count the occurrences of each value
+        const counts: any = {
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+        };
 
-    const createButton = (attribute: V5AttributesKey, i: number) => {
-        const alreadyPicked = [pickedAttributes.strongest, pickedAttributes.weakest, ...pickedAttributes.medium].includes(attribute)
-
-        let onClick: () => void
-        if (alreadyPicked) {
-            onClick = () => {
-                setPickedAttributes({
-                    strongest: pickedAttributes.strongest === attribute ? null : pickedAttributes.strongest,
-                    medium: pickedAttributes.medium.filter((it) => it !== attribute),
-                    weakest: pickedAttributes.weakest === attribute ? null : pickedAttributes.weakest,
-                })
+        pointsArray.forEach((value) => {
+            if (value in counts) {
+                counts[value]++;
             }
-        }
-        else if (!pickedAttributes.strongest) {
-            onClick = () => {
-                setPickedAttributes({ ...pickedAttributes, strongest: attribute })
-            }
-        } else if (!pickedAttributes.weakest) {
-            onClick = () => {
-                setPickedAttributes({ ...pickedAttributes, weakest: attribute })
-            }
-        } else if (pickedAttributes.medium.length < 2) {
-            onClick = () => {
-                setPickedAttributes({ ...pickedAttributes, medium: [...pickedAttributes.medium, attribute] })
-            }
-        } else {
-            onClick = () => {
-                const finalPick = { ...pickedAttributes, medium: [...pickedAttributes.medium, attribute] }
-                const attributes = {
-                    ...kindred.attributes,
-                    strength: { ...kindred.attributes.strength, creationPoints: 2 },
-                    dexterity: { ...kindred.attributes.dexterity, creationPoints: 2 },
-                    stamina: { ...kindred.attributes.stamina, creationPoints: 2 },
+        });
 
-                    charisma: { ...kindred.attributes.charisma, creationPoints: 2 },
-                    manipulation: { ...kindred.attributes.manipulation, creationPoints: 2 },
-                    composure: { ...kindred.attributes.composure, creationPoints: 2 },
+        // Check if the counts match the expected values
+        const totalResult =
+            counts[1] === 1 && counts[2] === 4 && counts[3] === 3 && counts[4] === 1;
 
-                    intelligence: { ...kindred.attributes.intelligence, creationPoints: 2 },
-                    wits: { ...kindred.attributes.wits, creationPoints: 2 },
-                    resolve: { ...kindred.attributes.resolve, creationPoints: 2 },
-                }
-                attributes[finalPick.strongest!].creationPoints = 4
-                attributes[finalPick.weakest!].creationPoints = 1
-                finalPick.medium.forEach((medium) => attributes[medium].creationPoints = 3)
-                setKindred({ ...kindred, attributes })
-                nextStep()
+        // Individual results
+        const individualResults = {
+            1: counts[1] === 1,
+            2: counts[2] === 4,
+            3: counts[3] === 3,
+            4: counts[4] === 1,
+        };
+
+        return { totalResult, individualResults };
+    };
+
+    function changeCreationPoints(
+        attribute: V5AttributesKey,
+        creationPoints: number,
+    ): void {
+
+        const updatedAttributes = {
+            ...kindred.attributes,
+            [attribute]: {
+                ...kindred.attributes[attribute],
+                creationPoints
             }
         }
 
-        const dots = (() => {
-            if (attribute === pickedAttributes.strongest) return "💪"
-            if (attribute === pickedAttributes.weakest) return "🪶"
-            if (pickedAttributes.medium.includes(attribute)) return "👌"
-            return ""
-        })()
-
-        const trackClick = () => {
+        const updatedCharacter = {
+            ...kindred,
+            attributes: updatedAttributes
         }
 
-        return (
-            <Grid.Col key={attribute} span={4}>
-                <Tooltip disabled={alreadyPicked} label={attributeDescriptions[attribute]} transitionProps={{ transition: 'slide-up', duration: 200 }} events={globals.tooltipTriggerEvents}>
-                    <Button p={phoneScreen ? 0 : "default"} leftIcon={dots} variant={alreadyPicked ? "outline" : "filled"} color="grape" fullWidth onClick={() => { trackClick(); onClick() }}>
-                        <Text fz={phoneScreen ? 12 : "inherit"}>{upcase(attribute)}</Text>
-                    </Button>
-                </Tooltip>
+        setKindred(updatedCharacter)
+    }
+    const check = checkAttributeArray(pointsArray).individualResults
 
-                {i % 3 === 0 || i % 3 === 1 ? <Divider size="xl" orientation="vertical" /> : null}
-            </Grid.Col >
-        )
+    const categoryIcons = {
+        mental: faBrain,
+        physical: faHandFist,
+        social: faComment,
     }
 
-    const toPick = (() => {
-        if (!pickedAttributes.strongest) return "strongest"
-        else if (!pickedAttributes.weakest) return "weakest"
-        else return "medium"
-    })()
+    const attributeCategories = ['physical', 'social', 'mental'] as AttributeCategory[]
+    const attributeInputs = attributeCategories.map(category => {
+        return (
+            <Grid.Col
+                span={globals.isPhoneScreen ? "content" : 4}
+                key={`${category} Attributes`}
+            >
+                <Text fw={500} fz="lg" color="dimmed" ta="center">
+                    <FontAwesomeIcon icon={categoryIcons[category]} /> {' '}
+                    {upcase(category)}
+                </Text>
+                <hr />
+                {Object.entries(kindred.attributes).map(([attribute, attributeInfo]) => {
+                    const typedAttribute = attribute as V5AttributesKey
+                    if (attributeInfo.category === category) {
+                        return (
+                            <div
+                                key={`${attribute} input`}
+                            >
+                                <Tooltip
+                                    multiline
+                                    width={220}
+                                    withArrow
+                                    offset={20}
+                                    transitionProps={{ duration: 200 }}
+                                    label={attributeDescriptions[typedAttribute]}
+                                    position={globals.isPhoneScreen ? "bottom" : "top"}
+                                    events={{ hover: true, focus: false, touch: false }}
+                                >
+                                    <NumberInput
+                                        key={`${category}-${attribute}`}
+                                        label={`${upcase(attribute)}`}
+                                        min={
+                                            1
+                                        }
+                                        max={!check[4] ? 4 : !check[3] ? 3 : !check[2] ? 2 : 1}
+                                        value={attributeInfo.creationPoints}
+                                        onChange={(val: number) =>
+                                            changeCreationPoints(
+                                                typedAttribute,
+                                                val
+                                            )
+                                        }
 
-    const strongestStyle = toPick === "strongest" ? { fontSize: globals.largeFontSize } : { fontSize: globals.smallFontSize, color: "grey" }
-    const weakestStyle = toPick === "weakest" ? { fontSize: globals.largeFontSize } : { fontSize: globals.smallFontSize, color: "grey" }
-    const mediumStyle = toPick === "medium" ? { fontSize: globals.largeFontSize } : { fontSize: globals.smallFontSize, color: "grey" }
+                                    />
+                                </Tooltip>
+                            </div>
+                        )
+                    }
+                    else {
+                        return null
+                    };
+                })}
+            </Grid.Col>
+        )
+    })
+
+    const fourStyle = !check[4] ? { fontSize: globals.smallFontSize } : { color: "grey" }
+    const threeStyle = !check[3] ? { fontSize: globals.smallFontSize } : { color: "grey" }
+    const twoStyle = !check[2] ? { fontSize: globals.smallFontSize } : { color: "grey" }
+    const oneStyle = !check[1] ? { fontSize: globals.smallFontSize } : { color: "grey" }
 
     return (
-        <div>
-            <Text style={strongestStyle} ta={"center"}>{toPick === "strongest" ? ">" : ""} Pick your <b>strongest</b> attribute! (lvl 4)</Text>
-            <Text style={weakestStyle} ta={"center"}>{toPick === "weakest" ? ">" : ""} Pick your < b > weakest</b > attribute! (lvl 1)</Text >
-            <Text style={mediumStyle} ta={"center"}>{toPick === "medium" ? ">" : ""} Pick <b>{3 - pickedAttributes.medium.length} medium</b> attribute{pickedAttributes.medium.length < 2 ? "s" : ""}! (lvl 3)</Text>
-            <Text style={{ fontSize: "14px", color: "grey" }} ta={"center"}>Remaining attributes will be lvl 2</Text>
+        <Center style={{ paddingTop: isPhoneScreen ? '60px' : '60px', paddingBottom: isPhoneScreen ? '60px' : '60px' }}>
+            <Stack mt={""} align="center" spacing="md">
 
-            <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Attributes</Text>
+                <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Attributes</Text>
+                <Group ta={"center"}>
+                    <Text style={fourStyle}>
+                        Take one Attribute at 4;
+                    </Text>
+                    <Text style={threeStyle}>
+                        three Attributes at 3;
+                    </Text>
+                    <Text style={twoStyle}>
+                        four Attributes at 2;
+                    </Text>
+                    <Text style={oneStyle}>
+                        one Attribute at 1
+                    </Text>
+                </Group>
 
-            <hr color="#e03131" />
-
-            <Group>
-                <Grid grow>
-                    <Grid.Col span={4}><Text fs="italic" fw={700} ta="center">Physical</Text></Grid.Col>
-                    <Grid.Col span={4}><Text fs="italic" fw={700} ta="center">Social</Text></Grid.Col>
-                    <Grid.Col span={4}><Text fs="italic" fw={700} ta="center">Mental</Text></Grid.Col>
-                    {
-                        ["strength", "charisma", "intelligence",
-                            "dexterity", "manipulation", "wits",
-                            "stamina", "composure", "resolve"]
-                            .map((a) => v5attributesKeySchema.parse(a))
-                            .map((clan, i) => createButton(clan, i))
-                    }
+                <Grid gutter="lg" justify="center">
+                    {attributeInputs}
                 </Grid>
-            </Group>
 
-            <Button.Group style={{ position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen ? "15%" : "30%" }}>
-                <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>
-                    <Button
-                        style={{ margin: "5px" }}
-                        color="gray"
-                        onClick={backStep}
-                    >
-                        Back
-                    </Button>
-                </Alert>
-            </Button.Group>
-        </div>
+                <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
+                    <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>
+                        <Button
+                            style={{ margin: "5px" }}
+                            color="gray"
+                            onClick={backStep}
+                        >
+                            Back
+                        </Button>
+                        <Button
+                            style={{ margin: "5px" }}
+                            color="gray"
+                            disabled={!checkAttributeArray(pointsArray).totalResult}
+                            onClick={nextStep}
+                        >
+                            Next
+                        </Button>
+                    </Alert>
+                </Button.Group>
+            </Stack>
+        </Center>
     )
 }
 

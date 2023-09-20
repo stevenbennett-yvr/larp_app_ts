@@ -31,7 +31,7 @@ export const kindredSchema = z.object({
 
     attributes: v5AttributesSchema,
     skills: v5skillsSchema,
-
+    skillSpecialties: specialtySchema.array(),
     disciplines: disciplineSchema.array(),
 
     backgrounds: v5BackgroundRefSchema.array(),
@@ -102,6 +102,7 @@ export const getEmptyKindred = (): Kindred => {
             science: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'mental'},
             technology: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'mental'},
         },
+        skillSpecialties: [],
 
         disciplines: [],
         backgrounds: [],

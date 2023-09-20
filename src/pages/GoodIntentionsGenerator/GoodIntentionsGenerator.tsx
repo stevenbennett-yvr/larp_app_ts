@@ -4,6 +4,7 @@ import { useLocalStorage } from "@mantine/hooks"
 
 import ClanPicker from "./Generator/ClanPicker"
 import AttributePicker from "./Generator/AttributePicker"
+import SkillsPicker from './Generator/SkillsPicker'
 
 import { Center } from "@mantine/core"
 
@@ -22,6 +23,10 @@ const GenerateKindred = () => {
             case 1:
                 return (
                     <AttributePicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                )
+            case 2:
+                return (
+                    <SkillsPicker character={kindred} setCharacter={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} />
                 )
             default:
                 return null;

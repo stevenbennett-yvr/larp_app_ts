@@ -6,6 +6,7 @@ import { globals } from "../../../assets/globals";
 import { useLocalStorage } from "@mantine/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBrain, faComments, faHandFist } from "@fortawesome/free-solid-svg-icons";
+import { upcase } from "../../../utils/case";
 
 type AttributeAssignerProps = {
   awakened: Awakened;
@@ -34,37 +35,40 @@ const categorySettingSchema = z.object({
 });
 
 type CategorySetting = z.infer<typeof categorySettingSchema>;
-  const AttributeAssigner = ({
-    awakened,
-    setAwakened,
-    nextStep,
-    backStep,
-    showInstructions, setShowInstructions 
-  }: AttributeAssignerProps) => {
-  const [categorySettings, setCategorySettings] = useLocalStorage<CategorySetting>({ key: "attributeSettings", defaultValue: {
-    primary: {
-      priority: "primary",
-      category: "",
-      points: 5,
-    },
-    secondary: {
-      priority: "secondary",
-      category: "",
-      points: 4,
-    },
-    tertiary: {
-      priority: "tertiary",
-      category: "",
-      points: 3,
-    },
-  }
+const AttributeAssigner = ({
+  awakened,
+  setAwakened,
+  nextStep,
+  backStep,
+  showInstructions, setShowInstructions
+}: AttributeAssignerProps) => {
+  const [categorySettings, setCategorySettings] = useLocalStorage<CategorySetting>({
+    key: "attributeSettings", defaultValue: {
+      primary: {
+        priority: "primary",
+        category: "",
+        points: 5,
+      },
+      secondary: {
+        priority: "secondary",
+        category: "",
+        points: 4,
+      },
+      tertiary: {
+        priority: "tertiary",
+        category: "",
+        points: 3,
+      },
+    }
   });
 
-  const [categoryCounts, setCategoryCounts] = useLocalStorage<Record<string, number>>({ key: "attributeCount", defaultValue: {
-    mental: 0,
-    social: 0,
-    physical: 0,
-  }});
+  const [categoryCounts, setCategoryCounts] = useLocalStorage<Record<string, number>>({
+    key: "attributeCount", defaultValue: {
+      mental: 0,
+      social: 0,
+      physical: 0,
+    }
+  });
 
   const checkAttributesAssigned = (categoryCounts: Record<string, number>): boolean => {
     const values = Object.values(categoryCounts);
@@ -94,8 +98,6 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
         [category]: totalPoints + newCreationPoints - prevCreationPoints,
       });
     }
-  
-    console.log(awakened.attributes)
 
     nWoD1eHandleAttributeChange(
       awakened,
@@ -166,37 +168,35 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
     social: faComments,
   };
 
-  console.log(awakened.attributes)
-
   const attributeCategories = ['mental', 'physical', 'social']
   const attributeInputs = attributeCategories.map(category => {
-      let typedCategory = category as AttributeCategory
-      const { priority, points } = getCategorySettings(typedCategory);
-      const categoryCount = categoryCounts[category];
-      const remainingPonits = points - categoryCount;
+    let typedCategory = category as AttributeCategory
+    const { priority, points } = getCategorySettings(typedCategory);
+    const categoryCount = categoryCounts[category];
+    const remainingPonits = points - categoryCount;
 
-      const isPrimarySelected = Object.values(categorySettings).some(
-        (setting) => setting.priority === "primary" && setting.category !== ""
-      );
-      const isSecondarySelected = Object.values(categorySettings).some(
-        (setting) => setting.priority === "secondary" && setting.category !== ""
-      );
-      const isTertiarySelected = Object.values(categorySettings).some(
-        (setting) => setting.priority === "tertiary" && setting.category !== ""
-      );
+    const isPrimarySelected = Object.values(categorySettings).some(
+      (setting) => setting.priority === "primary" && setting.category !== ""
+    );
+    const isSecondarySelected = Object.values(categorySettings).some(
+      (setting) => setting.priority === "secondary" && setting.category !== ""
+    );
+    const isTertiarySelected = Object.values(categorySettings).some(
+      (setting) => setting.priority === "tertiary" && setting.category !== ""
+    );
 
-      return (
-        <Grid.Col
-          span={globals.isPhoneScreen ? "content" : 4}
-          key={`${category} Attributes`}
-        >
-          <Text fw={500} fz="lg" color="dimmed" ta="center">
-            <FontAwesomeIcon icon={priorityIcons[typedCategory]} /> {' '}
-            {typedCategory.charAt(0).toUpperCase() + typedCategory.slice(1)} 
-              : 
-            {priority === "primary"? ` 5/${remainingPonits}`: priority === "secondary"? ` 4/${remainingPonits}` : priority === 'tertiary'? ` 3/${remainingPonits}` : ''}
-          </Text>
-          <Indicator color={priority === "primary" || priority === "secondary" || priority === "tertiary" ? "" : "red"} inline processing size={12}>
+    return (
+      <Grid.Col
+        span={globals.isPhoneScreen ? "content" : 4}
+        key={`${category} Attributes`}
+      >
+        <Text fw={500} fz="lg" color="dimmed" ta="center">
+          <FontAwesomeIcon icon={priorityIcons[typedCategory]} /> {' '}
+          {upcase(typedCategory)}
+          :
+          {priority === "primary" ? ` 5/${remainingPonits}` : priority === "secondary" ? ` 4/${remainingPonits}` : priority === 'tertiary' ? ` 3/${remainingPonits}` : ''}
+        </Text>
+        <Indicator color={priority === "primary" || priority === "secondary" || priority === "tertiary" ? "" : "red"} inline processing size={12}>
           <Select
             value={priority || ""}
             onChange={(value) =>
@@ -209,82 +209,83 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
               { value: "", label: "Unselected" },
             ]}
           />
-          </Indicator>
-          <hr/>
-          {Object.entries(awakened.attributes).map(([attribute, attributeInfo]) => {
-            const typedAttribute = attribute as AttributesKey
-            if (attributeInfo.category === category) {
+        </Indicator>
+        <hr />
+        {Object.entries(awakened.attributes).map(([attribute, attributeInfo]) => {
+          const typedAttribute = attribute as AttributesKey
+          if (attributeInfo.category === category) {
             return (
-                <div
+              <div
                 key={`${attribute} input`}
+              >
+                <Tooltip
+                  multiline
+                  width={220}
+                  withArrow
+                  offset={20}
+                  transitionProps={{ duration: 200 }}
+                  label={nWoD1eAttributeDescriptions[typedAttribute]}
+                  position={globals.isPhoneScreen ? "bottom" : "top"}
+                  events={{ hover: true, focus: false, touch: false }}
                 >
-                  <Tooltip
-                    multiline
-                    width={220}
-                    withArrow
-                    offset={20}
-                    transitionProps={{ duration: 200 }}
-                    label={nWoD1eAttributeDescriptions[typedAttribute]}
-                    position={globals.isPhoneScreen ? "bottom" : "top"}
-                    events={{ hover: true, focus: false, touch: false }}
-                    >
                   <NumberInput
-                  key={`${category}-${attribute}`}
-                  label={`${attribute.charAt(0).toUpperCase() + attribute.slice(1)}`}
-                  min={
-                    1
-                  }
-                  max={remainingPonits <= 0 ? attributeInfo.creationPoints : remainingPonits === 1 && attributeInfo.creationPoints === 4 ? 4 : 5}
-                  value={attributeInfo.creationPoints}
-                  onChange={(val: number) =>
-                    changeCreationPoints(
-                      typedAttribute,
-                      val,
-                      attributeInfo.creationPoints
+                    key={`${category}-${attribute}`}
+                    label={`${upcase(attribute)}`}
+                    min={
+                      1
+                    }
+                    max={remainingPonits <= 0 ? attributeInfo.creationPoints : remainingPonits === 1 && attributeInfo.creationPoints === 4 ? 4 : 5}
+                    value={attributeInfo.creationPoints}
+                    onChange={(val: number) =>
+                      changeCreationPoints(
+                        typedAttribute,
+                        val,
+                        attributeInfo.creationPoints
                       )
-                  }
+                    }
 
-                />
+                  />
                 </Tooltip>
-                </div>
-              )}
-              else {
-                return null
-              };
-          })}
-        </Grid.Col>
-      );
-    }
+              </div>
+            )
+          }
+          else {
+            return null
+          };
+        })}
+      </Grid.Col>
+    );
+  }
   );
 
-  const isPhoneScreen =globals.isPhoneScreen
+  const isPhoneScreen = globals.isPhoneScreen
   const isSmallScreen = globals.isSmallScreen
-  
+
   const toggleInstructions = () => {
     setShowInstructions(!showInstructions);
   };
 
   return (
 
-    <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px'}}>
+    <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
       <Stack mt={"xl"} align="center" spacing="xl">
 
         <Alert color="gray">
           <Stack>
-          <Text mt={"xl"} ta="center" fz="xl" fw={700} style={{marginTop:"0px"}}>Attributes</Text>
-          {showInstructions && (
-            <div>
-            <p>{`How would you describe your character's natural capabilities? Are they scheming, sly, or sturdy? Attribute Points define these characteristics mechanically across three categories: Mental, Physical, and Social.`}</p>
-            <p>{`Your first step is to decide which of these three categories is your Primary, the category in which you excel the most. Next, select your so-so Secondary category. Finally, choose your weakest Tertiary category.`}</p>
-            <p>{`All characters begin with one dot in each Attribute, representing basic human capabilities.`}</p>
-            <p>{`The fifth dot in any Attribute costs two points to purchase. Reaching a rating of Five in any Attribute requires a total of five points (the first dot is free).`}</p>
-            </div>
-          )}
-          <Center>
-          <Button variant="outline" color="gray" onClick={toggleInstructions}>
-            {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
-          </Button>
-          </Center>
+            <Text mt={"xl"} ta="center" fz="xl" fw={700} style={{ marginTop: "0px" }}>Attributes</Text>
+            {showInstructions && (
+              <div>
+                <p>{`How would you describe your character's natural capabilities? Are they scheming, sly, or sturdy? Attribute Points define these characteristics mechanically across three categories: Mental, Physical, and Social.`}</p>
+                <p>{`Your first step is to decide which of these three categories is your Primary, the category in which you excel the most. Next, select your so-so Secondary category. Finally, choose your weakest Tertiary category.`}</p>
+                <p>{`All characters begin with one dot in each Attribute, representing basic human capabilities.`}</p>
+                <p>{`The fifth dot in any Attribute costs two points to purchase. Reaching a rating of Five in any Attribute requires a total of five points (the first dot is free).`}</p>
+              </div>
+            )}
+            <Center>
+              <Button variant="outline" color="gray" onClick={toggleInstructions}>
+                {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+              </Button>
+            </Center>
           </Stack>
         </Alert>
 
@@ -293,26 +294,26 @@ type CategorySetting = z.infer<typeof categorySettingSchema>;
         </Grid>
 
 
-        <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen? "15%" : "30%"}}>
-          <Alert color="dark" variant="filled" radius="xs" style={{padding:"0px"}}>
-          <Button
+        <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
+          <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>
+            <Button
               style={{ margin: "5px" }}
               color="gray"
               onClick={backStep}
-          >
+            >
               Back
-          </Button>
-          <Button
+            </Button>
+            <Button
               disabled={!checkAttributesAssigned(categoryCounts)}
               style={{ margin: "5px" }}
               color="gray"
               onClick={nextStep}
-          >
+            >
               Next
-          </Button>
+            </Button>
           </Alert>
         </Button.Group>
-        
+
       </Stack>
     </Center>
   );

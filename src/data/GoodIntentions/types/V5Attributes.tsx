@@ -80,3 +80,15 @@ export const v5AttributeLevel = (
         return { level, totalXpNeeded, pastXpNeeded };
     }
 }
+
+export const getV5AttributeCPArray = (kindred: Kindred): number[] => {
+    const attributes = kindred.attributes;
+    const levelArray: number[] = [];
+    Object.keys(attributes).forEach((attribute) => {
+        let attributeName = attribute as V5AttributesKey;
+        const creationPoints = attributes[attributeName].creationPoints;
+        levelArray.push(creationPoints);
+    });
+    levelArray.sort((a,b) => b-a);
+    return levelArray
+}

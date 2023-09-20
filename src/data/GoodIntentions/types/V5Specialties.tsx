@@ -5,4 +5,4 @@ export const specialtySchema = z.object({
     skill: v5skillsKeySchema,
     name: z.string(),
 })
-export type Specialty = z.infer<typeof specialtySchema>
+export type V5Specialty = z.infer<typeof specialtySchema>
