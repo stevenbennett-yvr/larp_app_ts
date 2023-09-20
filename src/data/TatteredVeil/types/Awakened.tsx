@@ -149,7 +149,6 @@ export const getEmptyAwakened = (): Awakened => {
 
 export type Awakened = z.infer<typeof awakenedSchema>
 
-
 export const fetchAwakenedCharacter = async (characterId:string, currentUser:User, setAwakened:Function, setInitialAwakened:Function, getAwakenedById:Function, navigate:Function) => {
   const localStorageCharacter = localStorage.getItem(`awakened id ${characterId}`);
   if (localStorageCharacter) {
@@ -172,3 +171,4 @@ export const fetchAwakenedCharacter = async (characterId:string, currentUser:Use
     }
   }
 };
+

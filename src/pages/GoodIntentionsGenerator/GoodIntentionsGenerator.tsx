@@ -5,6 +5,9 @@ import { useLocalStorage } from "@mantine/hooks"
 import ClanPicker from "./Generator/ClanPicker"
 import AttributePicker from "./Generator/AttributePicker"
 import SkillsPicker from './Generator/SkillsPicker'
+import GenerationPicker from "./Generator/GenerationPicker"
+import PredatorTypePicker from "./Generator/PredatorPicker"
+import DisciplinesPicker from "./Generator/DisciplinePicker"
 
 import { Center } from "@mantine/core"
 
@@ -26,7 +29,19 @@ const GenerateKindred = () => {
                 )
             case 2:
                 return (
-                    <SkillsPicker character={kindred} setCharacter={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} />
+                    <SkillsPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                )
+            case 3:
+                return (
+                    <GenerationPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} />
+                )
+            case 4: 
+                return (
+                    <PredatorTypePicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} />
+                )
+            case 5:
+                return (
+                    <DisciplinesPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             default:
                 return null;

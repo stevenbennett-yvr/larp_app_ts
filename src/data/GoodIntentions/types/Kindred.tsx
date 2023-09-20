@@ -5,7 +5,9 @@ import { v5skillsSchema } from './V5Skills';
 import { predatorTypeNameSchema } from './V5PredatorType';
 import { specialtySchema } from './V5Specialties';
 import { v5BackgroundRefSchema } from './V5Backgrounds';
-import { disciplineSchema } from './V5Disciplines';
+import { disciplinesSchema } from './V5Disciplines';
+import { ritualSchema } from './V5Rituals';
+import { Power, powerSchema } from './V5Powers';
 
 export const v5BackgroundSchema = z.object({
     history: z.string(),
@@ -22,9 +24,9 @@ export const kindredSchema = z.object({
     name: z.string(),
 
     clan: clanNameSchema,
+    generation: z.number().min(0).int(),
     predatorType: z.object({
         name: predatorTypeNameSchema,
-        pickedSpecialities: specialtySchema.array(),
     }),
 
     background: v5BackgroundSchema,
@@ -32,7 +34,9 @@ export const kindredSchema = z.object({
     attributes: v5AttributesSchema,
     skills: v5skillsSchema,
     skillSpecialties: specialtySchema.array(),
-    disciplines: disciplineSchema.array(),
+    disciplines: disciplinesSchema,
+    powers: powerSchema.array(),
+    rituals: ritualSchema.array(),
 
     backgrounds: v5BackgroundRefSchema.array(),
     merits: z.array(z.string()),
@@ -55,7 +59,8 @@ export const getEmptyKindred = (): Kindred => {
         },
 
         clan: "",
-        predatorType: { name: "", pickedSpecialities: [] },
+        generation: 0,
+        predatorType: { name: "" },
 
         attributes: {
             strength: {creationPoints: 1, freebiePoints: 0, experiencePoints: 0, category: 'physical' },
@@ -104,10 +109,27 @@ export const getEmptyKindred = (): Kindred => {
         },
         skillSpecialties: [],
 
-        disciplines: [],
+        disciplines: {
+            animalism: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+            auspex: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+            celerity: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+            dominate: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+            fortitude: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+            obfuscate: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+            potence: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+            presence: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+            protean: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+            oblivion: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+            "blood sorcery": { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+        },
+        powers: [],
+        rituals: [],
+
         backgrounds: [],
         merits: [],
         flaws: [],
 
     }
 }
+
+export const containsBloodSorcery = (powers: Power[]) => powers.filter((power) => power.discipline === "blood sorcery").length > 0

@@ -181,3 +181,15 @@ export const v5SkillLevel = (
       return { level, totalXpNeeded, pastXpNeeded };
     }
 }
+
+export const getV5SkillCPArray = (kindred: Kindred): number[] => {
+    const skills = kindred.skills;
+    const levelArray: number[] = [];
+    Object.keys(skills).forEach((skill) => {
+        let skillName = skill as V5SkillsKey;
+        const creationPoints = skills[skillName].creationPoints;
+        levelArray.push(creationPoints);
+    });
+    levelArray.sort((a,b) => b-a);
+    return levelArray
+}

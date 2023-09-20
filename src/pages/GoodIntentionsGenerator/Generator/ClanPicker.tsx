@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 import { ClanName, Clans, clanNameSchema } from "../../../data/GoodIntentions/types/V5Clans";
 import { globals } from "../../../assets/globals";
-import { getDisciplinesForClan } from "../../../data/GoodIntentions/types/V5Disciplines";
 import { upcase } from "../../../utils/case";
+import { disciplines, getEmptyDisciplines } from "../../../data/GoodIntentions/types/V5Disciplines";
 
 type ClanPickerProps = {
     kindred: Kindred,
@@ -21,7 +21,7 @@ const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
 
     const [clan, setClan] = useState<ClanName>(kindred.clan)
 
-    const disciplinesForClan = getDisciplinesForClan(clan)
+    const disciplinesForClan = Clans[clan].disciplines
 
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -139,16 +139,18 @@ const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
                             </Text>
                             <Center>
                                 <Group>
-                                    {clan === "Caitiff" ? <Text>Access to all Disciplines</Text> :
-                                        Object.entries(disciplinesForClan).map(([name, discipline]) => (
-                                            <Tooltip label={discipline.summary}>
+                                    {clan === "Caitiff" ? (
+                                        <Text>Access to all Disciplines</Text>
+                                    ) : (
+                                        disciplinesForClan.map((discipline) => (
+                                            <Tooltip label={disciplines[discipline].summary} key={discipline}>
                                                 <Group>
-                                                    <Avatar size="sm" src={discipline.logo} />
-                                                    <Text>{upcase(name)}</Text>
+                                                    <Avatar size="sm" src={disciplines[discipline].logo} />
+                                                    <Text>{upcase(discipline)}</Text>
                                                 </Group>
                                             </Tooltip>
                                         ))
-                                    }
+                                    )}
                                 </Group>
                             </Center>
                             <Text fz={globals.smallerFontSize} style={{ textAlign: "left" }}>
@@ -164,7 +166,7 @@ const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
 
                         <Button
                             onClick={() => {
-                                setKindred({ ...kindred, clan, merits: [], disciplines: [] })
+                                setKindred({ ...kindred, clan, merits: [], disciplines: getEmptyDisciplines })
                                 nextStep()
                             }}
                         >Confirm Clan</Button>
