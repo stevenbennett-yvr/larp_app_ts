@@ -308,6 +308,10 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                     <Text align='center'>{merit.name} {merit.rating}</Text>
                                                     <Text align='center'>{merit.prerequisites ? `PreReq: ${merit.prerequisites}` : ''}</Text>
                                                     {merit.name === "Status (Consilium)" || merit.name === "Status (Order)" ? <></> :
+                                                        <>
+                                                        <Text size="12px" color="gray.6">Xp for Next: {currentMeritLevel(meritRef).totalXpNeeded - meritRef.experiencePoints}</Text>
+                                                        <Text size="12px" color="gray.6">Total XP Needed {currentMeritLevel(meritRef).totalXpNeeded}</Text>
+                        
                                                         <Group grow spacing='xl'>
                                                             <Group key={`${merit.id} group`}>
                                                                 <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -315,6 +319,7 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                                         size="xs"
                                                                         variant='outline'
                                                                         color='gray'
+                                                                        disabled={currentMeritLevel(meritRef).pastXpNeeded[1] === meritRef.experiencePoints}
                                                                         onClick={() => handleXpMeritChange(awakened, setAwakened, meritRef, meritRef.experiencePoints - 1)}
                                                                     >
                                                                         -
@@ -323,7 +328,7 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                                         style={{ width: '60px', margin: '0 8px' }}
                                                                         type="number"
                                                                         key={`${merit.id} input`}
-                                                                        min={0}
+                                                                        min={currentMeritLevel(meritRef).pastXpNeeded[1]}
                                                                         max={findMaxMerit(meritRef)}
                                                                         value={meritRef.experiencePoints}
                                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -352,6 +357,7 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                                 <></>
                                                             }
                                                         </Group>
+                                                        </>
                                                     }
                                                 </td></tr>
                                             <tr key={`${merit.name} ${merit.type}`}>
@@ -377,7 +383,8 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                 <td style={{ minWidth: "150px" }}>
                                                     <Text>{merit.name} {currentMeritLevel(meritRef).level}</Text>
                                                     <Text>{merit.rating}</Text>
-                                                    <Text>{merit.prerequisites ? `PreReq: ${merit.prerequisites}` : ''}</Text>
+                                                    <Text size="12px" color="gray.6">Xp for Next: {currentMeritLevel(meritRef).totalXpNeeded - meritRef.experiencePoints}</Text>
+                                                        <Text size="12px" color="gray.6">Total XP Needed {currentMeritLevel(meritRef).totalXpNeeded}</Text>
                                                     {merit.name === "Status (Consilium)" || merit.name === "Status (Order)" ? <></> :
                                                         <Group key={`${merit.name} input`}>
                                                             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -385,6 +392,7 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                                     size="xs"
                                                                     variant='outline'
                                                                     color='gray'
+                                                                    disabled={currentMeritLevel(meritRef).pastXpNeeded[1] === meritRef.experiencePoints}
                                                                     onClick={() => handleXpMeritChange(awakened, setAwakened, meritRef, meritRef.experiencePoints - 1)}
                                                                 >
                                                                     -
@@ -393,7 +401,7 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                                     style={{ width: '60px', margin: '0 8px' }}
                                                                     type="number"
                                                                     key={`${merit.name}`}
-                                                                    min={0}
+                                                                    min={currentMeritLevel(meritRef).pastXpNeeded[1]}
                                                                     max={findMaxMerit(meritRef)}
                                                                     value={meritRef.experiencePoints}
                                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -413,7 +421,7 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                             </div>
                                                         </Group>
                                                     }
-
+                                                    <Text>{merit.prerequisites ? `PreReq: ${merit.prerequisites}` : ''}</Text>
                                                     {meritRef.creationPoints === 0 && meritRef.freebiePoints === 0 ?
                                                         <Button
                                                             onClick={() => {

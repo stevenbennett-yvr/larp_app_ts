@@ -184,6 +184,7 @@ const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) =>
                                             </td>
                                             <td dangerouslySetInnerHTML={{ __html: `${selectedRoteData.description} <p>Rote Pool: ${selectedRoteData.rotePool}  (${calculatePool(selectedRoteData.rotePool, awakened)})</p>` }} />
                                             <td>
+                                                {isScriptoriumChecked?<Text size="12px" color="gray.6">XP Needed {selectedRoteData.level}</Text>:<Text size="12px" color="gray.6">XP Needed {selectedRoteData.level * 2}</Text>}
                                                 <Button
                                                     color="gray"
                                                     disabled={!selectedRote || !learnableRotes.some(rote => rote.name === selectedRote)}
