@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Text, Group, Avatar, Table, Image, Button, Accordion, Select, Stack } from '@mantine/core'
+import { Text, Group, Avatar, Table, Image, Button, Accordion, Select, Stack, Checkbox } from '@mantine/core'
 import { forwardRef } from 'react'
 //Asset Imports
 import { globals } from '../../../assets/globals'
@@ -8,6 +8,7 @@ import { Awakened } from "../../../data/TatteredVeil/types/Awakened"
 import { removeRote, roteData, getFilteredRotes, Rote, getRoteByName, RoteRef, roteRefs } from '../../../data/TatteredVeil/types/Rotes'
 import { arcanaDescriptions, ArcanaKey, currentArcanumLevel } from '../../../data/TatteredVeil/types/Arcanum'
 import { handleRoteChange, calculatePool } from '../../../data/TatteredVeil/types/Rotes'
+import { nWoD1eCurrentSkillLevel } from '../../../data/nWoD1e/nWoD1eSkills'
 
 type MageRotesXpInputsProps = {
     awakened: Awakened,
@@ -23,6 +24,10 @@ const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) =>
     useEffect(() => {
         setLearnableRotes(getFilteredRotes(awakened))
     }, [awakened])
+
+    const currentAcademics = nWoD1eCurrentSkillLevel(awakened, "academics").level
+    const hasScriptoriumMerit = awakened.merits.some((merit) => merit.name === "Scriptorium");
+    const [isScriptoriumChecked, setIsScriptoriumChecked] = useState(false);
 
     const roteInputs = (learnableRotes: Rote[]) => {
         const sortedRotes = learnableRotes.sort((a, b) => {
@@ -121,14 +126,28 @@ const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) =>
                                                         <i style={{ color: "white" }}>{selectedRoteData.source}</i>
                                                     </Stack>
 
+                                                    {isScriptoriumChecked?<Text size="12px" color="gray.6">XP Needed {selectedRoteData.level}</Text>:<Text size="12px" color="gray.6">XP Needed {selectedRoteData.level * 2}</Text>}
                                                     <Button
                                                         color="gray"
                                                         disabled={!selectedRote || !learnableRotes.some(rote => rote.name === selectedRote)}
                                                         onClick={() => {
                                                             let xpCost = selectedRoteData.level * 2;
+                                                            if (isScriptoriumChecked) {
+                                                                xpCost = selectedRoteData.level;
+                                                            }
                                                             handleRoteChange(awakened, setAwakened, selectedRoteRef, "experiencePoints", xpCost)
                                                             setSelectedRote("")
                                                         }}>Buy</Button>
+                                                    {hasScriptoriumMerit && selectedRoteData.level <= currentAcademics && (
+                                                        <Checkbox
+                                                            label="Scriptorium?"
+                                                            checked={isScriptoriumChecked}
+                                                            onChange={(e) => setIsScriptoriumChecked(e.target.checked)}
+                                                        >
+
+                                                        </Checkbox>
+                                                    )
+                                                    }
                                                 </Group>
                                             </td>
                                         </tr>
@@ -170,9 +189,22 @@ const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) =>
                                                     disabled={!selectedRote || !learnableRotes.some(rote => rote.name === selectedRote)}
                                                     onClick={() => {
                                                         let xpCost = selectedRoteData.level * 2;
+                                                        if (isScriptoriumChecked) {
+                                                            xpCost = selectedRoteData.level;
+                                                        }
                                                         handleRoteChange(awakened, setAwakened, selectedRoteRef, "experiencePoints", xpCost)
                                                         setSelectedRote("")
                                                     }}>Buy</Button>
+                                                {hasScriptoriumMerit && selectedRoteData.level <= currentAcademics && (
+                                                    <Checkbox
+                                                        label="Scriptorium?"
+                                                        checked={isScriptoriumChecked}
+                                                        onChange={(e) => setIsScriptoriumChecked(e.target.checked)}
+                                                    >
+
+                                                    </Checkbox>
+                                                )
+                                                }
                                             </td>
                                         </tr>
                                     </tbody>
@@ -238,7 +270,8 @@ const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) =>
                                                                     <i style={{ color: "white" }}>{rote.source}</i>
                                                                 </Stack>
                                                                 {roteRef.experiencePoints > 0 ?
-                                                                    <Button color="gray" onClick={() => {
+                                                                    <Button color="gray" 
+                                                                    onClick={() => {
                                                                         removeRote(awakened, setAwakened, roteRef)
                                                                     }}>Remove</Button>
                                                                     :
@@ -283,7 +316,7 @@ const MageRotesXpInputs = ({ awakened, setAwakened }: MageRotesXpInputsProps) =>
                                                         <i style={{ color: "white" }}>{rote.source}</i>
                                                         {roteRef.experiencePoints > 0 ?
                                                             <Button color="gray" onClick={() => {
-                                                                handleRoteChange(awakened, setAwakened, roteRef, "experiencePoints", 0)
+                                                                removeRote(awakened, setAwakened, roteRef)
                                                             }}>Remove</Button>
                                                             :
                                                             <></>

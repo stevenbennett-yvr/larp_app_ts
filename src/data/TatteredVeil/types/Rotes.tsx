@@ -228,7 +228,7 @@ export const removeRote = (
   setAwakened: Function,
   rote: RoteRef,
 ): void => {
-  const updatedRotes = awakened.rotes.filter((r) => r.name !== rote.name);
+  const updatedRotes = awakened.rotes.filter((r) => r.name !== rote.name); // Replace 'id' with the actual unique identifier property
   setAwakened({ ...awakened, rotes: updatedRotes });
 }
 

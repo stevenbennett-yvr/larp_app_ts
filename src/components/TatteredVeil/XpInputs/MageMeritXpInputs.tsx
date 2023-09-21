@@ -129,7 +129,7 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                                         style={{ width: '60px', margin: '0 8px' }}
                                                                         type="number"
                                                                         key={`${merit.id} input`}
-                                                                        min={0}
+                                                                        min={meritRef.name==="Scriptorium"?2:0}
                                                                         max={5}
                                                                         disabled={disabledValue === 0}
                                                                         value={getAtheniumFreebies(awakened, modifiedMeritId)}
@@ -159,8 +159,6 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                     </Accordion.Item>)
             }
         }
-
-
 
         const handleMeritBuy = (meritData: Merit) => {
             let { minCost, orBool, orToBool } = defineMeritRating(meritData.rating)
