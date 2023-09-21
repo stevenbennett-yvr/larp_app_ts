@@ -375,8 +375,7 @@ export const handleMeritChange = (
   const existingMerit = awakened.merits.find((m) => m.id === merit.id);
   if (existingMerit) {
     if (newPoints === 0 && type !== "experiencePoints") {
-      const updatedMerits = awakened.merits.filter((m) => m.id !== merit.id);
-      setAwakened({ ...awakened, merits: updatedMerits });
+      handleMeritRemove(awakened,setAwakened,merit)
     } else {
       const updatedMerits = awakened.merits.map((m) =>
         m.id === merit.id ? { ...m, [type]: newPoints } : m
@@ -389,6 +388,39 @@ export const handleMeritChange = (
       merits: [...awakened.merits, { ...merit, [type]: newPoints }],
     });
   }
+};
+
+export const handleMeritRemove = (awakened:Awakened, setAwakened:Function, meritRef:MeritRef) => {  
+  const { merits } = awakened;
+  const meritsToRemove = [] as MeritRef[];
+  meritsToRemove.push(meritRef)
+
+  if (meritRef.name.includes("Athenaeum")) {
+    merits.forEach((m) => {
+      if (m.id.includes(meritRef.id)) {
+        meritsToRemove.push(m);
+      }
+    });
+  }
+
+  // Find all merits that depend on meritRef and add them to meritsToRemove
+  merits.forEach((m) => {
+    const meritData = getMeritByName(m.name);
+    if (meritData.prerequisites.includes(meritRef.name)) {
+      meritsToRemove.push(m);
+      if (meritRef.name.includes("Athenaeum")) {
+        merits.forEach((m) => {
+          if (m.id.includes(meritRef.id)) {
+            meritsToRemove.push(m);
+          }
+        });
+      }
+    }
+  });
+
+  // Remove all merits in meritsToRemove from the awakened object
+  const updatedMerits = merits.filter((m) => !meritsToRemove.includes(m));
+  setAwakened({ ...awakened, merits: updatedMerits });
 };
 
 
@@ -429,3 +461,36 @@ export const checkMeritCreationPoints = (awakened: Awakened) => {
 
   return totalCreationPoints === 7;
 };
+
+export const getAtheniumFreebies = (awakened: Awakened, meritId:string) => {
+  const merit = awakened.merits.find((merit) => merit.id === meritId);
+  if (merit) {
+    return merit.freebiePoints || 0
+  }
+  return 0;
+}
+
+export const handleAtheniumPointChange = (value:number, merit: MeritRef, meritId:string, awakened:Awakened, setAwakened:Function) => {
+  const merits = awakened.merits
+  if (merit) {
+    const updatedMerit = { ...merit, freebiePoints: value, id: meritId }
+    const existingMeritIndex = merits.findIndex((m) => m.id === meritId)
+
+    if (existingMeritIndex !== -1) {
+      merits[existingMeritIndex] = updatedMerit;
+    } else {
+      merits.push(updatedMerit)
+    }
+
+    // the below doesn't work with the remove function for whatever reason.
+    if (updatedMerit.freebiePoints === 0) {
+      setAwakened({
+        ...awakened,
+        merits: awakened.merits.filter((m) => m.id !== meritId),
+      });
+  return
+    } else {
+      setAwakened({...awakened, merits})
+    }
+  }
+}

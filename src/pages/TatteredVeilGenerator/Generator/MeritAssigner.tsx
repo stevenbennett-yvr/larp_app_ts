@@ -87,7 +87,8 @@ const MeritAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstruct
     };
 
     const step = getStep(meritRef)
-
+    const hasFreebie = meritRef.freebiePoints >= 1
+    const isFreebie = freebieMerits.some(merit => merit.name === meritRef.name);
     return (
       <div>
         <NumberInput
@@ -95,9 +96,13 @@ const MeritAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstruct
           min={type === "freebiePoints" ? 1 : 0}
           max={type === "freebiePoints" ? 2 : getRemainingPoints(awakened) < minCost ? getMeritPoints(meritRef) : defineMeritRating(meritData.rating).maxCost}
           step={step}
-          disabled={(getRemainingPoints(awakened) < minCost && getMeritPoints(meritRef) === 0) || (type === "freebiePoints" && awakened.order === "Apostate") || (meritData.name === "High Speech" && awakened.order !== "Apostate")}
+          disabled={
+            (getRemainingPoints(awakened) < minCost && getMeritPoints(meritRef) === 0) || 
+            (type === "freebiePoints" && awakened.order === "Apostate") || 
+            (meritData.name === "High Speech" && awakened.order !== "Apostate") ||
+            (!isFreebie && hasFreebie)
+          }
           onChange={(val: number) => {
-
             handleMeritChange(awakened, setAwakened, meritRef, type, val)
           }}
         />

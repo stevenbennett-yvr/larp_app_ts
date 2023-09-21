@@ -1,9 +1,9 @@
 //Technical Imports
 import { useEffect, useState, forwardRef } from 'react'
-import { useMantineTheme, Accordion, Text, Group, Select, Table, Button, Input, Stack, TextInput } from '@mantine/core'
+import { useMantineTheme, Accordion, Text, Group, Select, Table, Button, Input, Stack, TextInput, NumberInput } from '@mantine/core'
 //Data Imports
 import { Awakened } from "../../../data/TatteredVeil/types/Awakened"
-import { getMeritByName, Merit, meritRefs, getFilteredMerits, meritData, defineMeritRating, handleMeritChange, currentMeritLevel, handleXpMeritChange, findMaxMerit } from '../../../data/TatteredVeil/types/Merits'
+import { getMeritByName, Merit, meritRefs, MeritRef, getFilteredMerits, meritData, defineMeritRating, handleMeritChange, currentMeritLevel, handleXpMeritChange, findMaxMerit, getAtheniumFreebies, handleAtheniumPointChange, handleMeritRemove } from '../../../data/TatteredVeil/types/Merits'
 import { globals } from '../../../assets/globals'
 
 type MageMeritXpInputsProps = {
@@ -84,6 +84,83 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                 </div>
             )
         );
+
+        const atheneumSection = (awakened: Awakened) => {
+            const athenaeumMerit = awakened.merits.find((merit) => merit.name === 'Athenaeum');
+            const scriptMerit = awakened.merits.find((merit) => merit.name === 'Scriptorium');
+            const labMerit = awakened.merits.find((merit) => merit.name === 'Alchemical Lab');
+            const libMerit = awakened.merits.find((merit) => merit.name === 'Library');
+
+            if (!athenaeumMerit) { return null }
+            else {
+                const athenaeumLevel = currentMeritLevel(athenaeumMerit).level
+                const athenaeumPoints = athenaeumLevel * 2;
+                const disabledValue = (athenaeumLevel * 2) -
+                    (scriptMerit ? scriptMerit.freebiePoints : 0) -
+                    (labMerit ? labMerit.freebiePoints : 0) -
+                    (libMerit ? libMerit.freebiePoints : 0);
+                return (
+                    <Accordion.Item value="Athenaeum" key="Athenaeum">
+                        <Accordion.Control style={{ color: "white", backgroundColor: "#DAA520" }}>ATHENAEUM SELECT: POINTS {disabledValue}/{athenaeumPoints}</Accordion.Control>
+                        <Accordion.Panel>
+                            {allSortedMerits.map((merit) => {
+                                if (
+                                    merit.name === "Library" ||
+                                    merit.name === "Alchemical Lab" ||
+                                    merit.name === "Scriptorium"
+                                ) {
+                                    const modifiedMeritId = `${merit.id}-${awakened.merits.find((merit) => merit.name === 'Athenaeum')?.id}`;
+                                    let meritRef = meritRefs.find((m) => m.name === merit.name) as MeritRef;
+
+                                    if (!meritRef) {
+                                        throw new Error(`MeritRef not found for ${merit.name}`);
+                                    }
+
+                                    return (
+                                        <Table>
+                                            <tbody>
+                                                <tr>
+                                                    <td style={{ width: "150px" }}>
+                                                        <Text align='center'>{merit.name} {merit.rating}</Text>
+                                                        <Group grow spacing='xl'>
+                                                            <Group key={`${merit.id} group`}>
+                                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                    <NumberInput
+                                                                        style={{ width: '60px', margin: '0 8px' }}
+                                                                        type="number"
+                                                                        key={`${merit.id} input`}
+                                                                        min={0}
+                                                                        max={5}
+                                                                        disabled={disabledValue === 0}
+                                                                        value={getAtheniumFreebies(awakened, modifiedMeritId)}
+                                                                        onChange={(event) => {
+                                                                            let val = Number(event);
+                                                                            handleAtheniumPointChange(val, meritRef, modifiedMeritId, awakened, setAwakened);
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            </Group>
+                                                        </Group>
+                                                        <Text align='center'>{merit.prerequisites ? `PreReq: ${merit.prerequisites}` : ''}</Text>
+
+                                                    </td>
+                                                    <td>
+                                                        <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </Table>
+                                    );
+                                } else {
+                                    return null; // Return null for merits you want to skip rendering
+                                }
+                            })}
+                        </Accordion.Panel>
+                    </Accordion.Item>)
+            }
+        }
+
+
 
         const handleMeritBuy = (meritData: Merit) => {
             let { minCost, orBool, orToBool } = defineMeritRating(meritData.rating)
@@ -218,96 +295,23 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
             const sortedMerits = awakened.merits.filter((merit) => getMeritByName(merit.name).type.toLowerCase() === type.toLowerCase()).sort((a, b) => a.id.localeCompare(b.id))
 
             return (
-                <div key={key}>
-                    <Accordion.Item value={type}>
-                        <Accordion.Control style={{ color: "white", backgroundColor: bgc }}>{type.toUpperCase()}</Accordion.Control>
-                        <Accordion.Panel>
+                <Accordion.Item value={type} key={key}>
+                    <Accordion.Control style={{ color: "white", backgroundColor: bgc }}>{type.toUpperCase()}</Accordion.Control>
+                    <Accordion.Panel>
 
-                            {globals.isPhoneScreen ?
-                                sortedMerits.map((meritRef) => {
-                                    const merit = getMeritByName(meritRef.name)
-                                    return (
-                                        <Table key={`${meritRef.id} phoneScreen`}>
-                                            <tbody>
-                                                <tr>
-                                                    <td style={{ minWidth: "150px" }}>
-                                                        <Text align='center'>{merit.name} {merit.rating}</Text>
-                                                        <Text align='center'>{merit.prerequisites ? `PreReq: ${merit.prerequisites}` : ''}</Text>
-                                                        {merit.name === "Status (Consilium)" || merit.name === "Status (Order)" ? <></> :
-                                                            <Group grow spacing='xl'>
-                                                                <Group key={`${merit.id} group`}>
-                                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                        <Button
-                                                                            size="xs"
-                                                                            variant='outline'
-                                                                            color='gray'
-                                                                            onClick={() => handleXpMeritChange(awakened, setAwakened, meritRef, meritRef.experiencePoints - 1)}
-                                                                        >
-                                                                            -
-                                                                        </Button>
-                                                                        <Input
-                                                                            style={{ width: '60px', margin: '0 8px' }}
-                                                                            type="number"
-                                                                            key={`${merit.id} input`}
-                                                                            min={0}
-                                                                            max={findMaxMerit(meritRef)}
-                                                                            value={meritRef.experiencePoints}
-                                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                                const value = Number(e.target.value);
-                                                                                handleXpMeritChange(awakened, setAwakened, meritRef, value);
-                                                                            }}
-                                                                        />
-                                                                        <Button
-                                                                            size="xs"
-                                                                            variant='outline'
-                                                                            color='gray'
-                                                                            disabled={findMaxMerit(meritRef) === meritRef.experiencePoints}
-                                                                            onClick={() => handleXpMeritChange(awakened, setAwakened, meritRef, meritRef.experiencePoints + 1)}
-                                                                        >
-                                                                            +
-                                                                        </Button>
-                                                                    </div>
-                                                                </Group>
-                                                                {meritRef.creationPoints === 0 && meritRef.freebiePoints === 0 ?
-                                                                    <Button
-                                                                        onClick={() => {
-                                                                            console.log(meritRef.id)
-                                                                            setAwakened({ ...awakened, merits: awakened.merits.filter((m) => !m.id.includes(meritRef.id)) })
-                                                                        }}
-                                                                    >Remove Merit</Button>
-                                                                    :
-                                                                    <></>
-                                                                }
-                                                            </Group>
-                                                        }
-                                                    </td></tr>
-                                                <tr key={`${merit.name} ${merit.type}`}>
-
-                                                    <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
-                                                </tr>
-                                            </tbody>
-                                        </Table>
-                                    )
-                                })
-                                :
-                                <Table key={`desktopDisplay`}>
-                                    <thead>
-                                        <tr>
-                                            <th>Merit</th>
-                                            <th>Description</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {sortedMerits.map((meritRef) => {
-                                            const merit = getMeritByName(meritRef.name)
-                                            return (
-                                                <tr key={`${merit.name} ${merit.type}`} id={`${merit.name} ${merit.type}`}>
-                                                    <td style={{ minWidth: "150px" }}>
-                                                        <Text>{merit.name} {currentMeritLevel(meritRef).level}</Text>
-                                                        <Text>{merit.rating}</Text>
-                                                        <Text>{merit.prerequisites ? `PreReq: ${merit.prerequisites}` : ''}</Text>
-                                                        {merit.name === "Status (Consilium)" || merit.name === "Status (Order)" ? <></> :
-                                                            <Group key={`${merit.name} input`}>
+                        {globals.isPhoneScreen ?
+                            sortedMerits.map((meritRef) => {
+                                const merit = getMeritByName(meritRef.name)
+                                return (
+                                    <Table key={`${meritRef.id} phoneScreen`}>
+                                        <tbody>
+                                            <tr>
+                                                <td style={{ minWidth: "150px" }}>
+                                                    <Text align='center'>{merit.name} {merit.rating}</Text>
+                                                    <Text align='center'>{merit.prerequisites ? `PreReq: ${merit.prerequisites}` : ''}</Text>
+                                                    {merit.name === "Status (Consilium)" || merit.name === "Status (Order)" ? <></> :
+                                                        <Group grow spacing='xl'>
+                                                            <Group key={`${merit.id} group`}>
                                                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                                                     <Button
                                                                         size="xs"
@@ -320,7 +324,7 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                                     <Input
                                                                         style={{ width: '60px', margin: '0 8px' }}
                                                                         type="number"
-                                                                        key={`${merit.name}`}
+                                                                        key={`${merit.id} input`}
                                                                         min={0}
                                                                         max={findMaxMerit(meritRef)}
                                                                         value={meritRef.experiencePoints}
@@ -340,39 +344,107 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                                     </Button>
                                                                 </div>
                                                             </Group>
-                                                        }
-
-                                                        {meritRef.creationPoints === 0 && meritRef.freebiePoints === 0 ?
-                                                            <Button
-                                                                onClick={() => {
-                                                                    console.log(meritRef.id)
-                                                                    setAwakened({ ...awakened, merits: awakened.merits.filter((m) => !m.id.includes(meritRef.id)) })
-                                                                }}
-                                                            >Remove Merit</Button>
-                                                            :
-                                                            <></>
-                                                        }
-                                                    </td>
-                                                    <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
-                                                    <td>
-                                                        <TextInput
-                                                            value={meritRef.note ? meritRef.note : ""}
-                                                            onChange={(event) =>
-                                                                handleMeritChange(awakened, setAwakened, meritRef, "note", event.target.value)
+                                                            {meritRef.creationPoints === 0 && meritRef.freebiePoints === 0 ?
+                                                                <Button
+                                                                    onClick={() => {
+                                                                        handleMeritRemove(awakened, setAwakened, meritRef)
+                                                                    }}
+                                                                >Remove Merit</Button>
+                                                                :
+                                                                <></>
                                                             }
-                                                            label="Merit Notes"
-                                                        />
-                                                    </td>
-                                                </tr>
-                                            )
+                                                        </Group>
+                                                    }
+                                                </td></tr>
+                                            <tr key={`${merit.name} ${merit.type}`}>
+                                                <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
+                                            </tr>
+                                        </tbody>
+                                    </Table>
+                                )
+                            })
+                            :
+                            <Table key={`desktopDisplay`}>
+                                <thead>
+                                    <tr>
+                                        <th>Merit</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {sortedMerits.map((meritRef) => {
+                                        const merit = getMeritByName(meritRef.name)
+                                        return (
+                                            <tr key={`${merit.name} ${merit.type}`} id={`${merit.name} ${merit.type}`}>
+                                                <td style={{ minWidth: "150px" }}>
+                                                    <Text>{merit.name} {currentMeritLevel(meritRef).level}</Text>
+                                                    <Text>{merit.rating}</Text>
+                                                    <Text>{merit.prerequisites ? `PreReq: ${merit.prerequisites}` : ''}</Text>
+                                                    {merit.name === "Status (Consilium)" || merit.name === "Status (Order)" ? <></> :
+                                                        <Group key={`${merit.name} input`}>
+                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                <Button
+                                                                    size="xs"
+                                                                    variant='outline'
+                                                                    color='gray'
+                                                                    onClick={() => handleXpMeritChange(awakened, setAwakened, meritRef, meritRef.experiencePoints - 1)}
+                                                                >
+                                                                    -
+                                                                </Button>
+                                                                <Input
+                                                                    style={{ width: '60px', margin: '0 8px' }}
+                                                                    type="number"
+                                                                    key={`${merit.name}`}
+                                                                    min={0}
+                                                                    max={findMaxMerit(meritRef)}
+                                                                    value={meritRef.experiencePoints}
+                                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                                        const value = Number(e.target.value);
+                                                                        handleXpMeritChange(awakened, setAwakened, meritRef, value);
+                                                                    }}
+                                                                />
+                                                                <Button
+                                                                    size="xs"
+                                                                    variant='outline'
+                                                                    color='gray'
+                                                                    disabled={findMaxMerit(meritRef) === meritRef.experiencePoints}
+                                                                    onClick={() => handleXpMeritChange(awakened, setAwakened, meritRef, meritRef.experiencePoints + 1)}
+                                                                >
+                                                                    +
+                                                                </Button>
+                                                            </div>
+                                                        </Group>
+                                                    }
 
-                                        })}
-                                    </tbody>
-                                </Table>
-                            }
-                        </Accordion.Panel>
-                    </Accordion.Item>
-                </div>
+                                                    {meritRef.creationPoints === 0 && meritRef.freebiePoints === 0 ?
+                                                        <Button
+                                                            onClick={() => {
+                                                                handleMeritRemove(awakened, setAwakened, meritRef)
+                                                            }}
+                                                        >Remove Merit</Button>
+                                                        :
+                                                        <></>
+                                                    }
+                                                </td>
+                                                <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
+                                                <td>
+                                                    <TextInput
+                                                        value={meritRef.note ? meritRef.note : ""}
+                                                        onChange={(event) =>
+                                                            handleMeritChange(awakened, setAwakened, meritRef, "note", event.target.value)
+                                                        }
+                                                        label="Merit Notes"
+                                                    />
+                                                </td>
+                                            </tr>
+                                        )
+
+                                    })}
+                                </tbody>
+                            </Table>
+                        }
+                    </Accordion.Panel>
+                </Accordion.Item>
             )
         }
 
@@ -403,6 +475,7 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                     {
                         (meritTypes).map((a) => createOwnedMeritAccordian(a, a))
                     }
+                    {atheneumSection(awakened)}
                 </Accordion>
             </div>
         )
