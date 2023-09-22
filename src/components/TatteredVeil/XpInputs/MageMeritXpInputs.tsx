@@ -392,7 +392,7 @@ const MageMeritXpInputs = ({ awakened, setAwakened }: MageMeritXpInputsProps) =>
                                                                     size="xs"
                                                                     variant='outline'
                                                                     color='gray'
-                                                                    disabled={currentMeritLevel(meritRef).pastXpNeeded[1] === meritRef.experiencePoints}
+                                                                    disabled={(currentMeritLevel(meritRef).pastXpNeeded[1] === meritRef.experiencePoints) || (findMaxMerit(meritRef) === meritRef.experiencePoints && meritRef.experiencePoints === 0)}
                                                                     onClick={() => handleXpMeritChange(awakened, setAwakened, meritRef, meritRef.experiencePoints - 1)}
                                                                 >
                                                                     -

@@ -1,15 +1,19 @@
-import { Button, Select, Space, Stack, Text } from "@mantine/core"
+import { Button, Select, Space, Stack, Text, Alert } from "@mantine/core"
 import { useState } from "react"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-
+import { globals } from "../../../assets/globals"
 
 type GenerationPickerProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void
     nextStep: () => void
+    backStep: () => void
 }
 
-const GenerationPicker = ({ kindred, setKindred, nextStep }: GenerationPickerProps) => {
+const GenerationPicker = ({ kindred, setKindred, nextStep, backStep }: GenerationPickerProps) => {
+    const isPhoneScreen = globals.isPhoneScreen
+    const isSmallScreen = globals.isSmallScreen
+
     const [generation, setGeneration] = useState<string | null>("13");
 
     return (
@@ -56,6 +60,20 @@ const GenerationPicker = ({ kindred, setKindred, nextStep }: GenerationPickerPro
                     setKindred({ ...kindred, generation: parseInt(generation ?? "0") })
                     nextStep()
                 }}>Confirm</Button>
+
+                <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
+                    <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>
+                        <Button
+                            style={{ margin: "5px" }}
+                            color="gray"
+                            onClick={backStep}
+                        >
+                            Back
+                        </Button>
+
+                    </Alert>
+                </Button.Group>
+
             </Stack>
         </div>
     )

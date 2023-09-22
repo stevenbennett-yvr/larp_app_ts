@@ -6,7 +6,8 @@ import { upcase } from "../../../utils/case"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBrain, faComment, faHandFist } from "@fortawesome/free-solid-svg-icons"
 import { SkillCategory } from "../../../data/nWoD1e/nWoD1eSkills"
-//import { SpecialtyModal } from "./SpecialtyModal"
+import { SpecialtyModal } from "./SpecialtyModal"
+import { useState } from "react"
 
 type SkillsPickerProps = {
     kindred: Kindred,
@@ -15,9 +16,22 @@ type SkillsPickerProps = {
     backStep: () => void,
 }
 
+
+
+
 const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerProps) => {
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
+
+    const [modalOpen, setModalOpen] = useState(false);
+    
+    const handleOpenModal = () => {
+        setModalOpen(true);
+        };
+
+      const handleCloseModal = () => {
+        setModalOpen(false);
+        };
 
     const pointsArray = getV5SkillCPArray(kindred)
     const checkSkillArray = (pointsArray: number[]) => {
@@ -61,9 +75,13 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
             }
         }
 
+
+        const clearedSpecialities = kindred.skillSpecialties.filter(entry => entry.skill !== skill)
+
         const updatedCharacter = {
             ...kindred,
-            skills: updatedAttributes
+            skills: updatedAttributes,
+            skillSpecialties: clearedSpecialities,
         }
 
         setKindred(updatedCharacter)
@@ -111,14 +129,11 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
                                         min={
                                             0
                                         }
-                                        max={!check[3] ? 3 : !check[2] ? 2 : 1}
+                                        max={!check[3] ? 3 : !check[2] ? 2 : !check[1]? 1: 0}
                                         value={skillInfo.creationPoints}
-                                        onChange={(val: number) =>
-                                            changeCreationPoints(
-                                                typedAttribute,
-                                                val
-                                            )
-                                        }
+                                        onChange={(val: number) => {
+                                            changeCreationPoints(typedAttribute, val);
+                                        }}
 
                                     />
                                 </Tooltip>
@@ -173,13 +188,14 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
                             style={{ margin: "5px" }}
                             color="gray"
                             disabled={!checkSkillArray(pointsArray).totalResult}
-                            onClick={nextStep}
+                            onClick={handleOpenModal}
                         >
                             Next
                         </Button>
                     </Alert>
                 </Button.Group>
             </Stack>
+            <SpecialtyModal modalOpened={modalOpen} closeModal={handleCloseModal} setCharacter={setKindred} nextStep={nextStep} character={kindred} ></SpecialtyModal>
         </Center>
 
     )

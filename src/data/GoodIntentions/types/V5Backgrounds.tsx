@@ -19,6 +19,7 @@ export const sphereOfInfluenceSchema = z.union([
     z.literal("transportation"),
     z.literal("underworld"),
     z.literal("university"),
+    z.literal("")
 ])
 
 export const v5AdvantageRefSchema = z.object({
@@ -30,6 +31,13 @@ export const v5AdvantageRefSchema = z.object({
 
 export type V5AdvantageRef = z.infer<typeof v5AdvantageRefSchema>
 
+export const emptyAdvantage: V5AdvantageRef = {
+    name: "",
+    creationPoints: 0,
+    freebiePoints: 0,
+    experiencePoints: 0,
+}
+
 export const v5BackgroundRefSchema = z.object({
     id: z.string(),
     name: z.string(),
@@ -40,8 +48,17 @@ export const v5BackgroundRefSchema = z.object({
     advantages: z.array(v5AdvantageRefSchema),
     sphere: z.optional(sphereOfInfluenceSchema),
 })
-
 export type V5BackgroundRef = z.infer<typeof v5BackgroundRefSchema>
+
+export const emptyBackground:V5BackgroundRef = {
+    id: "",
+    name: "",
+    creationPoints: 0,
+    freebiePoints: 0,
+    experiencePoints: 0,
+    note: "",
+    advantages: [],
+}
 
 /// build out refs from json here....
 

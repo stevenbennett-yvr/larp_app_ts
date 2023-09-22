@@ -33,7 +33,7 @@ const GenerateKindred = () => {
                 )
             case 3:
                 return (
-                    <GenerationPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} />
+                    <GenerationPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             case 4: 
                 return (
