@@ -36,7 +36,10 @@
         "coordinator": {
             "name": "",
             "email": ""
-        }, 
+        },
+        "links": {
+            "facebook": "https://www.facebook.com/groups/2249230082"
+        }
         },
     {
         "name": "CND-002 Saint John",
