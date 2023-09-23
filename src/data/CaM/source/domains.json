@@ -28,6 +28,17 @@
         }
         },
     {
+        "name": "Dark Aurora",
+        "id": "CND-098",
+        "location": "Vancouver, BC, Canada",
+        "status": "active",
+        "currentChronicles": ["Tattered Veil"],
+        "coordinator": {
+            "name": "",
+            "email": ""
+        }, 
+        },
+    {
         "name": "CND-002 Saint John",
         "id": "CND-002",
         "location": "Saint John, NB, Canada",
@@ -90,7 +101,7 @@
         "name": "Northern Winds Virtual Domain",
         "id": "CND-099",
         "location": "Thunder Bay, ON, Canada",
-        "status": "active",
+        "status": "inactive",
         "coordinator": {
             "name": "Yvonne Day",
             "email": "dc.099@canadaatmidnight.com"
