@@ -97,8 +97,8 @@ const MeritAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstruct
           max={type === "freebiePoints" ? 2 : getRemainingPoints(awakened) < minCost ? getMeritPoints(meritRef) : defineMeritRating(meritData.rating).maxCost}
           step={step}
           disabled={
-            (getRemainingPoints(awakened) < minCost && getMeritPoints(meritRef) === 0) || 
-            (type === "freebiePoints" && awakened.order === "Apostate") || 
+            (getRemainingPoints(awakened) < minCost && getMeritPoints(meritRef) === 0) ||
+            (type === "freebiePoints" && awakened.order === "Apostate") ||
             (meritData.name === "High Speech" && awakened.order !== "Apostate") ||
             (!isFreebie && hasFreebie)
           }
@@ -132,13 +132,19 @@ const MeritAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstruct
         break;
     }
 
-    const sortedMerits = showAllMerits
-      ? meritData
-        .filter((merit) => merit.type.toLowerCase() === type.toLowerCase())
-        .sort((a, b) => a.name.localeCompare(b.name))
-      : filteredMerits
-        .filter((merit) => merit.type.toLowerCase() === type.toLowerCase())
-        .sort((a, b) => a.name.localeCompare(b.name));
+    let meritsToShow = showAllMerits ? meritData : filteredMerits;
+
+    meritsToShow = meritsToShow
+      .filter((merit) => merit.type.toLowerCase() === type.toLowerCase())
+      .sort((a, b) => {
+        if (type === "Sanctum merits") {
+            return b.name.localeCompare(a.name);
+          }
+        else {
+          // Alphabetical order for other types
+          return a.name.localeCompare(b.name);
+        }
+      });
 
 
     return (
@@ -149,20 +155,20 @@ const MeritAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstruct
             {globals.isPhoneScreen ?
               <Table>
                 <tbody>
-                  {sortedMerits.map((merit) => {
+                  {meritsToShow.map((merit) => {
                     const isFreebieMerit = freebieMerits.some((item) => item.name === merit.name);
                     return (
                       <>
-                      <tr>
-                      <td style={{ minWidth: "150px" }}>
-                      <Text align='center'>{merit.name} {merit.rating}</Text>
-                      <Text align='center'>{merit.prerequisites ? `PreReq: ${merit.prerequisites}` : ''}</Text>
-                      {isFreebieMerit ? MeritInput(merit, "freebiePoints") : MeritInput(merit, "creationPoints")}
-                    </td></tr>
-                      <tr key={`${merit.name} ${merit.type}`}>
+                        <tr>
+                          <td style={{ minWidth: "150px" }}>
+                            <Text align='center'>{merit.name} {merit.rating}</Text>
+                            <Text align='center'>{merit.prerequisites ? `PreReq: ${merit.prerequisites}` : ''}</Text>
+                            {isFreebieMerit ? MeritInput(merit, "freebiePoints") : MeritInput(merit, "creationPoints")}
+                          </td></tr>
+                        <tr key={`${merit.name} ${merit.type}`}>
 
-                        <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
-                      </tr>
+                          <td dangerouslySetInnerHTML={{ __html: `${merit.description}` }} />
+                        </tr>
                       </>
                     )
                   })}
@@ -177,7 +183,7 @@ const MeritAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstruct
                   </tr>
                 </thead>
                 <tbody>
-                  {sortedMerits.map((merit) => {
+                  {meritsToShow.map((merit) => {
                     const isFreebieMerit = freebieMerits.some((item) => item.name === merit.name);
                     return (
                       <tr key={`${merit.name} ${merit.type}`}>
@@ -310,45 +316,45 @@ const MeritAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstruct
   return (
     <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px' }}>
       <Stack>
-      <ScrollArea h={height-140} pb={20}>
-        <Alert color='gray'>
-          <Text mt={"xl"} ta="center" fz="xl" fw={700}>Merits</Text>
-          {showInstructions && (
-            <div>
-              <p>{`Merits are special capabilities or qualities that add individuality to your character. Some are intrinsic, developed early in life, others can be acquired through trial and error, training and other efforts.`}</p>
-              <p>{`Each merit has a number of dots associated with it. These dots represent the number of points that need to be spent to purchase it.`}</p>
-              <p>{`As a member of one of the five Pentacle Orders, you are taught the rudiments of Atlantean High Speech and gain that merit for free. You also gain up to two free dots of Status (Order) and Status (Consilium) to represent your rank in Mage society.`}</p>
-              <Text mt={"xl"} ta="center" fz="xl" fw={700}>Gnosis</Text>
-              <p>{`A Mage's empowered will is measured by their Gnosis. As a Mage, you start with one dot in Gnosis by default.`}</p>
-              <p>{`The Gnosis trait is rated from 1 to 10 dots. It has the following game effects:`}</p>
-              <ul>
-                <li>{`Gnosis determines a character's potential to gain master of an Arcanum and successive Arcana. See "Arcana Mastery", M:ta pg. 76`}</li>
-                <li>{`A Mage roll Gnosis + Arcanum when casting improvised spells.`}</li>
-                <li>{`The higher a mage’s Gnosis, the more quickly they can cast elaborate or powerful spells.`}</li>
-                <li>{`Gnosis affects how many points of Mana a mage can spend in a single turn and how much Mana they can store.`}</li>
-                <li>{`A Mages can maintain only a certain number of active spells simultaneously, equal to Gnosis +3.`}</li>
-                <li>{`Mages can combine spells into a single casting, with the total number limited by Gnosis.`}</li>
-              </ul>
-              <p>{`You can spend 3 merit points here to purchase additional dots of Gnosis.`}</p>
-            </div>
-          )}
+        <ScrollArea h={height - 140} pb={20}>
+          <Alert color='gray'>
+            <Text mt={"xl"} ta="center" fz="xl" fw={700}>Merits</Text>
+            {showInstructions && (
+              <div>
+                <p>{`Merits are special capabilities or qualities that add individuality to your character. Some are intrinsic, developed early in life, others can be acquired through trial and error, training and other efforts.`}</p>
+                <p>{`Each merit has a number of dots associated with it. These dots represent the number of points that need to be spent to purchase it.`}</p>
+                <p>{`As a member of one of the five Pentacle Orders, you are taught the rudiments of Atlantean High Speech and gain that merit for free. You also gain up to two free dots of Status (Order) and Status (Consilium) to represent your rank in Mage society.`}</p>
+                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Gnosis</Text>
+                <p>{`A Mage's empowered will is measured by their Gnosis. As a Mage, you start with one dot in Gnosis by default.`}</p>
+                <p>{`The Gnosis trait is rated from 1 to 10 dots. It has the following game effects:`}</p>
+                <ul>
+                  <li>{`Gnosis determines a character's potential to gain master of an Arcanum and successive Arcana. See "Arcana Mastery", M:ta pg. 76`}</li>
+                  <li>{`A Mage roll Gnosis + Arcanum when casting improvised spells.`}</li>
+                  <li>{`The higher a mage’s Gnosis, the more quickly they can cast elaborate or powerful spells.`}</li>
+                  <li>{`Gnosis affects how many points of Mana a mage can spend in a single turn and how much Mana they can store.`}</li>
+                  <li>{`A Mages can maintain only a certain number of active spells simultaneously, equal to Gnosis +3.`}</li>
+                  <li>{`Mages can combine spells into a single casting, with the total number limited by Gnosis.`}</li>
+                </ul>
+                <p>{`You can spend 3 merit points here to purchase additional dots of Gnosis.`}</p>
+              </div>
+            )}
+            <Center>
+              <Button color="gray" onClick={toggleInstructions}>
+                {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+              </Button>
+            </Center>
+          </Alert>
           <Center>
-            <Button color="gray" onClick={toggleInstructions}>
-              {showInstructions ? 'Hide Instructions' : 'Show Instructions'}
-            </Button>
+            {createGnosisAssigner()}
           </Center>
-        </Alert>
-        <Center>
-          {createGnosisAssigner()}
-        </Center>
-        <Center>
-          <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
-            {
-              ["Mental merits", "Physical merits", "Social merits", "Mage merits", "Sanctum merits"].map((t) => createMeritAccordian(t, showAllMerits))
-            }
-          </Accordion>
-        </Center>
-      </ScrollArea>
+          <Center>
+            <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
+              {
+                ["Mental merits", "Physical merits", "Social merits", "Mage merits", "Sanctum merits"].map((t) => createMeritAccordian(t, showAllMerits))
+              }
+            </Accordion>
+          </Center>
+        </ScrollArea>
       </Stack>
 
       <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
@@ -369,14 +375,14 @@ const MeritAssigner = ({ awakened, setAwakened, nextStep, backStep, showInstruct
             >
               Next
             </Button>
-            {globals.isPhoneScreen? <></>:
-            <Button
-              color="gray"
-              style={{ margin: "5px" }}
-              onClick={() => setShowAllMerits((prevShowAllMerits) => !prevShowAllMerits)}
-            >
-              {showAllMerits ? "Hide All" : "Show All"}
-            </Button>
+            {globals.isPhoneScreen ? <></> :
+              <Button
+                color="gray"
+                style={{ margin: "5px" }}
+                onClick={() => setShowAllMerits((prevShowAllMerits) => !prevShowAllMerits)}
+              >
+                {showAllMerits ? "Hide All" : "Show All"}
+              </Button>
             }
             <Text fz={globals.smallerFontSize} style={{ margin: "10px" }}>Merit Points: 7/{getRemainingPoints(awakened)}</Text>
           </Button.Group>

@@ -238,7 +238,6 @@ export const getFilteredMerits = (awakened: Awakened): Merit[] => {
   const filteredMerits: Merit[] = [];
 
   meritData.forEach((merit) => {
-    if (merit.name.includes("Status")) { console.log(merit) }
     const { prerequisites } = merit
     let canSelect = false;
     if (prerequisites !== "") {
