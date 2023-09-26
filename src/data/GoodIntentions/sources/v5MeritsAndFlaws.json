@@ -1,0 +1,560 @@
+[
+    {
+        "name": "Bond Resistance",
+        "category": "bonding",
+        "type": "merit",
+        "cost": [1, 2, 3],
+        "description": "It is easier for you to resist the Blood Bond. For each dot of this Merit, reduce the difficulty of Defiance checks by one.",
+        "source": "LOTN5 pg.178"
+    },    
+    {
+        "name": "Short Bond",
+        "category": "bonding",
+        "type": "merit",
+        "cost": [2],
+        "description": "The Bond decays more quickly for you. Reduce the Bond Strength of your Blood Bond by two for each month you go without feeding from your regnant.",
+        "source": "LOTN5 pg.178"
+    },
+    {
+        "name": "Sympathy Pains",
+        "category": "bonding",
+        "type": "merit",
+        "cost": [2],
+        "description": "Whenever any of your thralls take Aggravated Damage, you feel a twinge in the back of your skull signaling they are in danger.",
+        "source": "LOTN5 pg.178"
+    },
+    {
+        "name": "Unbondable",
+        "category": "bonding",
+        "type": "merit",
+        "cost": [4],
+        "description": "You cannot be Blood Bound. This must be purchased at character creation.",
+        "creationOnly": true,
+        "source": "LOTN5 pg.178"
+    },
+    {
+        "name": "Bond at First Taste",
+        "category": "bonding",
+        "type": "flaw",
+        "cost": [3],
+        "description": "You bond at the first drink of vampire Blood.",
+        "source": "LOTN5 pg.178"
+    },
+    {
+        "name": "Bond Junkie",
+        "category": "bonding",
+        "type": "flaw",
+        "cost": [1,2,3],
+        "description": "The Bond feels sweeter to you, and it is harder for you to resist its effects.",
+        "source": "LOTN5 pg.178"
+    },
+    {
+        "name": "Long Bond",
+        "category": "bonding",
+        "type": "flaw",
+        "cost": [2],
+        "description": "The Bond takes more time to decay for you.",
+        "source": "LOTN5 pg.178"
+    },
+    {
+        "name": "Symbiotic Dependency",
+        "category": "bonding",
+        "type": "flaw",
+        "cost": [4],
+        "description": "For every two damage your regnant takes, you take one damage of the same type. If your regnant suffers their Final Death, you die of internal hemorrhaging within minutes. This damage cannot be prevented.",
+        "source": "LOTN5 pg.178"
+    },
+    {
+        "name": "Linguistics",
+        "category": "connection",
+        "type": "merit",
+        "cost": [1,2,3,4,5],
+        "description": "Each character may naturally speak and write their own native language and the most common language in the location where the game is set.",
+        "source": "LOTN5 pg.179"
+    },
+    {
+        "name": "Cobbler",
+        "category": "connection",
+        "type": "merit",
+        "cost": [1],
+        "description": ": You have studied the mortal systems enough to be able to create Masks for yourself and others.",
+        "source": "LOTN5 pg.179",
+        "prerequisite": {"trait":"Mask","level":2}
+    },
+    {
+        "name": "Phenom (Academics)",
+        "category": "connection",
+        "type": "merit",
+        "cost": [2],
+        "description": "You gain an additional specialty for each dot of the Academics that you possess.",
+        "source": "LOTN5 pg.179"
+    },
+    {
+        "name": "Phenom (Crafts)",
+        "category": "connection",
+        "type": "merit",
+        "cost": [2],
+        "description": "You gain an additional specialty for each dot of the Crafts that you possess.",
+        "source": "LOTN5 pg.179"
+    },
+    {
+        "name": "Phenom (Performance)",
+        "category": "connection",
+        "type": "merit",
+        "cost": [2],
+        "description": "You gain an additional specialty for each dot of the Performance that you possess.",
+        "source": "LOTN5 pg.179"
+    },
+    {
+        "name": "Zeroed",
+        "category": "connection",
+        "type": "merit",
+        "cost": [2],
+        "description": "According to any sort of record-keeping system, you do not exist.",
+        "source": "LOTN5 pg.179",
+        "prerequisite": {"trait":"Mask","level":3}
+    },
+    {
+        "name": "Enemy",
+        "category": "connection",
+        "type": "flaw",
+        "cost": [1,2,3],
+        "description": "You have an enemy who strongly dislikes you due to various offenses, and the level of this enemy determines the intensity of their efforts to cause you trouble, ranging from minor harassment (Level 1) to actively seeking to ruin you or cause harm (Level 3).",
+        "source": "LOTN5 pg.179",
+        "multi": true
+    },
+    {
+        "name": "Infamy",
+        "category": "connection",
+        "type": "flaw",
+        "cost": [1,2,3],
+        "description": "You have gained infamy for something dreadful in a specific Sphere of Influence, and each level of this Flaw results in a cumulative -2 penalty to social interactions with those who recognize you, making it difficult to convince them to engage with you, ranging from local recognition (Level 1) to widespread notoriety (Level 3).",
+        "source": "LOTN5 pg.179"
+    },
+    {
+        "name": "Poor",
+        "category": "connection",
+        "type": "flaw",
+        "cost": [1,2,3],
+        "description": "Having this Flaw prevents you from purchasing dots in the Resources Mortal Connection or its related Advantages and limits your options for Haven-related Advantages as well.",
+        "source": "LOTN5 pg.179"
+    },
+    {
+        "name": "No Haven",
+        "category": "connection",
+        "type": "flaw",
+        "cost": [2],
+        "description": "You have one less Downtime action than normal and may not purchase dots in the Haven Background.",
+        "source": "LOTN5 pg.179"
+    },
+    {
+        "name": "Obvious Predator",
+        "category": "connection",
+        "type": "flaw",
+        "cost": [2],
+        "description": "You are unable to purchase dots in the Herd Background and suffer a -1 penalty to any challenges involving non-violent attempts to feed",
+        "source": "LOTN5 pg.179"
+    },
+    {
+        "name": "Illiterate",
+        "category": "connection",
+        "type": "flaw",
+        "cost": [2],
+        "description": "You cannot read or write.",
+        "source": "LOTN5 pg.179"
+    },
+    {
+        "name": "Known Corpse",
+        "category": "connection",
+        "type": "flaw",
+        "cost": [2],
+        "description": "You have not been dead long and are known to be deceased by local humans.",
+        "source": "LOTN5 pg.179",
+        "prerequisite": {"trait":"Mask","level":0}
+    },
+    {
+        "name": "Known Blankbody",
+        "category": "connection",
+        "type": "flaw",
+        "cost": [4],
+        "description": "You have managed to get yourself included in high-level government databases, marked as someone to watch.",
+        "source": "LOTN5 pg.179",
+        "prerequisite": {"trait":"Mask","level":0}
+    },
+    {
+        "name": "Farmer",
+        "category": "feeding",
+        "type": "flaw",
+        "cost": [2],
+        "description": "You choose to feed exclusively from animals. In order to feed from any other blood source, you must spend two points of Willpower",
+        "source": "LOTN5 pg.181"
+    },
+    {
+        "name": "Methuselah's Thirst",
+        "category": "feeding",
+        "type": "flaw",
+        "cost": [4],
+        "description": "You must drain a supernatural creature dry, killing it outright, to Slake your Hunger below 1.",
+        "source": "LOTN5 pg.182"
+    },
+    {
+        "name": "Organovore",
+        "category": "feeding",
+        "type": "flaw",
+        "cost": [3],
+        "description": "You must kill a living mortal and eat a majority of the organs and flesh to Slake your Hunger below 1.",
+        "source": "LOTN5 pg.182"
+    },
+    {
+        "name": "Prey Exclusion",
+        "category": "feeding",
+        "type": "flaw",
+        "cost": [1],
+        "description": "You refuse to feed from a certain class of mortals. If you do so, you gain Stains as if you violated a Chronicle Tenet.",
+        "source": "LOTN5 pg.182"
+    },
+    {
+        "name": "Weak Stomach",
+        "category": "feeding",
+        "type": "flaw",
+        "cost": [3],
+        "description": "For one hour after you feed, you have the Weakened Condition. You start every game session with the Weakened Condition.",
+        "source": "LOTN5 pg.182"
+    },
+    {
+        "name": "Loremaster",
+        "category": "mystical",
+        "type": "merit",
+        "cost": [2],
+        "description": "You gain a +2 bonus to all Lore checks.",
+        "source": "LOTN5 pg.183"
+    },
+    {
+        "name": "Medium",
+        "category": "mystical",
+        "type": "merit",
+        "cost": [2],
+        "description": "You are a channel to the Shadowlands, and you possess the natural affinity to sense and hear ghosts within 15 steps of you. Ghosts are naturally aware of your ability to sense them.",
+        "source": "LOTN5 pg.183"
+    },
+    {
+        "name": "Bound to the Earth",
+        "category": "mystical",
+        "type": "flaw",
+        "cost": [1],
+        "description": "If a vampire with this Flaw does not rest in the proximity of two handfuls of natural soil, they do not regain Willpower upon Awakening.",
+        "source": "LOTN5 pg.183"
+    },
+    {
+        "name": "Eerie Presence",
+        "category": "mystical",
+        "type": "flaw",
+        "cost": [1],
+        "description": "Your presence exudes an unsettling aura that induces nervousness and unease in those around you.",
+        "source": "LOTN5 pg.183"
+    },
+    {
+        "name": "Folkloric Bane",
+        "category": "mystical",
+        "type": "flaw",
+        "cost": [3],
+        "description": "You possess a specific vulnerability known as a Bane, which inflicts Aggravated Damage upon contact or when struck with a substance or weapon made of that Bane, in addition to your existing vulnerabilities to sunlight and fire.",
+        "source": "LOTN5 pg.184"
+    },
+    {
+        "name": "Folkloric Block",
+        "category": "mystical",
+        "type": "flaw",
+        "cost": [2],
+        "description": "You have an intense aversion to a specific object or phenomenon, often from folklore, such as holy symbols or running water. You must stay at least five steps away from your chosen 'Folkloric Block,' and if you ever get within that distance, you become frightened until you move away.",
+        "source": "LOTN5 pg.184"
+    },
+    {
+        "name": "Haunted",
+        "category": "mystical",
+        "type": "flaw",
+        "cost": [1,2,3],
+        "description": "This Flaw works identically to the Enemy Background. In this case, your enemy is a ghost.",
+        "source": "LOTN5 pg.184"
+    },
+    {
+        "name": "Stake Bait",
+        "category": "mystical",
+        "type": "flaw",
+        "cost": [5],
+        "description": "You meet Final Death when you are successfully staked.",
+        "source": "LOTN5 pg.184"
+    },
+    {
+        "name": "Stigmata",
+        "category": "mystical",
+        "type": "flaw",
+        "cost": [1],
+        "description": "Whenever you reach Hunger 4, you begin to bleed from open wounds on your hands, feet, and forehead.",
+        "source": "LOTN5 pg.184"
+    },
+    {
+        "name": "Trouble Magnet",
+        "category": "mystical",
+        "type": "flaw",
+        "cost": [1],
+        "description": "Whenever the Storyteller needs to randomly determine which character suffers a negative result, you are affected.",
+        "source": "LOTN5 pg.184"
+    },
+    {
+        "name": "Ambidextrous",
+        "category": "physical",
+        "type": "merit",
+        "cost": [1],
+        "description": "You may utilize both your hands with equal dexterity.",
+        "source": "LOTN5 pg.185"
+    },
+    {
+        "name": "Eat Food",
+        "category": "physical",
+        "type": "merit",
+        "cost": [2],
+        "description": "Regardless of your Humanity, you may consume food and drink that is not blood.",
+        "source": "LOTN5 pg.185"
+    },
+    {
+        "name": "Light Sleeper",
+        "category": "physical",
+        "type": "merit",
+        "cost": [2],
+        "description": "You automatically wake up when you find yourself in dangerous situations.",
+        "source": "LOTN5 pg.185"
+    },
+    {
+        "name": "Awkward Mobility",
+        "category": "physical",
+        "type": "flaw",
+        "cost": [2],
+        "description": "You take two steps per action spent on movement instead of the standard three",
+        "source": "LOTN5 pg.185"
+    },
+    {
+        "name": "Awkward Mobility",
+        "category": "physical",
+        "type": "flaw",
+        "cost": [2],
+        "description": "You can't use a Willpower point to stay awake at sunrise unless not doing so would put you in danger. Additionally, whenever you use Willpower to stay awake (even in danger), you must spend an extra Willpower point.",
+        "source": "LOTN5 pg.185"
+    },
+    {
+        "name": "Low Pain Threshold",
+        "category": "physical",
+        "type": "flaw",
+        "cost": [1,2,3,4,5],
+        "description": "This Flaw makes you more susceptible to pain, with each dot causing wound penalties to begin one box earlier than usual, starting from the fifth damage box for every dot. You can take a number of dots in this Flaw up to your total health boxes minus three.",
+        "source": "LOTN5 pg.185"
+    },
+    {
+        "name": "Slow Healing",
+        "category": "physical",
+        "type": "flaw",
+        "cost": [3],
+        "description": "In combat, when you use Rouse the Blood to heal, the healing doesn't happen until the end of the round, after the Storyteller resolves the Mass Challenge for Rousing. Healing outside of combat follows the regular rules.",
+        "source": "LOTN5 pg.185"
+    },
+    {
+        "name": "Calm Heart",
+        "category": "psychological",
+        "type": "merit",
+        "cost": [3],
+        "description": "Reduce the difficulty of all Frenzy triggers by two.",
+        "source": "LOTN5 pg.185"
+    },
+    {
+        "name": "Common Sense",
+        "category": "psychological",
+        "type": "merit",
+        "cost": [4],
+        "description": "This Merit allows your character to assess risks and dangers by asking the Storyteller one of four specific questions twice per game as a simple action, receiving truthful answers. However, the Storyteller should avoid revealing private information or character motivations.",
+        "source": "LOTN5 pg.186"
+    },
+    {
+        "name": "Archaic",
+        "category": "psychological",
+        "type": "flaw",
+        "cost": [2],
+        "description": "You struggle with the rapid advancement of technology, which represents a shift away from your familiar world. You cannot acquire skills like Driving, modern Science, or Technology, and you can't operate machinery or technology invented within the last century. This Flaw is limited to characters who are 9th Generation and have spent at least 100 years as vampires, and its roleplay aspects should align with the game's themes as determined by the Storyteller.",
+        "source": "LOTN5 pg.186"
+    },
+    {
+        "name": "Dark Secret",
+        "category": "psychological",
+        "type": "flaw",
+        "cost": [1],
+        "description": "You possess a hidden shame or secret that could bring significant embarrassment if exposed to your enemies. A Dark Secret should only be allowed if it poses a genuine threat to the character's survival when revealed and doesn't replicate an inherent difficulty of the character type. Characters can have only one Dark Secret.",
+        "source": "LOTN5 pg.186"
+    },
+    {
+        "name": "Death Sight",
+        "category": "psychological",
+        "type": "flaw",
+        "cost": [1],
+        "description": "While in a state between life and death, you perceive the world as if everything is decayed and lifeless. This perception robs you of the ability to find beauty in the world and prevents you from discerning a character's creature type or mood, even with supernatural abilities like Scry the Soul.",
+        "source": "LOTN5 pg.187"
+    },
+    {
+        "name": "Living on the Edge",
+        "category": "psychological",
+        "type": "flaw",
+        "cost": [2],
+        "description": "Your insatiable curiosity and adventurous spirit often override your common sense. If you actively deny yourself the chance to explore something new or exciting, you lose one Willpower point.",
+        "source": "LOTN5 pg.187"
+    },
+    {
+        "name": "Impatient",
+        "category": "psychological",
+        "type": "flaw",
+        "cost": [2],
+        "description": "Every time you are forced to be patient instead of acting immediately, you must spend one Willpower to wait without acting for five minutes.",
+        "source": "LOTN5 pg.187"
+    },
+    {
+        "name": "Weak Willed",
+        "category": "psychological",
+        "type": "flaw",
+        "cost": [4],
+        "description": "If you suffer from the Distracted, Disoriented, Staggered, or Prone Condition, you cannot resolve them unless another character spends a simple action to aid you.",
+        "source": "LOTN5 pg.187"
+    },
+    {
+        "name": "Anarch Comrades",
+        "category": "thin-blood",
+        "type": "merit",
+        "cost": [1],
+        "description": "You've established a relatively positive rapport with the local Anarch vampire community, granting you the privilege to exchange major boons and life boons with them. Without this Merit, non-thin-blood Anarch vampires can reject granting such boons to thin-blood characters.",
+        "source": "LOTN5 pg.187"
+    },
+    {
+        "name": "Camarilla Contact",
+        "category": "thin-blood",
+        "type": "merit",
+        "cost": [1],
+        "description": "You've garnered the favor of a Camarilla member, and as long as you remain vigilant and report to them periodically, they will maintain a friendly disposition toward you, at least in private. This Camarilla contact can negotiate and manage minor and trivial boons for you while keeping your thin-blood status concealed. Without this Merit, Camarilla characters can decline to grant boons to thin-bloods without consequences.",
+        "source": "LOTN5 pg.189"
+    },
+    {
+        "name": "Catenating blood",
+        "category": "thin-blood",
+        "type": "merit",
+        "cost": [1],
+        "description": "Unlike other thin-bloods, your Blood is strong enough to create Blood Bonds, create ghouls, and perform the Embrace.",
+        "source": "LOTN5 pg.189"
+    },
+    {
+        "name": "Day Drinker",
+        "category": "thin-blood",
+        "type": "merit",
+        "cost": [1],
+        "description": "When exposed to sunlight, you don't take immediate damage but temporarily reduce the number of your health boxes by half (rounded up), with any existing wounds remaining unchanged.",
+        "source": "LOTN5 pg.189"
+    },
+    {
+        "name": "Discipline Affinity",
+        "category": "thin-blood",
+        "type": "merit",
+        "cost": [1],
+        "description": "You have an affinity for one Discipline. You gain one dot in this Discipline for free and can learn and purchase additional dots of this Discipline through the expenditure of XP at out-of-clan costs. ",
+        "source": "LOTN5 pg.189"
+    },
+    {
+        "name": "Lifelike",
+        "category": "thin-blood",
+        "type": "merit",
+        "cost": [1],
+        "description": "At all times, even during the day, you are biologically identical to a normal mortal.",
+        "source": "LOTN5 pg.189"
+    },
+    {
+        "name": "Thin-Blood Alchemist",
+        "category": "thin-blood",
+        "type": "merit",
+        "cost": [1],
+        "description": "You have learned the craft of Thin-Blood Alchemy.",
+        "source": "LOTN5 pg.189"
+    },
+    {
+        "name": "Thin-Blood Alchemist",
+        "category": "thin-blood",
+        "type": "merit",
+        "cost": [1],
+        "description": "Instead of taking damage as a mortal, you now take damage as if you were a true vampire.",
+        "source": "LOTN5 pg.189"
+    },
+    {
+        "name": "Baby Teeth",
+        "category": "thin-blood",
+        "type": "flaw",
+        "cost": [1],
+        "description": "After your embrace, you didn't develop fangs. To feed directly, you must either cut your victims or use a syringe to extract blood. You can't simply Sip from a human; to get a Non-Harmful drink, you need to succeed in a Strength + Brawl (or Weaponry) roll to incapacitate or render them unconscious first.",
+        "source": "LOTN5 pg.190"
+    },
+    {
+        "name": "Baby Teeth",
+        "category": "thin-blood",
+        "type": "flaw",
+        "cost": [1],
+        "description": "After your embrace, you didn't develop fangs. To feed directly, you must either cut your victims or use a syringe to extract blood. You can't simply Sip from a human; to get a Non-Harmful drink, you need to succeed in a Strength + Brawl (or Weaponry) roll to incapacitate or render them unconscious first.",
+        "source": "LOTN5 pg.190"
+    },
+    {
+        "name": "Bestial Temper",
+        "category": "thin-blood",
+        "type": "flaw",
+        "cost": [1],
+        "description": "You must test for Terror and Rage Frenzy as if you were a full-blooded vampire.",
+        "source": "LOTN5 pg.190"
+    },
+    {
+        "name": "Branded by the Camarilla",
+        "category": "thin-blood",
+        "type": "flaw",
+        "cost": [1],
+        "description": "Your presence in Camarilla territory doesn't lead to immediate death, but it carries a cost, often an ongoing subscription fee. To be acknowledged by Camarilla members, you must pay at least a trivial boon to anyone who requests it. Camarilla characters who hear your name will recognize your branded status and may try to exploit you, fearing the Scourge's intervention if you don't comply. You can still select the Camarilla Contact Merit with this Flaw. However, Storytellers may prohibit this Flaw if the game's focus isn't primarily on the Camarilla.",
+        "source": "LOTN5 pg.190"
+    },
+    {
+        "name": "Clan Curse",
+        "category": "thin-blood",
+        "type": "flaw",
+        "cost": [1],
+        "description": "Pick a Clan Bane you suffer from at Bane Severity 1. If you have also chosen the Bestial Temper Flaw, you must choose either the Brujah or Gangrel Bane. If you have chosen the Catenating Blood Merit, you must choose the Tremere Bane.",
+        "source": "LOTN5 pg.190"
+    },
+    {
+        "name": "Dead Flesh",
+        "category": "thin-blood",
+        "type": "flaw",
+        "cost": [1],
+        "description": "Your body deteriorates despite your vampiric blood, making you appear deceased. Without supernatural aid like Obfuscate, you breach the Masquerade, emitting a faint odor of decay and having a greenish tint to your flesh. Casual medical examinations reveal your undead nature, causing mortals to avoid you. You cannot choose the Lifelike Merit with this Flaw.",
+        "source": "LOTN5 pg.190"
+    },
+    {
+        "name": "Mortal Frailty",
+        "category": "thin-blood",
+        "type": "flaw",
+        "cost": [1],
+        "description": "You heal as a normal mortal and may not Rouse the Blood to mend wounds.",
+        "source": "LOTN5 pg.190"
+    },
+    {
+        "name": "Shunned by the Anarchs",
+        "category": "thin-blood",
+        "type": "flaw",
+        "cost": [1],
+        "description": "Despite it being relatively easy to avoid upsetting the Anarch Movement, you've somehow violated their rules or courtesies, leading to your ostracization. Anarch characters automatically recognize your shunned status and won't engage in boon exchanges with you, with any misbehavior potentially summoning an Enforcer to eject you.",
+        "source": "LOTN5 pg.190"
+    },
+    {
+        "name": "Vitae Dependency",
+        "category": "thin-blood",
+        "type": "flaw",
+        "cost": [1],
+        "description": "Your vampire Blood's supernatural effects are erratic. If you don't satisfy at least one Hunger each week by drinking from a vampire, you lose the ability to use Disciplines or Thin-Blood Alchemy. However, regaining these abilities is as simple as slaking at least one Hunger from vampire Blood.",
+        "source": "LOTN5 pg.190"
+    }
+]

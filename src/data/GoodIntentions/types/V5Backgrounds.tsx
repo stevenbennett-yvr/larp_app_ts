@@ -61,7 +61,15 @@ export const emptyBackground:V5BackgroundRef = {
 }
 
 /// build out refs from json here....
-
+export const v5BackgroundRefs: V5BackgroundRef[] = backgroundDataJson.map((b) => ({
+    id: `background_${b.name}`,
+    name: b.name,
+    creationPoints: 0,
+    freebiePoints: 0,
+    experiencePoints: 0,
+    note: "",
+    advantages: []
+  }))
 ///
 
 export type requirementFunctions = (kindred: Kindred) => boolean
@@ -87,6 +95,7 @@ export const v5BackgroundSchema = z.object({
     name: z.string(),
     id: z.string(),
     description: z.string(),
+    summary: z.string(),
     source: z.string(),
     advantages: z.array(v5AdvantageSchema).optional(),
 });
@@ -108,6 +117,7 @@ export const v5GetBackgroundByName = (name: string): V5Background => {
             name: "",
             id: "",
             description: "",
+            summary: "",
             source: "",
             advantages: []
         }

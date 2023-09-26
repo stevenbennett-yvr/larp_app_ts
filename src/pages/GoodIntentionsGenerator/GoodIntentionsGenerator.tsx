@@ -40,8 +40,28 @@ const GenerateKindred = () => {
                     <PredatorTypePicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} />
                 )
             case 5:
+                // Backgrounds and Loresheets
+                return (
+                    <></>
+                )
+            case 6: 
+                // Merits and Flaws
+                return (
+                    <></>
+                )
+            case 7:
                 return (
                     <DisciplinesPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                )
+            case 8:
+                // Spending Init XP
+                return (
+                    <></>
+                )
+            case 9:
+                // Background shit
+                return (
+                    <></>
                 )
             default:
                 return null;

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Kindred } from "./Kindred";
+import { v5xp } from "../V5Experience";
 
 export const attributeCategoriesSchema = z.union([
     z.literal('mental'),
@@ -59,20 +60,20 @@ export const v5AttributeLevel = (
 
     if (experiencePoints === 0) {
         let level = creationPoints + freebiePoints;
-        let xpNeeded = (level + 1) * 5;
+        let xpNeeded = (level + 1) * v5xp.attributes;
         totalXpNeeded = xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
         return { level, totalXpNeeded, pastXpNeeded };
     } else {
         let level = creationPoints + freebiePoints;
-        let xpNeeded = (level + 1) * 5;
+        let xpNeeded = (level + 1) * v5xp.attributes;
         totalXpNeeded += xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
 
         while (experiencePoints >= xpNeeded) {
             level++;
             experiencePoints -= xpNeeded;
-            xpNeeded = (level + 1) * 5;
+            xpNeeded = (level + 1) * v5xp.attributes;
             totalXpNeeded += xpNeeded;
             pastXpNeeded.push(totalXpNeeded);
         }

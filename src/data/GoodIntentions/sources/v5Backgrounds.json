@@ -2,8 +2,9 @@
     {
         "class": "Mortal Connections",
         "name": "Allies",
+        "summary": "Mortals who will carry out activities on your behalf.",
         "description": "<ul><li>You can cultivate mortal Allies who help you unknowingly as a vampire.</li><li>Allies may assist you occasionally, but maintain their own lives.</li><li>Build a balanced relationship; help them in return for better support.</li><li>Each Ally can be used once per game session.</li><li>Ally levels: <ul><li>Level 1: Weak mortal - pool of 3 in specialization, 4 Health levels.</li><li>Level 2: Average mortal - pool of 5 in specialization, 5 Health levels.</li><li>Level 3: Gifted mortal - pool of 7 in specialization, 6 Health levels.</li></ul></li></ul>",
-        "source": "",
+        "source": "LOTN5 pg.146",
         "advantages": [
             {
                 "name": "At Arm's Length",
@@ -11,7 +12,8 @@
                 "cost": [
                     1
                 ],
-                "type": "advantage"
+                "type": "advantage",
+                "source": "LOTN5 pg.147"
             },
             {
                 "name": "Diversity",
@@ -20,7 +22,8 @@
                     1,
                     2
                 ],
-                "type": "advantage"
+                "type": "advantage",
+                "source":"LOTN5 pg.147"
             },
             {
                 "name": "Reliable",
@@ -29,7 +32,8 @@
                     1,
                     2
                 ],
-                "type": "advantage"
+                "type": "advantage",
+                "source":"LOTN5 pg.147"
             },
             {
                 "name": "Retainer",
@@ -37,7 +41,8 @@
                 "cost": [
                     2
                 ],
-                "type": "advantage"
+                "type": "advantage",
+                "source":"LOTN5 pg.147"
             },
             {
                 "name": "Flaky",
@@ -46,7 +51,8 @@
                     1,
                     2
                 ],
-                "type": "disadvantage"
+                "type": "disadvantage",
+                "source":"LOTN5 pg.148"
             },
             {
                 "name": "Conspiracy Theorist",
@@ -54,21 +60,24 @@
                 "cost": [
                     1
                 ],
-                "type": "disadvantage"
+                "type": "disadvantage",
+                "source":"LOTN5 pg.148"
             }
         ]
     },
     {
         "class": "Mortal Connections",
         "name": "Familiar",
+        "summary": "An animal ghoul assistant.",
         "description": "<ul><li>Your Familiar is a ghoul animal, controlled through Animalism or training.</li><li>Size and traits depend on the Familiar's level: <ul><li>Level 1: Small (bird or cat), 2 Health levels, Physical test pools of 3, Mental and Social test pools of 1.</li><li>Level 2: Medium-sized (dog or wolf), 4 Health levels, Physical test pools of 5, Mental and Social test pools of 1.</li><li>Level 3: Large (bear or tiger), 6 Health levels, Physical test pools of 7, Mental and Social test pools of 1.</li></ul></li><li>You can choose a higher-level companion of a smaller size.</li><li>Choose one Discipline (Celerity, Potence, or Fortitude) for your Familiar, which gains both level-one powers of that Discipline.</li></ul>",
-        "source": ""
+        "source": "LOTN5 pg.148"
     },
     {
         "class": "Mortal Connections",
         "name": "Contacts",
+        "summary": "A mortal who is a source of information.",
         "description": "<ul><li>Contacts are professional connections for information.</li><li>They share insider knowledge and rarely ask for favors.</li><li>Use them for insights within their Sphere(s) or receive calls about intriguing matters.</li><li>Level 1: Low-level employee, general insider knowledge.</li><li>Level 2: Middle management, access to hidden information, some influence.</li><li>Level 3: Senior management, access to sensitive information, significant influence.</li></ul>",
-        "source": "",
+        "source": "LOTN5 pg.148",
         "advantages": [
             {
                 "name": "At Arm's Length",
@@ -76,7 +85,8 @@
                 "cost": [
                     1
                 ],
-                "type": "advantage"
+                "type": "advantage",
+                "source": "LOTN5 pg.150"
             },
             {
                 "name": "Diversity",
@@ -85,7 +95,8 @@
                     1,
                     2
                 ],
-                "type": "advantage"
+                "type": "advantage",
+                "source":"LOTN5 pg.150"
             },
             {
                 "name": "Paranoid",
@@ -94,15 +105,17 @@
                     1,
                     2
                 ],
-                "type": "disadvantage"
+                "type": "disadvantage",
+                "source":"LOTN5 pg.150"
             }
         ]
     },
     {
         "class": "Mortal Connections",
         "name": "Fame",
+        "summary": "The level to which you are well-known in public.",
         "description": "<ul><li>Famous in a specific Sphere of Influence.</li><li>Recognition and favors likely within that Sphere.</li><li>+1 to mundane Social challenges per Fame dot.</li><li>Increased visibility but also potential drawbacks.</li><li>Levels: Level 1 - Some recognition; Level 2 - Local following; Level 3 - Citywide recognition.</li></ul>",
-        "source": "",
+        "source": "LOTN5 pg.150",
         "advantages": [
             {
                 "name": "Fan Club",
@@ -110,7 +123,8 @@
                 "cost": [
                     2
                 ],
-                "type": "advantage"
+                "type": "advantage",
+                "source":"LOTN5 pg.151"
             },
             {
                 "name": "Star Power",
@@ -119,16 +133,8 @@
                     1,
                     2
                 ],
-                "type": "advantage"
-            },
-            {
-                "name": "Jealousy",
-                "description": "<ul><li>Fame brings envy and enemies who want to see you fail.</li><li>Level 1: A group dislikes you in one Sphere of Influence, no Contacts or Allies allowed.</li><li>Level 2: In addition to Level 1, those outside your Connections hate you and act negatively; enemies are always available.</li></ul>",
-                "cost": [
-                    1,
-                    2
-                ],
-                "type": "disadvantage"
+                "type": "advantage",
+                "source":"LOTN5 pg.151"
             },
             {
                 "name": "Paparazzi",
@@ -136,32 +142,268 @@
                 "cost": [
                     2
                 ],
-                "type": "disadvantage"
+                "type": "disadvantage",
+                "source":"LOTN5 pg.151"
             }
         ]
     },
     {
         "class": "Mortal Connections",
         "name": "Haven",
-        "description": "",
-        "source": ""
+        "summary": "Your safe haven and resting place.",
+        "description": "<ul><li>A place to slumber during the day, safe from sunlight</li><li>Size 1: A small basement or aparment. Big enough for yourself and one other.</li><li>Size 2: A single family home or a nice 3-4 bedroom apartment. Gain one free Advantage to add to your Haven. Requires Resources 1</li><li>Size 3: Penhouse-quality apartment, private estate or mansion. Can comfortably house yourself and nine others. Gain one additional free Advantage to add to your Haven (total of two free). Requires Resources 3</li></ul>",
+        "advantages": [
+            {
+                "name": "Armory",
+                "description": "<ul><li>You have a secure weapon storage within your Haven.</li><li>Your Armory is well-maintained, and these weapons are always available to you.</li><li>Your weapons replenish if sold, lost, or broken at the start of the next game, with a full Armory refresh every three months. Each dot represents two additional stored weapons.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.152"
+            },
+            {
+                "name": "Cell",
+                "description": "<ul><li>You have a prisoner holding area in your Haven for two captives.</li><li><strong>Additional Capacity:</strong> Each dot beyond the first adds space for two more people.</li><li>Feeding prisoners may require Downtime Actions between game sessions, and you can choose whether the location is sunproof.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.152"
+            },
+            {
+                "name": "Garage",
+                "description": "<ul><li>Your Haven includes an attached Garage with space for vehicles.</li><li><strong>Storage and Repair:</strong> Each dot adds two storage bays for vehicles. Smaller vehicles take up one bay, while larger ones may require more. You can also repair or destroy vehicles here.</li><li><strong>Skill Bonus:</strong> Each dot in this Advantage grants a +1 bonus to Crafts, Science, or Technology challenges related to vehicle maintenance and repair.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.152"
+            },
+            {
+                "name": "Laboratory",
+                "description": "<ul><li>You have a lab for scientific experimentation.</li><li>Each dot grants a +1 bonus to Science and Technology challenges and Thin-Blood Alchemy tests conducted in your lab.</li><li>A Size 1 Haven cannot accommodate a Laboratory.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.152"
+            },
+            {
+                "name": "Library",
+                "description": "<ul><li>You maintain an in-depth library in your Haven, including occult and mundane books.</li><li>Each dot in this Advantage provides a +1 bonus to mundane research challenges conducted within your Haven. This typically involves skills like Academics, Lore, Linguistics, Investigation, or Occult.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.153"
+            },
+            {
+                "name": "Location",
+                "description": "<ul><li>Your Haven is situated in a prestigious or hard-to-reach location.</li><li>Characters trying to track you or locate your Haven face a -1 penalty to their relevant challenge pools for each dot of the Location Advantage you have for that Haven.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.153"
+            },
+            {
+                "name": "Luxury",
+                "description": "<ul><li>Your Haven is adorned with the finest and most expensive furnishings and decorations.</li><li>Each dot adds a +1 bonus to mundane Social challenges made when the target is in your Haven.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.153"
+            },
+            {
+                "name": "Elaborate",
+                "description": "<ul><li>Your Haven is equipped with hidden passages, escape routes, and concealed safe areas.</li><li>This Advantage activates when you're aware of intruders and can be used for escaping or engaging them.</li><li>When engaging intruders, gain a +1 to Initiative per dot in this Advantage. For escaping, make a Dexterity + Stealth test with a +1 bonus per dot against your opponent's Wits + Investigation.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.153"
+            },
+            {
+                "name": "Security",
+                "description": "<ul><li>Your Haven is highly secure and provides advance alerts for intrusions.</li><li>Characters attempting to break into a Haven without this Advantage need a successful Wits + Larceny check with a base difficulty of 3 (representing about a minute of work).</li></li> Each dot in this Advantage adds two to the difficulty, and bypassing your Security takes roughly five minutes per dot.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.153"
+            },
+            {
+                "name": "Surgical Ward",
+                "description": "<ul><li>Your Haven includes an equipped surgical area with an operating table, sterilization tools, and medical supplies.</li></li> You can perform various medical procedures, and each dot in Surgical Ward grants a +1 bonus to mundane Medicine tests conducted within it.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.153"
+            },
+            {
+                "name": "Walk-In Freezer",
+                "description": "<ul><li> Your Haven includes a spacious freezer suitable for storing corpses or vampires.</li></li> Each dot allows you to store one corpse or vampire, along with two smaller items requiring refrigeration.</li></li> Walk-In Freezers are always sunproof and can be designed for Extreme Cold conditions.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.153"
+            },
+            {
+                "name": "Guards",
+                "description": "<ul><li> Your Haven is guarded by a team of actual individuals.</li></li> Each dot represents four Guards (Simple Antagonists, difficulty 3) and their boss (Simple Antagonist, difficulty 5).</li></li> Intruders must succeed in a Dexterity + Stealth test vs. difficulty 5 to sneak past them.</li></li> Failure results in engagement and immediate alerting of your presence.</li></li> More tests may be required based on Haven Size.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.154"
+            },
+            {
+                "name": "Workshop",
+                "description": "<ul><li>Your Haven includes a well-equipped crafting area. Choose one Craft specialization, and each dot in this Advantage provides a +1 bonus to Craft challenges related to that specialization.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.154"
+            },
+            {
+                "name": "Zoo",
+                "description": "<ul><li>Your Haven can house animals, with each dot providing space for specific quantities of Large, Medium, or Small animals.</li><li>The types of animals you possess must be reasonably domesticated in your location and are determined by the Storyteller.</li><li>During a game session, for each dot, you can Slake one Hunger by feeding on animals in your Haven.</li></ul>",
+                "cost": [
+                    1, 2, 3
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.154"
+            },
+            {
+                "name": "Compromised",
+                "description": "<ul><li>Your Haven attracts unwanted visitors, making it easier for people to locate.</li><li><strong>Level 1:</strong> Random individuals frequently stumble upon your Haven. +1 bonus to tracking or locating challenges related to your Haven.</li><li><strong>Level 2:</strong> Local law enforcement has been called to your Haven before, leading to quicker investigator responses. In addition to Level 1, intruders gain +1 Initiative during the first round of combat scenarios within your Haven.</li><li>Note that if you have a Compromised Haven, you may not benefit from the Location advantage.</li></ul>",
+                "cost": [
+                    1, 2
+                ],
+                "type": "disadvantage",
+                "source": "LOTN5 pg.154"
+            },
+            {
+                "name": "Creepy",
+                "description": "<ul><li>Your Haven's eerie appearance and unsettling decor make it resemble a horror movie set.</li><li>For each dot of this Disadvantage, you suffer a -2 penalty on mundane Social challenges when the target is within your Haven.</li><li><strong>Level 1:</strong> Your Haven contains some creepy items, and guests are often on edge.</li><li><strong>Level 2:</strong> Guests in your Haven actively require reassurance that you won't harm them due to the unsettling atmosphere.</li></ul>",
+                "cost": [
+                    1, 2
+                ],
+                "type": "disadvantage",
+                "source": "LOTN5 pg.154"
+            },
+            {
+                "name": "Haunted",
+                "description": "<ul><li>Your Haven experiences strange occurrences, including odd noises, moving objects, and occasional apparitions.</li><li>For each dot of this Disadvantage, subtract one from your test pool for challenges within your Haven that require concentration or focus.</li><li><strong>Level 1:</strong> Persistent but merely irritating ghosts keep you on edge in your Haven.</li><li><strong>Level 2:</strong> Your Haven is infested with active and disruptive ghosts, leading to frequent bizarre incidents like flying objects and broken mirrors.</li></ul>",
+                "cost": [
+                    1, 2
+                ],
+                "type": "disadvantage",
+                "source": "LOTN5 pg.154"
+            }
+        ],
+        "source": "LOTN5 pg.152"
     },
     {
         "class": "Mortal Connections",
         "name": "Herd",
-        "description": "",
-        "source": ""
+        "summary": "Mortals who are sources of stable feeding.",
+        "description": "<ul><li>You have a reliable group of humans as a safe and consistent source of food.</li><li>During a game session, you can Slake Hunger equal to your Herd rating. Each use requires five minutes out of play, but you can't reduce your Hunger to zero without killing a victim.</li><li>Be cautious not to overfeed; losing Herd dots may require finding a new Herd, and you can regain one dot per game starting the month after a loss.</li><li>Level 1 has random Resonance and no Dyscrasia. Level 2 lets you choose one Resonance each month, with a random Dyscrasia. Level 3 allows you to choose two Resonances per month, select your Resonance type when feeding, and choose one Dyscrasia from the ingested Resonance types.</li></ul>",
+        "source": "LOTN5 pg.155",
+        "advantages": [
+            {
+                "name": "Friendly",
+                "description": "<ul><li>Your Herd is outgoing and eager to make friends, often traveling in groups. They willingly offer their blood to those you vouch for.</li><li><strong>Level 1:</strong> When you Slake Hunger from your Herd, one additional character may also Slake the same amount.</li><li><strong>Level 2:</strong> When you Slake Hunger from your Herd, two additional characters may also Slake the same amount.</li></ul>",
+                "cost": [
+                    1, 2
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.156"
+            },
+            {
+                "name": "Flavor Station",
+                "description": "<ul><li>Your Herd offers a surprising variety of Dyscrasias, and you have more control over your selection.</li><li><strong>Level 1:</strong> Add one extra random Dyscrasia to your normal number and choose one from the selection when Slaking Hunger.</li><li><strong>Level 2:</strong> Add two extra random Dyscrasias to your normal amount, and choose one from the expanded selection when Slaking Hunger.</li></ul>",
+                "cost": [
+                    1, 2
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.156"
+            },
+            {
+                "name": "Open Bar",
+                "description": "<ul><li>Your Herd is either hardy or frequently changes, allowing you to feed more often.</li><li><strong>Level 1:</strong> You can Slake a total Hunger equal to twice your Herd rating during a game session instead of the normal amount.</li><li><strong>Level 2:</strong> You can Slake a total Hunger equal to three times your Herd rating during a game session instead of the normal amount.</li></ul>",
+                "cost": [
+                    1, 2
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.156"
+            },
+            {
+                "name": "Skittish",
+                "description": "<ul><li>Your Herd is easily frightened, and their trust is fragile.</li><li><strong>Test Requirement:</strong> Each time you Slake one Hunger, you must make a test using your Predator Type feeding pool. On failure, you cannot use your Herd again during the game session.</li><li><strong>Difficulty Levels:</strong> Level 1 requires a test vs. difficulty 3, while Level 2 necessitates a test vs. difficulty 6. This Disadvantage is available only if you have Herd 2 or higher, and your Herd cannot have the Friendly Advantage.</li></ul>",
+                "cost": [
+                    1, 2
+                ],
+                "type": "disadvantage",
+                "source": "LOTN5 pg.156"
+            }
+        ]
     },
     {
         "class": "Mortal Connections",
         "name": "Mask",
-        "description": "",
-        "source": ""
+        "summary": "Your cover for your true identity as an undying creature of the night.",
+        "description": "<ul><li>A Mask is what a vampire uses to blend into mortal society, providing a fake identity, profession, and background.</li><li>When purchasing Mask dots, create a pseudonym and a brief summary of your fake identity, including profession, place of birth, education, and more.</li><li>Level 1 allows your Mask to pass routine inspections; Level 2 passes state-level background checks, and Level 3 withstands intense investigations, even from national government agents.</li><li>If needed, you can temporarily lose your Mask dots due to specific events like arrest or injury, regaining them by finding a Cobbler to create a new Mask.</li></ul>",
+        "source": "LOTN5 pg.156"
     },
     {
         "class": "Mortal Connections",
         "name": "Resources",
-        "description": "",
-        "source": ""
+        "summary": "Your income and lifestyle.",
+        "description": "<ul><li>Money can buy comfort, equipment, and assistance, making the world go around.</li><li>With no dots in Resources, you're in the lower-middle class, with about $300 per month available for non-essential expenses.</li><li>Level 1 provides $2,500 monthly, Level 2 offers $20,000, and Level 3 provides $100,000 in disposable income each month.</li><li>You can pool Resources with other characters or spend beyond your allotment by month-to-month basis.</li></ul>",
+        "source": "LOTN5 pg.157",
+        "advantages": [
+            {
+                "name": "Cash Money",
+                "description": "<ul><li>You have a talent for quickly acquiring cash, regardless of its legality.</li><li><strong>Level 1:</strong> Once per game session, spend 15 minutes out of play to obtain $1,000 in disposable untraceable cash per dot of your Streetwise Skill.</li><li><strong>Level 2:</strong> Spend 15 minutes out of play to obtain $3,000 in disposable untraceable cash per dot of your Streetwise Skill. This is not cumulative with Level 1.</li></ul>",
+                "cost": [
+                    1, 2
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.158"
+            },
+            {
+                "name": "Cryptocurrency",
+                "description": "<ul><li>Your disposable income is securely stored in cryptocurrency. Tracking your monthly expenditures requires opponents to have two dots in both Finance and Technology Skills and succeed in an opposed test against your Intelligence + Finance.</li></ul>",
+                "cost": [
+                    1
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.158"
+            },
+            {
+                "name": "Liquidity",
+                "description": "<ul><li>Your wealth is invested in assets like antiques or precious metals that can be quickly sold for a substantial amount of money. Once per month, you can double your disposable cash for that month, but you won't have access to any disposable cash for the next two months as you rebuild your stock.</li></ul>",
+                "cost": [
+                    1
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.158"
+            },
+            {
+                "name": "Wall Street Wizard",
+                "description": "<ul><li>You excel at playing the Stock Market, amassing significant wealth each month.</li><li><strong>Level 1:</strong> Gain an extra $50,000 in disposable cash per dot of your Finance Skill each month.</li><li><strong>Level 2:</strong> Gain an extra $100,000 in disposable cash per dot of your Finance Skill each month. This is not cumulative with Level 1.</li></ul>",
+                "cost": [
+                    1, 2
+                ],
+                "type": "advantage",
+                "source": "LOTN5 pg.158"
+            }
+        ]
     }
 ]

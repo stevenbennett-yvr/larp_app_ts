@@ -1,8 +1,9 @@
 import { Button, Divider, Grid, ScrollArea, Space, Stack, Text, Tooltip } from "@mantine/core"
 import { useState } from "react"
-import { PredatorTypeName, PredatorTypes } from "../../../data/GoodIntentions/types/V5PredatorType"
+import { PredatorTypes, PredatorTypeName } from "../../../data/GoodIntentions/types/V5PredatorType"
 import { globals } from "../../../assets/globals"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
+import PredatorModal from "./PredatorModal"
 
 type PredatorTypePickerProps = {
     kindred: Kindred,
@@ -14,20 +15,18 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep }: PredatorTypePicke
     const phoneScreen = globals.isPhoneScreen
 
     const [pickedPredatorType, setPickedPredatorType] = useState<PredatorTypeName>("")
+    const [modalOpen, setModalOpen] = useState(false);
+    const handleCloseModal = () => {
+        setPickedPredatorType('');
+        setModalOpen(false);
+    };
 
     const createButton = (predatorTypeName: PredatorTypeName, color: string) => {
         return (
             <Tooltip label={PredatorTypes[predatorTypeName].summary} key={predatorTypeName} transitionProps={{ transition: 'slide-up', duration: 200 }}>
                 <Button disabled={kindred.clan === "Ventrue" && ["Bagger", "Farmer"].includes(predatorTypeName)} color={color} onClick={() => {
                     setPickedPredatorType(predatorTypeName)
-                    setKindred({
-                        ...kindred,
-                        predatorType: {
-                            ...kindred.predatorType,
-                            name: pickedPredatorType
-                        }
-                    })
-                    nextStep()
+                    setModalOpen(true)
                 }}>{predatorTypeName}</Button>
             </Tooltip>
         )
@@ -38,7 +37,7 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep }: PredatorTypePicke
             <Grid m={0}>
                 <Grid.Col span={4}><h1>Violent</h1></Grid.Col>
                 <Grid.Col offset={phoneScreen ? 1 : 0} span={phoneScreen ? 6 : 4}>
-                    <Stack>{(["Alleycat", "Extortionist", "Roadside Killer", "Montero"] as PredatorTypeName[]).map((clan) => createButton(clan, "red"))}</Stack>
+                    <Stack>{(["Alleycat", "Extortionist", "Hitcher"] as PredatorTypeName[]).map((clan) => createButton(clan, "red"))}</Stack>
                 </Grid.Col>
             </Grid>
 
@@ -47,7 +46,7 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep }: PredatorTypePicke
             <Grid m={0}>
                 <Grid.Col span={4}><h1>Sociable</h1></Grid.Col>
                 <Grid.Col offset={phoneScreen ? 1 : 0} span={phoneScreen ? 6 : 4}>
-                    <Stack>{(["Cleaver", "Consensualist", "Osiris", "Scene Queen", "Siren",] as PredatorTypeName[]).map((clan) => createButton(clan, "grape"))}</Stack>
+                    <Stack>{(["Cleaver", "Consensualist", "Osiris", "Scene Queen", "Siren"] as PredatorTypeName[]).map((clan) => createButton(clan, "grape"))}</Stack>
                 </Grid.Col>
             </Grid>
 
@@ -56,7 +55,7 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep }: PredatorTypePicke
             <Grid m={0}>
                 <Grid.Col span={4}><h1>Stealth</h1></Grid.Col>
                 <Grid.Col offset={phoneScreen ? 1 : 0} span={phoneScreen ? 6 : 4}>
-                    <Stack>{(["Sandman", "Graverobber", "Grim Reaper", "Pursuer", "Trapdoor"] as PredatorTypeName[]).map((clan) => createButton(clan, "gray"))}</Stack>
+                    <Stack>{(["Bagger", 'Ferryman', 'Graverobber', "Sandman"] as PredatorTypeName[]).map((clan) => createButton(clan, "gray"))}</Stack>
                 </Grid.Col>
             </Grid>
 
@@ -65,7 +64,7 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep }: PredatorTypePicke
             <Grid m={0}>
                 <Grid.Col span={4}><h1>Excluding Mortals</h1></Grid.Col>
                 <Grid.Col offset={phoneScreen ? 1 : 0} span={phoneScreen ? 6 : 4}>
-                    <Stack>{(["Bagger", "Blood Leech", "Farmer",] as PredatorTypeName[]).map((clan) => createButton(clan, "violet"))}</Stack>
+                    <Stack>{(["Farmer",] as PredatorTypeName[]).map((clan) => createButton(clan, "violet"))}</Stack>
                 </Grid.Col>
             </Grid>
         </Stack>
@@ -87,6 +86,8 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep }: PredatorTypePicke
                 </ScrollArea>
                 : createPredatorTypeStack()
             }
+
+            <PredatorModal modalOpened={modalOpen} closeModal={handleCloseModal} kindred={kindred} setKindred={setKindred} nextStep={nextStep} pickedPredatorType={pickedPredatorType} />
 
         </div>
     )
