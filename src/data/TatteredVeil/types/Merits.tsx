@@ -238,6 +238,7 @@ export const getFilteredMerits = (awakened: Awakened): Merit[] => {
   const filteredMerits: Merit[] = [];
 
   meritData.forEach((merit) => {
+    if (merit.name.includes("Status")) { console.log(merit) }
     const { prerequisites } = merit
     let canSelect = false;
     if (prerequisites !== "") {
@@ -430,6 +431,10 @@ export const findMaxMerit = (meritRef: MeritRef) => {
   let meritInfo = getMeritByName(meritRef.name)
 
   let max = undefined;
+  if ( meritRef.name === "Artifact" || meritRef.name === "Enhanced Item" || meritRef.name === "Imbued Item") 
+  {
+    return max
+  }
   if (level === 5 || level === defineMeritRating(meritInfo.rating).maxCost) {
     max = xp;
   }

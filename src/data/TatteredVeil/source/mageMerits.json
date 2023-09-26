@@ -2,7 +2,7 @@
     {
       "type": "Social merits",
       "name": "Allies",
-      "rating": "• to •••••",
+      "rating": "• to ••••• mult",
       "prerequisites": "",
       "description": "<ul>\n  <li>Allies represent individuals who provide assistance to your character.</li>\n  <li>Each acquisition of this merit represents a specific type of ally in an organization, society, or circle.</li>\n  <li>The rating of the merit reflects the level of influence within each group.</li>\n  <li>Different ratings offer varying levels of favors, from minor to significant to dangerous or criminal.</li>\n  <li>Doubtful requests may require a Manipulation + Persuasion roll, with a bonus equal to the character's Allies rating.</li>\n  <li>Penalties can apply based on the importance or danger of the request.</li>\n  <li>Allies are not always available, and calling in favors creates a debt that can be later requested.</li>\n</ul>",
       "source": "WoD 114"
@@ -25,9 +25,17 @@
     },
     {
       "type": "Social merits",
+      "name": "Status (City Hall)",
+      "rating": "• to •••••",
+      "prerequisites": "Politics •",
+      "description": "<ul>\n  <li>Your character holds a position of authority within the City Hall, such as a sergeant or lieutenant.</li>\n  <li>They have legal powers of search, seizure, and arrest, along with access to databases and the ability to carry a firearm.</li>\n  <li>Efforts to get things done through official channels call for Manipulation + Intimidation, Persuasion, or Socialize rolls.</li>\n  <li>Choose the skill that is appropriate to the request, circumstances, and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties might apply if your character browbeats someone (-1), uses threats (-2), skirts the limits of their authority (-2), or exceeds their authority (-3 to -5).</li>\n</ul>",
+      "source": "WoD 116"
+    },
+    {
+      "type": "Social merits",
       "name": "Status (Police)",
       "rating": "• to •••••",
-      "prerequisites": "",
+      "prerequisites": "Drive •, Firearms •",
       "description": "<ul>\n  <li>Your character holds a position of authority within the police force, such as a sergeant or lieutenant.</li>\n  <li>They have legal powers of search, seizure, and arrest, along with access to databases and the ability to carry a firearm.</li>\n  <li>Efforts to get things done through official channels call for Manipulation + Intimidation, Persuasion, or Socialize rolls.</li>\n  <li>Choose the skill that is appropriate to the request, circumstances, and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties might apply if your character browbeats someone (-1), uses threats (-2), skirts the limits of their authority (-2), or exceeds their authority (-3 to -5).</li>\n</ul>",
       "source": "WoD 116"
     },
@@ -35,7 +43,7 @@
       "type": "Social merits",
       "name": "Status (Diplomatic)",
       "rating": "• to •••••",
-      "prerequisites": "",
+      "prerequisites": "Persuasion ••, Politics ••",
       "description": "<ul>\n  <li>Your character is a registered diplomat for a sovereign country.</li>\n  <li>They enjoy benefits such as free lodging, access to their country's embassy, and immunity from foreign criminal prosecution.</li>\n  <li>Efforts to get things done through official channels call for Manipulation + Intimidation, Persuasion, or Socialize rolls.</li>\n  <li>Choose the skill that is appropriate to the request, circumstances, and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties might apply if your character browbeats someone (-1), uses threats (-2), skirts the limits of their authority (-2), or exceeds their authority (-3 to -5).</li>\n</ul>",
       "source": "WoD 116"
     },
@@ -57,17 +65,9 @@
     },
     {
       "type": "Social merits",
-      "name": "Status (Military)",
-      "rating": "• to •••••",
-      "prerequisites": "",
-      "description": "<ul>\n  <li>Your character is an enlisted soldier with various perks and privileges.</li>\n  <li>They receive a monthly stipend and have the ability to possess military-grade firearms.</li>\n  <li>They also have access to restricted information and equipment.</li>\n  <li>High-ranking officers have even greater authority and may command units or initiate foreign operations.</li>\n  <li>Efforts to get things done through official channels call for Manipulation + Intimidation, Persuasion, or Socialize rolls.</li>\n  <li>Choose the skill that is appropriate to the request, circumstances, and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties might apply if your character browbeats someone (-1), uses threats (-2), skirts the limits of their authority (-2), or exceeds their authority (-3 to -5).</li>\n</ul>",
-      "source": "WoD 116"
-    },
-    {
-      "type": "Social merits",
       "name": "Status (Medical)",
       "rating": "• to •••••",
-      "prerequisites": "",
+      "prerequisites": "Medicine ••",
       "description": "<ul>\n  <li>Your character is a licensed medical practitioner with privileges such as prescription writing and access to medical records.</li>\n  <li>They have the authority to enter restricted areas like crime and accident scenes.</li>\n  <li>Efforts to get things done through official channels require appropriate rolls such as Manipulation + Intimidation, Persuasion, or Socialize.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties may apply for browbeating (-1), using threats (-2), pushing the limits of authority (-2), or exceeding authority (-3 to -5).</li>\n</ul>",
       "source": "WoD 116"
     },
@@ -89,14 +89,6 @@
     },
     {
       "type": "Social merits",
-      "name": "Status (Other)",
-      "rating": "• to •••••",
-      "prerequisites": "",
-      "description": "<ul>\n  <li>Your character possesses authority and sway within a group or organization.</li>\n  <li>The depth of this influence is proportional to the dots in this merit.</li>\n  <li>Efforts to get things done through official channels still call for Manipulation + Intimidation, Persuasion, or Socialize rolls.</li>\n  <li>The appropriate skill depends on the request, circumstances, and your character's standing within the organization.</li>\n  <li>Your character receives bonus dice equal to their Status dots when making these rolls.</li>\n  <li>Penalties may apply if your character browbeats someone (-1), uses threats (-2), skirts the limits of their authority (-2), or exceeds their authority (-3 to -5).</li>\n</ul>",
-      "source": "WoD 116"
-    },
-    {
-      "type": "Social merits",
       "name": "Mentor",
       "rating": "• to •••••",
       "prerequisites": "",
@@ -105,7 +97,7 @@
     },
     {
       "type": "Social merits",
-      "name": "Status (Hobby Club)",
+      "name": "Status (Union/Rotary)",
       "rating": "• to •••••",
       "prerequisites": "",
       "description": "<ul>\n  <li>Your character is a member of a Hobbyist Club, granting access to the club's meeting hall and a network of members for information or assistance.</li>\n  <li>Higher-ranking members have broader connections and influence over civic groups and political figures.</li>\n  <li>Efforts to get things done through official channels require Manipulation + Intimidation, Persuasion, or Socialize rolls, based on the appropriate Skill and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots, reflecting their influence and reputation within the club.</li>\n  <li>Penalties may apply if your character uses aggressive or unethical methods to achieve their goals.</li>\n</ul>",
@@ -321,14 +313,6 @@
     },
     {
       "type": "Physical merits",
-      "name": "Disarm",
-      "rating": "••",
-      "prerequisites": "Dexterity •••, Weaponry •",
-      "description": "Can disarm if damage exceeds Dexterity",
-      "source": "WoD 110"
-    },
-    {
-      "type": "Physical merits",
       "name": "Ambidextrous",
       "rating": "•••",
       "prerequisites": "",
@@ -400,14 +384,6 @@
       "source": "WoD 113"
     },
     {
-      "type": "Physical merits",
-      "name": "Fresh Start",
-      "rating": "•",
-      "prerequisites": "Fast Reflexes",
-      "description": "Delay action into next round. Your character has the ability to change their position in the Initiative order for the next turn and all future turns by dedicating an action to do so. They can choose to place themselves at a different position in the roster, even if it means going first when they previously went last.",
-      "source": "WoD 112"
-    },
-    {
       "type": "Mental merits",
       "name": "Holistic Awareness",
       "rating": "•••",
@@ -427,7 +403,7 @@
       "type": "Mental merits",
       "name": "Trained Memory",
       "rating": "•",
-      "prerequisites": "Composure ••, Investigation •",
+      "prerequisites": "Composure ••, Investigation •, The Guardians of the Veil",
       "description": "Memorize information perfectly; roll to memorize for entire scene (i.e. everything a character could sense in a given moment) instead of specific information or sensory input. Just as for any other character, you must make an Intelligence + Composure roll for the\ncharacter to remember any additional details about a subject during stressful situations (such as combat).",
       "source": "GotV 46"
     },
@@ -435,7 +411,7 @@
       "type": "Mental merits",
       "name": "Rational Explanation (Science)",
       "rating": "••••",
-      "prerequisites": "Resolve ••, Science ••••",
+      "prerequisites": "Resolve ••, Science ••••, The Free Council",
       "description": "When required to make a Resolve + Composure roll to resist fear, panic or some other mental breakdown in the face of the supernatural, if you spend a Willpower, add your Science or Academics dots to the roll.",
       "source": "FC 133"
     },
@@ -443,7 +419,7 @@
       "type": "Mental merits",
       "name": "Crafter's Sense",
       "rating": "•••",
-      "prerequisites": "Crafts •••",
+      "prerequisites": "Crafts •••, The Free Council",
       "description": "Your character has an intuitive sense of her craft. When engaging in your character's crafts, the storyteller may make a reflexive Wits + Crafts roll one per game if your character is about to embark on a disasterouse course of action reguarding their craft.",
       "source": "FC 131"
     },
@@ -459,7 +435,7 @@
       "type": "Mental merits",
       "name": "Area of Expertise",
       "rating": "••",
-      "prerequisites": "Resolve ••",
+      "prerequisites": "Resolve ••, The Free Council",
       "description": "Effect: Increase a Mental Specialty bonus to +2. Drawback: You cannot have any other speciality in the same skill.",
       "source": "FC 131"
     },
@@ -467,7 +443,7 @@
       "type": "Mental merits",
       "name": "Scientist's Sense",
       "rating": "•••",
-      "prerequisites": "Science •••",
+      "prerequisites": "Science •••, The Free Council",
       "description": "Speciality in Science required. Gain Common Sense related to your area of Science expertise.",
       "source": "FC 133"
     },
@@ -491,7 +467,7 @@
       "type": "Mental merits",
       "name": "Interdisciplinary Specialty",
       "rating": "•",
-      "prerequisites": "",
+      "prerequisites": "The Free Council",
       "description": "Requires Two Skills ••• and a specialty. Share Specialty between two Skills",
       "source": "FC 132"
     },
@@ -499,7 +475,7 @@
       "type": "Mental merits",
       "name": "Vision",
       "rating": "• to •••••",
-      "prerequisites": "Intelligence •••• or Wits •••• or Resolve •••• or Composure ••••",
+      "prerequisites": "Intelligence •••• or Wits •••• or Resolve •••• or Composure ••••, The Free Council",
       "description": "<ul>\n<li>The character possesses a valuable attribute called Vision.</li>\n<li>By expending a Willpower point, the character can rely on their vision to gain bonus dice in extended actions.</li>\n<li>Each success rolled with the Vision attribute adds bonus dice to subsequent rolls for the extended action.</li>\n<li>In collaborative efforts, the character can use their Vision dots as a substitute for an Attribute or a Skill when assisting another character in an extended action.</li>\n<li>Vision cannot replace Strength for tasks like lifting.</li>\n<li>Spending Willpower points to activate this merit grants access to its benefits but does not provide other typical Willpower benefits.</li>\n<li>The character can only spend one Willpower point per turn.</li>\n</ul>",
       "source": "FC 133"
     },
@@ -507,7 +483,7 @@
       "type": "Mental merits",
       "name": "Make Do",
       "rating": "• to ••• mult",
-      "prerequisites": "Wits •••",
+      "prerequisites": "Wits •••, The Free Council",
       "description": "Remove -1/dot penalty for shoddy tools. When you purchase this merit, assign it to a particular skill. This merit can be purchased multiple times to apply to multiple Skills.",
       "source": "FC 132"
     },
@@ -539,7 +515,7 @@
       "type": "Mental merits",
       "name": "Informative",
       "rating": "•• or •••• mult",
-      "prerequisites": "Wits ••",
+      "prerequisites": "Wits ••, The Free Council",
       "description": "Your character may not be much of a writer or public speaker, but get him talking about his work and he becomes downright erudite. Use specified Skill in place of Expression, up to a maximum of the dots in this merit when discussing matters related to this skill. You must specify the Mental skill to which this merit applies.",
       "source": "FC 131"
     },
@@ -547,7 +523,7 @@
       "type": "Mental merits",
       "name": "Rational Explanation (Academics)",
       "rating": "••••",
-      "prerequisites": "Resolve ••, Academics ••••",
+      "prerequisites": "Resolve ••, Academics ••••, The Free Council",
       "description": "When required to make a Resolve + Composure roll to resist fear, panic or some other mental breakdown in the face of the supernatural, if you spend a Willpower, add your Science or Academics dots to the roll.",
       "source": "FC 133"
     },
@@ -649,14 +625,6 @@
     },
     {
       "type": "Mage merits",
-      "name": "Graduate of Otranto",
-      "rating": "•••",
-      "prerequisites": "Acanthus, The Mysterium, Status (Order)",
-      "description": "Graduates of Otranto possess a deep understanding of doom. When casting certain spells like \"The Evil Eye,\" \"Monkey's Paw,\" \"Forge Doom,\" and \"Great Curse,\" they gain a +2 dice bonus to their spellcasting pools. The Storyteller may extend this bonus to other curses utilizing the Fate Arcanum. \nHowever, using this benefit comes with a drawback. The mage takes on a portion of the target's doom, resulting in an additional Paradox die, even if the spell appeared plausible and covert.",
-      "source": "Myst p72"
-    },
-    {
-      "type": "Mage merits",
       "name": "Artifact",
       "rating": "•••+ mult orto",
       "prerequisites": "",
@@ -697,17 +665,9 @@
     },
     {
       "type": "Mage merits",
-      "name": "Law of Embodiment",
-      "rating": "•••••",
-      "prerequisites": "Gnosis •••, at least 5 Rotes",
-      "description": "cast Rote while attacking",
-      "source": "TotM p77"
-    },
-    {
-      "type": "Mage merits",
       "name": "Manifestation Machine",
       "rating": "• to •••",
-      "prerequisites": "Familiar",
+      "prerequisites": "Familiar, The Free Council",
       "description": "<ul>\n<li>The Manifestation Machine merit grants your character's fetch (familiar) a +1 die bonus on manifestation rolls within a certain range.</li>\n<li>Each dot in the merit corresponds to a +1 die bonus, with the range typically being around 10 to 15 yards.</li>\n<li>The Manifestation Machine object has a Size equal to its merit dots or larger.</li>\n<li>The object's Durability and Structure are equal to twice its merit dots, and its Size is equal to its merit dots.</li>\n<li>The specific object representing the Manifestation Machine must be determined in collaboration with the Storyteller.</li>\n<li>Alternative names for this merit include Twilight buoys, spirit flags, fetch channels, or other suitable names based on the setting.</li>\n<li>Manifestation Machine objects are like spiritual receivers or hand-holds that facilitate the familiar's manifestation in the material world.</li>\n<li>These objects have a unique spiritual quality that allows them to connect with the familiar's spiritual \"signal\" or reach into Twilight.</li>\n</ul>",
       "source": "FC p131"
     },
