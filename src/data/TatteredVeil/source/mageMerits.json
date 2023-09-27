@@ -9,7 +9,7 @@
     },
     {
       "type": "Social merits",
-      "name": "Status (Professional)",
+      "name": "Status (Licensed Professional)",
       "rating": "• to •••••",
       "prerequisites": "",
       "description": "<ul>\n  <li>Your character possesses a professional license in a specific profession.</li>\n  <li>The license grants unique privileges and benefits related to the profession.</li>\n  <li>For example, a licensed private investigator may have the right to carry a concealed weapon and access restricted databases.</li>\n  <li>When utilizing official channels, your character may need to make rolls such as Manipulation + Intimidation, Persuasion, or Socialize, depending on the situation.</li>\n  <li>The appropriate Skill is chosen based on the request, circumstances, and your character's standing within the organization.</li>\n  <li>Your character receives bonus dice equal to their Status dots.</li>\n  <li>Penalties may be applied if your character engages in browbeating (-1), threats (-2), pushing the limits of authority (-2), or exceeding their authority (-3 to -5).</li>\n</ul>",
@@ -28,7 +28,7 @@
       "name": "Status (City Hall)",
       "rating": "• to •••••",
       "prerequisites": "Politics •",
-      "description": "<ul>\n  <li>Your character holds a position of authority within the City Hall, such as a sergeant or lieutenant.</li>\n  <li>They have legal powers of search, seizure, and arrest, along with access to databases and the ability to carry a firearm.</li>\n  <li>Efforts to get things done through official channels call for Manipulation + Intimidation, Persuasion, or Socialize rolls.</li>\n  <li>Choose the skill that is appropriate to the request, circumstances, and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties might apply if your character browbeats someone (-1), uses threats (-2), skirts the limits of their authority (-2), or exceeds their authority (-3 to -5).</li>\n</ul>",
+      "description": "<ul>\n  <li>Your character holds a position of authority within the City Hall such as a City Planner.</li>\n  <li>Efforts to get things done through official channels call for Manipulation + Intimidation, Persuasion, or Socialize rolls.</li>\n  <li>Choose the skill that is appropriate to the request, circumstances, and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties might apply if your character browbeats someone (-1), uses threats (-2), skirts the limits of their authority (-2), or exceeds their authority (-3 to -5).</li>\n</ul>",
       "source": "WoD 116"
     },
     {
@@ -71,11 +71,11 @@
       "description": "<ul>\n  <li>Your character is a licensed medical practitioner with privileges such as prescription writing and access to medical records.</li>\n  <li>They have the authority to enter restricted areas like crime and accident scenes.</li>\n  <li>Efforts to get things done through official channels require appropriate rolls such as Manipulation + Intimidation, Persuasion, or Socialize.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties may apply for browbeating (-1), using threats (-2), pushing the limits of authority (-2), or exceeding authority (-3 to -5).</li>\n</ul>",
       "source": "WoD 116"
     },
-    {
+     {
       "type": "Social merits",
       "name": "Status (Religious)",
       "rating": "• to •••••",
-      "prerequisites": "",
+      "prerequisites": "Academics Specialty: Religion",
       "description": "<ul>\n  <li>Your character is a licensed minister, granting them access to various individuals and places.</li>\n  <li>This includes accused criminals, hospital patients, and restricted areas in religious institutions.</li>\n  <li>Efforts to get things done through official channels require appropriate rolls such as Manipulation + Intimidation, Persuasion, or Socialize.</li>\n  <li>Bonus dice equal your character's Status dots.</li>\n  <li>Penalties may apply for browbeating (-1), using threats (-2), pushing the limits of authority (-2), or exceeding authority (-3 to -5).</li>\n</ul>",
       "source": "WoD 116"
     },
@@ -100,12 +100,12 @@
       "name": "Status (Union/Rotary)",
       "rating": "• to •••••",
       "prerequisites": "",
-      "description": "<ul>\n  <li>Your character is a member of a Hobbyist Club, granting access to the club's meeting hall and a network of members for information or assistance.</li>\n  <li>Higher-ranking members have broader connections and influence over civic groups and political figures.</li>\n  <li>Efforts to get things done through official channels require Manipulation + Intimidation, Persuasion, or Socialize rolls, based on the appropriate Skill and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots, reflecting their influence and reputation within the club.</li>\n  <li>Penalties may apply if your character uses aggressive or unethical methods to achieve their goals.</li>\n</ul>",
+      "description": "<ul>\n  <li>Your character is a member of a Rotary Club or a significant Union, granting access to the club's meeting hall or union hall and a network of members for information or assistance.</li>\n  <li>Higher-ranking members have broader connections and influence over civic groups and political figures.</li>\n  <li>Efforts to get things done through official channels require Manipulation + Intimidation, Persuasion, or Socialize rolls, based on the appropriate Skill and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots, reflecting their influence and reputation within the club.</li>\n  <li>Penalties may apply if your character uses aggressive or unethical methods to achieve their goals.</li>\n</ul>",
       "source": "WoD 116"
     },
     {
       "type": "Social merits",
-      "name": "Status (Corporate)",
+      "name": "Status (Corporate Executive)",
       "rating": "• to •••••",
       "prerequisites": "",
       "description": "<ul>\n  <li>Your character is a low-level corporate executive, granting them access to company resources such as corporate credit cards, vehicles, and technology.</li>\n  <li>They may also have privileged information and connections within the company.</li>\n  <li>Efforts to get things done through official channels require Manipulation + Intimidation, Persuasion, or Socialize rolls, based on the appropriate Skill and your character's standing within the organization.</li>\n  <li>Bonus dice equal your character's Status dots, reflecting their influence and position within the company.</li>\n  <li>Penalties may apply if your character uses aggressive or unethical methods to achieve their goals.</li>\n</ul>",
