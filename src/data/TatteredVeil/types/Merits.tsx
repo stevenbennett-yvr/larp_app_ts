@@ -371,7 +371,6 @@ export const handleMeritChange = (
   type: VariableKeys,
   newPoints: number | string,
 ): void => {
-  console.log(merit)
   const existingMerit = awakened.merits.find((m) => m.id === merit.id);
   if (existingMerit) {
     if (newPoints === 0 && type !== "experiencePoints") {

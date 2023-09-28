@@ -8,6 +8,7 @@ import SkillsPicker from './Generator/SkillsPicker'
 import GenerationPicker from "./Generator/GenerationPicker"
 import PredatorTypePicker from "./Generator/PredatorPicker"
 import DisciplinesPicker from "./Generator/DisciplinePicker"
+import BackgroundPicker from "./Generator/BackgroundPicker"
 
 import { Center } from "@mantine/core"
 
@@ -37,12 +38,12 @@ const GenerateKindred = () => {
                 )
             case 4: 
                 return (
-                    <PredatorTypePicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} />
+                    <PredatorTypePicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             case 5:
                 // Backgrounds and Loresheets
                 return (
-                    <></>
+                    <BackgroundPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             case 6: 
                 // Merits and Flaws

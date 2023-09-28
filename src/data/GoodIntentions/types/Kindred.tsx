@@ -8,11 +8,18 @@ import { v5BackgroundRefSchema } from './V5Backgrounds';
 import { disciplinesSchema } from './V5Disciplines';
 import { ritualSchema } from './V5Rituals';
 import { Power, powerSchema } from './V5Powers';
+import { v5MeritFlawRefSchema } from './V5MeritsOrFlaws';
 
 export const v5BackgroundSchema = z.object({
     history: z.string(),
     goals: z.string(),
     description: z.string(), 
+})
+
+export const BasicSchema = z.object({
+    creationPoints: z.number().min(0).max(1).int(),
+    freebiePoints: z.number().min(0).int(),
+    experiencePoints: z.number().min(0).int(),
 })
 
 export const kindredSchema = z.object({
@@ -28,6 +35,8 @@ export const kindredSchema = z.object({
     predatorType: z.object({
         name: predatorTypeNameSchema,
     }),
+    bloodPotency: BasicSchema,
+    humanity: BasicSchema,
 
     background: v5BackgroundSchema,
 
@@ -39,9 +48,7 @@ export const kindredSchema = z.object({
     rituals: ritualSchema.array(),
 
     backgrounds: v5BackgroundRefSchema.array(),
-    merits: z.array(z.string()),
-    flaws: z.array(z.string())
-
+    meritsFlaws: v5MeritFlawRefSchema.array(),
 })
 export type Kindred = z.infer<typeof kindredSchema>
 
@@ -61,6 +68,8 @@ export const getEmptyKindred = (): Kindred => {
         clan: "",
         generation: 0,
         predatorType: { name: "" },
+        bloodPotency: {creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+        humanity: {creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
 
         attributes: {
             strength: {creationPoints: 1, freebiePoints: 0, experiencePoints: 0, category: 'physical' },
@@ -121,14 +130,13 @@ export const getEmptyKindred = (): Kindred => {
             protean: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
             oblivion: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
             "blood sorcery": { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+            "thin-blood alchemy": { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
         },
         powers: [],
         rituals: [],
 
         backgrounds: [],
-        merits: [],
-        flaws: [],
-
+        meritsFlaws: [],
     }
 }
 

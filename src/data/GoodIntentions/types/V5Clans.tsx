@@ -19,6 +19,7 @@ export const clanNameSchema = z.union([
     z.literal('Hecata'),
     z.literal('Salubri'),
     z.literal('Caitiff'),
+    z.literal('Thin-Blood'),
 
     z.literal(''),
 ])
@@ -197,6 +198,17 @@ export const Clans: Record<ClanName, Clan> = {
     },
     Caitiff: {
         name: "Caitiff",
+        disciplines: [],
+        nicknames: "The Clanless, Panders, Orphans, Trash, Scum, Freestylers",
+        summary: "Those of a flawed or unknown lineage.",
+        description: "Exhibiting no discernable lineage, the Caitiffs are vampires without a clan. Distrusted by their peers, they are scorned because of their lack of lineage but also feared for their unpredictability. Jacks of all trades but masters of none, each Pander makes their own way in the society of the damned, free from ancestry and expectations both.",
+        logo: GoodIntentions.caitiffLogo,
+        symbol: GoodIntentions.caitiffSymbol,
+        bane: "Outcast - Untouched by their ancestors, the Caitiff do not share a common Bane. The character begins with the Flaw Suspect (•) and they may not purchase positive status during Character Creation. The Storyteller may impose a 1-2 penalty to social tests against Kindred who know they are Caitiff. To improve a Discipline, the cost is 6 times the level of experience points.",
+        compulsion: "Caitiffs do not have a clan Compulsion"
+    },
+    "Thin-Blood": {
+        name: "Thin-Blood",
         disciplines: [],
         nicknames: "The Clanless, Panders, Orphans, Trash, Scum, Freestylers",
         summary: "Those of a flawed or unknown lineage.",

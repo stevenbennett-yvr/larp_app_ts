@@ -60,7 +60,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
             { ...emptyBackground, id: "bagger-contacts", name: "Contacts", sphere: "underworld", freebiePoints: 2 }
         ],
         meritsAndFlaws: [
-            { ...emptyMeritFlaw, id: 'bagger-IronGullet', freebiePoints: 3, note: "able to feed on rancid blood" },
+            { ...emptyMeritFlaw, id: 'bagger-IronGullet', name: "Iron Gullet", freebiePoints: 3, note: "able to feed on rancid blood" },
             { ...emptyMeritFlaw, id: 'bagger-Enemy', name: "Enemy", freebiePoints: 2, note: "Someone believes you owe them" },
         ],
         humanityChange: 0,

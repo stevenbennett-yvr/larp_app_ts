@@ -50,7 +50,7 @@ export const v5BackgroundRefSchema = z.object({
 })
 export type V5BackgroundRef = z.infer<typeof v5BackgroundRefSchema>
 
-export const emptyBackground:V5BackgroundRef = {
+export const emptyBackground: V5BackgroundRef = {
     id: "",
     name: "",
     creationPoints: 0,
@@ -69,7 +69,7 @@ export const v5BackgroundRefs: V5BackgroundRef[] = backgroundDataJson.map((b) =>
     experiencePoints: 0,
     note: "",
     advantages: []
-  }))
+}))
 ///
 
 export type requirementFunctions = (kindred: Kindred) => boolean
@@ -132,7 +132,7 @@ export const v5GetAdvantageByName = (name: string): V5Advantage => {
         const matchingAdvantage = background.advantages?.find(
             (advantage) => advantage.name === name
         );
-        
+
         if (matchingAdvantage) {
             return matchingAdvantage; // Return the matching advantage info
         }
@@ -185,7 +185,7 @@ export const v5BackgroundLevel = (v5BackgroundRef: V5BackgroundRef) => {
 }
 
 
-export const v5AdvantageLevel = ( AdvantageRef: V5AdvantageRef) => {
+export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
     let totalXpNeeded = 0;
     let pastXpNeeded = [0];
     let { experiencePoints, creationPoints, freebiePoints } = AdvantageRef;
@@ -223,4 +223,62 @@ export const v5AdvantageLevel = ( AdvantageRef: V5AdvantageRef) => {
     }
 
     return { level, totalXpNeeded, pastXpNeeded };
+}
+
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere";
+
+export const handleBackgroundChange = (
+    kindred: Kindred,
+    setKindred: Function,
+    background: V5BackgroundRef,
+    type: VariableKeys,
+    newPoints: number | string,
+) => {
+    const existingBackground = kindred.backgrounds.find((b) => b.id === background.id);
+    if (existingBackground) {
+        const updatedBackgrounds = kindred.backgrounds.map((b) =>
+            b.id === background.id ? { ...b, [type]: newPoints } : b
+        );
+        setKindred({ ...kindred, backgrounds: updatedBackgrounds });
+    } else {
+        setKindred({
+            ...kindred,
+            backgrounds: [...kindred.backgrounds, { ...background, [type]: newPoints }],
+        });
+    }
+};
+
+export const handleAdvantageChange = (
+    kindred: Kindred,
+    setKindred: Function,
+    background: V5Background,
+    advantage: V5Advantage,
+    type: VariableKeys,
+    newPoints: number | string,
+) => {
+    const updatedBackgrounds = kindred.backgrounds.map((b) => {
+        if (b.id === background.id) {
+            const updatedAdvantages = b.advantages.map((a) => {
+                if (a.name === advantage.name) {
+                    return { ...a, [type]: newPoints };
+                }
+                return a;
+            });
+            return { ...b, advantages: updatedAdvantages };
+        }
+        return b;
+    });
+
+    setKindred({ ...kindred, backgrounds: updatedBackgrounds });
+};
+
+export const handleBackgroundRemove = (
+    kindred: Kindred,
+    setKindred: Function,
+    backgroundRef: V5BackgroundRef
+) => {
+    const backgroundsToRemove = [] as V5BackgroundRef[];
+    backgroundsToRemove.push(backgroundRef)
+    const updatedBackgrounds = kindred.backgrounds.filter((b) => !backgroundsToRemove.includes(b))
+    setKindred({ ...kindred, backgrounds: updatedBackgrounds });
 }

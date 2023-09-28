@@ -14,6 +14,7 @@ export const disciplineNameSchema = z.union([
     z.literal("protean"),
     z.literal("blood sorcery"),
     z.literal("oblivion"),
+    z.literal("thin-blood alchemy"),
 ])
 export type DisciplineName = z.infer<typeof disciplineNameSchema>
 
@@ -28,7 +29,8 @@ export const allDisciplines : DisciplineName[] = [
     "presence",
     "protean",
     "blood sorcery",
-    "oblivion"
+    "oblivion",
+    "thin-blood alchemy"
 ]
 
 export const disciplineSchema = z.object({
@@ -48,6 +50,7 @@ export const disciplinesSchema = z.object({
     protean: disciplineSchema,
     oblivion: disciplineSchema,
     "blood sorcery": disciplineSchema,
+    "thin-blood alchemy": disciplineSchema,
 })
 export type Discipline = z.infer<typeof disciplinesSchema>
 
@@ -104,6 +107,10 @@ export const disciplines: Record<DisciplineName, DisciplineDescription> = {
         summary: "Shadow powers and necromancy",
         logo: logos.oblivionLogo,
     },
+    "thin-blood alchemy": {
+        summary: "Create draughts that provide different abilities",
+        logo: logos.alchemyLogo
+    }
 }
 
 export const getEmptyDisciplines: Discipline = {
@@ -118,4 +125,5 @@ export const getEmptyDisciplines: Discipline = {
     protean: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
     oblivion: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
     "blood sorcery": { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+    "thin-blood alchemy": { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
 }

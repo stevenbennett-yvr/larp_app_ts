@@ -1,7 +1,8 @@
-import { Button, Select, Space, Stack, Text, Alert } from "@mantine/core"
+import { Button, Select, Space, Stack, Text, Alert, Table } from "@mantine/core"
 import { useState } from "react"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { globals } from "../../../assets/globals"
+import { generations } from "../../../data/GoodIntentions/types/V5Generation"
 
 type GenerationPickerProps = {
     kindred: Kindred,
@@ -14,7 +15,34 @@ const GenerationPicker = ({ kindred, setKindred, nextStep, backStep }: Generatio
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
 
-    const [generation, setGeneration] = useState<string | null>("13");
+    const [generation, setGeneration] = useState<string| null>("13");
+    const showAlert = generation === '9';
+    const selectData =
+        kindred.clan === "Thin-Blood" ?
+            [
+                { value: '16', label: '16: Thin-blood' },
+                { value: '15', label: '15: Thin-blood' },
+                { value: '14', label: '14: Thin-blood' },
+            ] :
+            [
+                { value: '13', label: '13: Fledgeling - Newly Embraced' },
+                { value: '12', label: '12: Fledgeling - Newly Embraced' },
+                { value: '11', label: '11: Neonate - Been a while' },
+                { value: '10', label: '10: Neonate - Been a while' },
+                { value: '9', label: '9: Ancillae - I barely remember' }
+            ]
+
+    const handleGenerationChange = (generation:string|null) => {
+        if (generation === null) { return }
+        let genInt = parseInt(generation ?? "0")
+        let creationPoints = genInt < 14 ? 1 : 0;
+        let experiencePoints = genInt < 10 ? 20 : 0;
+        console.log(creationPoints)
+        setKindred({ ...kindred, 
+            generation: genInt, 
+            bloodPotency: {...kindred.bloodPotency, creationPoints, experiencePoints}
+        })
+    }
 
     return (
         <div style={{ width: "100%" }}>
@@ -25,6 +53,21 @@ const GenerationPicker = ({ kindred, setKindred, nextStep, backStep }: Generatio
             <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Generation</Text>
             <hr color="#e03131" />
             <Space h={"sm"} />
+
+            <Table>
+                <thead>
+                    <tr>
+                        <th>Generation</th>
+                        <th>Minimum Blood Potency</th>
+                        <th>Maximum Blood Potency</th>
+                    </tr>
+                    <tr>
+                        <td>{generations[parseInt(generation ?? "0")].generation}</td>
+                        <td>{generations[parseInt(generation ?? "0")].min_bp}</td>
+                        <td>{generations[parseInt(generation ?? "0")].max_bp}</td>
+                    </tr>
+                </thead>
+            </Table>
 
             <Stack align="center" spacing="xl">
                 <Select
@@ -44,20 +87,23 @@ const GenerationPicker = ({ kindred, setKindred, nextStep, backStep }: Generatio
                     })}
                     style={{ width: "100%" }}
                     value={generation}
-                    onChange={setGeneration}
+                    onChange={ (val) => {
+                        setGeneration(val)
+                        handleGenerationChange(val)
+                    }}
                     label="When were you turned?"
                     placeholder="Pick one"
-                    data={[
-                        { value: '14', label: '14: Childer - Recently' },
-                        { value: '13', label: '13: Neonate - Been a while' },
-                        { value: '12', label: '12: Neonate - Been a while' },
-                        { value: '11', label: '11: Ancillae - I barely remember' },
-                        { value: '10', label: '10: Ancillae - I barely remember' },
-                    ]}
+                    data={selectData}
                 />
 
+                {showAlert && (
+                    <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>
+                        <div style={{ color: "red" }}>9th Generations must begin play with two dots of Blood Potency. 20 starting XP will be spent to purchase your second dot of Blood Potency.</div>
+                    </Alert>
+                )}
+
                 <Button disabled={generation === null} color="grape" onClick={() => {
-                    setKindred({ ...kindred, generation: parseInt(generation ?? "0") })
+                    handleGenerationChange(generation)
                     nextStep()
                 }}>Confirm</Button>
 

@@ -44,7 +44,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                             return (
                                 <div key={background.id}>
                                     <Text fz={globals.smallerFontSize} style={{ textAlign: "left" }}>
-                                        {background.name} {v5BackgroundLevel(background).level}
+                                        <b>{background.name}</b> {v5BackgroundLevel(background).level}
                                         <div dangerouslySetInnerHTML={{ __html: backgroundInfo?.summary }} />
 
                                     </Text>
@@ -81,7 +81,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                 <div key={meritFlawInfo.id}>
                                     <Text fz={globals.smallerFontSize} style={{ textAlign: "left" }}>
                                         {icon} &nbsp;
-                                        {meritFlawInfo.name} {v5MeritLevel(meritFlaw).level}
+                                        <b>{meritFlawInfo.name}</b> {v5MeritLevel(meritFlaw).level}
                                         <div dangerouslySetInnerHTML={{ __html: meritFlaw.note }} />
                                     </Text>
                                 </div>
@@ -91,15 +91,18 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                     : null}
                 {PredatorTypes[pickedPredatorType].humanityChange !== 0 ?
                     <Text fz={globals.smallerFontSize} style={{ textAlign: "left" }}>
-                        Humanity Change: {PredatorTypes[pickedPredatorType].humanityChange}
+                        <b>Humanity Change:</b> {PredatorTypes[pickedPredatorType].humanityChange}
                     </Text>
                     : null}
                 <Button
                     onClick={() => {
                         setKindred({
                             ...kindred, predatorType: {
-                                name: pickedPredatorType
-                            }
+                                name: pickedPredatorType,
+                            },
+                            backgrounds: PredatorTypes[pickedPredatorType].backgrounds,
+                            meritsFlaws: PredatorTypes[pickedPredatorType].meritsAndFlaws,
+                            humanity: {...kindred.humanity, creationPoints: 7 + PredatorTypes[pickedPredatorType].humanityChange}
                         })
                         nextStep()
                     }}
