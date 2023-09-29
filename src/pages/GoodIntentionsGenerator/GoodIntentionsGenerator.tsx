@@ -9,6 +9,7 @@ import GenerationPicker from "./Generator/GenerationPicker"
 import PredatorTypePicker from "./Generator/PredatorPicker"
 import DisciplinesPicker from "./Generator/DisciplinePicker"
 import BackgroundPicker from "./Generator/BackgroundPicker"
+import MeritPicker from "./Generator/MeritPicker"
 
 import { Center } from "@mantine/core"
 
@@ -48,7 +49,7 @@ const GenerateKindred = () => {
             case 6: 
                 // Merits and Flaws
                 return (
-                    <></>
+                    <MeritPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             case 7:
                 return (

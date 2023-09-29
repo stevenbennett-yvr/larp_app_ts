@@ -1,6 +1,9 @@
 import { z } from "zod";
 
 import * as logos from "../../../assets/images/GoodIntentions";
+import { Kindred } from "./Kindred";
+import { Clans } from "./V5Clans";
+import { v5xp } from "../V5Experience";
 
 export const disciplineNameSchema = z.union([
     z.literal("animalism"),
@@ -126,4 +129,38 @@ export const getEmptyDisciplines: Discipline = {
     oblivion: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
     "blood sorcery": { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
     "thin-blood alchemy": { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+}
+
+export const v5DisciplineLevel = (kindred:Kindred, discipline:DisciplineKey) => {
+    const { creationPoints, freebiePoints, experiencePoints } = kindred.disciplines[discipline]
+    let clan = kindred.clan
+    const disciplinesForClan = Clans[clan].disciplines;
+    let inClan = disciplinesForClan.includes(discipline)
+    let isCaitiff = clan === "Caitiff"
+
+    const xpCost = inClan? v5xp.inClanDisciplines : isCaitiff? v5xp.caitiffDiscipline : v5xp.outOfClanDiscipline
+
+    let xp = experiencePoints
+    let totalXpNeeded = 0
+    let pastXpNeeded = [0]
+    if (xp === 0) {
+      let level = creationPoints + freebiePoints;
+      let totalXpNeeded = (level + 1) * xpCost;
+      pastXpNeeded.push(totalXpNeeded)
+      return {level, totalXpNeeded, pastXpNeeded};
+    } 
+    else {
+      let level = creationPoints + freebiePoints;
+      let xpNeeded = (level + 1) * xpCost;
+      totalXpNeeded += xpNeeded
+      pastXpNeeded.push(totalXpNeeded)
+      while (xp >= xpNeeded) {
+        level++;
+        xp -= xpNeeded;
+        xpNeeded = (level + 1) * xpCost;
+        totalXpNeeded += xpNeeded
+        pastXpNeeded.push(totalXpNeeded)
+      }
+      return {level, totalXpNeeded, pastXpNeeded};
+    }
 }

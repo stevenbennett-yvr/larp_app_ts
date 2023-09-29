@@ -21,6 +21,27 @@ export const sphereOfInfluenceSchema = z.union([
     z.literal("university"),
     z.literal("")
 ])
+export type V5SphereKey = z.infer<typeof sphereOfInfluenceSchema>
+
+export const SphereSelectData = [
+    { value: "Church", data: "church" },
+    { value: "Finance", data: "finance" },
+    { value: "Health", data: "health" },
+    { value: "High Society", data: "high society" },
+    { value: "Industry", data: "industry" },
+    { value: "Legal", data: "legal" },
+    { value: "Media", data: "media" },
+    { value: "Occult", data: "occult" },
+    { value: "Police", data: "police" },
+    { value: "Politics", data: "politics" },
+    { value: "Service Industry", data: "service industry" },
+    { value: "Street", data: "street" },
+    { value: "Transportation", data: "transportation" },
+    { value: "Underworld", data: "underworld" },
+    { value: "University", data: "university" },
+    { value: "", data: "" }
+];
+
 
 export const v5AdvantageRefSchema = z.object({
     name: z.string(),
@@ -190,6 +211,8 @@ export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
     let pastXpNeeded = [0];
     let { experiencePoints, creationPoints, freebiePoints } = AdvantageRef;
 
+
+
     const advantageInfo = v5GetAdvantageByName(AdvantageRef.name)
     const { cost } = advantageInfo
 
@@ -248,30 +271,6 @@ export const handleBackgroundChange = (
     }
 };
 
-export const handleAdvantageChange = (
-    kindred: Kindred,
-    setKindred: Function,
-    background: V5Background,
-    advantage: V5Advantage,
-    type: VariableKeys,
-    newPoints: number | string,
-) => {
-    const updatedBackgrounds = kindred.backgrounds.map((b) => {
-        if (b.id === background.id) {
-            const updatedAdvantages = b.advantages.map((a) => {
-                if (a.name === advantage.name) {
-                    return { ...a, [type]: newPoints };
-                }
-                return a;
-            });
-            return { ...b, advantages: updatedAdvantages };
-        }
-        return b;
-    });
-
-    setKindred({ ...kindred, backgrounds: updatedBackgrounds });
-};
-
 export const handleBackgroundRemove = (
     kindred: Kindred,
     setKindred: Function,
@@ -282,3 +281,33 @@ export const handleBackgroundRemove = (
     const updatedBackgrounds = kindred.backgrounds.filter((b) => !backgroundsToRemove.includes(b))
     setKindred({ ...kindred, backgrounds: updatedBackgrounds });
 }
+
+export const handleAdvantageChange = (
+    kindred: Kindred,
+    setKindred: Function,
+    bRef: V5BackgroundRef,
+    aRef: V5AdvantageRef,
+    type: VariableKeys,
+    newPoints: number | string,
+) => {
+    const existingAdvantage = bRef.advantages.find((a) => a.name === aRef.name);
+    if (!existingAdvantage) {
+        // If the background doesn't exist, create a new one with the provided advantage
+        bRef.advantages.push({ ...aRef, [type]: newPoints });
+    }
+    const updatedBackgrounds = kindred.backgrounds.map((background) => {
+        if (background.id === bRef.id) {
+            // Update the existing background with the new advantages
+            return {
+                ...background,
+                advantages: background.advantages.map((advantage) =>
+                    advantage.name === aRef.name ? { ...advantage, [type]: newPoints } : advantage
+                ),
+            };
+        }
+        return background;
+    });
+
+    setKindred({ ...kindred, backgrounds: updatedBackgrounds });
+
+};

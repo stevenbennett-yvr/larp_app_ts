@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import meritFlawDataJson from '../sources/v5MeritsAndFlaws.json'
+import { Kindred } from './Kindred'
 
 export const meritFlawTypeSchema = z.union([
     z.literal('merit'),
@@ -63,7 +64,7 @@ export const meritFlawData: V5MeritFlaw[] = meritFlawDataJson.map((mf) => ({
     source: mf.source
 }))
 
-export const emptyMeritFlaw:V5MeritFlawRef = {
+export const emptyMeritFlaw: V5MeritFlawRef = {
     id: "",
     name: "",
     creationPoints: 0,
@@ -107,4 +108,31 @@ export const v5MeritLevel = (v5MeritFlawRef: V5MeritFlawRef) => {
     }
 
     return { level, totalXpNeeded, pastXpNeeded };
+}
+
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "note";
+export const handleMeritFlawChange = (
+    kindred: Kindred,
+    setKindred: Function,
+    meritFlaw: V5MeritFlawRef,
+    type: VariableKeys,
+    newPoints: number | string,
+): void => {
+    const existingMerit = kindred.meritsFlaws.find((mf) => mf.id === meritFlaw.id)
+    if (existingMerit) {
+        if (newPoints === 0 && type !== "experiencePoints") {
+            const updatedMerits = kindred.meritsFlaws.filter((mf) => mf.id !== meritFlaw.id);
+            setKindred({ ...kindred, meritsFlaws: updatedMerits });
+        } else {
+            const updatedMerits = kindred.meritsFlaws.map((mf) =>
+                mf.id === meritFlaw.id ? { ...mf, [type]: newPoints } : mf
+            );
+            setKindred({ ...kindred, meritsFlaws: updatedMerits });
+        }
+    } else {
+        setKindred({
+            ...kindred,
+            meritsFlaws: [...kindred.meritsFlaws, { ...meritFlaw, [type]: newPoints }]
+        })
+    }
 }

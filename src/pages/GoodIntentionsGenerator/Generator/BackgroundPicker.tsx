@@ -2,10 +2,11 @@ import { faCircleUp, faCircleDown } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 //import { useState } from "react"
-import { handleBackgroundRemove, V5BackgroundRef, backgroundData, v5BackgroundLevel, handleBackgroundChange, v5BackgroundRefs, V5AdvantageRef, emptyAdvantage, v5AdvantageLevel } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { V5SphereKey, SphereSelectData, V5AdvantageRef, handleBackgroundRemove, V5BackgroundRef, backgroundData, v5BackgroundLevel, handleBackgroundChange, v5BackgroundRefs, emptyAdvantage, handleAdvantageChange, v5GetAdvantageByName } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { Text, Center, Stack, ScrollArea, Accordion, Button, Group, Alert, Table, NumberInput, Select } from "@mantine/core"
 import { globals } from "../../../assets/globals"
 import { useState, forwardRef } from 'react'
+import Tally from "../../../utils/talley"
 
 type BackgroundPickerProps = {
     kindred: Kindred,
@@ -20,41 +21,82 @@ const flawIcon = () => {
 const meritIcon = () => {
     return <FontAwesomeIcon icon={faCircleUp} style={{ color: "rgb(47, 158, 68)", }} />
 }
+const getRating = (array: number[]) => {
+    let first = array[0]
+    let last = array[array.length - 1]
 
+    if (first === last) {
+        return <Tally n={last} />
+    } else {
+        return <Group><Tally n={first} /> to <Tally n={last} /></Group>
+    }
+
+}
 
 const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: BackgroundPickerProps) => {
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
     const height = globals.viewportHeightPx
     const [selectedBackground, setSelectedBackground] = useState<string | null>("");
+    const [selectedSphere, setSelectedSphere] = useState<V5SphereKey | null>("");
 
-    /*     const getRemainingBackgroundPoints = (kindred: Kindred): number => {
-            let totalBackgroundPoints = 0;
-    
-            Object.values(kindred.backgrounds).forEach((background) => {
-                let backgroundInfo = backgroundData.find(entry => entry.name === background.name)
-    
-                totalBackgroundPoints += background.creationPoints;
-                Object.values(background.advantages).forEach((advantage) => {
-                    let advantageInfo = backgroundInfo?.advantages?.find(entry => entry.name === advantage.name)
-    
-                    if (advantageInfo?.type === "advantage") {
-                        totalBackgroundPoints += advantage.creationPoints
-                    }
-                })
-    
-            });
-    
-            return 7 - totalBackgroundPoints
-        } */
+    const getFlawPoints = (kindred: Kindred): number => {
+        let totalFlawPoints = 0;
+
+        Object.values(kindred.backgrounds).forEach((background) => {
+            let backgroundInfo = backgroundData.find(entry => entry.name === background.name)
+
+            Object.values(background.advantages).forEach((advantage) => {
+                let advantageInfo = backgroundInfo?.advantages?.find(entry => entry.name === advantage.name)
+
+                if (advantageInfo?.type === "disadvantage") {
+                    totalFlawPoints += advantage.creationPoints
+                }
+            })
+
+        });
+
+        return Math.min(totalFlawPoints, 5);
+
+    }
+
+    const getTotalBackgroundPoints = (kindred: Kindred): number => {
+        let totalAdvantagePoints = 0;
+
+        Object.values(kindred.backgrounds).forEach((background) => {
+            totalAdvantagePoints += background.creationPoints
+        });
+
+        return totalAdvantagePoints
+
+    }
+
+    const getRemainingPoints = (kindred: Kindred): number => {
+        let totalBackgroundPoints = 0;
+
+        Object.values(kindred.backgrounds).forEach((background) => {
+            let backgroundInfo = backgroundData.find(entry => entry.name === background.name)
+
+            totalBackgroundPoints += background.creationPoints;
+            Object.values(background.advantages).forEach((advantage) => {
+                let advantageInfo = backgroundInfo?.advantages?.find(entry => entry.name === advantage.name)
+
+                if (advantageInfo?.type === "advantage") {
+                    totalBackgroundPoints += advantage.creationPoints
+                }
+            })
+
+        });
+
+        return 7 + getFlawPoints(kindred) - totalBackgroundPoints
+    }
 
     const selectData = backgroundData.map((b) => ({
         value: `${b.name}`,
         label: `${b.name}`,
     }))
-
     const userBackgrounds = kindred.backgrounds; // Replace with the actual user's backgrounds
-    const backgroundsToExclude = ["Contact", "Allies", "Haven", "Mask"];
+    const backgroundsToExclude = ["Contacts", "Allies", "Haven", "Mask"];
 
     const filteredSelectData = selectData.filter((background) => {
         const backgroundName = background.value;
@@ -89,7 +131,11 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
         let newBackgroundRef = v5BackgroundRefs.find((b) => b.name === selectedBackground)
         if (!newBackgroundRef) { return }
 
-        const newBackground = { ...newBackgroundRef, id: `${newBackgroundRef.id}-${Date.now()}}` }
+        let newBackground = { ...newBackgroundRef, id: `${newBackgroundRef.id}-${Date.now()}}` }
+        if ((selectedBackground === 'Allies' || selectedBackground === 'Contacts') && selectedSphere) {
+            console.log(selectedSphere)
+            newBackground = {...newBackground, sphere: selectedSphere}
+        }
         handleBackgroundChange(kindred, setKindred, newBackground, "creationPoints", 1)
 
     }
@@ -110,12 +156,24 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
                             <tr>
                                 <td style={{ minWidth: "150px" }}>
                                     <Text color="white">{selectedBackgroundData.name}</Text>
+                                    {selectedBackground === "Allies"||selectedBackground === "Contacts"?
+                                    <Select
+                                        data={SphereSelectData}
+                                        value={selectedSphere} // Make sure selectedSphere contains the correct value
+                                        onChange={(val) => {
+                                            let sphere = val as V5SphereKey
+                                            setSelectedSphere(sphere);
+                                        }}
+                                        placeholder={`${selectedSphere}`}
+                                    />
+                                    :<></>}
                                     <Button
                                         color="gray"
-                                        disabled={!selectedBackground}
+                                        disabled={(selectedBackground === "Allies"||selectedBackground === "Contacts") && selectedSphere===""}
                                         onClick={() => {
                                             handleBackgroundBuy(selectedBackground)
                                             setSelectedBackground("")
+                                            setSelectedSphere("")
                                         }}>Buy</Button>
                                 </td>
                                 <td dangerouslySetInnerHTML={{ __html: `${selectedBackgroundData.description}` }} />
@@ -172,8 +230,6 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
                             <tr>
                                 <td>
                                     <Stack>
-                                        <Text></Text>
-                                        <Text>{bRef.sphere}</Text>
                                         {BackgroundInput(bRef)}
                                         {bRef.freebiePoints === 0 ?
                                             <Button
@@ -181,7 +237,7 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
                                                 onClick={() => {
                                                     handleBackgroundRemove(kindred, setKindred, bRef)
                                                 }}
-                                            >Remove Merit</Button>
+                                            >Remove Background</Button>
                                             :
                                             <></>
                                         }
@@ -203,12 +259,21 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
                                                                     <>
                                                                         <tr>
                                                                             <td>
-                                                                                <Text align="center">{icon} &nbsp;{advantage.name} {v5AdvantageLevel(advantageRef).level}</Text>
-                                                                                <NumberInput
-                                                                                    value={getAdvantagePoints(advantageRef)}
-                                                                                    min={advantageRef.freebiePoints}
-                                                                                    max={advantage.cost[-1] - advantageRef.freebiePoints}
-                                                                                />
+                                                                                <Text align="center">{icon} &nbsp;{advantage.name} {getAdvantagePoints(advantageRef)}</Text>
+                                                                                <Center>
+                                                                                    {getRating(advantage.cost)}
+                                                                                </Center>
+                                                                                <Center>
+                                                                                    <NumberInput
+                                                                                        value={advantageRef.creationPoints}
+                                                                                        style={{ width: "100px" }}
+                                                                                        min={0}
+                                                                                        max={getAdvantagePoints(advantageRef) === advantage.cost[advantage.cost.length - 1] ? advantageRef.creationPoints : advantage.cost[advantage.cost.length - 1]}
+                                                                                        onChange={(val) => {
+                                                                                            handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "creationPoints", val)
+                                                                                        }}
+                                                                                    />
+                                                                                </Center>
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
@@ -226,7 +291,25 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
                                         <></>}
                                 </td>
                             </tr>
+                            <tr>
+                                <td>
 
+                                    {bRef.advantages && bRef.advantages.length > 0 ?
+
+                                        bRef.advantages.map((a) => {
+                                            let advantageInfo = v5GetAdvantageByName(a.name)
+                                            const icon = advantageInfo?.type === "disadvantage" ? flawIcon() : meritIcon()
+
+                                            if (getAdvantagePoints(a) <= 0) { return null } else {
+                                                return (
+                                                    <div key={a.name}>{icon} &nbsp; {a.name} {getAdvantagePoints(a)}</div>
+                                                )
+                                            }
+                                        }) :
+                                        <></>
+                                    }
+                                </td>
+                            </tr>
                         </tbody>
                     </Table>
 
@@ -268,6 +351,7 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
                         allowDeselect
                         placeholder="Select Background to Buy"
                         style={{ width: '70%' }}
+                        disabled={getRemainingPoints(kindred) <= 0}
                     />
                 </Center>
                 {getSelectedBackgroundData()}
@@ -298,9 +382,12 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
                                 style={{ margin: "5px" }}
                                 color="gray"
                                 onClick={nextStep}
+                                disabled={getRemainingPoints(kindred) !== 0 || getTotalBackgroundPoints(kindred) > 7}
                             >
                                 Next
                             </Button>
+                            <Text fz={globals.smallerFontSize} style={{ margin: "10px" }}>Background Points: 7/{getRemainingPoints(kindred)}</Text>
+
                         </Button.Group>
                     </Group>
                 </Alert>

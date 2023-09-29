@@ -70,8 +70,8 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Cleaver",
         summary: "Feed on friends and family",
         backgrounds: [
-            { ...emptyBackground, id: "bagger-cleaver", name: "Herd", freebiePoints: 2 },
-            { ...emptyBackground, id: "bagger-cleaver", name: "Mask", freebiePoints: 2 },
+            { ...emptyBackground, id: "cleaver-herd", name: "Herd", freebiePoints: 2 },
+            { ...emptyBackground, id: "cleaver-mask", name: "Mask", freebiePoints: 2 },
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'bagger-DarkSecret', name: "Dark Secret", freebiePoints: 1, note: "You are a cleaver" },

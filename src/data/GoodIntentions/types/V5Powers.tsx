@@ -1,6 +1,7 @@
 import { z } from 'zod';
-import { disciplineNameSchema } from './V5Disciplines';
+import { DisciplineKey, disciplineNameSchema, v5DisciplineLevel } from './V5Disciplines';
 import { Ritual } from './V5Rituals';
+import { Kindred } from './Kindred';
 
 export const amalgamPrerequisiteSchema = z.object({
     discipline: disciplineNameSchema,
@@ -20,7 +21,7 @@ export const powerSchema = z.object({
 })
 export type Power = z.infer<typeof powerSchema>
 
-export const allPowers = [
+export const allPowers:Power[] = [
     { name: "Bond Famulus", description: "", rouseChecks: 3, amalgamPrerequisites: [], summary: "bond an animal companion. It will listen to basic commands, but full communication is not possible (unless you have Feral Whispers)", dicePool: "Charisma + Animal Ken", level: 1, discipline: "animalism" },
     { name: "Sense the Beast", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "sense hostility and supernatural traits in people", dicePool: "Resolve + Animalism", level: 1, discipline: "animalism" },
     { name: "Feral Whispers", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "communicate with animals. You can also call for animals and if they are nearby, they will come.", dicePool: "Manipulation / Charisma + Animalism", level: 2, discipline: "animalism" },
@@ -127,6 +128,39 @@ export const allPowers = [
     { name: "Touch of Oblivion", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "decay a living or unliving body", dicePool: "", level: 3, discipline: "oblivion" },
 
 ] as Power[]
+
+export const getFilteredPower = (kindred:Kindred): Power[] => {
+    const userDisciplines = [] as { discipline: DisciplineKey, level:number }[];
+
+    for (const discipline in kindred.disciplines) {
+        if (v5DisciplineLevel(kindred, discipline as DisciplineKey).level !== 0) {
+            const level = v5DisciplineLevel(kindred, discipline as DisciplineKey).level;
+            userDisciplines.push({discipline: discipline as DisciplineKey, level})
+        }
+    }
+
+
+    const filteredPowers = allPowers.filter((power) => {
+        const matchingDiscipline = userDisciplines.find((d) => d.discipline === power.discipline);
+        if (!matchingDiscipline) { return false; }
+        const matchingLevel = matchingDiscipline.level >= power.level
+        
+        let matchingAmalgam = false;
+        if(power.amalgamPrerequisites.length === 0) {
+            matchingAmalgam = true;
+        } else {
+            const {discipline, level} = power.amalgamPrerequisites[0]
+            const matchingUserDiscipline = userDisciplines.find(
+                (d) => d.discipline === discipline && d.level >= level
+            );
+            matchingAmalgam = Boolean(matchingUserDiscipline)
+        }
+
+        return matchingAmalgam && matchingLevel
+    })
+
+    return filteredPowers
+}
 
 export const powerIsRitual = (p: Power | Ritual): p is Ritual => {
     return (p as Ritual)["ingredients"] !== undefined
