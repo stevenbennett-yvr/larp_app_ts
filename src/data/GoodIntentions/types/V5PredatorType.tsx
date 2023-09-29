@@ -46,7 +46,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Alleycat",
         summary: "Ambush prey in alleys",
         backgrounds: [
-            { ...emptyBackground, id: "alleycat-contacts", name: "Contacts", freebiePoints: 2 },
+            { ...emptyBackground, id: "alleycat-contacts", name: "Contacts", freebiePoints: 2, advantages: [] },
             { ...emptyBackground, id: "alleycat-resources", name: "Resources", freebiePoints: 1, advantages: [{ ...emptyAdvantage, name: "Cash Money", freebiePoints: 1 }] },
         ],
         meritsAndFlaws: [],
@@ -57,7 +57,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Bagger",
         summary: "Feed on blood bags",
         backgrounds: [
-            { ...emptyBackground, id: "bagger-contacts", name: "Contacts", sphere: "underworld", freebiePoints: 2 }
+            { ...emptyBackground, id: "bagger-contacts", name: "Contacts", sphere: "underworld", freebiePoints: 2, advantages: [] }
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'bagger-IronGullet', name: "Iron Gullet", freebiePoints: 3, note: "able to feed on rancid blood" },
@@ -70,8 +70,8 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Cleaver",
         summary: "Feed on friends and family",
         backgrounds: [
-            { ...emptyBackground, id: "cleaver-herd", name: "Herd", freebiePoints: 2 },
-            { ...emptyBackground, id: "cleaver-mask", name: "Mask", freebiePoints: 2 },
+            { ...emptyBackground, id: "cleaver-herd", name: "Herd", freebiePoints: 2, advantages: [] },
+            { ...emptyBackground, id: "cleaver-mask", name: "Mask", freebiePoints: 2, advantages: [] },
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'bagger-DarkSecret', name: "Dark Secret", freebiePoints: 1, note: "You are a cleaver" },
@@ -83,7 +83,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Consensualist",
         summary: "Take blood only from the willing",
         backgrounds: [
-            { ...emptyBackground, id: "consensualist-herd", name: "Herd", freebiePoints: 3 }
+            { ...emptyBackground, id: "consensualist-herd", name: "Herd", freebiePoints: 3, advantages: [] }
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'consensualist-DarkSecret', name: "Dark Secret", freebiePoints: 1, note: "Masquerade Breacher" },
@@ -96,9 +96,9 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Extortionist",
         summary: "Strong-arm prey into giving you their blood",
         backgrounds: [
-            { ...emptyBackground, id: "extortionist-resources", name: "Resources", freebiePoints: 1 },
-            { ...emptyBackground, id: "extortionist-contacts", name: "Contacts" },
-            { ...emptyBackground, id: "extortionist-allies", name: "Allies" },
+            { ...emptyBackground, id: "extortionist-resources", name: "Resources", freebiePoints: 1, advantages: [] },
+            { ...emptyBackground, id: "extortionist-contacts", name: "Contacts", freebiePoints: 1, advantages: [] },
+            { ...emptyBackground, id: "extortionist-allies", name: "Allies", freebiePoints: 1, advantages: [] },
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'extortionist-Enemy', name: "Enemy", freebiePoints: 2, note: "(Police or Victim)" },
@@ -157,7 +157,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Osiris",
         summary: "Feed on your followers",
         backgrounds: [
-            { ...emptyBackground, id: "osiris-mask", name: "Mask", freebiePoints: 2 },
+            { ...emptyBackground, id: "osiris-mask", name: "Mask", freebiePoints: 2, advantages: [] },
         ],
         meritsAndFlaws: [
         ],
@@ -167,7 +167,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
     Sandman: {
         name: "Sandman",
         backgrounds: [
-            { ...emptyBackground, id: "sandman-mask", name: "Mask", freebiePoints: 0 },
+            { ...emptyBackground, id: "sandman-mask", name: "Mask", freebiePoints: 1, advantages: [] },
         ],
         summary: "Break into homes and feed on sleeping prey",
         meritsAndFlaws: [
@@ -180,9 +180,9 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Scene Queen",
         summary: "Feed in your scene / subculture",
         backgrounds: [
-            { ...emptyBackground, id: "sceneQueen-mask", name: "Mask", freebiePoints: 2 },
-            { ...emptyBackground, id: "sceneQueen-fame", name: "Fame", freebiePoints: 1 },
-            { ...emptyBackground, id: "sceneQueen-herd", name: "Herd", freebiePoints: 2 },
+            { ...emptyBackground, id: "sceneQueen-mask", name: "Mask", freebiePoints: 2, advantages: [] },
+            { ...emptyBackground, id: "sceneQueen-fame", name: "Fame", freebiePoints: 1, advantages: [] },
+            { ...emptyBackground, id: "sceneQueen-herd", name: "Herd", freebiePoints: 2, advantages: [] },
         ],
         meritsAndFlaws: [],
         humanityChange: 0,
@@ -193,8 +193,8 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Siren",
         summary: "Seduce prey and take their blood",
         backgrounds: [
-            { ...emptyBackground, id: "siren-herd", name: "Herd", freebiePoints: 0 },
-            { ...emptyBackground, id: "siren-fame", name: "Fame", freebiePoints: 0 },
+            { ...emptyBackground, id: "siren-herd", name: "Herd", freebiePoints: 1, advantages: [] },
+            { ...emptyBackground, id: "siren-fame", name: "Fame", freebiePoints: 1, advantages: [] },
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'siren-Enemy', name: "Enemy", freebiePoints: 1, note: "(spurned lover or jealous partner)" },

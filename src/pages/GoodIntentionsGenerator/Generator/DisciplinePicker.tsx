@@ -2,10 +2,11 @@ import { Table, Text, Center, Grid, Tooltip, Image, Card, Title, NumberInput, St
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { globals } from "../../../assets/globals"
 import { Clans } from "../../../data/GoodIntentions/types/V5Clans"
-import { DisciplineName, allDisciplines, disciplines, disciplineKeySchema, DisciplineKey } from "../../../data/GoodIntentions/types/V5Disciplines"
-import { Power, getFilteredPower } from "../../../data/GoodIntentions/types/V5Powers"
+import { v5DisciplineLevel, DisciplineName, disciplines, disciplineKeySchema, DisciplineKey, allDisciplines } from "../../../data/GoodIntentions/types/V5Disciplines"
+import { Power, getFilteredPower, handlePowerChange, powerRefs, removePower, allPowers } from "../../../data/GoodIntentions/types/V5Powers"
 import { upcase } from "../../../utils/case"
 import { useEffect, useState } from "react"
+import RitualsModal from "./RitualModal"
 
 type DisciplinesPickerProps = {
     kindred: Kindred,
@@ -18,13 +19,28 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
 
-    const disciplinesForClan = Clans[kindred.clan].disciplines;
-    const otherDisciplines = allDisciplines.filter((disciplineName) => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const handleCloseModal = () => {
+        setKindred({
+            ...kindred,
+            rituals: [],
+            ceremonies:[],
+        })
+        setModalOpen(false);
+    };
+
+    let mostDisciplines = allDisciplines.filter((disciplineName) => {
+        return disciplineName !== "thin-blood alchemy";
+    })
+
+    const disciplinesForClan = kindred.clan === "Caitiff" ? mostDisciplines : Clans[kindred.clan].disciplines;
+    const otherDisciplines = mostDisciplines.filter((disciplineName) => {
         // Add a condition to filter out "thin blood alchemy"
-        return !disciplinesForClan.includes(disciplineName) && disciplineName !== "thin-blood alchemy";
+        return !disciplinesForClan.includes(disciplineName);
     });
 
     const [inClanFirst, inClanSecond, inClanThird] = disciplinesForClan;
+
     const [inClanDots, setInClanDots] = useState<number[]>(
         [kindred.disciplines[inClanFirst].creationPoints, kindred.disciplines[inClanSecond].creationPoints, kindred.disciplines[inClanThird].creationPoints]
     );
@@ -45,7 +61,8 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
 
         setKindred({
             ...kindred,
-            disciplines: updatedDisciplines
+            disciplines: updatedDisciplines,
+            powers: []
         })
     }
 
@@ -57,8 +74,6 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
         const isMaxedOut = totalPoints === 4;
 
         const isCategoryCreationPointsZero = kindred.disciplines[discipline].creationPoints === 0;
-
-        console.log(isMaxedOut && isCategoryCreationPointsZero, inClanDots)
 
         const isDisabled = isMaxedOut && isCategoryCreationPointsZero ? true : (!inClan && !(inClanDots.includes(1) && inClanDots.includes(2)));
         const maxPoints = isMaxedOut ? 0 : inClanDots.includes(2) ? 1 : 2;
@@ -128,8 +143,44 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
         return discipline.creationPoints > 0;
     })
 
-    const createPowerAccordion = (discipline: DisciplineKey) => {
+    const handleSelect = (power: Power) => {
+        const powerRef = powerRefs.find((p) => p.name === power.name)
+        if (powerRef && !kindred.powers.some(existingPower => existingPower.name === power.name)) {
+            handlePowerChange(kindred, setKindred, powerRef, "creationPoints", 1)
+        }
+    }
 
+    const handleDeselect = (power: Power) => {
+        const powerRef = powerRefs.find((p) => p.name === power.name)
+        if (powerRef) {
+            removePower(kindred, setKindred, powerRef)
+        }
+    }
+
+    const getHighestSelectedLevelInDiscipline = (kindred: Kindred, disciplineCategory: DisciplineKey) => {
+        let highestLevel = 0;
+
+        kindred.powers.forEach((power) => {
+            let powerData = allPowers.find((p) => power.name === p.name)
+            if (!powerData) { return 0 }
+            if (powerData.discipline === disciplineCategory && powerData.level > highestLevel) {
+                highestLevel = powerData.level;
+            }
+        });
+
+        return highestLevel;
+    };
+
+    const disciplinePowersSelected = (kindred: Kindred, discipline: DisciplineKey) => {
+        const selectedPowers = kindred.powers.filter((power) => {
+            const matchingPower = allPowers.find((p) => power.name === p.name);
+            return matchingPower?.discipline === discipline;
+        });
+
+        return selectedPowers.length < v5DisciplineLevel(kindred, discipline).level;
+    };
+
+    const createPowerAccordion = (discipline: DisciplineKey) => {
         const filteredPowers = learnablePowers.filter((power) => power.discipline.toLowerCase() === discipline.toLowerCase())
 
         filteredPowers.sort((a, b) => {
@@ -138,6 +189,9 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
             }
             return a.name.localeCompare(b.name);
         });
+
+        // Count the number of selected powers in the current discipline
+        const selectedPowersInDiscipline = kindred.powers.filter((power) => allPowers.find((p) => power.name === p.name)?.discipline === discipline);
 
         return (
             <div>
@@ -153,36 +207,44 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredPowers.map((power) => (
-                                    <tr key={`${power.name} desktop`}>
-                                        <td>
-                                            <Text fz={globals.smallerFontSize} style={{ color: "white" }}>{power.name}</Text>
-                                            <Image
-                                                fit="contain"
-                                                withPlaceholder
-                                                src={disciplines[discipline].logo}
-                                                height={30}
-                                                width={30}
-                                                alt="order"
-                                            />
-                                            <p style={{ color: "white" }}>{power.discipline} {power.level} {power.amalgamPrerequisites.length > 0 ? `+ ${power.amalgamPrerequisites[0].discipline} ${power.amalgamPrerequisites[0].level}` : ""}</p>
-                                        </td>
-                                        <td dangerouslySetInnerHTML={{ __html: `${power.summary} <p>Rote Pool: ${power.dicePool}  ()</p>` }} />
-                                        <td>
-
-                                        </td>
-                                    </tr>
-                                ))}
+                                {filteredPowers.map((power) => {
+                                    const isPowerSelected = selectedPowersInDiscipline.some((p) => p.name === power.name);
+                                    return (
+                                        <tr key={`${power.name} desktop`}>
+                                            <td>
+                                                <Text fz={globals.smallerFontSize} style={{ color: "white" }}>{power.name}</Text>
+                                                <Image
+                                                    fit="contain"
+                                                    withPlaceholder
+                                                    src={disciplines[discipline].logo}
+                                                    height={30}
+                                                    width={30}
+                                                    alt="order"
+                                                />
+                                                <p style={{ color: "white" }}>{power.discipline} {power.level} {power.amalgamPrerequisites.length > 0 ? `+ ${power.amalgamPrerequisites[0].discipline} ${power.amalgamPrerequisites[0].level}` : ""}</p>
+                                            </td>
+                                            <td dangerouslySetInnerHTML={{ __html: `${power.summary} <p>Rote Pool: ${power.dicePool}  ()</p>` }} />
+                                            <td>
+                                                {isPowerSelected ? (
+                                                    <Button color="red" onClick={() => { handleDeselect(power); }}>Deselect</Button>
+                                                ) : (
+                                                    disciplinePowersSelected(kindred, discipline) && (getHighestSelectedLevelInDiscipline(kindred, discipline) >= power.level - 1) ? (
+                                                        <Button color="gray" onClick={() => { handleSelect(power); }}>Select</Button>
+                                                    ) : (
+                                                        <Button disabled>Select</Button>
+                                                    )
+                                                )}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </Table>
                     </Accordion.Panel>
                 </Accordion.Item>
             </div>
         )
-
     }
-
-
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '120px' : '60px' }}>
             <Stack mt={"xl"} align="center" spacing="xl">
@@ -200,18 +262,30 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
                 </Group>
                 <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">In-Clan</Text>
 
-                <Grid columns={isPhoneScreen ? 4 : 6} grow m={0}>
-                    {
-                        disciplinesForClan.map((o) => disciplineKeySchema.parse(o)).map((discipline) => createDisciplinePicker(discipline, true))
-                    }
-                </Grid>
-                <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Out-of-Clan</Text>
+                {kindred.clan === "Caitiff" ?
+                    <Grid columns={isPhoneScreen ? 4 : 8} grow m={0}>
+                        {
+                            disciplinesForClan.map((o) => disciplineKeySchema.parse(o)).map((discipline) => createDisciplinePicker(discipline, true))
+                        }
+                    </Grid>
+                    :
+                    <div>
+                        <Grid columns={isPhoneScreen ? 4 : 6} grow m={0}>
+                            {
+                                disciplinesForClan.map((o) => disciplineKeySchema.parse(o)).map((discipline) => createDisciplinePicker(discipline, true))
+                            }
+                        </Grid>
+                        <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Out-of-Clan</Text>
 
-                <Grid columns={isPhoneScreen ? 4 : 8} grow m={0}>
-                    {
-                        otherDisciplines.map((o) => disciplineKeySchema.parse(o)).map((discipline) => createDisciplinePicker(discipline, false))
-                    }
-                </Grid>
+                        <Grid columns={isPhoneScreen ? 4 : 8} grow m={0}>
+                            {
+                                otherDisciplines.map((o) => disciplineKeySchema.parse(o)).map((discipline) => createDisciplinePicker(discipline, false))
+                            }
+                        </Grid>
+                    </div>
+                }
+
+
                 <Center>
                     <Accordion>
                         {
@@ -220,6 +294,8 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
                     </Accordion>
                 </Center>
             </Stack>
+
+            <RitualsModal modalOpened={modalOpen} closeModal={handleCloseModal} kindred={kindred} setKindred={setKindred} nextStep={nextStep} />
 
             <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                 <Group>
@@ -234,7 +310,10 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
                         <Button
                             style={{ margin: "5px" }}
                             color="gray"
-                            onClick={nextStep}
+                            onClick={() => 
+                                setModalOpen(true)
+                            }
+                            disabled={(knownDisciplines as DisciplineKey[]).some((d) => disciplinePowersSelected(kindred, d))}
                         >
                             Next
                         </Button>

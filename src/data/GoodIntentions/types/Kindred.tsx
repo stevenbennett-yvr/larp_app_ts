@@ -6,9 +6,10 @@ import { predatorTypeNameSchema } from './V5PredatorType';
 import { specialtySchema } from './V5Specialties';
 import { v5BackgroundRefSchema } from './V5Backgrounds';
 import { disciplinesSchema } from './V5Disciplines';
-import { ritualSchema } from './V5Rituals';
-import { Power, powerSchema } from './V5Powers';
+import { ritualRefSchema } from './V5Rituals';
+import { Power, powerRefSchema } from './V5Powers';
 import { v5MeritFlawRefSchema } from './V5MeritsOrFlaws';
+import { ceremonyRefSchema } from './V5Ceremonies';
 
 export const v5BackgroundSchema = z.object({
     history: z.string(),
@@ -17,7 +18,7 @@ export const v5BackgroundSchema = z.object({
 })
 
 export const BasicSchema = z.object({
-    creationPoints: z.number().min(0).max(1).int(),
+    creationPoints: z.number().min(0).int(),
     freebiePoints: z.number().min(0).int(),
     experiencePoints: z.number().min(0).int(),
 })
@@ -44,8 +45,9 @@ export const kindredSchema = z.object({
     skills: v5skillsSchema,
     skillSpecialties: specialtySchema.array(),
     disciplines: disciplinesSchema,
-    powers: powerSchema.array(),
-    rituals: ritualSchema.array(),
+    powers: powerRefSchema.array(),
+    rituals: ritualRefSchema.array(),
+    ceremonies: ceremonyRefSchema.array(),
 
     backgrounds: v5BackgroundRefSchema.array(),
     meritsFlaws: v5MeritFlawRefSchema.array(),
@@ -134,6 +136,7 @@ export const getEmptyKindred = (): Kindred => {
         },
         powers: [],
         rituals: [],
+        ceremonies: [],
 
         backgrounds: [],
         meritsFlaws: [],
@@ -141,3 +144,5 @@ export const getEmptyKindred = (): Kindred => {
 }
 
 export const containsBloodSorcery = (powers: Power[]) => powers.filter((power) => power.discipline === "blood sorcery").length > 0
+
+export const containsOblivion = (powers: Power[]) => powers.filter((power) => power.discipline === "oblivion").length > 0

@@ -97,19 +97,28 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
     }))
     const userBackgrounds = kindred.backgrounds; // Replace with the actual user's backgrounds
     const backgroundsToExclude = ["Contacts", "Allies", "Haven", "Mask"];
+    const hasObviousPredator = kindred.meritsFlaws.some(entry => entry.name === "Obvious Predator");
 
-    const filteredSelectData = selectData.filter((background) => {
+
+    let filteredSelectData = selectData.filter((background) => {
         const backgroundName = background.value;
-
+    
         // Check if there is no object in userBackgrounds with a matching name
         const isNotInUserBackgrounds = !userBackgrounds.some((bg) => bg.name === backgroundName);
-
+    
         // Check if the backgroundName is in the exceptions list
         const isException = backgroundsToExclude.includes(backgroundName);
-
-        // Keep the background if it's not in userBackgrounds or is an exception
-        return isNotInUserBackgrounds || isException;
+    
+        // Check if the backgroundName is "Herd" and the user has "Obvious Predator"
+        const isHerdAndObviousPredator = backgroundName === "Herd" && hasObviousPredator;
+    
+        // Keep the background if it's not in userBackgrounds, is an exception, or is "Herd" with "Obvious Predator"
+        return isNotInUserBackgrounds || isException || isHerdAndObviousPredator;
     });
+
+    if (hasObviousPredator) {
+        filteredSelectData = filteredSelectData.filter((background) => background.value !== "Herd");
+    }
 
     interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
         label: string;
@@ -127,11 +136,13 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
         )
     );
 
+            console.log(v5BackgroundRefs)
+
     const handleBackgroundBuy = (selectedBackground: string) => {
         let newBackgroundRef = v5BackgroundRefs.find((b) => b.name === selectedBackground)
         if (!newBackgroundRef) { return }
 
-        let newBackground = { ...newBackgroundRef, id: `${newBackgroundRef.id}-${Date.now()}}` }
+        let newBackground = { ...newBackgroundRef, id: `${newBackgroundRef.id}-${Date.now()}}`, advantages: [] }
         if ((selectedBackground === 'Allies' || selectedBackground === 'Contacts') && selectedSphere) {
             console.log(selectedSphere)
             newBackground = {...newBackground, sphere: selectedSphere}

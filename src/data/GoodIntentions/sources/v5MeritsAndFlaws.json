@@ -334,14 +334,6 @@
         "source": "LOTN5 pg.185"
     },
     {
-        "name": "Awkward Mobility",
-        "category": "physical",
-        "type": "flaw",
-        "cost": [2],
-        "description": "You can't use a Willpower point to stay awake at sunrise unless not doing so would put you in danger. Additionally, whenever you use Willpower to stay awake (even in danger), you must spend an extra Willpower point.",
-        "source": "LOTN5 pg.185"
-    },
-    {
         "name": "Low Pain Threshold",
         "category": "physical",
         "type": "flaw",

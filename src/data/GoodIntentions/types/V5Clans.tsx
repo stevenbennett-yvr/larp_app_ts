@@ -204,19 +204,19 @@ export const Clans: Record<ClanName, Clan> = {
         description: "Exhibiting no discernable lineage, the Caitiffs are vampires without a clan. Distrusted by their peers, they are scorned because of their lack of lineage but also feared for their unpredictability. Jacks of all trades but masters of none, each Pander makes their own way in the society of the damned, free from ancestry and expectations both.",
         logo: GoodIntentions.caitiffLogo,
         symbol: GoodIntentions.caitiffSymbol,
-        bane: "Outcast - Untouched by their ancestors, the Caitiff do not share a common Bane. The character begins with the Flaw Suspect (•) and they may not purchase positive status during Character Creation. The Storyteller may impose a 1-2 penalty to social tests against Kindred who know they are Caitiff. To improve a Discipline, the cost is 6 times the level of experience points.",
+        bane: "Outcast - No matter the sect, a known Caitiff requires 2 additional Support beyond the normal to gain a dot of Status.",
         compulsion: "Caitiffs do not have a clan Compulsion"
     },
     "Thin-Blood": {
         name: "Thin-Blood",
         disciplines: [],
-        nicknames: "The Clanless, Panders, Orphans, Trash, Scum, Freestylers",
-        summary: "Those of a flawed or unknown lineage.",
+        nicknames: "Duskborn, Mercurians, The Young Ones, Run-Off, Chameleons, Abortions",
+        summary: "Neither vampire nor mortal, something different.",
         description: "Exhibiting no discernable lineage, the Caitiffs are vampires without a clan. Distrusted by their peers, they are scorned because of their lack of lineage but also feared for their unpredictability. Jacks of all trades but masters of none, each Pander makes their own way in the society of the damned, free from ancestry and expectations both.",
-        logo: GoodIntentions.caitiffLogo,
-        symbol: GoodIntentions.caitiffSymbol,
-        bane: "Outcast - Untouched by their ancestors, the Caitiff do not share a common Bane. The character begins with the Flaw Suspect (•) and they may not purchase positive status during Character Creation. The Storyteller may impose a 1-2 penalty to social tests against Kindred who know they are Caitiff. To improve a Discipline, the cost is 6 times the level of experience points.",
-        compulsion: "Caitiffs do not have a clan Compulsion"
+        logo: GoodIntentions.thinBloodLogo,
+        symbol: GoodIntentions.thinBloodSymbol,
+        bane: "Thin-bloods do not suffer from a Bane.",
+        compulsion: "Thin-bloods do not suffer from a clan Compulsion."
     },
     "": {
         name: "",

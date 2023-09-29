@@ -3,6 +3,14 @@ import { DisciplineKey, disciplineNameSchema, v5DisciplineLevel } from './V5Disc
 import { Ritual } from './V5Rituals';
 import { Kindred } from './Kindred';
 
+export const powerRefSchema = z.object({
+    name: z.string(),
+    creationPoints: z.number(),
+    freebiePoints: z.number(),
+    experiencePoints: z.number()
+})
+export type PowerRef=z.infer<typeof powerRefSchema>
+
 export const amalgamPrerequisiteSchema = z.object({
     discipline: disciplineNameSchema,
     level: z.number().min(1).int(),
@@ -128,6 +136,46 @@ export const allPowers:Power[] = [
     { name: "Touch of Oblivion", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "decay a living or unliving body", dicePool: "", level: 3, discipline: "oblivion" },
 
 ] as Power[]
+
+export const powerRefs: PowerRef[] = allPowers.map((power) => ({
+    name: power.name,
+    creationPoints: 0,
+    freebiePoints: 0,
+    experiencePoints: 0,
+}))
+
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
+
+export const handlePowerChange = (
+    kindred: Kindred,
+    setKindred: Function,
+    power: PowerRef,
+    type: VariableKeys,
+    newPoints: number
+): void => {
+    const existingPower = kindred.powers.find((p) => p.name === power.name)
+
+    if (existingPower) {
+        const updatedPowers = kindred.powers.map((p) =>
+            p.name === power.name ? { ...p, [type]: newPoints } : p
+        );
+        setKindred({...kindred, powers: updatedPowers})
+    } else {
+        setKindred({
+            ...kindred,
+            powers: [...kindred.powers, { ...power, [type]: newPoints}]
+        })
+    }
+}
+
+export const removePower = (
+    kindred: Kindred,
+    setKindred: Function,
+    power: PowerRef,
+): void => {
+    const updatedPowers = kindred.powers.filter((p) => p.name !== power.name);
+    setKindred({...kindred, powers: updatedPowers})
+}
 
 export const getFilteredPower = (kindred:Kindred): Power[] => {
     const userDisciplines = [] as { discipline: DisciplineKey, level:number }[];
