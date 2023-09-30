@@ -1,12 +1,13 @@
 import { faCircleUp, faCircleDown } from "@fortawesome/free-solid-svg-icons"
-import { Modal, Stack, Text, Button, Title } from "@mantine/core"
+import { Modal, Stack, Text, Button, Title, Select } from "@mantine/core"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { PredatorTypeName, PredatorTypes } from "../../../data/GoodIntentions/types/V5PredatorType"
-import { v5BackgroundLevel, v5AdvantageLevel } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { PredatorType, PredatorTypeName, PredatorTypes } from "../../../data/GoodIntentions/types/V5PredatorType"
+import { v5BackgroundLevel, v5AdvantageLevel, V5SphereKey } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { backgroundData } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { globals } from "../../../assets/globals"
 import { meritFlawData, v5MeritLevel } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws"
+import { SphereSelectData } from "../../../data/GoodIntentions/types/V5Backgrounds"
 
 type PredatorModalProps = {
     modalOpened: boolean
@@ -15,6 +16,8 @@ type PredatorModalProps = {
     pickedPredatorType: PredatorTypeName,
     setKindred: (character: Kindred) => void
     nextStep: () => void
+    predatorData: any,
+    setPredatorData: (predatorData: PredatorType) => void
 }
 
 const flawIcon = () => {
@@ -24,7 +27,8 @@ const meritIcon = () => {
     return <FontAwesomeIcon icon={faCircleUp} style={{ color: "rgb(47, 158, 68)", }} />
 }
 
-const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep, pickedPredatorType }: PredatorModalProps) => {
+const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep, pickedPredatorType, predatorData, setPredatorData }: PredatorModalProps) => {
+    
 
     return (
         <Modal
@@ -48,8 +52,43 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                         <div dangerouslySetInnerHTML={{ __html: backgroundInfo?.summary }} />
 
                                     </Text>
+                                    {background.sphere && background.sphere.length > 1 ? 
+                                    <Select
+                                        label="Pick Sphere for Background"
+                                        placeholder="Pick sphere"
+                                        data={background.sphere}
+                                        defaultValue=""
+                                        clearable
+                                        onChange={(val) => {
+                                            const updatedBackground = { ...background };
+                                            updatedBackground.sphere = [val as V5SphereKey];
+                                            const index = predatorData.backgrounds.findIndex((b:any) => b.id === background.id);
+                                            const newBackgrounds = [...predatorData.backgrounds];
+                                            newBackgrounds[index] = updatedBackground;
+                                            setPredatorData({...predatorData, backgrounds: newBackgrounds})
+                                          }}
+                                    />
+                                    : 
+                                    <></>}
+                                {background.sphere && background.sphere.length === 0 ? 
+                                    <Select
+                                        label="Pick Sphere for Background"
+                                        placeholder="Pick sphere"
+                                        data={SphereSelectData}
+                                        defaultValue=""
+                                        clearable
+                                        onChange={() => {
+
+                                          }}
+                                    />
+                                    : 
+                                    <></>}
+                                    
                                     {background.advantages && background.advantages.length > 0 && (
-                                        <ul>
+                                    
+                                    
+                                    
+                                    <ul>
                                             {background.advantages.map((advantage) => {
                                                 let advantageInfo = backgroundInfo?.advantages?.find(entry => entry.name === advantage.name)
                                                 const icon = advantageInfo?.type === "disadvantage" ? flawIcon() : meritIcon()
@@ -97,9 +136,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                 <Button
                     onClick={() => {
                         setKindred({
-                            ...kindred, predatorType: {
-                                name: pickedPredatorType,
-                            },
+                            ...kindred, 
                             backgrounds: PredatorTypes[pickedPredatorType].backgrounds,
                             meritsFlaws: PredatorTypes[pickedPredatorType].meritsAndFlaws,
                             humanity: {...kindred.humanity, creationPoints: 7 + PredatorTypes[pickedPredatorType].humanityChange}

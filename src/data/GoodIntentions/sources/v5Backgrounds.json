@@ -5,6 +5,7 @@
         "summary": "Mortals who will carry out activities on your behalf.",
         "description": "<ul><li>You can cultivate mortal Allies who help you unknowingly as a vampire.</li><li>Allies may assist you occasionally, but maintain their own lives.</li><li>Build a balanced relationship; help them in return for better support.</li><li>Each Ally can be used once per game session.</li><li>Ally levels: <ul><li>Level 1: Weak mortal - pool of 3 in specialization, 4 Health levels.</li><li>Level 2: Average mortal - pool of 5 in specialization, 5 Health levels.</li><li>Level 3: Gifted mortal - pool of 7 in specialization, 6 Health levels.</li></ul></li></ul>",
         "source": "LOTN5 pg.146",
+        "icon": "faUserGroup",
         "advantages": [
             {
                 "name": "At Arm's Length",
@@ -70,7 +71,9 @@
         "name": "Familiar",
         "summary": "An animal ghoul assistant.",
         "description": "<ul><li>Your Familiar is a ghoul animal, controlled through Animalism or training.</li><li>Size and traits depend on the Familiar's level: <ul><li>Level 1: Small (bird or cat), 2 Health levels, Physical test pools of 3, Mental and Social test pools of 1.</li><li>Level 2: Medium-sized (dog or wolf), 4 Health levels, Physical test pools of 5, Mental and Social test pools of 1.</li><li>Level 3: Large (bear or tiger), 6 Health levels, Physical test pools of 7, Mental and Social test pools of 1.</li></ul></li><li>You can choose a higher-level companion of a smaller size.</li><li>Choose one Discipline (Celerity, Potence, or Fortitude) for your Familiar, which gains both level-one powers of that Discipline.</li></ul>",
-        "source": "LOTN5 pg.148"
+        "source": "LOTN5 pg.148",
+        "icon": "faCat"
+
     },
     {
         "class": "Mortal Connections",
@@ -78,6 +81,7 @@
         "summary": "A mortal who is a source of information.",
         "description": "<ul><li>Contacts are professional connections for information.</li><li>They share insider knowledge and rarely ask for favors.</li><li>Use them for insights within their Sphere(s) or receive calls about intriguing matters.</li><li>Level 1: Low-level employee, general insider knowledge.</li><li>Level 2: Middle management, access to hidden information, some influence.</li><li>Level 3: Senior management, access to sensitive information, significant influence.</li></ul>",
         "source": "LOTN5 pg.148",
+        "icon": "faAddressBook",
         "advantages": [
             {
                 "name": "At Arm's Length",
@@ -116,6 +120,7 @@
         "summary": "The level to which you are well-known in public.",
         "description": "<ul><li>Famous in a specific Sphere of Influence.</li><li>Recognition and favors likely within that Sphere.</li><li>+1 to mundane Social challenges per Fame dot.</li><li>Increased visibility but also potential drawbacks.</li><li>Levels: Level 1 - Some recognition; Level 2 - Local following; Level 3 - Citywide recognition.</li></ul>",
         "source": "LOTN5 pg.150",
+        "icon": "faFaceGrinStars",
         "advantages": [
             {
                 "name": "Fan Club",
@@ -152,6 +157,7 @@
         "name": "Haven",
         "summary": "Your safe haven and resting place.",
         "description": "<ul><li>A place to slumber during the day, safe from sunlight</li><li>Size 1: A small basement or aparment. Big enough for yourself and one other.</li><li>Size 2: A single family home or a nice 3-4 bedroom apartment. Gain one free Advantage to add to your Haven. Requires Resources 1</li><li>Size 3: Penhouse-quality apartment, private estate or mansion. Can comfortably house yourself and nine others. Gain one additional free Advantage to add to your Haven (total of two free). Requires Resources 3</li></ul>",
+        "icon": "faHouseChimney",
         "advantages": [
             {
                 "name": "Armory",
@@ -312,9 +318,10 @@
     {
         "class": "Mortal Connections",
         "name": "Herd",
-        "summary": "Mortals who are sources of stable feeding.",
+        "summary": "Mortals who are a source of feeding.",
         "description": "<ul><li>You have a reliable group of humans as a safe and consistent source of food.</li><li>During a game session, you can Slake Hunger equal to your Herd rating. Each use requires five minutes out of play, but you can't reduce your Hunger to zero without killing a victim.</li><li>Be cautious not to overfeed; losing Herd dots may require finding a new Herd, and you can regain one dot per game starting the month after a loss.</li><li>Level 1 has random Resonance and no Dyscrasia. Level 2 lets you choose one Resonance each month, with a random Dyscrasia. Level 3 allows you to choose two Resonances per month, select your Resonance type when feeding, and choose one Dyscrasia from the ingested Resonance types.</li></ul>",
         "source": "LOTN5 pg.155",
+        "icon": "faCow",
         "advantages": [
             {
                 "name": "Friendly",
@@ -357,9 +364,10 @@
     {
         "class": "Mortal Connections",
         "name": "Mask",
-        "summary": "Your cover for your true identity as an undying creature of the night.",
+        "summary": "Your cover for your true identity.",
         "description": "<ul><li>A Mask is what a vampire uses to blend into mortal society, providing a fake identity, profession, and background.</li><li>When purchasing Mask dots, create a pseudonym and a brief summary of your fake identity, including profession, place of birth, education, and more.</li><li>Level 1 allows your Mask to pass routine inspections; Level 2 passes state-level background checks, and Level 3 withstands intense investigations, even from national government agents.</li><li>If needed, you can temporarily lose your Mask dots due to specific events like arrest or injury, regaining them by finding a Cobbler to create a new Mask.</li></ul>",
-        "source": "LOTN5 pg.156"
+        "source": "LOTN5 pg.156",
+        "icon": "faMasksTheater"
     },
     {
         "class": "Mortal Connections",
@@ -367,6 +375,7 @@
         "summary": "Your income and lifestyle.",
         "description": "<ul><li>Money can buy comfort, equipment, and assistance, making the world go around.</li><li>With no dots in Resources, you're in the lower-middle class, with about $300 per month available for non-essential expenses.</li><li>Level 1 provides $2,500 monthly, Level 2 offers $20,000, and Level 3 provides $100,000 in disposable income each month.</li><li>You can pool Resources with other characters or spend beyond your allotment by month-to-month basis.</li></ul>",
         "source": "LOTN5 pg.157",
+        "icon": "faCoins",
         "advantages": [
             {
                 "name": "Cash Money",

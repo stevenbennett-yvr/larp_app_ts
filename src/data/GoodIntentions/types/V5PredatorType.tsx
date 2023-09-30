@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { v5BackgroundRefSchema, emptyBackground, emptyAdvantage } from "./V5Backgrounds";
+import { v5BackgroundRefSchema, emptyBackground, emptyAdvantage, sphereOfInfluenceSchema } from "./V5Backgrounds";
 import { v5attributesKeySchema } from "./V5Attributes";
 import { v5skillsKeySchema } from "./V5Skills";
 import { v5MeritFlawRefSchema, emptyMeritFlaw } from "./V5MeritsOrFlaws";
@@ -23,20 +23,33 @@ export const predatorTypeNameSchema = z.union([
 ])
 export type PredatorTypeName = z.infer<typeof predatorTypeNameSchema>
 
+export const selectableBackgroundsSchema = z.object({
+    options: v5BackgroundRefSchema.array(),
+    totalPoints: z.number().int(),
+})
+
+export const selectableMeritFlawSchema = z.object({
+    options: v5MeritFlawRefSchema.array(),
+    totalPoints: z.number().int(),
+})
+
 export const huntingPoolSchema =
-    z.object({
-        attribute: v5attributesKeySchema,
-        skill: v5skillsKeySchema,
-    }
+        z.object({
+            attribute: v5attributesKeySchema,
+            skill: v5skillsKeySchema,
+        }
     )
 
 export const predatorTypeSchema = z.object({
-    name: z.string(),
+    name: predatorTypeNameSchema,
     summary: z.string(),
     backgrounds: v5BackgroundRefSchema.array(),
     meritsAndFlaws: v5MeritFlawRefSchema.array(),
     humanityChange: z.number().int(),
     huntingPool: huntingPoolSchema.optional(),
+    selectableSpheres: sphereOfInfluenceSchema.array(),
+    selectableBackground: selectableBackgroundsSchema,
+    selectableMeritFlaw: selectableMeritFlawSchema,
 })
 export type PredatorType = z.infer<typeof predatorTypeSchema>
 
@@ -46,25 +59,32 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Alleycat",
         summary: "Ambush prey in alleys",
         backgrounds: [
-            { ...emptyBackground, id: "alleycat-contacts", name: "Contacts", freebiePoints: 2, advantages: [] },
+            { ...emptyBackground, id: "alleycat-contacts", name: "Contacts", freebiePoints: 2, advantages: [], sphere: ["underworld", "street"] },
             { ...emptyBackground, id: "alleycat-resources", name: "Resources", freebiePoints: 1, advantages: [{ ...emptyAdvantage, name: "Cash Money", freebiePoints: 1 }] },
         ],
         meritsAndFlaws: [],
         humanityChange: -1,
-        huntingPool: { attribute: "wits", skill: "streetwise" }
+        huntingPool: { attribute: "wits", skill: "streetwise" },
+        selectableBackground: { options: [], totalPoints: 0},
+        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableSpheres: [],
     },
     Bagger: {
         name: "Bagger",
         summary: "Feed on blood bags",
         backgrounds: [
-            { ...emptyBackground, id: "bagger-contacts", name: "Contacts", sphere: "underworld", freebiePoints: 2, advantages: [] }
+            { ...emptyBackground, id: "bagger-contacts", name: "Contacts", sphere: ["underworld"], freebiePoints: 2, advantages: [] }
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'bagger-IronGullet', name: "Iron Gullet", freebiePoints: 3, note: "able to feed on rancid blood" },
             { ...emptyMeritFlaw, id: 'bagger-Enemy', name: "Enemy", freebiePoints: 2, note: "Someone believes you owe them" },
         ],
         humanityChange: 0,
-        huntingPool: { attribute: "intelligence", skill: "larceny" }
+        huntingPool: { attribute: "intelligence", skill: "larceny" },
+        selectableBackground: { options: [], totalPoints: 0},
+        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableSpheres: [],
+
     },
     Cleaver: {
         name: "Cleaver",
@@ -77,7 +97,11 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
             { ...emptyMeritFlaw, id: 'bagger-DarkSecret', name: "Dark Secret", freebiePoints: 1, note: "You are a cleaver" },
         ],
         humanityChange: 0,
-        huntingPool: { attribute: "manipulation", skill: "subterfuge" }
+        huntingPool: { attribute: "manipulation", skill: "subterfuge" },
+        selectableBackground: { options: [], totalPoints: 0},
+        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableSpheres: [],
+
     },
     Consensualist: {
         name: "Consensualist",
@@ -91,20 +115,29 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         ],
         humanityChange: 1,
         huntingPool: { attribute: "manipulation", skill: "persuasion" },
+        selectableBackground: { options: [], totalPoints: 0},
+        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableSpheres: [],
+
     },
     Extortionist: {
         name: "Extortionist",
         summary: "Strong-arm prey into giving you their blood",
         backgrounds: [
             { ...emptyBackground, id: "extortionist-resources", name: "Resources", freebiePoints: 1, advantages: [] },
-            { ...emptyBackground, id: "extortionist-contacts", name: "Contacts", freebiePoints: 1, advantages: [] },
-            { ...emptyBackground, id: "extortionist-allies", name: "Allies", freebiePoints: 1, advantages: [] },
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'extortionist-Enemy', name: "Enemy", freebiePoints: 2, note: "(Police or Victim)" },
         ],
         humanityChange: 0,
-        huntingPool: { attribute: "manipulation", skill: "intimidation" }
+        huntingPool: { attribute: "manipulation", skill: "intimidation" },
+        selectableBackground: { options: [
+            { ...emptyBackground, id: "extortionist-contacts", name: "Contacts", freebiePoints: 0, sphere: [], advantages: [] },
+            { ...emptyBackground, id: "extortionist-allies", name: "Allies", freebiePoints: 0, sphere: [], advantages: [] }, 
+        ], totalPoints: 3},
+        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableSpheres: [],
+
     },
     Farmer: {
         name: "Farmer",
@@ -117,15 +150,23 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         ],
         humanityChange: 1,
         huntingPool: { attribute: "composure", skill: "animal ken" },
-    },
+        selectableBackground: { options: [], totalPoints: 0},
+        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableSpheres: [],
+
+        },
     Ferryman: {
         name: "Ferryman",
         summary: "Use your retainers to herd prey",
         backgrounds: [
-            { ...emptyBackground, id: "ferryman-allies", name: "Allies", freebiePoints: 2, advantages: [{ ...emptyAdvantage, name: "Retainer", freebiePoints: 2 }] }
+            { ...emptyBackground, id: "ferryman-allies", name: "Allies", freebiePoints: 2, advantages: [{ ...emptyAdvantage, name: "Retainer", freebiePoints: 2 }], sphere: [] }
         ],
         meritsAndFlaws: [],
         humanityChange: 0,
+        selectableBackground: { options: [], totalPoints: 0},
+        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableSpheres: [],
+
     },
     Graverobber: {
         name: "Graverobber",
@@ -139,6 +180,10 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         ],
         humanityChange: 0,
         huntingPool: { attribute: "wits", skill: "medicine" },
+        selectableBackground: { options: [], totalPoints: 0},
+        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableSpheres: [],
+
     },
     Hitcher: {
         name: "Hitcher",
@@ -152,6 +197,10 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         ],
         humanityChange: 0,
         huntingPool: { attribute: "wits", skill: "etiquette" },
+        selectableBackground: { options: [], totalPoints: 0},
+        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableSpheres: [],
+
     },
     Osiris: {
         name: "Osiris",
@@ -162,45 +211,75 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         meritsAndFlaws: [
         ],
         humanityChange: 0,
-        huntingPool: { attribute: "manipulation", skill: "subterfuge" }
+        huntingPool: { attribute: "manipulation", skill: "subterfuge" },
+        selectableBackground: { options: [
+            {...emptyBackground, id: "osiris-herd", name:"Herd" },
+            {...emptyBackground, id: "osiris-fame", name:"Fame" }
+        ], totalPoints: 3},
+        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableSpheres: [],
+
     },
     Sandman: {
         name: "Sandman",
         backgrounds: [
-            { ...emptyBackground, id: "sandman-mask", name: "Mask", freebiePoints: 1, advantages: [] },
         ],
         summary: "Break into homes and feed on sleeping prey",
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'sandman-PreyExclusion', name: "Prey Exclusion", freebiePoints: 1, note: "Conscious Mortals." },
         ],
         humanityChange: 0,
-        huntingPool: { attribute: "dexterity", skill: "stealth" }
+        huntingPool: { attribute: "dexterity", skill: "stealth" },
+        selectableBackground: { options: [
+            { ...emptyBackground, id: "sandman-mask1", name: "Mask" },
+            { ...emptyBackground, id: "sandman-mask2", name: "Mask" },
+            { ...emptyBackground, id: "sandman-mask3", name: "Mask" },
+            { ...emptyBackground, id: "sandman-mask4", name: "Mask" },
+        ], totalPoints: 4},
+        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableSpheres: [],
+
     },
     "Scene Queen": {
         name: "Scene Queen",
         summary: "Feed in your scene / subculture",
         backgrounds: [
             { ...emptyBackground, id: "sceneQueen-mask", name: "Mask", freebiePoints: 2, advantages: [] },
-            { ...emptyBackground, id: "sceneQueen-fame", name: "Fame", freebiePoints: 1, advantages: [] },
+            { ...emptyBackground, id: "sceneQueen-fame", name: "Fame", freebiePoints: 1, advantages: [], note:"Applies to Mask Background" },
             { ...emptyBackground, id: "sceneQueen-herd", name: "Herd", freebiePoints: 2, advantages: [] },
         ],
         meritsAndFlaws: [],
         humanityChange: 0,
         huntingPool: { attribute: "charisma", skill: "etiquette" },
-    },
+        selectableBackground: { options: [], totalPoints: 0},
+        selectableMeritFlaw: { options: [
+            { ...emptyMeritFlaw, id: "sceneQueen-enemy", name:"Enemy" },
+            { ...emptyMeritFlaw, id: "sceneQueen-boundToTheEarth", name:"Bound to the Earth" },
+            { ...emptyMeritFlaw, id: "sceneQueen-eeriePresence", name:"Eerie Presence" },
+            { ...emptyMeritFlaw, id: "sceneQueen-folkloricBlock", name:"Folkloric Block" },
+            { ...emptyMeritFlaw, id: "sceneQueen-Haunted", name:"Haunted" },
+            { ...emptyMeritFlaw, id: "sceneQueen-Stigmata", name:"Stigmata" },
+            { ...emptyMeritFlaw, id: "sceneQueen-TroubleMagnet", name:"Trouble Magnet" },
+        ], totalPoints: 2},
+        selectableSpheres: [],
 
+    },
     Siren: {
         name: "Siren",
         summary: "Seduce prey and take their blood",
-        backgrounds: [
-            { ...emptyBackground, id: "siren-herd", name: "Herd", freebiePoints: 1, advantages: [] },
-            { ...emptyBackground, id: "siren-fame", name: "Fame", freebiePoints: 1, advantages: [] },
-        ],
+        backgrounds: [],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'siren-Enemy', name: "Enemy", freebiePoints: 1, note: "(spurned lover or jealous partner)" },
         ],
         humanityChange: 0,
-        huntingPool: { attribute: "charisma", skill: "subterfuge" }
+        huntingPool: { attribute: "charisma", skill: "subterfuge" },
+        selectableBackground: { options: [
+            { ...emptyBackground, id: "siren-herd", name: "Herd" },
+            { ...emptyBackground, id: "siren-fame", name: "Fame" },
+        ], totalPoints: 5},
+        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableSpheres: [],
+
     },
     "": {
         name: "",
@@ -208,5 +287,20 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         backgrounds: [],
         meritsAndFlaws: [],
         humanityChange: 0,
+        selectableBackground: { options: [], totalPoints: 0},
+        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableSpheres: [],
+
     },
+}
+
+export const emptyPredatorType = {
+    name: "",
+    summary: "",
+    backgrounds: [],
+    meritsAndFlaws: [],
+    humanityChange: 0,
+    selectableBackground: { options: [], totalPoints: 0},
+    selectableMeritFlaw: { options: [], totalPoints: 0},
+    selectableSpheres: [],
 }

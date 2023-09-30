@@ -1,6 +1,6 @@
 import { Button, Divider, Grid, ScrollArea, Space, Stack, Text, Tooltip, Alert } from "@mantine/core"
 import { useState } from "react"
-import { PredatorTypes, PredatorTypeName } from "../../../data/GoodIntentions/types/V5PredatorType"
+import { PredatorTypes, PredatorTypeName, PredatorType } from "../../../data/GoodIntentions/types/V5PredatorType"
 import { globals } from "../../../assets/globals"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import PredatorModal from "./PredatorModal"
@@ -16,26 +16,33 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep, backStep }: Predato
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
 
-    const isVentrue = kindred.clan === "Ventrue"? true: false
+    const isVentrue = kindred.clan === "Ventrue" ? true : false
 
     const [pickedPredatorType, setPickedPredatorType] = useState<PredatorTypeName>("")
     const [modalOpen, setModalOpen] = useState(false);
     const handleCloseModal = () => {
         setPickedPredatorType('');
         setModalOpen(false);
+
     };
+    const [predatorData, setPredatorData] = useState<PredatorType>();
+
+    console.log(predatorData)
 
     const createButton = (predatorTypeName: PredatorTypeName, color: string) => {
 
         const meritsAndFlaws = PredatorTypes[predatorTypeName].meritsAndFlaws;
         const meritNamesToCheck = ["Iron Gullet", "Farmer", "Prey Exclusion"];
-        
+
+
+
         const hasDesiredMerits = meritsAndFlaws.some(merit => meritNamesToCheck.includes(merit.name));
-                return (
+        return (
             <Tooltip label={PredatorTypes[predatorTypeName].summary} key={predatorTypeName} transitionProps={{ transition: 'slide-up', duration: 200 }}>
                 <Button disabled={isVentrue && hasDesiredMerits} color={color} onClick={() => {
                     setPickedPredatorType(predatorTypeName)
                     setModalOpen(true)
+                    setPredatorData(PredatorTypes[predatorTypeName])
                 }}>{predatorTypeName}</Button>
             </Tooltip>
         )
@@ -96,20 +103,20 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep, backStep }: Predato
                 : createPredatorTypeStack()
             }
 
-            <PredatorModal modalOpened={modalOpen} closeModal={handleCloseModal} kindred={kindred} setKindred={setKindred} nextStep={nextStep} pickedPredatorType={pickedPredatorType} />
+            <PredatorModal modalOpened={modalOpen} closeModal={handleCloseModal} kindred={kindred} setKindred={setKindred} nextStep={nextStep} pickedPredatorType={pickedPredatorType} predatorData={predatorData} setPredatorData={setPredatorData}/>
 
             <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
-                    <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>
-                        <Button
-                            style={{ margin: "5px" }}
-                            color="gray"
-                            onClick={backStep}
-                        >
-                            Back
-                        </Button>
+                <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>
+                    <Button
+                        style={{ margin: "5px" }}
+                        color="gray"
+                        onClick={backStep}
+                    >
+                        Back
+                    </Button>
 
-                    </Alert>
-                </Button.Group>
+                </Alert>
+            </Button.Group>
 
         </div>
     )

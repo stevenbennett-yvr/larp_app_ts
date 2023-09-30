@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { Kindred } from './Kindred'
 import backgroundDataJson from '../sources/v5Backgrounds.json'
 
+
 export const sphereOfInfluenceSchema = z.union([
     z.literal("church"),
     z.literal("finance"),
@@ -24,22 +25,21 @@ export const sphereOfInfluenceSchema = z.union([
 export type V5SphereKey = z.infer<typeof sphereOfInfluenceSchema>
 
 export const SphereSelectData = [
-    { value: "Church", data: "church" },
-    { value: "Finance", data: "finance" },
-    { value: "Health", data: "health" },
-    { value: "High Society", data: "high society" },
-    { value: "Industry", data: "industry" },
-    { value: "Legal", data: "legal" },
-    { value: "Media", data: "media" },
-    { value: "Occult", data: "occult" },
-    { value: "Police", data: "police" },
-    { value: "Politics", data: "politics" },
-    { value: "Service Industry", data: "service industry" },
-    { value: "Street", data: "street" },
-    { value: "Transportation", data: "transportation" },
-    { value: "Underworld", data: "underworld" },
-    { value: "University", data: "university" },
-    { value: "", data: "" }
+    "church",
+    "finance",
+    "health",
+    "high society",
+    "industry",
+    "legal",
+    "media",
+    "occult",
+    "police",
+    "politics",
+    "service industry",
+    "street",
+    "transportation",
+    "underworld",
+    "university",
 ];
 
 
@@ -67,7 +67,7 @@ export const v5BackgroundRefSchema = z.object({
     experiencePoints: z.number(),
     note: z.string(),
     advantages: z.array(v5AdvantageRefSchema),
-    sphere: z.optional(sphereOfInfluenceSchema),
+    sphere: z.array(sphereOfInfluenceSchema).optional(),
 })
 export type V5BackgroundRef = z.infer<typeof v5BackgroundRefSchema>
 
@@ -119,6 +119,7 @@ export const v5BackgroundSchema = z.object({
     summary: z.string(),
     source: z.string(),
     advantages: z.array(v5AdvantageSchema).optional(),
+    icon: z.string(),
 });
 
 export type V5Background = z.infer<typeof v5BackgroundSchema>;
@@ -140,7 +141,8 @@ export const v5GetBackgroundByName = (name: string): V5Background => {
             description: "",
             summary: "",
             source: "",
-            advantages: []
+            advantages: [],
+            icon: ""
         }
     } else {
         return backgroundInfo
@@ -248,7 +250,7 @@ export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
     return { level, totalXpNeeded, pastXpNeeded };
 }
 
-type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere";
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note";
 
 export const handleBackgroundChange = (
     kindred: Kindred,
