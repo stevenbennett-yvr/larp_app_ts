@@ -95,6 +95,31 @@ export const getV5AttributeCPArray = (kindred: Kindred): number[] => {
     return levelArray
 }
 
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
+export const v5HandleAttributeChange = (
+    character: any,
+    setCharacter: Function,
+    attribute: V5AttributesKey,
+    variableKey: VariableKeys,
+    value: number,
+) => {
+
+    const updatedAttributes = {
+        ...character.attributes,
+        [attribute]: {
+            ...character.attributes[attribute],
+            [variableKey]: value
+        }
+    }
+
+    const updatedCharacter = {
+        ...character,
+        attributes: updatedAttributes
+    }
+
+    setCharacter(updatedCharacter)
+}
+
 export const v5HandleXpAttributeChange = (
     character: any,
     setCharacter: Function,
@@ -106,39 +131,22 @@ export const v5HandleXpAttributeChange = (
 
     let xp = value > attributeData.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
 
-    const updatedAttributes = {
-        ...character.attributes,
-        [attribute]: {
-            ...character.attributes[attribute],
-            experiencePoints: value
-        }
-    }
-
-    const updatedCharacter = {
-        ...character,
-        attributes: updatedAttributes
-    }
-
-    setCharacter(updatedCharacter)    
+    v5HandleAttributeChange(character, setCharacter, attribute, "experiencePoints", xp)
     return xp
 }
 
 export const v5FindMaxAttribute = (
-    character: any,
+    kindred: Kindred,
     attribute: V5AttributesKey,
 ) => {
-    const attributes = character.attributes as V5Attributes;
+    const attributes = kindred.attributes as V5Attributes;
     const attributeData = attributes[attribute]
 
     const { experiencePoints } = attributeData;
-    const { level } = v5AttributeLevel(character, attribute);
-
-    const powerStat = 5
+    const { level } = v5AttributeLevel(kindred, attribute);
 
     let max = undefined;
-    if (powerStat <= 5 && level === 5) {
-        max = experiencePoints;
-    } if (powerStat > 5 && level === powerStat) {
+    if (level === 5) {
         max = experiencePoints;
     }
     return max;

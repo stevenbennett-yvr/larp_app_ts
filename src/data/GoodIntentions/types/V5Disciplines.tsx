@@ -4,6 +4,7 @@ import * as logos from "../../../assets/images/GoodIntentions";
 import { Kindred } from "./Kindred";
 import { Clans } from "./V5Clans";
 import { v5xp } from "../V5Experience";
+import { getNumberBelow } from "../../../utils/getNumberBelow";
 
 export const disciplineNameSchema = z.union([
     z.literal("animalism"),
@@ -41,6 +42,10 @@ export const disciplineSchema = z.object({
     freebiePoints: z.number(),
     experiencePoints: z.number(),
 })
+
+export type V5Discipline = z.infer<typeof disciplineSchema>
+
+
 export const disciplinesSchema = z.object({
     animalism: disciplineSchema,
     auspex: disciplineSchema,
@@ -55,7 +60,7 @@ export const disciplinesSchema = z.object({
     "blood sorcery": disciplineSchema,
     "thin-blood alchemy": disciplineSchema,
 })
-export type Discipline = z.infer<typeof disciplinesSchema>
+export type V5Disciplines = z.infer<typeof disciplinesSchema>
 
 export const disciplineKeySchema = disciplinesSchema.keyof()
 export type DisciplineKey = z.infer<typeof disciplineKeySchema>
@@ -116,7 +121,7 @@ export const disciplines: Record<DisciplineName, DisciplineDescription> = {
     }
 }
 
-export const getEmptyDisciplines: Discipline = {
+export const getEmptyDisciplines: V5Disciplines = {
     animalism: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
     auspex: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
     celerity: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
@@ -163,4 +168,63 @@ export const v5DisciplineLevel = (kindred:Kindred, discipline:DisciplineKey) => 
       }
       return {level, totalXpNeeded, pastXpNeeded};
     }
+}
+
+
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
+export const v5HandleDisciplineChange = (
+    character: any,
+    setCharacter: Function,
+    discipline: DisciplineKey,
+    variableKey: VariableKeys,
+    value: number,
+) => {
+
+    const updatedDisciplines = {
+        ...character.disciplines,
+        [discipline]: {
+            ...character.disciplines[discipline],
+            [variableKey]: value
+        }
+    }
+
+    const updatedCharacter = {
+        ...character,
+        disciplines: updatedDisciplines
+    }
+
+    setCharacter(updatedCharacter)
+}
+
+
+export const v5HandleXpDisciplineChange = (
+    character: any,
+    setCharacter: Function,
+    discipline: DisciplineKey,
+    value: number) => {
+    const { totalXpNeeded, pastXpNeeded } = v5DisciplineLevel(character, discipline)
+    const disciplines = character.disciplines as V5Disciplines;
+    const disciplineData = disciplines[discipline];
+
+    let xp = value > disciplineData.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
+
+    v5HandleDisciplineChange(character, setCharacter, discipline, "experiencePoints", xp)
+    return xp
+}
+
+export const v5FindMaxDiscipline = (
+    kindred: Kindred,
+    discipline: DisciplineKey,
+) => {
+    const disciplines = kindred.disciplines as V5Disciplines;
+    const disciplineData = disciplines[discipline]
+
+    const { experiencePoints } = disciplineData;
+    const { level } = v5DisciplineLevel(kindred, discipline);
+
+    let max = undefined;
+    if (level === 5) {
+        max = experiencePoints;
+    }
+    return max;
 }

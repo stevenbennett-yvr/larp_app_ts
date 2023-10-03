@@ -9,8 +9,8 @@ type MageArcanaXpInputsProps = {
     setAwakened: (awakened: Awakened) => void
 }
 
-const MageArcanaXpInputs = ({awakened, setAwakened}: MageArcanaXpInputsProps) => {
-    
+const MageArcanaXpInputs = ({ awakened, setAwakened }: MageArcanaXpInputsProps) => {
+
     const theme = useMantineTheme()
     const c1 = "rgba(26, 27, 30, 0.90)"
     const rulingArcana = Paths[awakened.path].rulingArcana
@@ -20,8 +20,8 @@ const MageArcanaXpInputs = ({awakened, setAwakened}: MageArcanaXpInputsProps) =>
     const arcanumXpInputs = (arcanum: ArcanaKey) => {
         const c2 = arcanaDescriptions[arcanum].color
         const bgColor = theme.fn.linearGradient(0, c1, c2)
-        const isRuling = rulingArcana.includes(arcanum); 
-        const isInferior =  inferiorArcana.includes(arcanum)
+        const isRuling = rulingArcana.includes(arcanum);
+        const isInferior = inferiorArcana.includes(arcanum)
 
         return (
             <Grid.Col key={arcanum} span={2}>
@@ -40,49 +40,49 @@ const MageArcanaXpInputs = ({awakened, setAwakened}: MageArcanaXpInputsProps) =>
                                 height={50}
                                 width={50}
                                 alt="order"
-                                style={{ filter: "brightness(0)" }} 
+                                style={{ filter: "brightness(0)" }}
                             />
                         </Center>
                         <Center>
-                        <Group>
-                        <Input.Wrapper 
-                            label={`${arcanaDescriptions[arcanum].name} : ${currentArcanumLevel(awakened, arcanum).level} ${isInferior? "Inferior" : isRuling? "Ruling" : ""}`}
-                            >
-                                <Text size="12px" color="gray.6">Xp for Next: {currentArcanumLevel(awakened, arcanum).totalXpNeeded - awakened.arcana[arcanum].experiencePoints}</Text>
-                                <Text size="12px" color="gray.6">Total XP Needed {currentArcanumLevel(awakened, arcanum).totalXpNeeded}</Text>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Button
-                            size="xs"
-                            variant='outline'
-                            color='gray'
-                            onClick={() => {handleArcanumChange(awakened, setAwakened, arcanum, "experiencePoints", awakened.arcana[arcanum].experiencePoints - 1);}}
-                        >
-                            -
-                        </Button>
-                        <Input
-                            style={{ width: '60px', margin: '0 8px' }}
-                            type="number"
-                            key={`${arcanum}`}
-                            min={0}
-                            max={findMaxArcana(awakened, arcanum)}
-                            value={awakened.arcana[arcanum].experiencePoints}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            const value = Number(e.target.value);
-                            handleArcanumChange(awakened, setAwakened, arcanum, "experiencePoints", value);
-                            }}
-                        />
-                        <Button
-                            size="xs"
-                            variant='outline'
-                            color='gray'
-                            disabled={findMaxArcana(awakened, arcanum) === awakened.arcana[arcanum].experiencePoints}
-                            onClick={() => {handleArcanumChange(awakened, setAwakened, arcanum, "experiencePoints", awakened.arcana[arcanum].experiencePoints + 1);}}
-                        >
-                            +
-                        </Button>
-                        </div>
-                        </Input.Wrapper>
-                        </Group>
+                            <Group>
+                                <Input.Wrapper
+                                    label={`${arcanaDescriptions[arcanum].name} : ${currentArcanumLevel(awakened, arcanum).level} ${isInferior ? "Inferior" : isRuling ? "Ruling" : ""}`}
+                                >
+                                    <Text size="12px" color="gray.6">Xp for Next: {currentArcanumLevel(awakened, arcanum).totalXpNeeded - awakened.arcana[arcanum].experiencePoints}</Text>
+                                    <Text size="12px" color="gray.6">Total XP Needed {currentArcanumLevel(awakened, arcanum).totalXpNeeded}</Text>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <Button
+                                            size="xs"
+                                            variant='outline'
+                                            color='gray'
+                                            onClick={() => { handleArcanumChange(awakened, setAwakened, arcanum, "experiencePoints", awakened.arcana[arcanum].experiencePoints - 1); }}
+                                        >
+                                            -
+                                        </Button>
+                                        <Input
+                                            style={{ width: '60px', margin: '0 8px' }}
+                                            type="number"
+                                            key={`${arcanum}`}
+                                            min={0}
+                                            max={findMaxArcana(awakened, arcanum)}
+                                            value={awakened.arcana[arcanum].experiencePoints}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                const value = Number(e.target.value);
+                                                handleArcanumChange(awakened, setAwakened, arcanum, "experiencePoints", value);
+                                            }}
+                                        />
+                                        <Button
+                                            size="xs"
+                                            variant='outline'
+                                            color='gray'
+                                            disabled={findMaxArcana(awakened, arcanum) === awakened.arcana[arcanum].experiencePoints}
+                                            onClick={() => { handleArcanumChange(awakened, setAwakened, arcanum, "experiencePoints", awakened.arcana[arcanum].experiencePoints + 1); }}
+                                        >
+                                            +
+                                        </Button>
+                                    </div>
+                                </Input.Wrapper>
+                            </Group>
                         </Center>
                     </Card.Section>
                 </Card>
@@ -92,15 +92,15 @@ const MageArcanaXpInputs = ({awakened, setAwakened}: MageArcanaXpInputsProps) =>
 
     return (
         <>
-        <Text mt={"xl"} ta="center" fz="xl" fw={700}>Arcana</Text>
-        <hr style={{width:"50%"}}/>
-        <Grid grow m={0}>
-            {
-                rulingArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => arcanumXpInputs(arcanum))
-            }{
-                otherArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => arcanumXpInputs(arcanum))
-            }
-        </Grid>
+            <Text mt={"xl"} ta="center" fz="xl" fw={700}>Arcana</Text>
+            <hr style={{ width: "50%" }} />
+            <Grid grow m={0}>
+                {
+                    rulingArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => arcanumXpInputs(arcanum))
+                }{
+                    otherArcana.map((o) => arcanaKeySchema.parse(o)).map((arcanum) => arcanumXpInputs(arcanum))
+                }
+            </Grid>
         </>
     )
 }

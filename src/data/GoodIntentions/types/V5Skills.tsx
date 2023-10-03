@@ -1,5 +1,7 @@
 import { z } from "zod";
 import { Kindred } from "./Kindred";
+import { getNumberBelow } from "../../../utils/getNumberBelow";
+import { v5xp } from "../V5Experience";
 
 export const v5skillCategoriesSchema = z.union([
     z.literal('mental'),
@@ -160,20 +162,20 @@ export const v5SkillLevel = (
   
     if (experiencePoints === 0) {
       let level = creationPoints + freebiePoints;
-      let xpNeeded = (level + 1) * 3;
+      let xpNeeded = (level + 1) * v5xp.skill;
       totalXpNeeded = xpNeeded;
       pastXpNeeded.push(totalXpNeeded);
       return { level, totalXpNeeded, pastXpNeeded };
     } else {
       let level = creationPoints + freebiePoints;
-      let xpNeeded = (level + 1) * 3;
+      let xpNeeded = (level + 1) * v5xp.skill;
       totalXpNeeded += xpNeeded;
       pastXpNeeded.push(totalXpNeeded);
   
       while (experiencePoints >= xpNeeded) {
         level++;
         experiencePoints -= xpNeeded;
-        xpNeeded = (level + 1) * 3;
+        xpNeeded = (level + 1) * v5xp.skill;
         totalXpNeeded += xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
       }
@@ -181,6 +183,48 @@ export const v5SkillLevel = (
       return { level, totalXpNeeded, pastXpNeeded };
     }
 }
+
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
+export const v5HandleSkillChange = (
+    character: any,
+    setCharacter: Function,
+    skill: V5SkillsKey,
+    variableKey: VariableKeys,
+    value: number,
+) => {
+
+    const updatedAttributes = {
+        ...character.skills,
+        [skill]: {
+            ...character.skills[skill],
+            [variableKey]: value
+        }
+    }
+
+    const updatedCharacter = {
+        ...character,
+        skills: updatedAttributes
+    }
+
+    setCharacter(updatedCharacter)
+}
+
+
+export const v5HandleXpSkillChange = (
+    character: any,
+    setCharacter: Function,
+    skill: V5SkillsKey,
+    value: number) => {
+    const { totalXpNeeded, pastXpNeeded } = v5SkillLevel(character, skill)
+    const skills = character.skills as V5Skills;
+    const skillData = skills[skill]; // Get the skill data
+
+    let xp = value > skillData.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
+
+    v5HandleSkillChange(character, setCharacter, skill, "experiencePoints", xp)
+    return xp
+}
+
 
 export const getV5SkillCPArray = (kindred: Kindred): number[] => {
     const skills = kindred.skills;
@@ -193,3 +237,20 @@ export const getV5SkillCPArray = (kindred: Kindred): number[] => {
     levelArray.sort((a,b) => b-a);
     return levelArray
 }
+
+export const v5FindMaxSkill = (
+    kindred: Kindred,
+    skill: V5SkillsKey,
+) => {
+    const skills = kindred.skills as V5Skills;
+    const skillData = skills[skill]
+
+    const { experiencePoints } = skillData;
+    const { level } = v5SkillLevel(kindred, skill);
+
+    let max = undefined;
+    if (level === 5) {
+        max = experiencePoints;
+    }
+    return max;
+};

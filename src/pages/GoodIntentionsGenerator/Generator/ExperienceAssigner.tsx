@@ -1,8 +1,16 @@
-import { Center, Stack, Alert, Group, Button, Text, Grid, Input } from '@mantine/core'
+import {  Alert, Group, Button, Divider, Center } from '@mantine/core'
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { v5HandleXpAttributeChange, AttributeCategory, V5AttributesKey, v5AttributeLevel, v5FindMaxAttribute } from '../../../data/GoodIntentions/types/V5Attributes'
+import { useState } from 'react'
+
+import V5AttributeXpInputs from '../../../components/GoodIntentions/XpInputs/V5AttributeXpInputs'
+import V5SkillXpInputs from '../../../components/GoodIntentions/XpInputs/V5SkillXpInputs'
+import V5DisciplineXpInputs from '../../../components/GoodIntentions/XpInputs/V5DisciplineXpInputs'
+import V5PowersInputs from '../../../components/GoodIntentions/XpInputs/V5PowersInputs'
+import V5RitualsXpInputs from '../../../components/GoodIntentions/XpInputs/V5RitualsXpInputs'
+import V5CeremoniesXpInputs from '../../../components/GoodIntentions/XpInputs/V5CeremonyXpInputs'
 
 import { globals } from '../../../assets/globals'
+import { v5DisciplineLevel } from '../../../data/GoodIntentions/types/V5Disciplines'
 
 type V5ExperienceAssignerProps = {
     kindred: Kindred,
@@ -11,106 +19,58 @@ type V5ExperienceAssignerProps = {
     backStep: () => void
 }
 
-
 const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5ExperienceAssignerProps) => {
-
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
 
-    const v5AttributeXpInputs = () => {
-        const orderedCategories = ['mental', 'physical', 'social'];
-        const orderedAttributes = {
-            'physical': ['strength', 'dexterity', 'stamina'],
-            'social': ["charisma", 'manipulation', 'composure'],
-            'mental': ['intelligence', 'wits', 'resolve'],
-        }
+    const [ritualModalOpen, setRitualModalOpen] = useState(false);
+    const [ceremonyModalOpen, setCeremonyModalOpen] = useState(false);
 
-        return (
-            <>
-                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Attributes</Text>
-                <Grid>
-                {orderedCategories.map((category) => {
-                let categoryKey = category as AttributeCategory
-                const orderedAttributesForCategory = orderedAttributes[categoryKey];
-                return (
-                <Grid.Col 
-                    span={globals.isPhoneScreen ? 8 : 4} 
-                    key={`${category}-Attributes`}
-                >
-                    <Text fs="italic" fw={700} ta="center">
-                    {category.charAt(0).toUpperCase() + category.slice(1)}
-                    </Text>
-                    <hr />
-                    {Object.entries(kindred.attributes)
-                    .sort(([a], [b]) => orderedAttributesForCategory.indexOf(a) - orderedAttributesForCategory.indexOf(b))
-                    .map(([attribute, attributeInfo]) => {
-                    const attributeName = attribute as V5AttributesKey;
-                    const { level, totalXpNeeded } = v5AttributeLevel(kindred, attributeName);
-                    if ( attributeInfo.category === categoryKey ) {
-                    return (
-                        <Center key={`${attribute}-Input`}>
-                        <Group>
-                            <Input.Wrapper 
-                                label={`${attribute.charAt(0).toUpperCase() + attribute.slice(1)} ${level}`}
-                                >
-                                <Text size="12px" color="gray.6">Xp for Next: {totalXpNeeded - attributeInfo.experiencePoints}</Text>
-                                <Text size="12px" color="gray.6">Total XP Needed {totalXpNeeded}</Text>
+    const openRitualsModal = () => {
+        setRitualModalOpen(true)
+    };
+    
+    const closeRitualsModal = () => {
+        setRitualModalOpen(false)
+    };
+    
+    const openCeremoniesModal = () => {
+        setCeremonyModalOpen(true)
+    };
+    
+    const closeCeremoniesModal = () => {
+        setCeremonyModalOpen(false)
+    };
 
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Button
-                                    size="xs"
-                                    variant='outline'
-                                    color='gray'
-                                    onClick={() => v5HandleXpAttributeChange(kindred, setKindred, attributeName, attributeInfo.experiencePoints - 1)}
-                                >
-                                    -
-                                </Button>
-                                <Input
-                                    style={{ width: '60px', margin: '0 8px' }}
-                                    type="number"
-                                    key={`${category}-${attribute}`}
-                                    min={0}
-                                    max={v5FindMaxAttribute(kindred, attributeName)}
-                                    value={attributeInfo.experiencePoints}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    const value = Number(e.target.value);
-                                    v5HandleXpAttributeChange(kindred, setKindred, attributeName, value);
-                                    }}
-                                />
-                                <Button
-                                    size="xs"
-                                    variant='outline'
-                                    color='gray'
-                                    disabled={v5FindMaxAttribute(kindred, attributeName) === attributeInfo.experiencePoints}
-                                    onClick={() => v5HandleXpAttributeChange(kindred, setKindred, attributeName, attributeInfo.experiencePoints + 1)}
-                                >
-                                    +
-                                </Button>
-                                </div>
-                            </Input.Wrapper>
-                        </Group>
-                        </Center>
-                    ) }
-                    else {
-                        return null
-                    };
-                    })}
-                </Grid.Col>
-                );
-            })}
-                </Grid>
-            </>
-        )
-
-
-    }
-
+    const height = globals.viewportHeightPx
+    const heightBreakPoint = 1250
     return (
-        <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '120px' : '60px' }}>
-            <Stack mt={"xl"} align="center" spacing="xl">
+        <div style={{ width: "100%", marginTop: height < heightBreakPoint ? "50px" : "55px", marginBottom: height < heightBreakPoint ? "50px" : "55px" }}>
 
-                {v5AttributeXpInputs()}
+                <V5AttributeXpInputs kindred={kindred} setKindred={setKindred} />
+                <Divider my="sm"/>
+                <V5SkillXpInputs kindred={kindred} setKindred={setKindred} />
+                <Divider my="sm"/>
+                <V5DisciplineXpInputs kindred={kindred} setKindred={setKindred}></V5DisciplineXpInputs>
+                <V5PowersInputs kindred={kindred} setKindred={setKindred} />
+                <Divider my="sm"/>
 
+                <V5RitualsXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ritualModalOpen} closeModal={closeRitualsModal} />    
+                <V5CeremoniesXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ceremonyModalOpen} closeModal={closeCeremoniesModal} />    
+                <Center>
+                <Group>
+                    {v5DisciplineLevel(kindred, 'blood sorcery').level > 0?
+                    <Button color={"gray"} onClick={openRitualsModal}>Get Rituals</Button>
+                    :
+                    <></>
+                }
+                {v5DisciplineLevel(kindred, 'oblivion').level > 0?
+                    <Button color={"gray"} onClick={openCeremoniesModal}>Get Ceremonies</Button>
+                    :
+                    <></>
+                }
+                </Group>
+                </Center>
 
                 <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                     <Group>
@@ -135,8 +95,7 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                     </Group>
                 </Alert>
 
-            </Stack>
-        </Center>
+        </div>
     )
 }
 
