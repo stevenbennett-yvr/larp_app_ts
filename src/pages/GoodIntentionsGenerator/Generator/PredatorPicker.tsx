@@ -17,6 +17,7 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep, backStep }: Predato
     const isSmallScreen = globals.isSmallScreen
 
     const isVentrue = kindred.clan === "Ventrue" ? true : false
+//    const isRavnos = kindred.clan === "Ravnos" ? true : false
 
     const [pickedPredatorType, setPickedPredatorType] = useState<PredatorTypeName>("")
     const [modalOpen, setModalOpen] = useState(false);
@@ -32,14 +33,14 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep, backStep }: Predato
     const createButton = (predatorTypeName: PredatorTypeName, color: string) => {
 
         const meritsAndFlaws = PredatorTypes[predatorTypeName].meritsAndFlaws;
-        const meritNamesToCheck = ["Iron Gullet", "Farmer", "Prey Exclusion"];
+        const ventrueMeritNamesToCheck = ["Iron Gullet", "Farmer", "Prey Exclusion"];
+//        const ravnosMeritsToCheck = ["Haven"]
+        const ventrueHasDesiredMerits = meritsAndFlaws.some(merit => ventrueMeritNamesToCheck.includes(merit.name));
+//        const ravnosHasDesiredMerits = PredatorTypes[predatorTypeName].backgrounds.some(merit => ravnosMeritsToCheck.includes(merit.name));
 
-
-
-        const hasDesiredMerits = meritsAndFlaws.some(merit => meritNamesToCheck.includes(merit.name));
         return (
             <Tooltip label={PredatorTypes[predatorTypeName].summary} key={predatorTypeName} transitionProps={{ transition: 'slide-up', duration: 200 }}>
-                <Button disabled={isVentrue && hasDesiredMerits} color={color} onClick={() => {
+                <Button disabled={(isVentrue && ventrueHasDesiredMerits)} color={color} onClick={() => {
                     setPickedPredatorType(predatorTypeName)
                     setModalOpen(true)
                     setPredatorData(PredatorTypes[predatorTypeName])
@@ -103,8 +104,9 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep, backStep }: Predato
                 : createPredatorTypeStack()
             }
 
-            <PredatorModal modalOpened={modalOpen} closeModal={handleCloseModal} kindred={kindred} setKindred={setKindred} nextStep={nextStep} pickedPredatorType={pickedPredatorType} predatorData={predatorData} setPredatorData={setPredatorData}/>
-
+            {!predatorData ? null :
+                <PredatorModal modalOpened={modalOpen} closeModal={handleCloseModal} kindred={kindred} setKindred={setKindred} nextStep={nextStep} pickedPredatorType={pickedPredatorType} predatorData={predatorData} setPredatorData={setPredatorData} />
+            }
             <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                 <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>
                     <Button

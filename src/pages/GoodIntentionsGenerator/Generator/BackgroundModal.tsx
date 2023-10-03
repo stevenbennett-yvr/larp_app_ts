@@ -1,9 +1,10 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { Modal, NumberInput, Accordion, Text, Button, Group, Table, Center, Stack, TextInput } from "@mantine/core"
+import { Checkbox, CheckboxProps, Modal, NumberInput, Accordion, Text, Button, Group, Table, Center, Stack, TextInput } from "@mantine/core"
 import Tally from "../../../utils/talley"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons"
 import { handleAdvantageChange, emptyAdvantage, handleBackgroundRemove, V5AdvantageRef, V5BackgroundRef, v5BackgroundLevel, handleBackgroundChange, backgroundData } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { Droplet } from 'tabler-icons-react';
 
 type BackgroundModalProps = {
     kindred: Kindred,
@@ -19,6 +20,11 @@ const flawIcon = () => {
 const meritIcon = () => {
     return <FontAwesomeIcon icon={faCircleUp} style={{ color: "rgb(47, 158, 68)", }} />
 }
+
+const CheckboxIcon: CheckboxProps['icon'] = ({ indeterminate, ...others }) =>
+    indeterminate ? <Droplet {...others} /> : <Droplet {...others} />;
+
+
 const getRating = (array: number[]) => {
     let first = array[0]
     let last = array[array.length - 1]
@@ -35,22 +41,26 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
 
     const bRef = kindred.backgrounds.find((entry) => entry.id === bId)
     if (!bRef) { return null }
+
     const backgroundInfo = backgroundData.find((entry) => entry.name === bRef.name)
     if (!backgroundInfo) { return null }
 
+    const resourcesRef = kindred.backgrounds.find((entry => entry.name === "Resources"))
+    const resourceLevel = resourcesRef ? v5BackgroundLevel(resourcesRef).level : 0;
+    const havenMax = resourceLevel === 3 ? 3 : resourceLevel === 1 ? 2 : 1
     const BackgroundInput = (backgroundRef: V5BackgroundRef) => {
         if (!backgroundRef) { return }
-
         return (
             <Center>
                 <Stack>
                     <Center>
                         <NumberInput
-                            value={backgroundRef.creationPoints}
-                            min={backgroundRef.freebiePoints > 0 ? 0 : 1}
-                            max={v5BackgroundLevel(backgroundRef).level === 3 ? backgroundRef.creationPoints : 3}
+                            value={v5BackgroundLevel(backgroundRef).level}
+                            min={Math.max(backgroundRef.freebiePoints, 1)}
+                            max={backgroundRef.name === "Haven" ? havenMax : v5BackgroundLevel(backgroundRef).level === 3 ? backgroundRef.creationPoints : 3}
                             onChange={(val: number) => {
-                                handleBackgroundChange(kindred, setKindred, backgroundRef, "creationPoints", val)
+                                let creationPoints = val - backgroundRef.freebiePoints
+                                handleBackgroundChange(kindred, setKindred, backgroundRef, "creationPoints", creationPoints)
                             }}
                             style={{ width: "100px" }}
                         />
@@ -75,6 +85,19 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
         const freebie = advantageInfo ? advantageInfo.freebiePoints : 0
         return creation + freebie
     }
+
+    const havenSizeMax = bRef.name === "Haven" ? v5BackgroundLevel(bRef).level : 0;
+    let freeAdvantagePoints = Math.max(0, havenSizeMax - 1)
+    const advantagesWithFreebiePoints = bRef.advantages.filter((advantage) => {
+        return advantage.freebiePoints > 0;
+    });
+    let freeAdvantage = bRef.freeAdvantage ?? [];
+
+    console.log()
+
+    let predatorType = kindred.predatorType.name
+    const numberOfAdvantagesWithFreebiePoints =
+        advantagesWithFreebiePoints.length + (predatorType === "Farmer" || predatorType === "Hitcher" || predatorType === "Graverobber" ? 1 : 0);
 
     return (
         <Modal
@@ -116,15 +139,45 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
                                                                 {getRating(advantage.cost)}
                                                             </Center>
                                                             <Center>
-                                                                <NumberInput
-                                                                    value={advantageRef.creationPoints}
-                                                                    style={{ width: "100px" }}
-                                                                    min={0}
-                                                                    max={getAdvantagePoints(advantageRef) === advantage.cost[advantage.cost.length - 1] ? advantageRef.creationPoints : advantage.cost[advantage.cost.length - 1]}
-                                                                    onChange={(val) => {
-                                                                        handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "creationPoints", val)
-                                                                    }}
-                                                                />
+                                                                <Group>
+                                                                    <NumberInput
+                                                                        value={advantageRef.creationPoints}
+                                                                        style={{ width: "100px" }}
+                                                                        min={0}
+                                                                        max={bRef.name === "Haven" && advantage.type === "advantage" ?
+                                                                            havenSizeMax : getAdvantagePoints(advantageRef) === advantage.cost[advantage.cost.length - 1] ?
+                                                                                advantageRef.creationPoints : advantage.cost[advantage.cost.length - 1]}
+                                                                        onChange={(val) => {
+                                                                            handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "creationPoints", val)
+                                                                        }}
+                                                                    />
+                                                                    {bRef.name === "Haven" && advantage.type === "advantage" ?
+                                                                        <Checkbox
+                                                                            color="red"
+                                                                            icon={CheckboxIcon}
+                                                                            disabled={
+                                                                                advantageRef.creationPoints > 0 || 
+                                                                                (advantageRef.freebiePoints > 0 && !(freeAdvantage.includes(advantage.name))) || 
+                                                                                (freeAdvantagePoints - numberOfAdvantagesWithFreebiePoints === 0 && !(freeAdvantage.includes(advantage.name)))
+                                                                            }
+                                                                            checked={freeAdvantage.includes(advantage.name)}
+                                                                            onClick={() => {
+                                                                                if (advantageRef.freebiePoints === 0) {
+                                                                                    handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "freebiePoints", 1)
+                                                                                    freeAdvantage.push(advantageRef.name)
+                                                                                    handleBackgroundChange(kindred, setKindred, bRef, "freeAdvantage", freeAdvantage)
+                                                                                }
+                                                                                else {
+                                                                                    bRef.advantages = bRef.advantages.filter((entry: V5AdvantageRef) => entry.name !== advantageRef.name);
+                                                                                    freeAdvantage = freeAdvantage.filter((name: string) => name !== advantageRef.name);
+                                                                                    console.log(bRef); // This should show the updated bRef
+                                                                                    handleBackgroundChange(kindred, setKindred, bRef, "freeAdvantage", freeAdvantage);
+                                                                                }
+                                                                            }}
+                                                                        />
+                                                                        :
+                                                                        <></>}
+                                                                </Group>
                                                             </Center>
                                                         </td>
                                                     </tr>

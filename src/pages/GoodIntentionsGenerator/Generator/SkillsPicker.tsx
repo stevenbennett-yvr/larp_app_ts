@@ -1,6 +1,6 @@
-import { Grid, Text, Tooltip, NumberInput, Center, Stack, Button, Group, Alert } from "@mantine/core"
+import { Grid, Text, Tooltip, NumberInput, Center, Stack, Button, Group, Alert, Divider } from "@mantine/core"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { V5SkillsKey, skillsDescriptions, getV5SkillCPArray } from "../../../data/GoodIntentions/types/V5Skills"
+import { V5SkillsKey, skillsDescriptions, getV5SkillCPArray, v5SkillLevel } from "../../../data/GoodIntentions/types/V5Skills"
 import { globals } from "../../../assets/globals"
 import { upcase } from "../../../utils/case"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,14 +24,14 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
     const isSmallScreen = globals.isSmallScreen
 
     const [modalOpen, setModalOpen] = useState(false);
-    
+
     const handleOpenModal = () => {
         setModalOpen(true);
-        };
+    };
 
-      const handleCloseModal = () => {
+    const handleCloseModal = () => {
         setModalOpen(false);
-        };
+    };
 
     const pointsArray = getV5SkillCPArray(kindred)
     const checkSkillArray = (pointsArray: number[]) => {
@@ -87,6 +87,17 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
         setKindred(updatedCharacter)
     }
 
+    const specialtySkills: V5SkillsKey[] = ["craft", "performance", "academics", "science"];
+
+    let totalSpecialtySkillLevel = 0;
+
+    for (const skill of specialtySkills) {
+        const skillLevel = v5SkillLevel(kindred, skill).level;
+
+        totalSpecialtySkillLevel += skillLevel;
+    }
+
+
     const categoryIcons = {
         mental: faBrain,
         physical: faHandFist,
@@ -94,18 +105,18 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
     }
 
     const skillCategories = ['physical', 'social', 'mental'] as SkillCategory[]
-    
+
     const skillInputs = skillCategories.map(category => {
         return (
             <Grid.Col
                 span={globals.isPhoneScreen ? "content" : 4}
                 key={`${category} Skills`}
             >
-                <Text fw={500} fz="lg" color="dimmed" ta="center">
+                <Text c={"red"} fw={500} fz="lg" color="dimmed" ta="center">
                     <FontAwesomeIcon icon={categoryIcons[category]} /> {' '}
                     {upcase(category)}
                 </Text>
-                <hr />
+                <Divider my="sm" color={"red"} />
                 {Object.entries(kindred.skills).map(([skill, skillInfo]) => {
                     const typedAttribute = skill as V5SkillsKey
                     if (skillInfo.category === category) {
@@ -129,7 +140,7 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
                                         min={
                                             0
                                         }
-                                        max={!check[3] ? 3 : !check[2] ? 2 : !check[1]? 1: 0}
+                                        max={!check[3] ? 3 : !check[2] ? 2 : !check[1] ? 1 : 0}
                                         value={skillInfo.creationPoints}
                                         onChange={(val: number) => {
                                             changeCreationPoints(typedAttribute, val);
@@ -161,10 +172,10 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
                 <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Attributes</Text>
                 <Group ta={"center"}>
                     <Text style={threeStyle}>
-                        Take three Skills at 3; 
+                        Take three Skills at 3;
                     </Text>
                     <Text style={twoStyle}>
-                        five Skills at 2; 
+                        five Skills at 2;
                     </Text>
                     <Text style={oneStyle}>
                         and seven Skills at 1
@@ -188,7 +199,10 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
                             style={{ margin: "5px" }}
                             color="gray"
                             disabled={!checkSkillArray(pointsArray).totalResult}
-                            onClick={handleOpenModal}
+                            onClick={() => {
+                                if (totalSpecialtySkillLevel === 0) { nextStep() }
+                                else { handleOpenModal() }
+                            }}
                         >
                             Next
                         </Button>

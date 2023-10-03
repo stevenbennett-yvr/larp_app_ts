@@ -4,7 +4,7 @@ import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 import { Alert, Button, Stack, Accordion, Center, NumberInput, useMantineTheme, Table, Text, Group, ScrollArea } from "@mantine/core";
 
 import { globals } from "../../../assets/globals";
-import { V5MeritFlaw, V5MeritFlawRef, v5MeritFlawRefs, v5MeritLevel, meritFlawData, handleMeritFlawChange } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
+import { V5MeritFlaw, V5MeritFlawRef, v5MeritFlawRefs, v5MeritLevel, v5MeritFlawFilter, handleMeritFlawChange } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
 import Tally from "../../../utils/talley";
 
 type MeritPickerProps = {
@@ -35,6 +35,8 @@ const getRating = (array: number[]) => {
 const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerProps) => {
     const theme = useMantineTheme()
 
+    const meritFlawData = v5MeritFlawFilter(kindred)
+
     const getTotalPoints = (kindred:Kindred) => {
         let totalFlawPoints = 0;
         let totalMeritPoints = 0;
@@ -54,7 +56,7 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
         const meritInfo = meritFlawData.find(entry => entry.name === meritFlaw.name)
         let minCost = meritInfo?.cost[0];
         let maxCost = meritInfo?.cost[meritInfo?.cost.length - 1]
-        if (!minCost || !maxCost) { return 0 }
+        if (!minCost || !maxCost) { return 1 }
         if (minCost === maxCost) {
             return minCost;
           } else {
@@ -78,7 +80,7 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
                 <NumberInput
                     value={getMeritPoints(meritRef)}
                     min={meritRef.freebiePoints}
-                    max={v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo?.cost.length - 1] ? meritRef.creationPoints : meritInfo.cost[meritInfo.cost.length - 1]}
+                    max={ meritInfo.cost.length===1 && meritInfo.cost[0] === 1? 1: v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo?.cost.length - 1] ? meritRef.creationPoints : meritInfo.cost[meritInfo.cost.length - 1]}
                     step={getStep(meritRef)}
                     onChange={(val) => {
                         console.log(val)

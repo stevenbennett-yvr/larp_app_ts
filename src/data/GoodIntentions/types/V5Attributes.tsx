@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { Kindred } from "./Kindred";
 import { v5xp } from "../V5Experience";
+import { getNumberBelow } from "../../../utils/getNumberBelow";
 
 export const attributeCategoriesSchema = z.union([
     z.literal('mental'),
@@ -93,3 +94,52 @@ export const getV5AttributeCPArray = (kindred: Kindred): number[] => {
     levelArray.sort((a,b) => b-a);
     return levelArray
 }
+
+export const v5HandleXpAttributeChange = (
+    character: any,
+    setCharacter: Function,
+    attribute: V5AttributesKey,
+    value: number) => {
+    const { totalXpNeeded, pastXpNeeded } = v5AttributeLevel(character, attribute)
+    const attributes = character.attributes as V5Attributes;
+    const attributeData = attributes[attribute]; // Get the attribute data
+
+    let xp = value > attributeData.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
+
+    const updatedAttributes = {
+        ...character.attributes,
+        [attribute]: {
+            ...character.attributes[attribute],
+            experiencePoints: value
+        }
+    }
+
+    const updatedCharacter = {
+        ...character,
+        attributes: updatedAttributes
+    }
+
+    setCharacter(updatedCharacter)    
+    return xp
+}
+
+export const v5FindMaxAttribute = (
+    character: any,
+    attribute: V5AttributesKey,
+) => {
+    const attributes = character.attributes as V5Attributes;
+    const attributeData = attributes[attribute]
+
+    const { experiencePoints } = attributeData;
+    const { level } = v5AttributeLevel(character, attribute);
+
+    const powerStat = 5
+
+    let max = undefined;
+    if (powerStat <= 5 && level === 5) {
+        max = experiencePoints;
+    } if (powerStat > 5 && level === powerStat) {
+        max = experiencePoints;
+    }
+    return max;
+};

@@ -310,9 +310,11 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
                         <Button
                             style={{ margin: "5px" }}
                             color="gray"
-                            onClick={() => 
-                                setModalOpen(true)
-                            }
+                            onClick={() => {
+                                if (v5DisciplineLevel(kindred,"blood sorcery").level === 0 && v5DisciplineLevel(kindred,"oblivion").level === 0)
+                                { nextStep( ) } else 
+                                { setModalOpen(true) }
+                            }}
                             disabled={(knownDisciplines as DisciplineKey[]).some((d) => disciplinePowersSelected(kindred, d))}
                         >
                             Next

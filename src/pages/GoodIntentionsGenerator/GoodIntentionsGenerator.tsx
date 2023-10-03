@@ -10,6 +10,7 @@ import PredatorTypePicker from "./Generator/PredatorPicker"
 import DisciplinesPicker from "./Generator/DisciplinePicker"
 import BackgroundPicker from "./Generator/BackgroundPicker"
 import MeritPicker from "./Generator/MeritPicker"
+import V5ExperienceAssigner from './Generator/ExperienceAssigner'
 
 import { Center } from "@mantine/core"
 
@@ -58,7 +59,7 @@ const GenerateKindred = () => {
             case 8:
                 // Spending Init XP
                 return (
-                    <></>
+                    <V5ExperienceAssigner kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             case 9:
                 // Background shit

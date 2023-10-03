@@ -1,4 +1,4 @@
-import { Button, Text, Alert, Center, Grid, Tooltip, NumberInput, Stack, Group } from "@mantine/core"
+import { Button, Text, Alert, Center, Grid, Tooltip, NumberInput, Stack, Group, Divider } from "@mantine/core"
 import { V5AttributesKey, attributeDescriptions, getV5AttributeCPArray, AttributeCategory } from "../../../data/GoodIntentions/types/V5Attributes"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { globals } from "../../../assets/globals"
@@ -83,11 +83,11 @@ const AttributePicker = ({ kindred, setKindred, nextStep, backStep }: AttributeP
                 span={globals.isPhoneScreen ? "content" : 4}
                 key={`${category} Attributes`}
             >
-                <Text fw={500} fz="lg" color="dimmed" ta="center">
+                <Text c={"red"} fw={500} fz="lg" color="dimmed" ta="center">
                     <FontAwesomeIcon icon={categoryIcons[category]} /> {' '}
                     {upcase(category)}
                 </Text>
-                <hr />
+                <Divider my="sm" color={"red"} />
                 {Object.entries(kindred.attributes).map(([attribute, attributeInfo]) => {
                     const typedAttribute = attribute as V5AttributesKey
                     if (attributeInfo.category === category) {

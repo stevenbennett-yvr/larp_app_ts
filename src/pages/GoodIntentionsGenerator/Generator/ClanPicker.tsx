@@ -1,4 +1,4 @@
-import { Button, Card, Center, Grid, Group, Image, Stack, ScrollArea, Text, Title, useMantineTheme, Modal, Avatar, Tooltip } from "@mantine/core";
+import { Button, Card, Center, Grid, Group, Image, Stack, ScrollArea, Text, Title, useMantineTheme, Modal, Avatar, Tooltip, Divider } from "@mantine/core";
 import { useState } from "react";
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 import { ClanName, Clans, clanNameSchema } from "../../../data/GoodIntentions/types/V5Clans";
@@ -134,6 +134,8 @@ const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
                                     <div dangerouslySetInnerHTML={{ __html: Clans[clan].nicknames }} />
                                 </Text>
                             </Center>
+                            <Divider my="sm" />
+
                             <Text fz={globals.smallFontSize} style={{ textAlign: "center" }}>
                                 Disciplines:
                             </Text>
@@ -153,6 +155,8 @@ const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
                                     )}
                                 </Group>
                             </Center>
+                            <Divider my="sm" />
+
                             <Text fz={globals.smallerFontSize} style={{ textAlign: "left" }}>
                                 <div dangerouslySetInnerHTML={{ __html: Clans[clan].description }} />
                             </Text>
@@ -163,10 +167,11 @@ const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
                                 <div dangerouslySetInnerHTML={{ __html: `<b>Compulsion:</b> ${Clans[clan].compulsion}` }} />
                             </Text>
                         </Stack>
+                        <Divider my="sm" />
 
                         <Button
                             onClick={() => {
-                                setKindred({ ...kindred, clan, predatorType:{name:""}, meritsFlaws: [], disciplines: getEmptyDisciplines, powers: [] })
+                                setKindred({ ...kindred, clan, predatorType: { name: "" }, meritsFlaws: [], disciplines: getEmptyDisciplines, powers: [] })
                                 nextStep()
                             }}
                         >Confirm Clan</Button>

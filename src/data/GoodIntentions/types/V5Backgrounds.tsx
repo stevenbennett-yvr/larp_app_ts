@@ -3,7 +3,6 @@ import { z } from 'zod'
 import { Kindred } from './Kindred'
 import backgroundDataJson from '../sources/v5Backgrounds.json'
 
-
 export const sphereOfInfluenceSchema = z.union([
     z.literal("church"),
     z.literal("finance"),
@@ -68,6 +67,7 @@ export const v5BackgroundRefSchema = z.object({
     note: z.string(),
     advantages: z.array(v5AdvantageRefSchema),
     sphere: z.array(sphereOfInfluenceSchema).optional(),
+    freeAdvantage: z.array(z.string()).optional(),
 })
 export type V5BackgroundRef = z.infer<typeof v5BackgroundRefSchema>
 
@@ -250,14 +250,14 @@ export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
     return { level, totalXpNeeded, pastXpNeeded };
 }
 
-type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note";
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "freeAdvantage";
 
 export const handleBackgroundChange = (
     kindred: Kindred,
     setKindred: Function,
     background: V5BackgroundRef,
     type: VariableKeys,
-    newPoints: number | string,
+    newPoints: number | string | string[],
 ) => {
     const existingBackground = kindred.backgrounds.find((b) => b.id === background.id);
     if (existingBackground) {
