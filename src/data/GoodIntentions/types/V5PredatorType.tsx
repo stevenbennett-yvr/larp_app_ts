@@ -176,7 +176,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'graverobber-IronGullet', name: "Iron Gullet", freebiePoints: 3, note: "able to feed on rancid blood" },
-            { ...emptyMeritFlaw, id: 'graverobber-ObviousPredator', name: "Obvious Predator", freebiePoints: 3, note: "mortals are scared of you, can't keep Herd" },
+            { ...emptyMeritFlaw, id: 'graverobber-ObviousPredator', name: "Obvious Predator", freebiePoints: 2, note: "mortals are scared of you, can't keep Herd" },
         ],
         humanityChange: 0,
         huntingPool: { attribute: "wits", skill: "medicine" },

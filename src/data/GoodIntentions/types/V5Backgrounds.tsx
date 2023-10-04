@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 import { Kindred } from './Kindred'
 import backgroundDataJson from '../sources/v5Backgrounds.json'
+import { getNumberBelow } from '../../../utils/getNumberBelow'
 
 export const sphereOfInfluenceSchema = z.union([
     z.literal("church"),
@@ -175,79 +176,55 @@ export const v5BackgroundLevel = (v5BackgroundRef: V5BackgroundRef) => {
     let pastXpNeeded = [0];
     let { experiencePoints, creationPoints, freebiePoints } = v5BackgroundRef;
 
-    let level = Math.max(creationPoints + freebiePoints)
-
-    if (!creationPoints && !freebiePoints) {
-        totalXpNeeded += 3;
+    if (experiencePoints === 0) {
+        let level = creationPoints + freebiePoints;
+        let xpNeeded = 3;
+        totalXpNeeded = xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
-    }
-    let xpNeeded = (level + 1) * 3;
-    totalXpNeeded += xpNeeded;
-    pastXpNeeded.push(totalXpNeeded);
-
-    if (experiencePoints < xpNeeded && creationPoints + freebiePoints > 0) {
-        level = creationPoints + freebiePoints; // Set level to 0 for the initial purchase
         return { level, totalXpNeeded, pastXpNeeded };
-    }
-
-    // Check if xp is less than the first xpNeeded value
-    if (experiencePoints < xpNeeded) {
-        level = 1; // Set level to 0 for the initial purchase
-        return { level, totalXpNeeded, pastXpNeeded };
-    }
-
-    while (experiencePoints >= xpNeeded) {
-        level++;
-        experiencePoints -= xpNeeded;
-        xpNeeded = (level + 1) * 3;
+    } else {
+        let level = creationPoints + freebiePoints;
+        let xpNeeded = 3;
         totalXpNeeded += xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
+        while (experiencePoints >= xpNeeded) {
+            level++;
+            experiencePoints -= xpNeeded;
+            xpNeeded = 3;
+            totalXpNeeded += xpNeeded;
+            pastXpNeeded.push(totalXpNeeded);
+        }
+        return { level, totalXpNeeded, pastXpNeeded };
     }
-
-    return { level, totalXpNeeded, pastXpNeeded };
 }
-
 
 export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
     let totalXpNeeded = 0;
     let pastXpNeeded = [0];
     let { experiencePoints, creationPoints, freebiePoints } = AdvantageRef;
 
-
-
-    const advantageInfo = v5GetAdvantageByName(AdvantageRef.name)
-    const { cost } = advantageInfo
-
-    let level = Math.max(creationPoints + freebiePoints)
-
-    if (!creationPoints && !freebiePoints) {
-        totalXpNeeded += cost[0] * 3;
+    if (experiencePoints === 0) {
+        let level = creationPoints + freebiePoints;
+        let xpNeeded = 3;
+        totalXpNeeded = xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
-    }
-    let xpNeeded = (level + 1) * 3;
-    totalXpNeeded += xpNeeded;
-    pastXpNeeded.push(totalXpNeeded);
-
-    if (experiencePoints < xpNeeded && creationPoints + freebiePoints > 0) {
-        level = creationPoints + freebiePoints; // Set level to 0 for the initial purchase
         return { level, totalXpNeeded, pastXpNeeded };
-    }
-
-    // Check if xp is less than the first xpNeeded value
-    if (experiencePoints < xpNeeded) {
-        level = 1; // Set level to 0 for the initial purchase
-        return { level, totalXpNeeded, pastXpNeeded };
-    }
-
-    while (experiencePoints >= xpNeeded) {
-        level++;
-        experiencePoints -= xpNeeded;
-        xpNeeded = (level + 1) * 3;
+    } else {
+        let level = creationPoints + freebiePoints;
+        let xpNeeded = 3;
         totalXpNeeded += xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
-    }
 
-    return { level, totalXpNeeded, pastXpNeeded };
+        while (experiencePoints >= xpNeeded) {
+            level++;
+            experiencePoints -= xpNeeded;
+            xpNeeded = 3;
+            totalXpNeeded += xpNeeded;
+            pastXpNeeded.push(totalXpNeeded);
+        }
+
+        return { level, totalXpNeeded, pastXpNeeded };
+    }
 }
 
 type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "freeAdvantage";
@@ -271,6 +248,37 @@ export const handleBackgroundChange = (
             backgrounds: [...kindred.backgrounds, { ...background, [type]: newPoints }],
         });
     }
+};
+
+export const v5HandleXpBackgroundChange = (
+    character: any,
+    setCharacter: Function,
+    background: V5BackgroundRef,
+    value: number) => {
+    const { totalXpNeeded, pastXpNeeded } = v5BackgroundLevel(background)
+
+    let xp = value > background.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
+
+    handleBackgroundChange(character, setCharacter, background, "experiencePoints", xp)
+    return xp
+}
+
+export const v5FindMaxBackground = (
+    kindred: Kindred,
+    background: V5BackgroundRef,
+) => {
+    const resourcesRef = kindred.backgrounds.find((entry) => entry.name === "Resources");
+    const resourceLevel = resourcesRef ? v5BackgroundLevel(resourcesRef).level : 0;
+    const havenMax = resourceLevel === 3 ? 3 : resourceLevel === 1 ? 2 : 1;
+
+    const { experiencePoints } = background;
+    const { level } = v5BackgroundLevel(background);
+
+    let max = undefined;
+    if (background.name === "Haven" ? havenMax : level === 3) {
+        max = experiencePoints;
+    }
+    return max;
 };
 
 export const handleBackgroundRemove = (
@@ -313,3 +321,64 @@ export const handleAdvantageChange = (
     setKindred({ ...kindred, backgrounds: updatedBackgrounds });
 
 };
+
+export const v5HandleXpAdvantageChange = (
+    character: any,
+    setCharacter: Function,
+    background: V5BackgroundRef,
+    advantage: V5AdvantageRef,
+    value: number) => {
+    const { totalXpNeeded, pastXpNeeded } = v5AdvantageLevel(advantage)
+
+    let xp = value > advantage.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
+
+    handleAdvantageChange(character, setCharacter, background, advantage, "experiencePoints", xp)
+    return xp
+}
+
+
+/* 
+
+// This doesn't work, found a workaround.
+
+export const v5FindMaxAdvantage = (
+    advantage: V5AdvantageRef,
+    advantageInfo: V5Advantage,
+    background: V5BackgroundRef
+) => {
+    const { experiencePoints } = background;
+    const { level } = v5AdvantageLevel(advantage);
+    let maxCost = advantageInfo.cost[advantageInfo.cost.length - 1]
+
+    let max = undefined;
+    if (level === maxCost) {
+        max = experiencePoints;
+    }
+    console.log(level)
+    return max;
+} */
+
+export const filterSelectData = (
+    kindred: Kindred,
+    backgroundData: V5Background[]
+) => {
+    const userBackgrounds = kindred.backgrounds; // Replace with the actual user's backgrounds
+    const backgroundsToExclude = ["Contacts", "Allies", "Haven", "Mask"];
+    const hasObviousPredator = kindred.meritsFlaws.some(entry => entry.name === "Obvious Predator");
+
+    return backgroundData.filter((background) => {
+        const backgroundName = background.name;
+
+        // Check if there is no object in userBackgrounds with a matching name
+        const isNotInUserBackgrounds = !userBackgrounds.some((bg) => bg.name === backgroundName);
+
+        // Check if the backgroundName is in the exceptions list
+        const isException = backgroundsToExclude.includes(backgroundName);
+
+        // Check if the backgroundName is "Herd" and the user has "Obvious Predator"
+        const isHerdAndObviousPredator = backgroundName === "Herd" && hasObviousPredator;
+
+        // Keep the background if it's not in userBackgrounds, is an exception, or is "Herd" with "Obvious Predator"
+        return isNotInUserBackgrounds || isException || isHerdAndObviousPredator;
+    });
+}

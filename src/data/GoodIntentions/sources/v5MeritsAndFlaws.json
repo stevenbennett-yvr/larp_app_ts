@@ -182,6 +182,30 @@
         "prerequisite": {"trait":"Mask","level":0}
     },
     {
+        "name": "Bloodhount",
+        "category": "feeding",
+        "type": "merit",
+        "cost": [1],
+        "description": "You may identify the Resonance of a mortal within five steps by sniffing them.",
+        "source": "LOTN5 pg.181"
+    },
+    {
+        "name": "Iron Gullet",
+        "category": "feeding",
+        "type": "merit",
+        "cost": [3],
+        "description": "You can feed from stale, rancid, or bagged blood.",
+        "source": "LOTN5 pg.181"
+    },
+    {
+        "name": "Viscosity",
+        "category": "feeding",
+        "type": "merit",
+        "cost": [1, 2, 3],
+        "description": "For each level, you may tap Dyscrasias one addional time per game.",
+        "source": "LOTN5 pg.181"
+    },
+    {
         "name": "Farmer",
         "category": "feeding",
         "type": "flaw",

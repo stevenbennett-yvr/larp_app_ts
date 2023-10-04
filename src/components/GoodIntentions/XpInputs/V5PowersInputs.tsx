@@ -71,10 +71,10 @@ const V5PowersInputs = ({ kindred, setKindred }: V5PowersXpInputsProps) => {
             return matchingPower?.discipline === discipline;
         });
     };
-    
+
     const disciplinePowersSelected = (kindred: Kindred, discipline: DisciplineKey) => {
         const selectedPowers = getSelectedPowers(kindred, discipline);
-    
+
         return selectedPowers.length < v5DisciplineLevel(kindred, discipline).level;
     };
 
@@ -96,7 +96,7 @@ const V5PowersInputs = ({ kindred, setKindred }: V5PowersXpInputsProps) => {
                 <Accordion.Item value={discipline}>
                     <Accordion.Control icon={<Image height={20} width={20} src={disciplines[discipline].logo} />}>
                         {disciplinePowersSelected(kindred, discipline) ?
-                            <Text>{discipline.toUpperCase()} <b style={{color:"#880808"}}>{v5DisciplineLevel(kindred, discipline).level - getSelectedPowers(kindred, discipline).length} Remaining</b></Text> :
+                            <Text>{discipline.toUpperCase()} <b style={{ color: "#880808" }}>{v5DisciplineLevel(kindred, discipline).level - getSelectedPowers(kindred, discipline).length} Remaining</b></Text> :
                             <Text>{discipline.toUpperCase()}</Text>
                         }
 
@@ -132,7 +132,7 @@ const V5PowersInputs = ({ kindred, setKindred }: V5PowersXpInputsProps) => {
                                             <td dangerouslySetInnerHTML={{ __html: `${power.summary} <p>Rote Pool: ${power.dicePool}  ()</p>` }} />
                                             <td>
                                                 {isPowerSelected ? (
-                                                    <Button color="red" disabled={getHighestSelectedLevelInDiscipline(kindred, discipline) > power.level || ( powerRef && powerRef?.creationPoints > 0)} onClick={() => { handleDeselect(power); }}>Deselect</Button>
+                                                    <Button color="red" disabled={getHighestSelectedLevelInDiscipline(kindred, discipline) > power.level || (powerRef && powerRef?.creationPoints > 0)} onClick={() => { handleDeselect(power); }}>Deselect</Button>
                                                 ) : (
                                                     disciplinePowersSelected(kindred, discipline) && (getHighestSelectedLevelInDiscipline(kindred, discipline) >= power.level - 1) ? (
                                                         <Button color="gray" onClick={() => { handleSelect(power); }}>Select</Button>
@@ -162,13 +162,17 @@ const V5PowersInputs = ({ kindred, setKindred }: V5PowersXpInputsProps) => {
                         (knownInClan as DisciplineKey[]).map((d) => createPowerAccordion(d))
                     }
                 </Accordion>
-                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Out Clan Powers</Text>
 
-                <Accordion>
-                    {
-                        (knownOutClan as DisciplineKey[]).map((d) => createPowerAccordion(d))
-                    }
-                </Accordion>
+                {knownOutClan.length > 0 ?
+                    <>
+                        <Text mt={"xl"} ta="center" fz="xl" fw={700}>Out Clan Powers</Text>
+                        <Accordion>
+                            {
+                                (knownOutClan as DisciplineKey[]).map((d) => createPowerAccordion(d))
+                            }
+                        </Accordion>
+                    </>
+                    : <></>}
             </Stack>
         </Center>
     )

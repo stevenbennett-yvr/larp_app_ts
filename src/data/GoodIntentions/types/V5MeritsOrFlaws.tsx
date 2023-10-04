@@ -2,6 +2,7 @@ import { z } from 'zod'
 import meritFlawDataJson from '../sources/v5MeritsAndFlaws.json'
 import { Kindred, v5BloodPotencyLevel } from './Kindred'
 import { V5BackgroundRef, v5BackgroundLevel } from './V5Backgrounds'
+import { getNumberBelow } from '../../../utils/getNumberBelow'
 
 export const meritFlawTypeSchema = z.union([
     z.literal('merit'),
@@ -74,41 +75,52 @@ export const emptyMeritFlaw: V5MeritFlawRef = {
     note: "",
 }
 
+const v5GetMeritByName = (name: string) => {
+    let meritInfo = meritFlawData.find((merit) => {
+        return merit.name.trim() === name.trim();
+    });
+    if (!meritInfo) {
+        return {
+            id: "",
+            name: "",
+            type: "flaw",
+            category: "feeding",
+            cost: [0],
+            description: "",
+            source: ""
+        }
+    } else {
+        return meritInfo
+    }
+}
+
 export const v5MeritLevel = (v5MeritFlawRef: V5MeritFlawRef) => {
     let totalXpNeeded = 0;
     let pastXpNeeded = [0];
     let { experiencePoints, creationPoints, freebiePoints } = v5MeritFlawRef;
 
-    let level = Math.max(creationPoints + freebiePoints)
+    let meritInfo = v5GetMeritByName(v5MeritFlawRef.name)
 
-    if (!creationPoints && !freebiePoints) {
-        totalXpNeeded += 3;
+    if (experiencePoints === 0) {
+        let level = creationPoints + freebiePoints;
+        let xpNeeded = level > 0 ? 3 : meritInfo.cost[0] * 3;
+        totalXpNeeded = xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
-    }
-    let xpNeeded = (level + 1) * 3;
-    totalXpNeeded += xpNeeded;
-    pastXpNeeded.push(totalXpNeeded);
-
-    if (experiencePoints < xpNeeded && creationPoints + freebiePoints > 0) {
-        level = creationPoints + freebiePoints; // Set level to 0 for the initial purchase
         return { level, totalXpNeeded, pastXpNeeded };
-    }
-
-    // Check if xp is less than the first xpNeeded value
-    if (experiencePoints < xpNeeded) {
-        level = 1; // Set level to 0 for the initial purchase
-        return { level, totalXpNeeded, pastXpNeeded };
-    }
-
-    while (experiencePoints >= xpNeeded) {
-        level++;
-        experiencePoints -= xpNeeded;
-        xpNeeded = (level + 1) * 3;
+    } else {
+        let level = creationPoints + freebiePoints;
+        let xpNeeded = 3;
         totalXpNeeded += xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
+        while (experiencePoints >= xpNeeded) {
+            level++;
+            experiencePoints -= xpNeeded;
+            xpNeeded = 3;
+            totalXpNeeded += xpNeeded;
+            pastXpNeeded.push(totalXpNeeded);
+        }
+        return { level, totalXpNeeded, pastXpNeeded };
     }
-
-    return { level, totalXpNeeded, pastXpNeeded };
 }
 
 type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "note";
@@ -136,6 +148,28 @@ export const handleMeritFlawChange = (
             meritsFlaws: [...kindred.meritsFlaws, { ...meritFlaw, [type]: newPoints }]
         })
     }
+}
+
+export const v5HandleXpMeritChange = (
+    character: any,
+    setCharacter: Function,
+    meritFlaw: V5MeritFlawRef,
+    value: number) => {
+    const { totalXpNeeded, pastXpNeeded } = v5MeritLevel(meritFlaw)
+
+    let xp = value > meritFlaw.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
+
+    handleMeritFlawChange(character, setCharacter, meritFlaw, "experiencePoints", xp)
+    return xp
+}
+
+export const v5HandleMeritRemove = (kindred:Kindred, setKindred:Function, meritRef:V5MeritFlawRef) => {
+    const { meritsFlaws } = kindred;
+    const meritsToRemove = [] as V5MeritFlawRef[];
+    meritsToRemove.push(meritRef)
+
+    const updatedMerits = meritsFlaws.filter((m) => !meritsToRemove.includes(m));
+    setKindred({ ...kindred, meritsFlaws: updatedMerits})
 }
 
 export const v5MeritFlawFilter = (kindred: Kindred) => {

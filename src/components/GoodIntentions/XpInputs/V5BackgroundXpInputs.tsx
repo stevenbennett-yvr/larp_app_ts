@@ -1,28 +1,31 @@
-import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-//import { useState } from "react"
-import { V5SphereKey, SphereSelectData, V5BackgroundRef, backgroundData, filterSelectData, handleBackgroundChange, v5BackgroundRefs, v5BackgroundLevel } from "../../../data/GoodIntentions/types/V5Backgrounds"
-import { Stack, Space, Text, Center, ScrollArea, Button, Group, Alert, Table, Select, Grid, Card } from "@mantine/core"
-import { globals } from "../../../assets/globals"
-import { useState, forwardRef } from 'react'
-import BackgroundModal from './BackgroundModal'
+import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
+import { v5BackgroundLevel, V5BackgroundRef, SphereSelectData, V5Background, V5SphereKey, backgroundData, filterSelectData, v5BackgroundRefs, handleBackgroundChange } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { globals } from "../../../assets/globals";
+import { useState, forwardRef } from "react";
+import { Space, Group, Text, Table, Select, Button, Grid, Card, Center, Stack } from "@mantine/core";
+import V5AdvantageXpInputs from "./V5AdvantageXpInputs";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUserGroup, faCat, faAddressBook, faFaceGrinStars, faHouseChimney, faCow, faMasksTheater, faCoins } from "@fortawesome/free-solid-svg-icons"
+import { v5xp } from "../../../data/GoodIntentions/V5Experience";
 
-type BackgroundPickerProps = {
+type v5BackgroundXpInputProps = {
     kindred: Kindred,
-    setKindred: (kindred: Kindred) => void
-    nextStep: () => void
-    backStep: () => void
+    setKindred: (kindred:Kindred) => void
 }
 
-const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: BackgroundPickerProps) => {
-    const isPhoneScreen = globals.isPhoneScreen
-    const isSmallScreen = globals.isSmallScreen
-    const height = globals.viewportHeightPx
+const V5BackgroundXpInput = ({ kindred, setKindred }:v5BackgroundXpInputProps) => {
+
     const [selectedBackground, setSelectedBackground] = useState<string | null>("");
     const [selectedSphere, setSelectedSphere] = useState<V5SphereKey | null>("");
 
+    const [modalBackground, setModalBackground] = useState<string>("")
+    const [modalOpen, setModalOpen] = useState(false);
+    const handleCloseModal = () => {
+        setModalBackground("");
+        setModalOpen(false);
+    };
+    
     const getIcon = (name:string) => {
         if (name === "Allies") {
             return faUserGroup
@@ -50,64 +53,12 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
         }
     }
 
-    const getFlawPoints = (kindred: Kindred): number => {
-        let totalFlawPoints = 0;
+    const filterData = filterSelectData(kindred, backgroundData)
 
-        Object.values(kindred.backgrounds).forEach((background) => {
-            let backgroundInfo = backgroundData.find(entry => entry.name === background.name)
-
-            Object.values(background.advantages).forEach((advantage) => {
-                let advantageInfo = backgroundInfo?.advantages?.find(entry => entry.name === advantage.name)
-
-                if (advantageInfo?.type === "disadvantage") {
-                    totalFlawPoints += advantage.creationPoints
-                }
-            })
-
-        });
-
-        return Math.min(totalFlawPoints, 5);
-
-    }
-
-    const getTotalBackgroundPoints = (kindred: Kindred): number => {
-        let totalAdvantagePoints = 0;
-
-        Object.values(kindred.backgrounds).forEach((background) => {
-            totalAdvantagePoints += background.creationPoints
-        });
-
-        return totalAdvantagePoints
-
-    }
-
-    const getRemainingPoints = (kindred: Kindred): number => {
-        let totalBackgroundPoints = 0;
-
-        Object.values(kindred.backgrounds).forEach((background) => {
-            let backgroundInfo = backgroundData.find(entry => entry.name === background.name)
-
-            totalBackgroundPoints += background.creationPoints;
-            Object.values(background.advantages).forEach((advantage) => {
-                let advantageInfo = backgroundInfo?.advantages?.find(entry => entry.name === advantage.name)
-
-                if (advantageInfo?.type === "advantage") {
-                    totalBackgroundPoints += advantage.creationPoints
-                }
-            })
-
-        });
-
-        return 7 + getFlawPoints(kindred) - totalBackgroundPoints
-    }
-
-    const filteredData = filterSelectData(kindred, backgroundData)
-
-    const filteredSelectData = filteredData.map((b) => ({
+    const selectData = filterData.map((b:V5Background) => ({
         value: `${b.name}`,
         label: `${b.name}`,
     }))
-
     interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
         label: string;
         bgc: string;
@@ -133,8 +84,7 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
             console.log(selectedSphere)
             newBackground = { ...newBackground, sphere: [selectedSphere] }
         }
-        handleBackgroundChange(kindred, setKindred, newBackground, "creationPoints", 1)
-
+        handleBackgroundChange(kindred, setKindred, newBackground, "experiencePoints", v5xp.background)
     }
 
     const getSelectedBackgroundData = () => {
@@ -182,15 +132,6 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
         }
     }
 
-    const [modalOpen, setModalOpen] = useState(false);
-
-    const handleCloseModal = () => {
-        setModalBackground("");
-        setModalOpen(false);
-    };
-
-    const [modalBackground, setModalBackground] = useState<string>("")
-
     const createBackgroundPick = (bRef: V5BackgroundRef) => {
         const backgroundInfo = backgroundData.find((entry) => entry.name === bRef.name)
         const icon = getIcon(bRef.name)
@@ -227,11 +168,11 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
             <Stack mt={"xl"} align="center" spacing="xl">
                 <Text fz={"30px"} ta={"center"}>Select <b>Backgrounds</b></Text>
 
+                <V5AdvantageXpInputs kindred={kindred} setKindred={setKindred} bId={modalBackground} modalOpened={modalOpen} closeModal={handleCloseModal} />
 
-                <ScrollArea h={height - 215} w={"100%"} p={20}>
                     <Center>
                     <Select
-                        data={filteredSelectData}
+                        data={selectData}
                         value={selectedBackground}
                         onChange={(val) => setSelectedBackground(val)}
                         itemComponent={SelectItem}
@@ -239,15 +180,12 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
                         allowDeselect
                         placeholder="Select Background to Buy"
                         style={{ width: '70%' }}
-                        disabled={getRemainingPoints(kindred) <= 0}
                     />
                     </Center>
                     {getSelectedBackgroundData()}
 
 
                     <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Owned Backgrounds</Text>
-                    <hr color="#e03131" />
-
 
                     <Space h={"sm"} />
                     <Grid grow m={0}>
@@ -255,35 +193,10 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
                             sortedBackgrounds.map((bRef) => createBackgroundPick(bRef))
                         }
                     </Grid>
-                </ScrollArea>
-
-                <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
-                    <Group>
-                        <Button.Group>
-                            <Button
-                                style={{ margin: "5px" }}
-                                color="gray"
-                                onClick={backStep}
-                            >
-                                Back
-                            </Button>
-                            <Button
-                                style={{ margin: "5px" }}
-                                color="gray"
-                                onClick={nextStep}
-                                disabled={getRemainingPoints(kindred) !== 0 || getTotalBackgroundPoints(kindred) > 7}
-                            >
-                                Next
-                            </Button>
-                            <Text fz={globals.smallerFontSize} style={{ margin: "10px" }}>Background Points: 7/{getRemainingPoints(kindred)}</Text>
-
-                        </Button.Group>
-                    </Group>
-                </Alert>
-                <BackgroundModal kindred={kindred} setKindred={setKindred} bId={modalBackground} modalOpened={modalOpen} closeModal={handleCloseModal} />
             </Stack>
         </Center>
     )
+
 }
 
-export default BackgroundPicker
+export default V5BackgroundXpInput

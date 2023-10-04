@@ -361,7 +361,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                         ...selectableBackgrounds
                     ];
                     const combinedMeritsFlaws = [
-                        ...predatorData.backgrounds,
+                        ...predatorData.meritsAndFlaws,
                         ...selectableMeritFlaw
                     ];
                     setKindred({

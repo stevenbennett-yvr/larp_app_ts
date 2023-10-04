@@ -8,6 +8,8 @@ import V5DisciplineXpInputs from '../../../components/GoodIntentions/XpInputs/V5
 import V5PowersInputs from '../../../components/GoodIntentions/XpInputs/V5PowersInputs'
 import V5RitualsXpInputs from '../../../components/GoodIntentions/XpInputs/V5RitualsXpInputs'
 import V5CeremoniesXpInputs from '../../../components/GoodIntentions/XpInputs/V5CeremonyXpInputs'
+import V5BackgroundXpInput from '../../../components/GoodIntentions/XpInputs/V5BackgroundXpInputs'
+import V5MeritFlawInputs from '../../../components/GoodIntentions/XpInputs/V5MeritFlawInputs'
 
 import { globals } from '../../../assets/globals'
 import { v5DisciplineLevel } from '../../../data/GoodIntentions/types/V5Disciplines'
@@ -57,6 +59,7 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
 
                 <V5RitualsXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ritualModalOpen} closeModal={closeRitualsModal} />    
                 <V5CeremoniesXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ceremonyModalOpen} closeModal={closeCeremoniesModal} />    
+                                
                 <Center>
                 <Group>
                     {v5DisciplineLevel(kindred, 'blood sorcery').level > 0?
@@ -71,6 +74,9 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                 }
                 </Group>
                 </Center>
+
+                <V5BackgroundXpInput kindred={kindred} setKindred={setKindred} />
+                <V5MeritFlawInputs kindred={kindred} setKindred={setKindred} />
 
                 <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                     <Group>
