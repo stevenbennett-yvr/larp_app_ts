@@ -1,8 +1,9 @@
 import { z } from 'zod'
 import meritFlawDataJson from '../sources/v5MeritsAndFlaws.json'
-import { Kindred, v5BloodPotencyLevel } from './Kindred'
+import { Kindred } from './Kindred'
 import { V5BackgroundRef, v5BackgroundLevel } from './V5Backgrounds'
 import { getNumberBelow } from '../../../utils/getNumberBelow'
+import { v5BloodPotencyLevel } from './V5BloodPotency'
 
 export const meritFlawTypeSchema = z.union([
     z.literal('merit'),

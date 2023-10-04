@@ -10,7 +10,6 @@ import { ritualRefSchema } from './V5Rituals';
 import { Power, powerRefSchema } from './V5Powers';
 import { v5MeritFlawRefSchema } from './V5MeritsOrFlaws';
 import { ceremonyRefSchema } from './V5Ceremonies';
-import { v5xp } from '../V5Experience';
 
 export const v5BackgroundSchema = z.object({
     history: z.string(),
@@ -29,7 +28,6 @@ export const kindredSchema = z.object({
     email: z.string(),
     uid: z.string(),
     domain: z.string(),
-
     name: z.string(),
 
     clan: clanNameSchema,
@@ -52,6 +50,7 @@ export const kindredSchema = z.object({
 
     backgrounds: v5BackgroundRefSchema.array(),
     meritsFlaws: v5MeritFlawRefSchema.array(),
+    startDate: z.string().datetime(),
 })
 export type Kindred = z.infer<typeof kindredSchema>
 
@@ -141,41 +140,10 @@ export const getEmptyKindred = (): Kindred => {
 
         backgrounds: [],
         meritsFlaws: [],
+        startDate: new Date().toISOString(),
     }
 }
 
 export const containsBloodSorcery = (powers: Power[]) => powers.filter((power) => power.discipline === "blood sorcery").length > 0
 
 export const containsOblivion = (powers: Power[]) => powers.filter((power) => power.discipline === "oblivion").length > 0
-
-export const v5BloodPotencyLevel = (
-    kindred: Kindred,
-) => {  
-    let { creationPoints, freebiePoints = 0, experiencePoints = 0 } = kindred.bloodPotency
-  
-    let totalXpNeeded = 0;
-    let pastXpNeeded = [0];
-  
-    if (experiencePoints === 0) {
-      let level = creationPoints + freebiePoints;
-      let xpNeeded = (level + 1) * v5xp.bloodPotency;
-      totalXpNeeded = xpNeeded;
-      pastXpNeeded.push(totalXpNeeded);
-      return { level, totalXpNeeded, pastXpNeeded };
-    } else {
-      let level = creationPoints + freebiePoints;
-      let xpNeeded = (level + 1) * v5xp.bloodPotency;
-      totalXpNeeded += xpNeeded;
-      pastXpNeeded.push(totalXpNeeded);
-  
-      while (experiencePoints >= xpNeeded) {
-        level++;
-        experiencePoints -= xpNeeded;
-        xpNeeded = (level + 1) * v5xp.bloodPotency;
-        totalXpNeeded += xpNeeded;
-        pastXpNeeded.push(totalXpNeeded);
-      }
-  
-      return { level, totalXpNeeded, pastXpNeeded };
-    }
-}

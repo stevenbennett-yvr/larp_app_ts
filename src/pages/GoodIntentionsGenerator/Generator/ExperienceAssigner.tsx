@@ -1,4 +1,4 @@
-import {  Alert, Group, Button, Divider, Center } from '@mantine/core'
+import {  Alert, Group, Button, Divider, Center, Text } from '@mantine/core'
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { useState } from 'react'
 
@@ -10,9 +10,12 @@ import V5RitualsXpInputs from '../../../components/GoodIntentions/XpInputs/V5Rit
 import V5CeremoniesXpInputs from '../../../components/GoodIntentions/XpInputs/V5CeremonyXpInputs'
 import V5BackgroundXpInput from '../../../components/GoodIntentions/XpInputs/V5BackgroundXpInputs'
 import V5MeritFlawInputs from '../../../components/GoodIntentions/XpInputs/V5MeritFlawInputs'
+import V5BloodPotenceXpInput from '../../../components/GoodIntentions/XpInputs/V5BloodPotenceXpInputs'
+import V5HumanityXpInput from '../../../components/GoodIntentions/XpInputs/V5HumanityXpInputs'
 
 import { globals } from '../../../assets/globals'
 import { v5DisciplineLevel } from '../../../data/GoodIntentions/types/V5Disciplines'
+import { spentExperience } from '../../../data/GoodIntentions/types/V5Experience'
 
 type V5ExperienceAssignerProps = {
     kindred: Kindred,
@@ -77,6 +80,8 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
 
                 <V5BackgroundXpInput kindred={kindred} setKindred={setKindred} />
                 <V5MeritFlawInputs kindred={kindred} setKindred={setKindred} />
+                <V5BloodPotenceXpInput kindred={kindred} setKindred={setKindred} />
+                <V5HumanityXpInput kindred={kindred} setKindred={setKindred} />
 
                 <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                     <Group>
@@ -97,6 +102,8 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                             >
                                 Next
                             </Button>
+                            <Text fz={globals.smallerFontSize} style={{ margin: "10px" }} color={0 > 50 - spentExperience(kindred)? "black" : "white"}>Remaining Experience: {50 - spentExperience(kindred)}</Text>
+
                         </Button.Group>
                     </Group>
                 </Alert>
