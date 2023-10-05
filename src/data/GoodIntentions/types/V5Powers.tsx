@@ -15,6 +15,7 @@ export const amalgamPrerequisiteSchema = z.object({
     discipline: disciplineNameSchema,
     level: z.number().min(1).int(),
 })
+
 export type AmalgamPrerequisite = z.infer<typeof amalgamPrerequisiteSchema>
 
 export const powerSchema = z.object({
@@ -26,6 +27,7 @@ export const powerSchema = z.object({
     discipline: disciplineNameSchema,
     rouseChecks: z.number().min(0).int(),
     amalgamPrerequisites: amalgamPrerequisiteSchema.array(),
+    powerPrerequisite: z.string().array(),
 })
 export type Power = z.infer<typeof powerSchema>
 
@@ -33,119 +35,174 @@ export const allPowers:Power[] = [
 
     //Animalism
     //1
-    { name: "Feral Whispers", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can summon and communicate with an animal.", dicePool: "", level: 1, discipline: "animalism" },
-    { name: "Sense the Beast", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can sense the beast within other vampires, mortals and supernatural creatures.​​", dicePool: "", level: 1, discipline: "animalism" },
+    { name: "Feral Whispers", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "The vampire can summon and communicate with an animal.", dicePool: "", level: 1, discipline: "animalism" },
+    { name: "Sense the Beast", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "The vampire can sense the beast within other vampires, mortals and supernatural creatures.​​", dicePool: "", level: 1, discipline: "animalism" },
     //2
-    { name: "Animal Succulence", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "The vampire can slake additional Hunger by feeding on animals.", dicePool: "", level: 2, discipline: "animalism" },
-    { name: "Atavism", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can cause an animal to temporarily revert to their primal instincts, forcing them to attack anyone nearby or to flee the scene", dicePool: "Charisma + Animalism", level: 2, discipline: "animalism" },
+    { name: "Animal Succulence", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "The vampire can slake additional Hunger by feeding on animals.", dicePool: "", level: 2, discipline: "animalism" },
+    { name: "Atavism", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "The vampire can cause an animal to temporarily revert to their primal instincts, forcing them to attack anyone nearby or to flee the scene", dicePool: "Charisma + Animalism", level: 2, discipline: "animalism" },
     //3
-    { name: "Enhance the Wild Ride", description: "Enhance the Wild Ride, once purchased, automatically boosts your Blood Potency by two for Blood Surge bonuses during Frenzies, allows one Blood Surge without a Rouse check per Frenzy, and maintains its effect throughout a frenzy, contrary to typical social powers.", rouseChecks: 0, amalgamPrerequisites: [], summary: "You have learned how to work with the Beast, instead of against it, leaning into every Frenzy and becoming far more dangerous.", dicePool: "", level: 3, discipline: "animalism" },
-    { name: "Quell the Beast", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can cow mortals and can pull vampiric targets out of frenzy.", dicePool: "Charisma + Animal Ken", level: 3, discipline: "animalism" },
-    { name: "Unliving Hive", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can become a permanent home for swarms of flies or cockroaches or similar small creatures.", dicePool: "", level: 3, discipline: "animalism" },
+    { name: "Enhance the Wild Ride", description: "Enhance the Wild Ride, once purchased, automatically boosts your Blood Potency by two for Blood Surge bonuses during Frenzies, allows one Blood Surge without a Rouse check per Frenzy, and maintains its effect throughout a frenzy, contrary to typical social powers.", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "You have learned how to work with the Beast, instead of against it, leaning into every Frenzy and becoming far more dangerous.", dicePool: "", level: 3, discipline: "animalism" },
+    { name: "Quell the Beast", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "The vampire can cow mortals and can pull vampiric targets out of frenzy.", dicePool: "Charisma + Animal Ken", level: 3, discipline: "animalism" },
+    { name: "Unliving Hive", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "The vampire can become a permanent home for swarms of flies or cockroaches or similar small creatures.", dicePool: "", level: 3, discipline: "animalism" },
     //4
-    { name: "Subsume the Spirit", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can mentally take over an animal target.", dicePool: "Manipulation + Animal Ken", level: 4, discipline: "animalism" },
-    { name: "Control the Savage Beast", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "Manipulate other vampires in frenzy.", dicePool: "Charisma + Animal Ken", level: 4, discipline: "animalism" },
+    { name: "Subsume the Spirit", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "The vampire can mentally take over an animal target.", dicePool: "Manipulation + Animal Ken", level: 4, discipline: "animalism" },
+    { name: "Control the Savage Beast", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Manipulate other vampires in frenzy.", dicePool: "Charisma + Animal Ken", level: 4, discipline: "animalism" },
     //5
-    { name: "Animal Domination", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can perfectly direct swarms and flocks of animals.", dicePool: "", level: 5, discipline: "animalism" },
-    { name: "Drawing Out the Beast", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can cause a target to immediately frenzy.", dicePool: "Wits + Animal Ken", level: 5, discipline: "animalism" },    
-
-    { name: "Heightened Senses", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "your senses become supernaturally sharp; add Auspex rating to perception rolls", dicePool: "", level: 1, discipline: "auspex" },
-    { name: "Sense the Unseen", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "sense supernatural activity", dicePool: "Wits / Resolve + Auspex", level: 1, discipline: "auspex" },
-    { name: "Premonition", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "gain visions of the future", dicePool: "", level: 2, discipline: "auspex" },
-    { name: "Obeah", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "fortitude", level: 1 }], summary: "soothe a person's psychological turmoil", dicePool: "Composure + Auspex", level: 2, discipline: "auspex" },
-    { name: "Unerring Pursuit", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "dominate", level: 1 }], summary: "create a bond with a target to spy on them", dicePool: "Resolve + Auspex", level: 2, discipline: "auspex" },
+    { name: "Animal Domination", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "The vampire can perfectly direct swarms and flocks of animals.", dicePool: "", level: 5, discipline: "animalism" },
+    { name: "Drawing Out the Beast", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "The vampire can cause a target to immediately frenzy.", dicePool: "Wits + Animal Ken", level: 5, discipline: "animalism" },    
 
     //Auspex
+    //1
+    { name: "Heightened Senses", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Enhance vampiric senses.", dicePool: "", level: 1, discipline: "auspex" },
+    { name: "Sense the Unseen", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Sense supernatural activity.", dicePool: "Wits + Auspex", level: 1, discipline: "auspex" },
+    //2
+    { name: "Panacea", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "fortitude", level: 1 }], powerPrerequisite:[], summary: "Heals Willpower and calms nerves.", dicePool: "Composure + Medicine", level: 2, discipline: "auspex" },
+    { name: "Premonition", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Visions of the future", dicePool: "", level: 2, discipline: "auspex" },
+    { name: "Scry the Soul", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Perceives information about the target", dicePool: "Intelligence + Insight", level: 2, discipline: "auspex" },
+    //3
+    { name: "Collective Cognizance", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "You automatically notice mental and social attacks without a test.", dicePool: "Wits + Awareness", level: 3, discipline: "auspex" },
+    { name: "Share the Senses", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Sense through another person (eg. see through their eyes)", dicePool: "Resolve + Awareness", level: 3, discipline: "auspex" },
+    //4
+    { name: "Unveil the Edifice", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "You can extend your senses beyond your immediate surroundings", dicePool: "", level: 4, discipline: "auspex" },
+    { name: "Spirit's Touch", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Gathering emotional residue from an object or location", dicePool: "Intelligence + Investigation", level: 4, discipline: "auspex" },
+    //5
+    { name: "Clairvoyance", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Information gathering from surroundings", dicePool: "Intelligence + Investigation", level: 5, discipline: "auspex" },
+    { name: "Possession", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "dominate", level: 3}], powerPrerequisite:[], summary: "Possess a mortal body", dicePool: "Resolve + Intimidation", level: 5, discipline: "auspex" },
+    { name: "Telepahty", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Read minds and project thoughts", dicePool: "Resolve + Awareness", level: 5, discipline: "auspex" },
+    { name: "Unburdening the Bestial Soul", description: "", rouseChecks: 1, powerPrerequisite:["Panacea"], amalgamPrerequisites: [{ discipline: "dominate", level: 3}], summary: "Stain removal or protection from Stains", dicePool: "", level: 5, discipline: "auspex" },
 
-    { name: "Fatal Flaw", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "oblivion", level: 1 }], summary: "determine a target's weakness", dicePool: "Intelligence + Auspex", level: 3, discipline: "auspex" },
-    { name: "Scry the Soul", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "see people's auras", dicePool: "Intelligence + Auspex", level: 3, discipline: "auspex" },
-    { name: "Share the Senses", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "sense through another person (eg. see through their eyes)", dicePool: "Resolve + Auspex", level: 3, discipline: "auspex" },
+    //Blood Sorcery
+    //1
+    { name: "A Taste for Blood", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Discover traits of another through their blood.", dicePool: "", level: 1, discipline: "blood sorcery" },
+    { name: "Corrosive Vitae", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Turn vitae corrosive.", dicePool: "", level: 1, discipline: "blood sorcery" },
+    //2
+    { name: "Extinguish Vitae", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "increase another vampire's hunger", dicePool: " Intelligence + Occult", level: 2, discipline: "blood sorcery" },
+    { name: "Blood Rash", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "When inflicted with this curse, Rousing the Blood causes the victim to become agitated", dicePool: " Intelligence + Occult", level: 2, discipline: "blood sorcery" },
+    //3
+    { name: "Blood of Potency", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "temporarily increase your Blood Potency", dicePool: "Resolve + Occult", level: 3, discipline: "blood sorcery" },
+    { name: "Scorpion's Touch", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "turn your blood into paralyzing poison", dicePool: "Dexterity + Marksmanship", level: 3, discipline: "blood sorcery" },
+    //4
+    { name: "Theft of Vitae", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Manipulate blood from a victim through the air to feed", dicePool: "Wits + Occult", level: 4, discipline: "blood sorcery" },
+    { name: "Slow the Beating Heart", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Slow the heartbeat of nearby mortals, sending them into a coma-like sleep", dicePool: "Wits + Occult", level: 4, discipline: "blood sorcery" },
+    //5
+    { name: "Baal's Caress", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:["Scorpion's Touch"], summary: "Change the user's own Vitae into an aggressive and lethal poison", dicePool: "Dexterity + Marksmanship", level: 5, discipline: "blood sorcery" },
+    { name: "Cauldron of Blood", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:["Scorpion's Touch"], summary: "Change the user's own Vitae into an aggressive and lethal poison", dicePool: "Dexterity + Marksmanship", level: 5, discipline: "blood sorcery" },
 
-    { name: "Cat's Grace", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "automatically pass balance tests", dicePool: "", level: 1, discipline: "celerity" },
-    { name: "Rapid Reflexes", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "faster reactions & free minor actions", dicePool: "", level: 1, discipline: "celerity" },
-    { name: "Fleetness", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "add Celerity rating for defense and Dexterity rolls", dicePool: "", level: 2, discipline: "celerity" },
+    //Celerity
+    //1
+    { name: "Cat's Grace", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Automatically pass balance tests.", dicePool: "", level: 1, discipline: "celerity" },
+    { name: "Quicksilver", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Your reactions are so quick you do not have time to be surprised.", dicePool: "", level: 1, discipline: "celerity" },
+    //2
+    { name: "Fleetness", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Add Celerity rating to Initiative.", dicePool: "", level: 2, discipline: "celerity" },
+    { name: "Rapid Reflexes", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Gain an additional simple action per turn. Add your dots in Celerity to non-combat Dexterity tests.", dicePool: "", level: 2, discipline: "celerity" },
+    //3
+    { name: "Blink", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Closes the distance as if teleporting.", dicePool: "", level: 3, discipline: "celerity" },
+    { name: "Nimble Departure", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "You may choose to declare Fair Escape at the end of a turn instead of during your initiative.", dicePool: "", level: 3, discipline: "celerity" },
+    //4
+    { name: "Unerring Aim", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "auspex", level: 2 }], powerPrerequisite:[], summary: "You can automatically hit a target with a ranged attack.", dicePool: "", level: 4, discipline: "celerity" },
+    { name: "Velocity", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "You may reduce a critical hit against you to a normal hit.", dicePool: "", level: 4, discipline: "celerity" },
+    { name: "Zephyr", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "This power lets you move as quickly and effortlessly as the wind itself.", dicePool: "", level: 4, discipline: "celerity" },
+    //5
+    { name: "Bulletstorm", description: "", rouseChecks: 2, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Fire a hail of bullets with uncanny speed and precision.", dicePool: "", level: 5, discipline: "celerity" },
+    { name: "Lightning Strike", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Attack with lightning speed, automatically hitting.", dicePool: "", level: 5, discipline: "celerity" },
 
-    { name: "Blink", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "dash up to 50m at supernatural speed", dicePool: "Dexterity + Athletics", level: 3, discipline: "celerity" },
-    { name: "Traversal", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "run across liquids or walls", dicePool: "Dexterity + Athletics", level: 3, discipline: "celerity" },
-    { name: "Weaving", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "add Celerity rating to defense against ranged (Requires 'Rapid Reflexes')", dicePool: "", level: 3, discipline: "celerity" },
+    //Dominate
+    //1
+    { name: "Cloud Memory", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Make someone forget the current moment.", dicePool: "Charisma + Persuasion vs. Wits + Resolve", level: 1, discipline: "dominate" },
+    { name: "Compel", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "a single, short command with an immediate effect", dicePool: "Charisma + Intimidation vs. Intelligence + Resolve", level: 1, discipline: "dominate" },
+    //2
+    { name: "Dementation", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "obfuscate", level: 2 }], powerPrerequisite:[], summary: "trigger psychotic breaks or nervous breakdowns in others", dicePool: "Manipulation + Insight vs. Intelligence + Composure", level: 2, discipline: "dominate" },
+    { name: "Mesmerize", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Issue complex commands.", dicePool: "Manipulation + Persuasion vs. Intelligence + Resolve", level: 2, discipline: "dominate" },
+    { name: "Domitor's Favor", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "make it harder for thralls to resist you", dicePool: "", level: 2, discipline: "dominate" },
+    //3
+    { name: "Forgetful Mind", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Rewrite someone's memory", dicePool: "Manipulation + Subterfuge vs. Composure + Resolve", level: 3, discipline: "dominate" },
+    { name: "Submerged Directive", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:["Cloud Memory","Compel","Mesmerize"], summary: "Implant Dominate orders as suggestions for victims", dicePool: "Manipulation + Subterfuge vs. Composure + Resolve", level: 3, discipline: "dominate" },
+    //4
+    { name: "Rationalize", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Convince victims of Dominate it was their idea the entire time", dicePool: "", level: 4, discipline: "dominate" },
+    { name: "Conditioning", description: "", rouseChecks: 2, amalgamPrerequisites: [], powerPrerequisite:[], summary: "An adept hypnotist, you may now use repeated sessions to implant suggestions.", dicePool: "Manipulation + Persuasion vs. Intelligence + Resolve", level: 4, discipline: "dominate" },
+    //5
+    { name: "Mass Manipulation", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Extend effects of Dominate to multiple targets.", dicePool: "", level: 5, discipline: "dominate" },
+    { name: "Terminal Decree", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:["Compel", "Mesmerism","Conditioning"], summary: "Bolster effects of Dominate to be able to circumvent victims' self-preservation.", dicePool: "", level: 5, discipline: "dominate" },
 
-    { name: "Cloud Memory", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "make a person forget the past minute", dicePool: "Charisma + Dominate", level: 1, discipline: "dominate" },
-    { name: "Compel", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "a single, short command with an immediate effect", dicePool: "Charisma + Dominate", level: 1, discipline: "dominate" },
-    { name: "Mesmerize", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "allow issuing more complex commands", dicePool: "Manipulation + Dominate", level: 2, discipline: "dominate" },
+    //Fortitude
+    //1
+    { name: "Resiliency", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "You are more difficult to stake and immune to extreme cold.", dicePool: "", level: 1, discipline: "fortitude" },
+    { name: "Toughness", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Gain one health level and ignore wound penalties", dicePool: "", level: 1, discipline: "fortitude" },
+    //2
+    { name: "Coagulate", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "You are able to secure your blood from supernatural influence.", dicePool: "", level: 2, discipline: "fortitude" },
+    { name: "Enduring Beasts", description: "", rouseChecks: 1, amalgamPrerequisites: [{discipline:"animalism", level:1}], powerPrerequisite:[], summary: "Share the vampire's toughness with animals.", dicePool: "", level: 2, discipline: "fortitude" },
+    { name: "Unswayable Mind", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: " You are immune to the Distracted Condition.", dicePool: "", level: 2, discipline: "fortitude" },
+    { name: "Valeren", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "auspex", level: 1 }], powerPrerequisite:[], summary: "Mend an injured target.", dicePool: "Intelligence + Medicine vs. a difficulty of 2", level: 2, discipline: "fortitude" },
+    //3
+    { name: "Roots of the Mountain", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "With this power you cannot be knocked down.", dicePool: "", level: 3, discipline: "fortitude" },
+    { name: "Unyielding", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "You are immune to the Weakened Condition.", dicePool: "", level: 3, discipline: "fortitude" },
+    //4
+    { name: "Aegis", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "you may reduce one source of Aggravated Damage to Normal Damage.", dicePool: "", level: 4, discipline: "fortitude" },
+    { name: "Adaptability", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Your Blood has made your body adaptable to defend against a multitude of hazards.", dicePool: "", level: 4, discipline: "fortitude" },
+    //5
+    { name: "Flesh of Marble", description: "", rouseChecks: 2, amalgamPrerequisites: [], powerPrerequisite:[], summary: "You can only take one damage from any attack or explosion.", dicePool: "", level: 5, discipline: "fortitude" },
+    { name: "Personal Armor", description: "", rouseChecks: 2, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Those who dare try to hit you feel some of that force redirected back at them.", dicePool: "", level: 5, discipline: "fortitude" },
 
-    { name: "Domitor's Favor", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "make it harder for thralls to resist you", dicePool: "", level: 2, discipline: "dominate" },
-    { name: "Slavish Devotion", description: "", rouseChecks: 0, amalgamPrerequisites: [{ discipline: "presence", level: 1 }], summary: "strengthen the mind of your dominated victims against interference from other kindred", dicePool: "", level: 2, discipline: "dominate" },
-    // { name: "Dementation", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "obfuscate", level: 2 }], summary: "trigger psychotic breaks or nervous breakdowns in others", dicePool: "Manipulation + Dominate", level: 2, discipline: "dominate" },
 
-    { name: "Forgetful Mind", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "Rewrite memories", dicePool: "Manipulation + Dominate", level: 3, discipline: "dominate" },
-    { name: "Submerged Directive", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "When using Mesmerize you can give a command that stays dormant until triggered (requires Mesmerize)", dicePool: "", level: 3, discipline: "dominate" },
+    //Obfuscate
+    //1
+    { name: "Conceal", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Hide any inanimate objects in your possession.", dicePool: "", level: 1, discipline: "obfuscate" },
+    { name: "Silence of Death", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Mute all sounds you make", dicePool: "", level: 1, discipline: "obfuscate" },
+    //2
+    { name: "Chimerstry", description: "", rouseChecks: 1, amalgamPrerequisites: [{discipline:"presence", level:1}], powerPrerequisite:[], summary: "Hide any inanimate objects in your possession.", dicePool: "Manipulation + Subterfuge vs. Composure + Wits", level: 2, discipline: "obfuscate" },
+    { name: "Unseen Passage", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "move while remaining hidden", dicePool: "", level: 2, discipline: "obfuscate" },
+    { name: "Cache", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:["Conceal"], summary: "Your ability to Conceal objects now extends to items not on your person.", dicePool: "", level: 2, discipline: "obfuscate" },
+    //3
+    { name: "Fata Morgana", description: "", rouseChecks: 1, amalgamPrerequisites: [{discipline:"presence", level:1}], powerPrerequisite:[], summary: "Create eaborate hallucinations.", dicePool: "Manipulation + Subterfuge vs. Intelligence + Awareness", level: 3, discipline: "obfuscate" },
+    { name: "Ghost in the Machine", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Obfuscate affects technology (eg. hide yourself from recordings)", dicePool: "", level: 3, discipline: "obfuscate" },
+    { name: "Mask of a Thousand Faces", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "make yourself appear as a non-descript stranger to others", dicePool: "", level: 3, discipline: "obfuscate" },
+    //4
+    { name: "Vanish from the Mind's Eye", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:["Conceal","Unseen Passage"], summary: "Activate Cloak of Shadows or Unseen Passage while being observed.", dicePool: "Wits + Stealth vs. Wits + Awareness", level: 4, discipline: "obfuscate" },
+    { name: "Soul Mask", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Your mind is a fortress hidden behind your powers of Obfuscate.", dicePool: "", level: 4, discipline: "obfuscate" },
+    //5
+    { name: "Cloak the Gathering", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Shelter companions under Obfuscate.", dicePool: "", level: 5, discipline: "obfuscate" },
+    { name: "Phantom Hunter", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "You can act while obfuscated without drawing attention.", dicePool: "", level: 5, discipline: "obfuscate" },
 
-    { name: "Resilience", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "add Fortitude rating to health track", dicePool: "", level: 1, discipline: "fortitude" },
-    { name: "Unswayable Mind", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "add extra defense against mind-swaying", dicePool: "", level: 1, discipline: "fortitude" },
-    { name: "Toughness", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "reduce Superficial physical damage sustained", dicePool: "", level: 2, discipline: "fortitude" },
-    { name: "Valeren", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "auspex", level: 1 }], summary: "use your blood to heal other vampires", dicePool: "Intelligence + Fortitude", level: 2, discipline: "fortitude" },
-    // { name: "Obdurate", description: "", rouseChecks: 0, amalgamPrerequisites: [{ discipline: "potence", level: 2 }], summary: "maintain steady footing even when struck by massive force", dicePool: "", level: 2, discipline: "fortitude" },
+    //////
 
-    { name: "Defy Bane", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "turn aggravated damage to superficial", dicePool: "", level: 3, discipline: "fortitude" },
-    { name: "Fortify the Inner Facade", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "resist auspex and similar powers", dicePool: "", level: 3, discipline: "fortitude" },
-    { name: "Seal the Beast's Maw", description: "", rouseChecks: 2, amalgamPrerequisites: [], summary: "ignore hunger for one scene", dicePool: "", level: 3, discipline: "fortitude" },
+    { name: "Lethal Body", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "cause serious physical damage to a mortals", dicePool: "", level: 1, discipline: "potence" },
+    { name: "Soaring Leap", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "jump over long distance", dicePool: "", level: 1, discipline: "potence" },
+    { name: "Prowess", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "add Potence rating to strength checks", dicePool: "", level: 2, discipline: "potence" },
 
-    { name: "Cloak of Shadows", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "blend into surroundings while motionless", dicePool: "Wits + Obfuscate / Stealth", level: 1, discipline: "obfuscate" },
-    { name: "Silence of Death", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "mute all sounds you make", dicePool: "", level: 1, discipline: "obfuscate" },
-    { name: "Unseen Passage", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "move while remaining hidden", dicePool: "Wits + Obfuscate / Stealth", level: 2, discipline: "obfuscate" },
-    { name: "Ghost's Passing", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "animalism", level: 1 }], summary: "extend your obfuscate powers to animals under your influence", dicePool: "Wits + Obfuscate", level: 2, discipline: "obfuscate" },
-    // { name: "Ventriloquism", description: "", rouseChecks: 0, amalgamPrerequisites: [{ discipline: "auspex", level: 2 }], summary: "choose who can and cannot hear you when speaking", dicePool: "", level: 2, discipline: "obfuscate" },
+    { name: "Brutal Feed", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "drain a person in seconds", dicePool: "", level: 3, discipline: "potence" },
+    { name: "Uncanny Grip", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "grip and hold onto any surface, including walls and ceilings", dicePool: "", level: 3, discipline: "potence" },
+    { name: "Wrecker", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "add double Potence rating to strength when destroying objects (requires 'Prowess')", dicePool: "", level: 3, discipline: "potence" },
 
-    { name: "Ghost in the Machine", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "Obfuscate affects technology (eg. hide yourself from recordings)", dicePool: "", level: 3, discipline: "obfuscate" },
-    { name: "Mask of a Thousand Faces", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "make yourself appear as a non-descript stranger to others", dicePool: "", level: 3, discipline: "obfuscate" },
-    { name: "Mental Maze", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "dominate", level: 1 }], summary: "prevent someone from perceiving any exits or means of escape", dicePool: "Charisma + Obfuscate", level: 3, discipline: "obfuscate" },
+    { name: "Awe", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "become attractive and charismatic; add Presence rating to Persuasion and Performance checks", dicePool: "", level: 1, discipline: "presence" },
+    { name: "Daunt", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "push people away and intimidate; add Presence rating to Intimidation checks", dicePool: "", level: 1, discipline: "presence" },
+    { name: "Lingering Kiss", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "make mortals you feed from love you", dicePool: "", level: 2, discipline: "presence" },
 
-    { name: "Lethal Body", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "cause serious physical damage to a mortals", dicePool: "", level: 1, discipline: "potence" },
-    { name: "Soaring Leap", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "jump over long distance", dicePool: "", level: 1, discipline: "potence" },
-    { name: "Prowess", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "add Potence rating to strength checks", dicePool: "", level: 2, discipline: "potence" },
+    { name: "Dread Gaze", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "terrify an individual, causing them to submit, freeze, flee or terror-frenzy", dicePool: "Charisma + Presence", level: 3, discipline: "presence" },
+    { name: "Entrancement", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "cause infatuation, making a target do almost anything to remain in your good graces", dicePool: "Charisma + Presence", level: 3, discipline: "presence" },
+    { name: "Thrown Voice", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "auspex", level: 1 }], powerPrerequisite:[], summary: "project your voice to anywhere you can see", dicePool: "", level: 3, discipline: "presence" },
 
-    { name: "Brutal Feed", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "drain a person in seconds", dicePool: "", level: 3, discipline: "potence" },
-    { name: "Uncanny Grip", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "grip and hold onto any surface, including walls and ceilings", dicePool: "", level: 3, discipline: "potence" },
-    { name: "Wrecker", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "add double Potence rating to strength when destroying objects (requires 'Prowess')", dicePool: "", level: 3, discipline: "potence" },
+    { name: "Eyes of the Beast", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "your eyes start glowing and you can see in total darkness", dicePool: "", level: 1, discipline: "protean" },
+    { name: "Weight of the Feather", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "become weightless", dicePool: "", level: 1, discipline: "protean" },
+    { name: "Feral Weapons", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "grow deadly claws", dicePool: "", level: 2, discipline: "protean" },
+    { name: "Vicissitude", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "dominate", level: 2 }], powerPrerequisite:[], summary: "reshape your own skin, muscles and bone at will", dicePool: "Resolve + Protean", level: 2, discipline: "protean" },
 
-    { name: "Awe", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "become attractive and charismatic; add Presence rating to Persuasion and Performance checks", dicePool: "", level: 1, discipline: "presence" },
-    { name: "Daunt", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "push people away and intimidate; add Presence rating to Intimidation checks", dicePool: "", level: 1, discipline: "presence" },
-    { name: "Lingering Kiss", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "make mortals you feed from love you", dicePool: "", level: 2, discipline: "presence" },
+    { name: "Earth Meld", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "meld into the soil", dicePool: "", level: 3, discipline: "protean" },
+    { name: "Shapechange", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "turn into a human-sized animal", dicePool: "", level: 3, discipline: "protean" },
 
-    { name: "Dread Gaze", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "terrify an individual, causing them to submit, freeze, flee or terror-frenzy", dicePool: "Charisma + Presence", level: 3, discipline: "presence" },
-    { name: "Entrancement", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "cause infatuation, making a target do almost anything to remain in your good graces", dicePool: "Charisma + Presence", level: 3, discipline: "presence" },
-    { name: "Thrown Voice", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "auspex", level: 1 }], summary: "project your voice to anywhere you can see", dicePool: "", level: 3, discipline: "presence" },
+    { name: "Corrosive Vitae", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "make your blood corrosive to dead substances", dicePool: "", level: 1, discipline: "blood sorcery" },
 
-    { name: "Eyes of the Beast", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "your eyes start glowing and you can see in total darkness", dicePool: "", level: 1, discipline: "protean" },
-    { name: "Weight of the Feather", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "become weightless", dicePool: "", level: 1, discipline: "protean" },
-    { name: "Feral Weapons", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "grow deadly claws", dicePool: "", level: 2, discipline: "protean" },
-    { name: "Vicissitude", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "dominate", level: 2 }], summary: "reshape your own skin, muscles and bone at will", dicePool: "Resolve + Protean", level: 2, discipline: "protean" },
+    { name: "Shadow Cloak", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "manipulate shadows for stealth or intimidation", dicePool: "", level: 1, discipline: "oblivion" },
+    { name: "Oblivion's Sight", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "see in darkness and see ghosts", dicePool: "", level: 1, discipline: "oblivion" },
+    { name: "Ashes to Ashes", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "use your vitae to disintegrate non-vampire corpses", dicePool: "Stamina + Oblivion", level: 1, discipline: "oblivion" },
+    { name: "The Binding Fetter", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "identify objects and locations that are connected to ghosts", dicePool: "", level: 1, discipline: "oblivion" },
+    { name: "Shadow Cast", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "summon a supernatural shadow you control", dicePool: "", level: 2, discipline: "oblivion" },
+    { name: "Where the Shroud Thins", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "find places where ghosts can cross between worlds", dicePool: "Wits + Oblivion", level: 2, discipline: "oblivion" },
+    // { name: "Arms of Ahriman", description: "", rouseChecks: 0, amalgamPrerequisites: [{ discipline: "potence", level: 2 }], powerPrerequisite:[], summary: "xxx", dicePool: "", level: 2, discipline: "oblivion" },
+    // { name: "Fatal Precognition", description: "", rouseChecks: 0, amalgamPrerequisites: [{ discipline: "auspex", level: 2 }], powerPrerequisite:[], summary: "xxx", dicePool: "", level: 2, discipline: "oblivion" },
 
-    { name: "Earth Meld", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "meld into the soil", dicePool: "", level: 3, discipline: "protean" },
-    { name: "Shapechange", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "turn into a human-sized animal", dicePool: "", level: 3, discipline: "protean" },
-
-    { name: "Corrosive Vitae", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "make your blood corrosive to dead substances", dicePool: "", level: 1, discipline: "blood sorcery" },
-    { name: "A Taste for Blood", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "Discern traits about someone by tasting a drop of their blood", dicePool: "Resolve + Blood Sorcery", level: 1, discipline: "blood sorcery" },
-    { name: "Shape of the Sanguine Sacrament", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "manipulate blood to show simple messages or shapes", dicePool: "Manipulation + Blood Sorcery", level: 1, discipline: "blood sorcery" },
-    { name: "Extinguish Vitae", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "increase another vampire's hunger", dicePool: "Resolve + Blood Sorcery", level: 2, discipline: "blood sorcery" },
-    { name: "Scour Secrets", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "locate particular information in text", dicePool: "Intelligence + Blood Sorcery", level: 2, discipline: "blood sorcery" },
-
-    { name: "Blood of Potency", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "temporarily increase your Blood Potency", dicePool: "Resolve + Blood Sorcery", level: 3, discipline: "blood sorcery" },
-    { name: "Scorpion's Touch", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "turn your blood into paralyzing poison", dicePool: "Strength + Blood Sorcery", level: 3, discipline: "blood sorcery" },
-    { name: "Transitive Bond", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "your blood can retain Blood Bonding properties even when stored in an object or a ghoul", dicePool: "Intelligence + Blood Sorcery", level: 3, discipline: "blood sorcery" },
-    
-    { name: "Shadow Cloak", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "manipulate shadows for stealth or intimidation", dicePool: "", level: 1, discipline: "oblivion" },
-    { name: "Oblivion's Sight", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "see in darkness and see ghosts", dicePool: "", level: 1, discipline: "oblivion" },
-    { name: "Ashes to Ashes", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "use your vitae to disintegrate non-vampire corpses", dicePool: "Stamina + Oblivion", level: 1, discipline: "oblivion" },
-    { name: "The Binding Fetter", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "identify objects and locations that are connected to ghosts", dicePool: "", level: 1, discipline: "oblivion" },
-    { name: "Shadow Cast", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "summon a supernatural shadow you control", dicePool: "", level: 2, discipline: "oblivion" },
-    { name: "Where the Shroud Thins", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "find places where ghosts can cross between worlds", dicePool: "Wits + Oblivion", level: 2, discipline: "oblivion" },
-    // { name: "Arms of Ahriman", description: "", rouseChecks: 0, amalgamPrerequisites: [{ discipline: "potence", level: 2 }], summary: "xxx", dicePool: "", level: 2, discipline: "oblivion" },
-    // { name: "Fatal Precognition", description: "", rouseChecks: 0, amalgamPrerequisites: [{ discipline: "auspex", level: 2 }], summary: "xxx", dicePool: "", level: 2, discipline: "oblivion" },
-
-    { name: "Aura of Decay", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "decay everything around", dicePool: "Stamina + Oblivion", level: 3, discipline: "oblivion" },
-    { name: "Shadow Perspective", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "project senses through shadows", dicePool: "", level: 3, discipline: "oblivion" },
-    { name: "Touch of Oblivion", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "decay a living or unliving body", dicePool: "", level: 3, discipline: "oblivion" },
+    { name: "Aura of Decay", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "decay everything around", dicePool: "Stamina + Oblivion", level: 3, discipline: "oblivion" },
+    { name: "Shadow Perspective", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "project senses through shadows", dicePool: "", level: 3, discipline: "oblivion" },
+    { name: "Touch of Oblivion", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "decay a living or unliving body", dicePool: "", level: 3, discipline: "oblivion" },
 
 ] as Power[]
 
