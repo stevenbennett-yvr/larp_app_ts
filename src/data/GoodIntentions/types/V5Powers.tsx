@@ -163,47 +163,79 @@ export const allPowers:Power[] = [
     { name: "Cloak the Gathering", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Shelter companions under Obfuscate.", dicePool: "", level: 5, discipline: "obfuscate" },
     { name: "Phantom Hunter", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "You can act while obfuscated without drawing attention.", dicePool: "", level: 5, discipline: "obfuscate" },
 
-    //////
+    //Oblivion
+    //1
+    { name: "Shadow Cloak", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "The vampire shapes ambient shadows to conceal their presence and make themselves more frightening.", dicePool: "", level: 1, discipline: "oblivion" },
+    { name: "Oblivion's Sight", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "See in darkness clearly and see ghosts present", dicePool: "", level: 1, discipline: "oblivion" },
+    //2
+    { name: "Arms of Ahriman", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "potence", level: 2 }], powerPrerequisite:[], summary: "Conjures shadow appendages that the user can control.", dicePool: "", level: 2, discipline: "oblivion" },
+    { name: "Shadow Cast", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Conjure shadows from the user's body", dicePool: "", level: 2, discipline: "oblivion" },
+    { name: "Masque of Death", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Allows the Kindred to turn his/her body into a corpse-like state", dicePool: "", level: 2, discipline: "oblivion" },
+    //3
+    { name: "Aura of Decay", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Harnessing their connection to Oblivion can make plants wilt, animals and humans sick, and food spoil.", dicePool: "", level: 3, discipline: "oblivion" },
+    { name: "Reaper's Passing", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline:"dominate", level: 1 }], powerPrerequisite:[], summary: "Creates a 'near death experience' in the subject of choice.", dicePool: "Manipulation + Occult vs. Resolve + Composure", level: 3, discipline: "oblivion" },
+    //4
+    { name: "Stygian Shroud", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Darkness spews out of a nearby shadow and covers the area.", dicePool: "Wits + Investigation vs. the Oblivion user’s Resolve + Occult", level: 4, discipline: "oblivion" },
+    { name: "Touch of Oblivion", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Allows the user to cripple opponent's with their strikes.", dicePool: "", level: 4, discipline: "oblivion" },
+    //5
+    { name: "Shadowstep", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "The user can step into one shadow and appear in another within their sight", dicePool: "", level: 5, discipline: "oblivion" },
+    { name: "Tenebrous Avatar", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Changes their body into a shadow able to move over any surface or through small spaces.", dicePool: "", level: 5, discipline: "oblivion" },
 
-    { name: "Lethal Body", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "cause serious physical damage to a mortals", dicePool: "", level: 1, discipline: "potence" },
-    { name: "Soaring Leap", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "jump over long distance", dicePool: "", level: 1, discipline: "potence" },
-    { name: "Prowess", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "add Potence rating to strength checks", dicePool: "", level: 2, discipline: "potence" },
+    //Potence
+    //1
+    { name: "Prowess", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Add Potence rating to strength checks", dicePool: "", level: 2, discipline: "potence" },
+    { name: "Soaring Leap", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Jump over long distance", dicePool: "", level: 1, discipline: "potence" },
+    //2
+    { name: "Lethal Body", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Cause serious physical damage to a mortals", dicePool: "", level: 1, discipline: "potence" },
+    { name: "Uncanny Grip", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Grip and hold onto any surface, including walls and ceilings", dicePool: "", level: 3, discipline: "potence" },
+    //3
+    { name: "Brutal Feed", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Turn feeding into a violent and messy affair that only lasts seconds to Slake the user's Hunger.", dicePool: "", level: 3, discipline: "potence" },
+    { name: "Staggering Strike", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Brawl and Melee attacks inflict the Staggered Condition", dicePool: "", level: 3, discipline: "potence" },
+    //4
+    { name: "Fist of Caine", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Inflict Aggravated Health damage to mortals and supernatural creatures alike.", dicePool: "", level: 4, discipline: "potence" },
+    { name: "Savage Pursuit", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "You may chase a fleeing opponent at great speed, ignoring obstacles", dicePool: "", level: 4, discipline: "potence" },
+    //5
+    { name: "Earth Shock", description: "", rouseChecks: 2, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Create a shockwave to throw opponents prone.", dicePool: "", level: 5, discipline: "potence" },
+    { name: "Puissance", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Increase Brawl and Melee damage to two.", dicePool: "", level: 5, discipline: "potence" },
 
-    { name: "Brutal Feed", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "drain a person in seconds", dicePool: "", level: 3, discipline: "potence" },
-    { name: "Uncanny Grip", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "grip and hold onto any surface, including walls and ceilings", dicePool: "", level: 3, discipline: "potence" },
-    { name: "Wrecker", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "add double Potence rating to strength when destroying objects (requires 'Prowess')", dicePool: "", level: 3, discipline: "potence" },
+    //Presence
+    //1
+    { name: "Awe", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Become attractive and charismatic, gaining Gaze and Focus.", dicePool: "", level: 1, discipline: "presence" },
+    { name: "Daunt", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Push people away and intimidate, mortals must overcome your presence to attack you.", dicePool: "", level: 1, discipline: "presence" },
+    { name: "Eyes of the Serpent", description: "", rouseChecks: 0, amalgamPrerequisites: [{discipline:"protean",level:1}], powerPrerequisite:[], summary: "Immobilize a victim by making eye contact.", dicePool: " Charisma + Persuasion vs. Wits + Composure", level: 1, discipline: "presence" },
+    //2
+    { name: "Monologue", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "You engage your targets in conversation, preventing them from initiating an attack until you.", dicePool: "", level: 2, discipline: "presence" },
+    { name: "Silencing Tongue", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Render opponent speechless with a scathing remark.", dicePool: "Charisma + Leadership vs. Composure + Resolve", level: 2, discipline: "presence" },
+    //3
+    { name: "Dread Gaze", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Instill fear into a target to make them flee.", dicePool: "Charisma + Intimidation vs. Composure + Resolve", level: 3, discipline: "presence" },
+    { name: "Entrancement", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Influence someone into a star-struck or beguiled state of mind where they do their best to keep the user happy.", dicePool: "Manipulation + Leadership vs. Composure + Wits", level: 3, discipline: "presence" },
+    //4
+    { name: "Summon", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Call target you have met to your location", dicePool: "Manipulation + Leadership vs. Composure + Intelligence", level: 4, discipline: "presence" },
+    { name: "Nightmare Mantle", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Disorient nearby enemies, inflicting the Weakened condition.", dicePool: "", level: 4, discipline: "presence" },
+    //5
+    { name: "Majesty", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Everyone who looks at the user is dumbstruck.", dicePool: "Charisma + Leadership vs. Composure + Resolve", level: 5, discipline: "presence" },
+    { name: "Capricious Visage", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:["Dread Gaze","Entrancement"], summary: "Enhance Dread Gaze or Entrancement to affect additional targets.", dicePool: "", level: 5, discipline: "presence" },
 
-    { name: "Awe", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "become attractive and charismatic; add Presence rating to Persuasion and Performance checks", dicePool: "", level: 1, discipline: "presence" },
-    { name: "Daunt", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "push people away and intimidate; add Presence rating to Intimidation checks", dicePool: "", level: 1, discipline: "presence" },
-    { name: "Lingering Kiss", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "make mortals you feed from love you", dicePool: "", level: 2, discipline: "presence" },
-
-    { name: "Dread Gaze", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "terrify an individual, causing them to submit, freeze, flee or terror-frenzy", dicePool: "Charisma + Presence", level: 3, discipline: "presence" },
-    { name: "Entrancement", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "cause infatuation, making a target do almost anything to remain in your good graces", dicePool: "Charisma + Presence", level: 3, discipline: "presence" },
-    { name: "Thrown Voice", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "auspex", level: 1 }], powerPrerequisite:[], summary: "project your voice to anywhere you can see", dicePool: "", level: 3, discipline: "presence" },
-
+    //Protean
+    //1
     { name: "Eyes of the Beast", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "your eyes start glowing and you can see in total darkness", dicePool: "", level: 1, discipline: "protean" },
     { name: "Weight of the Feather", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "become weightless", dicePool: "", level: 1, discipline: "protean" },
+    //2
     { name: "Feral Weapons", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "grow deadly claws", dicePool: "", level: 2, discipline: "protean" },
-    { name: "Vicissitude", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "dominate", level: 2 }], powerPrerequisite:[], summary: "reshape your own skin, muscles and bone at will", dicePool: "Resolve + Protean", level: 2, discipline: "protean" },
-
     { name: "Earth Meld", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "meld into the soil", dicePool: "", level: 3, discipline: "protean" },
-    { name: "Shapechange", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "turn into a human-sized animal", dicePool: "", level: 3, discipline: "protean" },
-
-    { name: "Corrosive Vitae", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "make your blood corrosive to dead substances", dicePool: "", level: 1, discipline: "blood sorcery" },
-
-    { name: "Shadow Cloak", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "manipulate shadows for stealth or intimidation", dicePool: "", level: 1, discipline: "oblivion" },
-    { name: "Oblivion's Sight", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "see in darkness and see ghosts", dicePool: "", level: 1, discipline: "oblivion" },
-    { name: "Ashes to Ashes", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "use your vitae to disintegrate non-vampire corpses", dicePool: "Stamina + Oblivion", level: 1, discipline: "oblivion" },
-    { name: "The Binding Fetter", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "identify objects and locations that are connected to ghosts", dicePool: "", level: 1, discipline: "oblivion" },
-    { name: "Shadow Cast", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "summon a supernatural shadow you control", dicePool: "", level: 2, discipline: "oblivion" },
-    { name: "Where the Shroud Thins", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "find places where ghosts can cross between worlds", dicePool: "Wits + Oblivion", level: 2, discipline: "oblivion" },
-    // { name: "Arms of Ahriman", description: "", rouseChecks: 0, amalgamPrerequisites: [{ discipline: "potence", level: 2 }], powerPrerequisite:[], summary: "xxx", dicePool: "", level: 2, discipline: "oblivion" },
-    // { name: "Fatal Precognition", description: "", rouseChecks: 0, amalgamPrerequisites: [{ discipline: "auspex", level: 2 }], powerPrerequisite:[], summary: "xxx", dicePool: "", level: 2, discipline: "oblivion" },
-
-    { name: "Aura of Decay", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "decay everything around", dicePool: "Stamina + Oblivion", level: 3, discipline: "oblivion" },
-    { name: "Shadow Perspective", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "project senses through shadows", dicePool: "", level: 3, discipline: "oblivion" },
-    { name: "Touch of Oblivion", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "decay a living or unliving body", dicePool: "", level: 3, discipline: "oblivion" },
-
+    { name: "Vicissitude", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "dominate", level: 2 }], powerPrerequisite:[], summary: "reshape your own skin, muscles and bone at will", dicePool: "", level: 2, discipline: "protean" },
+    //3
+    { name: "Fleshcrafting", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "dominate", level: 2 }], powerPrerequisite:["Vicissitude"], summary: "Extends the mastery over the flesh to be used on others.", dicePool: "", level: 3, discipline: "protean" },
+    { name: "Shapechange", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Turn into a human-sized animal", dicePool: "", level: 3, discipline: "protean" },
+    { name: "Unfettered Heart", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: " You are immune to Staking", dicePool: "", level: 3, discipline: "protean" },
+    //4
+    { name: "Metamorphosis", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:["Shapechange"], summary: "Extends shape change to be able to change into a larger or smaller animals than the vampire's mass", dicePool: "", level: 4, discipline: "protean" },
+    { name: "Abrupt Internment", description: "", rouseChecks: 1, amalgamPrerequisites: [{discipline:"auspex",level:1}], powerPrerequisite:[], summary: "You can use the earth to meld other things into the Earth, either to store or simply stop them from moving", dicePool: "Strength + Survival Skill vs. target’s Strength + Athletics Skill", level: 4, discipline: "protean" },
+    { name: "Horrid Form", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:["Vicissitude"], summary: "Take on a monstrous shape.", dicePool: "", level: 4, discipline: "protean" },
+    //5
+    { name: "Heart of Darkness", description: "", rouseChecks: 2, amalgamPrerequisites: [{discipline:"fortitude",level:2}], powerPrerequisite:[], summary: "Allows a vampire to remove their own heart and store it outside of their body.", dicePool: "", level: 5, discipline: "protean" },
+    { name: "Form of Mist", description: "", rouseChecks: 2, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Turn into a cloud of mist.", dicePool: "", level: 5, discipline: "protean" },
+    { name: "Shape Mastery", description: "", rouseChecks: 2, amalgamPrerequisites: [{discipline:"presence",level:2}], powerPrerequisite:[], summary: "Force another shapeshifter to return to their natural form.", dicePool: "Strength + Survival vs. Composure + Resolve", level: 5, discipline: "protean" },
 ] as Power[]
 
 export const powerRefs: PowerRef[] = allPowers.map((power) => ({
@@ -273,7 +305,21 @@ export const getFilteredPower = (kindred:Kindred): Power[] => {
             matchingAmalgam = Boolean(matchingUserDiscipline)
         }
 
-        return matchingAmalgam && matchingLevel
+        let matchingPowerPreq = false;
+        const powers = kindred.powers;
+        
+        if (power.powerPrerequisite.length === 0) {
+            matchingPowerPreq = true;
+        } else {
+            for (const prereq of power.powerPrerequisite) {
+                if (powers.some((p) => p.name === prereq)) {
+                    matchingPowerPreq = true;
+                    break; // Exit the loop once a match is found
+                }
+            }
+        }
+
+        return matchingAmalgam && matchingLevel && matchingPowerPreq;
     })
 
     return filteredPowers

@@ -129,7 +129,7 @@ const V5PowersInputs = ({ kindred, setKindred }: V5PowersXpInputsProps) => {
                                                 />
                                                 <p style={{ color: "white" }}>{power.discipline} {power.level} {power.amalgamPrerequisites.length > 0 ? `+ ${power.amalgamPrerequisites[0].discipline} ${power.amalgamPrerequisites[0].level}` : ""}</p>
                                             </td>
-                                            <td dangerouslySetInnerHTML={{ __html: `${power.summary} <p>Rote Pool: ${power.dicePool}  ()</p>` }} />
+                                            <td dangerouslySetInnerHTML={{ __html: `${power.summary} <p>${power.dicePool}</p>` }} />
                                             <td>
                                                 {isPowerSelected ? (
                                                     <Button color="red" disabled={getHighestSelectedLevelInDiscipline(kindred, discipline) > power.level || (powerRef && powerRef?.creationPoints > 0)} onClick={() => { handleDeselect(power); }}>Deselect</Button>
