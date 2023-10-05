@@ -1,7 +1,6 @@
 import { Kindred, getEmptyKindred } from "../../data/GoodIntentions/types/Kindred"
 import { useLocalStorage } from "@mantine/hooks"
 
-
 import ClanPicker from "./Generator/ClanPicker"
 import AttributePicker from "./Generator/AttributePicker"
 import SkillsPicker from './Generator/SkillsPicker'
@@ -11,6 +10,8 @@ import DisciplinesPicker from "./Generator/DisciplinePicker"
 import BackgroundPicker from "./Generator/BackgroundPicker"
 import MeritPicker from "./Generator/MeritPicker"
 import V5ExperienceAssigner from './Generator/ExperienceAssigner'
+import CoreConcept from "./Generator/CoreConcept"
+import V5PrintSheet from './Generator/PrintSheet'
 
 import { Center } from "@mantine/core"
 
@@ -62,9 +63,13 @@ const GenerateKindred = () => {
                     <V5ExperienceAssigner kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             case 9:
-                // Background shit
+                // Backstory shit
                 return (
-                    <></>
+                    <CoreConcept kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                )
+            case 10:
+                return (
+                    <V5PrintSheet kindred={kindred} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             default:
                 return null;

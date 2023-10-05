@@ -3,7 +3,7 @@ import { Checkbox, CheckboxProps, Modal, NumberInput, Accordion, Text, Button, G
 import Tally from "../../../utils/talley"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons"
-import { handleAdvantageChange, emptyAdvantage, handleBackgroundRemove, V5AdvantageRef, V5BackgroundRef, v5BackgroundLevel, handleBackgroundChange, backgroundData } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { handleAdvantageChange, emptyAdvantage, handleBackgroundRemove, V5AdvantageRef, V5BackgroundRef, v5BackgroundLevel, handleBackgroundChange, backgroundData, V5Background } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { Droplet } from 'tabler-icons-react';
 
 type BackgroundModalProps = {
@@ -95,9 +95,23 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
 
     console.log()
 
-    let predatorType = kindred.predatorType.name
+    let predatorType = kindred.predatorType
     const numberOfAdvantagesWithFreebiePoints =
         advantagesWithFreebiePoints.length + (predatorType === "Farmer" || predatorType === "Hitcher" || predatorType === "Graverobber" ? 1 : 0);
+
+
+    const advantageStep = (advantage: V5AdvantageRef, background: V5Background): number => {
+        if (!background.advantages) { return 1 }
+        const advantageInfo = background.advantages.find(entry => entry.name === advantage.name)
+        let minCost = advantageInfo?.cost[0];
+        let maxCost = advantageInfo?.cost[advantageInfo?.cost.length - 1]
+        if (!minCost || !maxCost) { return 0 }
+        if (minCost === maxCost) {
+            return minCost;
+        } else {
+            return 1;
+        }
+    }
 
     return (
         <Modal
@@ -144,6 +158,7 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
                                                                         value={advantageRef.creationPoints}
                                                                         style={{ width: "100px" }}
                                                                         min={0}
+                                                                        step={advantageStep(advantageRef, backgroundInfo)}
                                                                         max={bRef.name === "Haven" && advantage.type === "advantage" ?
                                                                             havenSizeMax : getAdvantagePoints(advantageRef) === advantage.cost[advantage.cost.length - 1] ?
                                                                                 advantageRef.creationPoints : advantage.cost[advantage.cost.length - 1]}
@@ -156,8 +171,8 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
                                                                             color="red"
                                                                             icon={CheckboxIcon}
                                                                             disabled={
-                                                                                advantageRef.creationPoints > 0 || 
-                                                                                (advantageRef.freebiePoints > 0 && !(freeAdvantage.includes(advantage.name))) || 
+                                                                                advantageRef.creationPoints > 0 ||
+                                                                                (advantageRef.freebiePoints > 0 && !(freeAdvantage.includes(advantage.name))) ||
                                                                                 (freeAdvantagePoints - numberOfAdvantagesWithFreebiePoints === 0 && !(freeAdvantage.includes(advantage.name)))
                                                                             }
                                                                             checked={freeAdvantage.includes(advantage.name)}

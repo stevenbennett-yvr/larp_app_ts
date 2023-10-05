@@ -76,7 +76,7 @@ export const emptyMeritFlaw: V5MeritFlawRef = {
     note: "",
 }
 
-const v5GetMeritByName = (name: string) => {
+export const v5GetMeritByName = (name: string) => {
     let meritInfo = meritFlawData.find((merit) => {
         return merit.name.trim() === name.trim();
     });

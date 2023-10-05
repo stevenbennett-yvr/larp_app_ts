@@ -196,7 +196,13 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
         return (
             <div>
                 <Accordion.Item value={discipline}>
-                    <Accordion.Control icon={<Image height={20} width={20} src={disciplines[discipline].logo} />}>{discipline.toUpperCase()}</Accordion.Control>
+                    <Accordion.Control 
+                        icon={<Image height={20} width={20} src={disciplines[discipline].logo} />}>
+                            {discipline.toUpperCase()} 
+                            {selectedPowersInDiscipline.length < kindred.disciplines[discipline].creationPoints? 
+                                <Text><b style={{ color: "#880808" }}>{kindred.disciplines[discipline].creationPoints - selectedPowersInDiscipline.length} Remaining</b></Text>:
+                                <></>}
+                    </Accordion.Control>
                     <Accordion.Panel>
                         <Table>
                             <thead>

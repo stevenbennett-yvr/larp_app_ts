@@ -23,22 +23,37 @@ export const BasicSchema = z.object({
     experiencePoints: z.number().min(0).int(),
 })
 
+export const backstorySchema = z.object({
+    history: z.string(),
+    goals: z.string(),
+    description: z.string(),
+    profilePic: z.string(),
+  })
+
+export const touchstoneSchema = z.object({
+    name: z.string(),
+    description: z.string(),
+    conviction: z.string(),
+})
+
+export type Touchstone = z.infer<typeof touchstoneSchema>
+
 export const kindredSchema = z.object({
     id: z.optional(z.string()),
     email: z.string(),
     uid: z.string(),
     domain: z.string(),
     name: z.string(),
+    concept: z.string(),
+
+    backstory: backstorySchema,
+    touchstones: touchstoneSchema.array(),
 
     clan: clanNameSchema,
     generation: z.number().min(0).int(),
-    predatorType: z.object({
-        name: predatorTypeNameSchema,
-    }),
+    predatorType: predatorTypeNameSchema,
     bloodPotency: BasicSchema,
     humanity: BasicSchema,
-
-    background: v5BackgroundSchema,
 
     attributes: v5AttributesSchema,
     skills: v5skillsSchema,
@@ -57,19 +72,22 @@ export type Kindred = z.infer<typeof kindredSchema>
 export const getEmptyKindred = (): Kindred => {
     return {
         name: "",
+        concept: "",
         email: "",
         uid: "",
         domain: "",
+        touchstones: [],
 
-        background: {
+        backstory: {
             history: "",
             goals: "",
             description: "",
-        },
+            profilePic: "",
+          },
 
         clan: "",
         generation: 0,
-        predatorType: { name: "" },
+        predatorType:"",
         bloodPotency: {creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
         humanity: {creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
 

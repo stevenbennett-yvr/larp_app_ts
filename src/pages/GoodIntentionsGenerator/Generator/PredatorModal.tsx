@@ -366,6 +366,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                     ];
                     setKindred({
                         ...kindred,
+                        predatorType: predatorData.name as PredatorTypeName,
                         backgrounds: combinedBackgrounds,
                         meritsFlaws: combinedMeritsFlaws,
                         humanity: {

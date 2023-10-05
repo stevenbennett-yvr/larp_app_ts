@@ -171,7 +171,7 @@ const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
 
                         <Button
                             onClick={() => {
-                                setKindred({ ...kindred, clan, predatorType: { name: "" }, meritsFlaws: [], disciplines: getEmptyDisciplines, powers: [] })
+                                setKindred({ ...kindred, clan, predatorType: "", meritsFlaws: [], disciplines: getEmptyDisciplines, powers: [] })
                                 nextStep()
                             }}
                         >Confirm Clan</Button>

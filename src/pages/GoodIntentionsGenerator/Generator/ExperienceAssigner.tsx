@@ -77,13 +77,20 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                 }
                 </Group>
                 </Center>
+                <Divider my="sm"/>
 
                 <V5BackgroundXpInput kindred={kindred} setKindred={setKindred} />
+                <Divider my="sm"/>
+
                 <V5MeritFlawInputs kindred={kindred} setKindred={setKindred} />
+                <Divider my="sm"/>
+
                 <V5BloodPotenceXpInput kindred={kindred} setKindred={setKindred} />
+                <Divider my="sm"/>
+
                 <V5HumanityXpInput kindred={kindred} setKindred={setKindred} />
 
-                <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
+                <Alert color="dark" variant="filled" radius="xs" style={{ zIndex:9999, padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                     <Group>
                         <Button.Group>
                             <Button
@@ -99,10 +106,11 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                                 onClick={() => {
                                     nextStep()
                                 }}
+                                disabled={6 < 50 - spentExperience(kindred)}
                             >
                                 Next
                             </Button>
-                            <Text fz={globals.smallerFontSize} style={{ margin: "10px" }} color={0 > 50 - spentExperience(kindred)? "black" : "white"}>Remaining Experience: {50 - spentExperience(kindred)}</Text>
+                            <Text fz={globals.smallerFontSize} style={{ margin: "10px" }} color={0 > 50 - spentExperience(kindred)? "red" : "white"}>Remaining Experience: {50 - spentExperience(kindred)}</Text>
 
                         </Button.Group>
                     </Group>

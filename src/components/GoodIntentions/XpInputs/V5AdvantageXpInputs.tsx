@@ -90,7 +90,7 @@ const V5AdvantageXpInputs = ({ kindred, setKindred, bId, modalOpened, closeModal
 
     console.log()
 
-    let predatorType = kindred.predatorType.name
+    let predatorType = kindred.predatorType
     const numberOfAdvantagesWithFreebiePoints =
         advantagesWithFreebiePoints.length + (predatorType === "Farmer" || predatorType === "Hitcher" || predatorType === "Graverobber" ? 1 : 0);
 
