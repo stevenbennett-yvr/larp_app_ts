@@ -197,6 +197,7 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
             <div>
                 <Accordion.Item value={discipline}>
                     <Accordion.Control 
+                        style={{ backgroundColor:"#25262B"}}
                         icon={<Image height={20} width={20} src={disciplines[discipline].logo} />}>
                             {discipline.toUpperCase()} 
                             {selectedPowersInDiscipline.length < kindred.disciplines[discipline].creationPoints? 
@@ -292,18 +293,16 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
                 }
 
 
-                <Center>
-                    <Accordion>
+                    <Accordion variant="contained" >
                         {
                             (knownDisciplines as DisciplineKey[]).map((d) => createPowerAccordion(d))
                         }
                     </Accordion>
-                </Center>
             </Stack>
 
             <RitualsModal modalOpened={modalOpen} closeModal={handleCloseModal} kindred={kindred} setKindred={setKindred} nextStep={nextStep} />
 
-            <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
+            <Alert color="dark" variant="filled" radius="md" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                 <Group>
                     <Button.Group>
                         <Button

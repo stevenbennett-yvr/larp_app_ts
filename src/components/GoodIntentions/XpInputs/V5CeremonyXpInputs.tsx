@@ -78,7 +78,7 @@ const V5CeremoniesXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: 
     const getCeremonyCardColsXp = () => {
         return Ceremonies.map((ceremony) => {
             const ceremonyRef = ceremonyRefs.find((entry) => entry.name === ceremony.name)
-            const isCeremonySelected = kindred.ceremonies.some((r) => r.name === ceremony.name && r.experiencePoints > 0)
+            const isCeremonySelected = kindred.ceremonies.some((r) => r.name === ceremony.name)
             let check = ceremonyRef
             if (isCeremonySelected) {
                 check = kindred.ceremonies.find((r) => r.name === ceremony.name);
@@ -129,7 +129,7 @@ const V5CeremoniesXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: 
                                         <Text truncate>Deselect {ceremony.name}</Text>
                                     </Button>
                                     :
-                                    <Button onClick={onClick} disabled={kindred.ceremonies.length !== 0} variant="light" color="blue" fullWidth radius="md">
+                                    <Button onClick={onClick} variant="light" color="blue" fullWidth radius="md">
                                         <Text truncate>Buy {ceremony.name}</Text>
                                     </Button>
                                 }

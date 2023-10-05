@@ -32,10 +32,10 @@ const RitualsModal = ({ kindred, setKindred, nextStep, modalOpened, closeModal }
                 setKindred({ ...kindred, rituals: [] });
             }
             const isRitualSelected = kindred.rituals.some((r) => r.name === ritual.name)
-            let cardHeight = phoneScreen ? 180 : 215
+            let cardHeight = phoneScreen ? 400 : 215
             if (ritual.name.length > 15) cardHeight += 25
             return (
-                <Grid.Col key={ritual.name} span={smallScreen ? 12 : 6}>
+                <Grid.Col key={ritual.name} span={12}>
                     <Card mb={20} h={cardHeight} style={{ backgroundColor: "rgba(26, 27, 30, 0.90)" }}>
                         <Group mt="0" mb="xs">
                             <Image
@@ -80,7 +80,7 @@ const RitualsModal = ({ kindred, setKindred, nextStep, modalOpened, closeModal }
             const ceremonyRef = ceremonyRefs.find((entry) => entry.name === ceremony.name)
             if (!ceremonyRef) { return null }
             const onClick = () => {
-                const updatedRituals = [...kindred.rituals, { ...ceremonyRef, creationPoints: 1 }];
+                const updatedRituals = [...kindred.ceremonies, { ...ceremonyRef, creationPoints: 1 }];
                 setKindred({ ...kindred, ceremonies: updatedRituals });
             };
             const deselect = () => {
@@ -90,13 +90,13 @@ const RitualsModal = ({ kindred, setKindred, nextStep, modalOpened, closeModal }
 
 
 
-            let cardHeight = phoneScreen ? 180 : 215
+            let cardHeight = phoneScreen ? 400 : 215
             if (ceremony.name.length > 15) cardHeight += 25
             return (
-                <Grid.Col key={ceremony.name} span={smallScreen ? 12 : 6}>
+                <Grid.Col key={ceremony.name} span={12}>
                     <Card mb={20} h={cardHeight} style={{ backgroundColor: "rgba(26, 27, 30, 0.90)" }}>
                         <Group mt="0" mb="xs">
-                        <Image
+                            <Image
                                 fit="contain"
                                 withPlaceholder
                                 src={disciplines["oblivion"].logo}
@@ -117,7 +117,7 @@ const RitualsModal = ({ kindred, setKindred, nextStep, modalOpened, closeModal }
                         </Text>
 
                         <div style={{ position: "absolute", bottom: "0", width: "100%", padding: "inherit", left: 0 }}>
-                        {isRitualSelected ?
+                            {isRitualSelected ?
                                 <Button onClick={deselect} variant="light" color="red" fullWidth radius="md">
                                     <Text truncate>Deselect {ceremony.name}</Text>
                                 </Button>
@@ -148,7 +148,6 @@ const RitualsModal = ({ kindred, setKindred, nextStep, modalOpened, closeModal }
                     :
                     <></>
                 }
-
 
                 {kindred.disciplines["oblivion"].creationPoints > 0 ?
                     <Text fw={700} fz={smallScreen ? "14px" : "28px"} align="right">

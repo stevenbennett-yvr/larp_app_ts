@@ -182,7 +182,7 @@
         "prerequisite": {"trait":"Mask","level":0}
     },
     {
-        "name": "Bloodhount",
+        "name": "Bloodhound",
         "category": "feeding",
         "type": "merit",
         "cost": [1],

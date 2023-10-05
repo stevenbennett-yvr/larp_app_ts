@@ -84,9 +84,7 @@ const V5RitualsXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: Rit
                 check = kindred.rituals.find((r) => r.name === ritual.name);
             }
 
-            if (!ritualRef || !check) {
-                return null;
-            }
+            if (!ritualRef || !check) { return null; }
 
             const onClick = () => {
 

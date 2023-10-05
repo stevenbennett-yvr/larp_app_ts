@@ -30,20 +30,32 @@ export const powerSchema = z.object({
 export type Power = z.infer<typeof powerSchema>
 
 export const allPowers:Power[] = [
-    { name: "Bond Famulus", description: "", rouseChecks: 3, amalgamPrerequisites: [], summary: "bond an animal companion. It will listen to basic commands, but full communication is not possible (unless you have Feral Whispers)", dicePool: "Charisma + Animal Ken", level: 1, discipline: "animalism" },
-    { name: "Sense the Beast", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "sense hostility and supernatural traits in people", dicePool: "Resolve + Animalism", level: 1, discipline: "animalism" },
-    { name: "Feral Whispers", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "communicate with animals. You can also call for animals and if they are nearby, they will come.", dicePool: "Manipulation / Charisma + Animalism", level: 2, discipline: "animalism" },
-    { name: "Atavism", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "make an animal enrage or flee", dicePool: "Composure + Animalism", level: 2, discipline: "animalism" },
 
-    { name: "Animal Succulence", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "Feed more effectively on animals. You can consume your famulus to temporarily gain their aspect", dicePool: "", level: 3, discipline: "animalism" },
-    { name: "Scent of Prey", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "Detect Mortals who saw Masquerade breaches", dicePool: "Resolve + Animalism", level: 3, discipline: "animalism" },
-    { name: "Quell the Beast", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "Shut down a target's drives and desires, pull vampires out of frenzy", dicePool: "Charisma + Animalism", level: 3, discipline: "animalism" },
-    
+    //Animalism
+    //1
+    { name: "Feral Whispers", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can summon and communicate with an animal.", dicePool: "", level: 1, discipline: "animalism" },
+    { name: "Sense the Beast", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can sense the beast within other vampires, mortals and supernatural creatures.​​", dicePool: "", level: 1, discipline: "animalism" },
+    //2
+    { name: "Animal Succulence", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "The vampire can slake additional Hunger by feeding on animals.", dicePool: "", level: 2, discipline: "animalism" },
+    { name: "Atavism", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can cause an animal to temporarily revert to their primal instincts, forcing them to attack anyone nearby or to flee the scene", dicePool: "Charisma + Animalism", level: 2, discipline: "animalism" },
+    //3
+    { name: "Enhance the Wild Ride", description: "Enhance the Wild Ride, once purchased, automatically boosts your Blood Potency by two for Blood Surge bonuses during Frenzies, allows one Blood Surge without a Rouse check per Frenzy, and maintains its effect throughout a frenzy, contrary to typical social powers.", rouseChecks: 0, amalgamPrerequisites: [], summary: "You have learned how to work with the Beast, instead of against it, leaning into every Frenzy and becoming far more dangerous.", dicePool: "", level: 3, discipline: "animalism" },
+    { name: "Quell the Beast", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can cow mortals and can pull vampiric targets out of frenzy.", dicePool: "Charisma + Animal Ken", level: 3, discipline: "animalism" },
+    { name: "Unliving Hive", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can become a permanent home for swarms of flies or cockroaches or similar small creatures.", dicePool: "", level: 3, discipline: "animalism" },
+    //4
+    { name: "Subsume the Spirit", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can mentally take over an animal target.", dicePool: "Manipulation + Animal Ken", level: 4, discipline: "animalism" },
+    { name: "Control the Savage Beast", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "Manipulate other vampires in frenzy.", dicePool: "Charisma + Animal Ken", level: 4, discipline: "animalism" },
+    //5
+    { name: "Animal Domination", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can perfectly direct swarms and flocks of animals.", dicePool: "", level: 5, discipline: "animalism" },
+    { name: "Drawing Out the Beast", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "The vampire can cause a target to immediately frenzy.", dicePool: "Wits + Animal Ken", level: 5, discipline: "animalism" },    
+
     { name: "Heightened Senses", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "your senses become supernaturally sharp; add Auspex rating to perception rolls", dicePool: "", level: 1, discipline: "auspex" },
     { name: "Sense the Unseen", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "sense supernatural activity", dicePool: "Wits / Resolve + Auspex", level: 1, discipline: "auspex" },
     { name: "Premonition", description: "", rouseChecks: 0, amalgamPrerequisites: [], summary: "gain visions of the future", dicePool: "", level: 2, discipline: "auspex" },
     { name: "Obeah", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "fortitude", level: 1 }], summary: "soothe a person's psychological turmoil", dicePool: "Composure + Auspex", level: 2, discipline: "auspex" },
     { name: "Unerring Pursuit", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "dominate", level: 1 }], summary: "create a bond with a target to spy on them", dicePool: "Resolve + Auspex", level: 2, discipline: "auspex" },
+
+    //Auspex
 
     { name: "Fatal Flaw", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "oblivion", level: 1 }], summary: "determine a target's weakness", dicePool: "Intelligence + Auspex", level: 3, discipline: "auspex" },
     { name: "Scry the Soul", description: "", rouseChecks: 1, amalgamPrerequisites: [], summary: "see people's auras", dicePool: "Intelligence + Auspex", level: 3, discipline: "auspex" },
