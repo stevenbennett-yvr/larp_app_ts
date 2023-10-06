@@ -1,10 +1,11 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 //import { useState } from "react"
 import { V5SphereKey, SphereSelectData, V5BackgroundRef, backgroundData, filterSelectData, handleBackgroundChange, v5BackgroundRefs, v5BackgroundLevel } from "../../../data/GoodIntentions/types/V5Backgrounds"
-import { Stack, Space, Text, Center, ScrollArea, Button, Group, Alert, Table, Select, Grid, Card } from "@mantine/core"
+import { Stack, Space, Text, Center, ScrollArea, Button, Group, Table, Select, Grid, Card } from "@mantine/core"
 import { globals } from "../../../assets/globals"
 import { useState, forwardRef } from 'react'
 import BackgroundModal from './BackgroundModal'
+
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUserGroup, faCat, faAddressBook, faFaceGrinStars, faHouseChimney, faCow, faMasksTheater, faCoins } from "@fortawesome/free-solid-svg-icons"
@@ -12,13 +13,9 @@ import { faUserGroup, faCat, faAddressBook, faFaceGrinStars, faHouseChimney, faC
 type BackgroundPickerProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void
-    nextStep: () => void
-    backStep: () => void
 }
 
-const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: BackgroundPickerProps) => {
-    const isPhoneScreen = globals.isPhoneScreen
-    const isSmallScreen = globals.isSmallScreen
+const BackgroundPicker = ({ kindred, setKindred }: BackgroundPickerProps) => {
     const height = globals.viewportHeightPx
     const [selectedBackground, setSelectedBackground] = useState<string | null>("");
     const [selectedSphere, setSelectedSphere] = useState<V5SphereKey | null>("");
@@ -67,17 +64,6 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
         });
 
         return Math.min(totalFlawPoints, 5);
-
-    }
-
-    const getTotalBackgroundPoints = (kindred: Kindred): number => {
-        let totalAdvantagePoints = 0;
-
-        Object.values(kindred.backgrounds).forEach((background) => {
-            totalAdvantagePoints += background.creationPoints
-        });
-
-        return totalAdvantagePoints
 
     }
 
@@ -225,8 +211,6 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
             <Stack mt={"xl"} align="center" spacing="xl">
-                <Text fz={"30px"} ta={"center"}>Select <b>Backgrounds</b></Text>
-
 
                 <ScrollArea h={height - 215} w={"100%"} p={20}>
                     <Center>
@@ -256,30 +240,6 @@ const BackgroundPicker = ({ kindred, setKindred, nextStep, backStep }: Backgroun
                         }
                     </Grid>
                 </ScrollArea>
-
-                <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
-                    <Group>
-                        <Button.Group>
-                            <Button
-                                style={{ margin: "5px" }}
-                                color="gray"
-                                onClick={backStep}
-                            >
-                                Back
-                            </Button>
-                            <Button
-                                style={{ margin: "5px" }}
-                                color="gray"
-                                onClick={nextStep}
-                                disabled={getRemainingPoints(kindred) !== 0 || getTotalBackgroundPoints(kindred) > 7}
-                            >
-                                Next
-                            </Button>
-                            <Text fz={globals.smallerFontSize} style={{ margin: "10px" }}>Background Points: 7/{getRemainingPoints(kindred)}</Text>
-
-                        </Button.Group>
-                    </Group>
-                </Alert>
                 <BackgroundModal kindred={kindred} setKindred={setKindred} bId={modalBackground} modalOpened={modalOpen} closeModal={handleCloseModal} />
             </Stack>
         </Center>

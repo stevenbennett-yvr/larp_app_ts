@@ -7,11 +7,11 @@ import SkillsPicker from './Generator/SkillsPicker'
 import GenerationPicker from "./Generator/GenerationPicker"
 import PredatorTypePicker from "./Generator/PredatorPicker"
 import DisciplinesPicker from "./Generator/DisciplinePicker"
-import BackgroundPicker from "./Generator/BackgroundPicker"
 import MeritPicker from "./Generator/MeritPicker"
 import V5ExperienceAssigner from './Generator/ExperienceAssigner'
 import CoreConcept from "./Generator/CoreConcept"
 import V5PrintSheet from './Generator/PrintSheet'
+import BackgroundLoreTabs from './Generator/BackgroundLoreTabs'
 
 import { Center } from "@mantine/core"
 
@@ -46,7 +46,7 @@ const GenerateKindred = () => {
             case 5:
                 // Backgrounds and Loresheets
                 return (
-                    <BackgroundPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                    <BackgroundLoreTabs kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             case 6: 
                 // Merits and Flaws

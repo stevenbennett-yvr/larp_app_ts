@@ -10,6 +10,7 @@ import { ritualRefSchema } from './V5Rituals';
 import { Power, powerRefSchema } from './V5Powers';
 import { v5MeritFlawRefSchema } from './V5MeritsOrFlaws';
 import { ceremonyRefSchema } from './V5Ceremonies';
+import { loresheetRefSchema, sectNameSchema } from './V5Loresheets'
 
 export const v5BackgroundSchema = z.object({
     history: z.string(),
@@ -50,6 +51,7 @@ export const kindredSchema = z.object({
     touchstones: touchstoneSchema.array(),
 
     clan: clanNameSchema,
+    sect: sectNameSchema,
     generation: z.number().min(0).int(),
     predatorType: predatorTypeNameSchema,
     bloodPotency: BasicSchema,
@@ -65,6 +67,7 @@ export const kindredSchema = z.object({
 
     backgrounds: v5BackgroundRefSchema.array(),
     meritsFlaws: v5MeritFlawRefSchema.array(),
+    loresheet: loresheetRefSchema,
     startDate: z.string().datetime(),
 })
 export type Kindred = z.infer<typeof kindredSchema>
@@ -86,6 +89,7 @@ export const getEmptyKindred = (): Kindred => {
           },
 
         clan: "",
+        sect: "",
         generation: 0,
         predatorType:"",
         bloodPotency: {creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
@@ -158,6 +162,7 @@ export const getEmptyKindred = (): Kindred => {
 
         backgrounds: [],
         meritsFlaws: [],
+        loresheet: {name:"",benefits:[]},
         startDate: new Date().toISOString(),
     }
 }
