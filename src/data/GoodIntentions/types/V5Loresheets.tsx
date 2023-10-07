@@ -278,7 +278,7 @@ export const loresheets: Loresheet[] = [
                 selectableSkills: []
             },
             {
-                name: "",
+                name: "Lessons of the Convention",
                 level: 3,
                 description: "Through your research and interviews, you have learned a great deal about how the Founders of the Camarilla operated in negotiations. You have had time to reflect on how they operated, and you have put those lessons to use in your own manipulation of Mortal Connections. Your Contacts and Allies gain a +1 bonus in tests vs. competing Mortal Connections (see page 141). In addition, the Deterrents Coterie Background (see page 307) can never reduce your Mortal Connections’ test pool below two.",
                 skillBonus: [],
@@ -744,7 +744,7 @@ export const loresheets: Loresheet[] = [
                 name: "Peacock",
                 level: 1,
                 description: "You are proud of being part of a High Clan and have been trained in etiquette, politics, and courtly graces. Once per game session, you can automatically succeed on a Frenzy test caused by being insulted, embarrassed, or humiliated by a vampire publicly known to be a member of a Low Clan. You also gain the first two dots of the Etiquette and Politics Skills.",
-                skillBonus: [{skill:"etiquette",level:1},{skill:"politics",level:2}],
+                skillBonus: [{skill:"etiquette",level:2},{skill:"politics",level:2}],
                 selectableBackgrounds: { options: [], totalPoints: 0 },
                 backgrounds: [],
                 meritsAndFlaws: [],

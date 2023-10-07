@@ -63,7 +63,13 @@ const BackgroundLoreTabs = ({kindred, setKindred, nextStep, backStep}:Background
 
         });
 
-        return 7 + getFlawPoints(kindred) - totalBackgroundPoints
+        let totalLoresheetPoints = 0
+
+        Object.values(kindred.loresheet.benefits).forEach((benefit) => {
+            totalLoresheetPoints += benefit.creationPoints
+        })
+
+        return 7 + getFlawPoints(kindred) - (totalBackgroundPoints + totalLoresheetPoints)
     }
 
     return(
@@ -85,7 +91,7 @@ const BackgroundLoreTabs = ({kindred, setKindred, nextStep, backStep}:Background
           </Tabs.Panel>
   
           <Tabs.Panel value="loresheet" pt="xs">
-            <LoresheetsPicker kindred={kindred} />
+            <LoresheetsPicker kindred={kindred} setKindred={setKindred} />
           </Tabs.Panel>
 
           </Stack>

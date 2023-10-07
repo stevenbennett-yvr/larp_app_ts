@@ -1,15 +1,45 @@
-import { faCircleUp, faCircleDown } from "@fortawesome/free-solid-svg-icons"
-import { Tooltip, Group, Modal, Stack, Text, Button, Title, Select, Divider, NumberInput } from "@mantine/core"
-import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { PredatorType, PredatorTypeName, PredatorTypes } from "../../../data/GoodIntentions/types/V5PredatorType"
-import { v5BackgroundLevel, v5AdvantageLevel, V5SphereKey, V5BackgroundRef } from "../../../data/GoodIntentions/types/V5Backgrounds"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { backgroundData } from "../../../data/GoodIntentions/types/V5Backgrounds"
-import { globals } from "../../../assets/globals"
-import { V5MeritFlawRef, meritFlawData, v5MeritLevel } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws"
-import { SphereSelectData } from "../../../data/GoodIntentions/types/V5Backgrounds"
-import { upcase } from "../../../utils/case"
-import Tally from "../../../utils/talley"
+// External Libraries
+import { faCircleUp, faCircleDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    Group,
+    Modal,
+    Stack,
+    Text,
+    Button,
+    Title,
+    Select,
+    Divider,
+    NumberInput,
+    Tooltip
+  } from "@mantine/core";
+
+
+// Data Types
+import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
+import {
+  PredatorType,
+  PredatorTypeName,
+  PredatorTypes,
+} from "../../../data/GoodIntentions/types/V5PredatorType";
+import {
+  v5BackgroundLevel,
+  v5AdvantageLevel,
+  V5SphereKey,
+  V5BackgroundRef,
+} from "../../../data/GoodIntentions/types/V5Backgrounds";
+import { V5MeritFlawRef, v5MeritLevel } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
+import { SphereSelectData } from "../../../data/GoodIntentions/types/V5Backgrounds";
+
+// Data and Globals
+import { backgroundData } from "../../../data/GoodIntentions/types/V5Backgrounds";
+import { globals } from "../../../assets/globals";
+import { meritFlawData } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
+
+// Utilities
+import { upcase } from "../../../utils/case";
+import Tally from "../../../utils/talley";
+
 
 type PredatorModalProps = {
     modalOpened: boolean
