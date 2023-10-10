@@ -209,12 +209,11 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                     let spentPoints = 0;
                     options.forEach((option: V5BackgroundRef) => {
                         spentPoints += option.freebiePoints;
-                        console.log(spentPoints)
                     });
                     return (
                         <>
                             <Group position="apart">
-                                <Text maw={"80%"} fz={"xl"}>
+                            <Text maw={"80%"} fz={"xl"}>
                                     {`Pick ${totalPoints} from: `}
                                 </Text>
                                 <Text>

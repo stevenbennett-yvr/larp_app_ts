@@ -58,6 +58,8 @@ const benefitSchema = z.object({
     selectableSkills: skillBonusSchema.array(),
 })
 
+export type Benefit = z.infer<typeof benefitSchema>
+
 const loresheetSchema = z.object({
     name: z.string(),
     description: z.string(),
