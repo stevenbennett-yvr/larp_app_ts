@@ -396,3 +396,37 @@ export const advantageStep = (advantage: V5AdvantageRef, background: V5Backgroun
         return 1;
     }
 }
+
+export const kindredBackgrounds = (kindred: Kindred) => {
+    const uniqueBackgrounds = new Map();
+
+    const allBackgrounds:V5BackgroundRef[] = [];
+    const highestLevelHerdResources:V5BackgroundRef[] = [];
+    
+    kindred.backgrounds
+      .filter((bg, index, array) => {
+        // Keep the first occurrence of each background based on 'id'
+        return array.findIndex((b) => b.id === bg.id) === index;
+      })
+      .forEach((bg) => {
+        const name = bg.name;
+        const level = v5BackgroundLevel(bg).level;
+    
+        if (!(name === "Herd" || name === "Resources")) {
+          allBackgrounds.push(bg);
+        } else {
+          const existingEntry = uniqueBackgrounds.get(name);
+          if (!existingEntry || level > v5BackgroundLevel(existingEntry).level) {
+            uniqueBackgrounds.set(name, bg);
+          }
+        }
+      });
+    
+    uniqueBackgrounds.forEach((bg) => {
+      if (bg.name === "Herd" || bg.name === "Resources") {
+        highestLevelHerdResources.push(bg);
+      }
+    });
+    
+    return [...highestLevelHerdResources, ...allBackgrounds].sort((a, b) => a.name.localeCompare(b.name));
+}

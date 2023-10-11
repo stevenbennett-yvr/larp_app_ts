@@ -94,7 +94,9 @@ const V5PowersInputs = ({ kindred, setKindred }: V5PowersXpInputsProps) => {
         return (
             <div>
                 <Accordion.Item value={discipline}>
-                    <Accordion.Control icon={<Image height={20} width={20} src={disciplines[discipline].logo} />}>
+                    <Accordion.Control
+                        style={{ backgroundColor: "#25262B" }}
+                        icon={<Image height={20} width={20} src={disciplines[discipline].logo} />}>
                         {disciplinePowersSelected(kindred, discipline) ?
                             <Text>{discipline.toUpperCase()} <b style={{ color: "#880808" }}>{v5DisciplineLevel(kindred, discipline).level - getSelectedPowers(kindred, discipline).length} Remaining</b></Text> :
                             <Text>{discipline.toUpperCase()}</Text>

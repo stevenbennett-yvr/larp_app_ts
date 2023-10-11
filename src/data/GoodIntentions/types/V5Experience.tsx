@@ -128,6 +128,14 @@ export const humanityExperience = (kindred:Kindred): number => {
     return hXp
 }
 
+export const loresheetExperience  = (kindred:Kindred): number => {
+    let lsXp = 0
+    kindred.loresheet.benefits.forEach((b) => {
+        lsXp += b.experiencePoints
+    })
+    return lsXp
+}
+
 export const spentExperience = (kindred:Kindred) => {
     const attributeXp = attributeExperience(kindred);
     const skillXp = skillExperience(kindred);
@@ -139,8 +147,9 @@ export const spentExperience = (kindred:Kindred) => {
     const meritXp = meritExperience(kindred)
     const bpXp = bloodPotencyExperience(kindred)
     const hXp = humanityExperience(kindred)
+    const lsXp = loresheetExperience(kindred)
 
-    const spentExperience = (attributeXp + skillXp + disciplineXp + powerXp + ritualXp + ceremonyXp + backgroundXp + meritXp + bpXp + hXp);
+    const spentExperience = (attributeXp + skillXp + disciplineXp + powerXp + ritualXp + ceremonyXp + backgroundXp + meritXp + bpXp + hXp + lsXp);
     return spentExperience;
 };
 

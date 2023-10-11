@@ -1,4 +1,4 @@
-import {  Alert, Group, Button, Divider, Center, Text } from '@mantine/core'
+import { Alert, Group, Button, Divider, Center, Text, Space, ScrollArea, Tabs } from '@mantine/core'
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { useState } from 'react'
 
@@ -12,6 +12,7 @@ import V5BackgroundXpInput from '../../../components/GoodIntentions/XpInputs/V5B
 import V5MeritFlawInputs from '../../../components/GoodIntentions/XpInputs/V5MeritFlawInputs'
 import V5BloodPotenceXpInput from '../../../components/GoodIntentions/XpInputs/V5BloodPotenceXpInputs'
 import V5HumanityXpInput from '../../../components/GoodIntentions/XpInputs/V5HumanityXpInputs'
+import LoresheetXpInputs from '../../../components/GoodIntentions/XpInputs/V5LoresheetXpInputs'
 
 import { globals } from '../../../assets/globals'
 import { v5DisciplineLevel } from '../../../data/GoodIntentions/types/V5Disciplines'
@@ -34,63 +35,80 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
     const openRitualsModal = () => {
         setRitualModalOpen(true)
     };
-    
+
     const closeRitualsModal = () => {
         setRitualModalOpen(false)
     };
-    
+
     const openCeremoniesModal = () => {
         setCeremonyModalOpen(true)
     };
-    
+
     const closeCeremoniesModal = () => {
         setCeremonyModalOpen(false)
     };
 
     const height = globals.viewportHeightPx
-    const heightBreakPoint = 1250
     return (
-        <div style={{ width: "100%", marginTop: height < heightBreakPoint ? "50px" : "55px", marginBottom: height < heightBreakPoint ? "50px" : "55px" }}>
-
+        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px' }}>
+            <ScrollArea h={height - 140} pb={20}>
                 <V5AttributeXpInputs kindred={kindred} setKindred={setKindred} />
-                <Divider my="sm"/>
+                <Divider my="sm" />
                 <V5SkillXpInputs kindred={kindred} setKindred={setKindred} />
-                <Divider my="sm"/>
+                <Divider my="sm" />
                 <V5DisciplineXpInputs kindred={kindred} setKindred={setKindred}></V5DisciplineXpInputs>
                 <V5PowersInputs kindred={kindred} setKindred={setKindred} />
-                <Divider my="sm"/>
-
-                <V5RitualsXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ritualModalOpen} closeModal={closeRitualsModal} />    
-                <V5CeremoniesXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ceremonyModalOpen} closeModal={closeCeremoniesModal} />    
-                                
+                <V5RitualsXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ritualModalOpen} closeModal={closeRitualsModal} />
+                <V5CeremoniesXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ceremonyModalOpen} closeModal={closeCeremoniesModal} />
+                <Space h="md" />
                 <Center>
-                <Group>
-                    {v5DisciplineLevel(kindred, 'blood sorcery').level > 0?
-                    <Button color={"gray"} onClick={openRitualsModal}>Get Rituals</Button>
-                    :
-                    <></>
-                }
-                {v5DisciplineLevel(kindred, 'oblivion').level > 0?
-                    <Button color={"gray"} onClick={openCeremoniesModal}>Get Ceremonies</Button>
-                    :
-                    <></>
-                }
-                </Group>
+                    <Group>
+                        {v5DisciplineLevel(kindred, 'blood sorcery').level > 0 ?
+                            <Button color={"gray"} onClick={openRitualsModal}>Get Rituals</Button>
+                            :
+                            <></>
+                        }
+                        {v5DisciplineLevel(kindred, 'oblivion').level > 0 ?
+                            <Button color={"gray"} onClick={openCeremoniesModal}>Get Ceremonies</Button>
+                            :
+                            <></>
+                        }
+                    </Group>
                 </Center>
-                <Divider my="sm"/>
+                <Divider my="sm" />
 
-                <V5BackgroundXpInput kindred={kindred} setKindred={setKindred} />
-                <Divider my="sm"/>
+                <Tabs variant="pills" defaultValue="backgrounds">
+                    <Tabs.List>
+                        <Tabs.Tab value="backgrounds">
+                            Backgrounds
+                        </Tabs.Tab>
+                        <Tabs.Tab value="loresheet" >
+                            Loresheets
+                        </Tabs.Tab>
+                    </Tabs.List>
+
+                    <Tabs.Panel value="backgrounds">
+                        <V5BackgroundXpInput kindred={kindred} setKindred={setKindred} />
+                    </Tabs.Panel>
+
+                    <Tabs.Panel value="loresheet">
+                        <LoresheetXpInputs kindred={kindred} setKindred={setKindred} />
+                    </Tabs.Panel>
+
+                </Tabs>
+
+
+                <Divider my="sm" />
 
                 <V5MeritFlawInputs kindred={kindred} setKindred={setKindred} />
-                <Divider my="sm"/>
+                <Divider my="sm" />
 
                 <V5BloodPotenceXpInput kindred={kindred} setKindred={setKindred} />
-                <Divider my="sm"/>
+                <Divider my="sm" />
 
                 <V5HumanityXpInput kindred={kindred} setKindred={setKindred} />
 
-                <Alert color="dark" variant="filled" radius="xs" style={{ zIndex:9999, padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
+                <Alert color="dark" variant="filled" radius="xs" style={{ zIndex: 9999, padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                     <Group>
                         <Button.Group>
                             <Button
@@ -110,13 +128,13 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                             >
                                 Next
                             </Button>
-                            <Text fz={globals.smallerFontSize} style={{ margin: "10px" }} color={0 > 50 - spentExperience(kindred)? "red" : "white"}>Remaining Experience: {50 - spentExperience(kindred)}</Text>
+                            <Text fz={globals.smallerFontSize} style={{ margin: "10px" }} color={0 > 50 - spentExperience(kindred) ? "red" : "white"}>Remaining Experience: {50 - spentExperience(kindred)}</Text>
 
                         </Button.Group>
                     </Group>
                 </Alert>
-
-        </div>
+            </ScrollArea>
+        </Center>
     )
 }
 

@@ -1,6 +1,6 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 import { globals } from "../../../assets/globals"
-import { Text, Grid, Center, Group, Input, ActionIcon, Button } from "@mantine/core"
+import { Text, Grid, Center, Group, Input, ActionIcon, Button, Stack } from "@mantine/core"
 import { CirclePlus, CircleMinus } from 'tabler-icons-react';
 import { SkillCategory } from "../../../data/nWoD1e/nWoD1eSkills";
 import { V5SkillsKey, v5FindMaxSkill, v5HandleXpSkillChange, v5SkillLevel } from "../../../data/GoodIntentions/types/V5Skills";
@@ -31,7 +31,8 @@ const V5SkillXpInputs = ({ kindred, setKindred }: V5SkillXpInputsProps) => {
     };
 
     return (
-        <>
+        <Center>
+            <Stack>
             <V5SpecialtyModal character={kindred} setCharacter={setKindred} modalOpened={isModalOpen} closeModal={closeModal}></V5SpecialtyModal>
             <Text mt={"xl"} ta="center" fz="xl" fw={700}>Skills</Text>
             <Center>
@@ -98,7 +99,8 @@ const V5SkillXpInputs = ({ kindred, setKindred }: V5SkillXpInputsProps) => {
                     );
                 })}
             </Grid>
-        </>
+            </Stack>
+        </Center>
     )
 
 

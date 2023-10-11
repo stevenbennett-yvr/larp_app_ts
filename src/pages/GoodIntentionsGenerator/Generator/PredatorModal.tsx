@@ -398,6 +398,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                         predatorType: predatorData.name as PredatorTypeName,
                         backgrounds: combinedBackgrounds,
                         meritsFlaws: combinedMeritsFlaws,
+                        loresheet:{name:"",benefits:[]},
                         humanity: {
                             ...kindred.humanity,
                             creationPoints: 7 + PredatorTypes[pickedPredatorType].humanityChange

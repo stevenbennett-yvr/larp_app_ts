@@ -3,7 +3,7 @@ import { Checkbox, CheckboxProps, Modal, NumberInput, Accordion, Text, Button, G
 import Tally from "../../../utils/talley"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons"
-import { handleAdvantageChange, emptyAdvantage, handleBackgroundRemove, V5AdvantageRef, V5BackgroundRef, v5BackgroundLevel, handleBackgroundChange, backgroundData, V5Background } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { v5AdvantageLevel, handleAdvantageChange, emptyAdvantage, handleBackgroundRemove, V5AdvantageRef, V5BackgroundRef, v5BackgroundLevel, handleBackgroundChange, backgroundData, V5Background } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { Droplet } from 'tabler-icons-react';
 
 type BackgroundModalProps = {
@@ -93,8 +93,6 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
     });
     let freeAdvantage = bRef.freeAdvantage ?? [];
 
-    console.log()
-
     let predatorType = kindred.predatorType
     const numberOfAdvantagesWithFreebiePoints =
         advantagesWithFreebiePoints.length + (predatorType === "Farmer" || predatorType === "Hitcher" || predatorType === "Graverobber" ? 1 : 0);
@@ -134,6 +132,25 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
                     <></>
                 }
                 <Text size="sm" color="dimmed" dangerouslySetInnerHTML={{ __html: `${backgroundInfo.description}` }}></Text>
+                {bRef.advantages.length > 0 ?
+                <Table>
+                    <thead>
+                        <tr>
+                            Owned Advantages
+                        </tr>
+                    </thead>
+                    {bRef.advantages.map((aRef) => {
+                        const advantage = backgroundInfo.advantages?.find((a) => a.name === aRef.name)
+                        if (!advantage || v5AdvantageLevel(aRef).level === 0) {return null}
+                        const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
+                        return (
+                            <tr>
+                            <Text align="center">{icon} &nbsp;{advantage.name} {v5AdvantageLevel(aRef).level}</Text>
+                            </tr>
+                        )
+                    })}
+                </Table>
+                :<></>}
                 {backgroundInfo.advantages && backgroundInfo.advantages.length > 0 ?
                     <Accordion variant="contained">
                         <Accordion.Item value={bRef.name}>

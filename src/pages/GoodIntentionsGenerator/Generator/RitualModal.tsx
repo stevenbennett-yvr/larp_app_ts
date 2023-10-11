@@ -21,6 +21,7 @@ const RitualsModal = ({ kindred, setKindred, nextStep, modalOpened, closeModal }
 
     const getRitualCardCols = () => {
         return Rituals.map((ritual) => {
+            if (ritual.level > 1) {return null}
             const ritualRef = ritualRefs.find((entry) => entry.name === ritual.name)
             if (!ritualRef) { return null }
 
@@ -77,6 +78,7 @@ const RitualsModal = ({ kindred, setKindred, nextStep, modalOpened, closeModal }
 
     const getCeremonyCardCols = () => {
         return Ceremonies.map((ceremony) => {
+            if (ceremony.level > 1) {return null}
             const ceremonyRef = ceremonyRefs.find((entry) => entry.name === ceremony.name)
             if (!ceremonyRef) { return null }
             const onClick = () => {

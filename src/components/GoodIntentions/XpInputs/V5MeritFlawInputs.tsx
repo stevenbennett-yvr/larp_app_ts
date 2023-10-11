@@ -280,7 +280,6 @@ const V5MeritFlawInputs = ({ kindred, setKindred }: V5MeritFlawInputsProps) => {
     meritTypes.sort((a, b) => a.localeCompare(b));
 
     return (
-        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px' }}>
             <Stack>
                 <Text mt={"xl"} ta="center" fz="xl" fw={700}>Merits & Flaws</Text>
                 <Select
@@ -303,7 +302,6 @@ const V5MeritFlawInputs = ({ kindred, setKindred }: V5MeritFlawInputsProps) => {
                     </Accordion>
                 </Center>
             </Stack>
-        </Center>
     )
 
 }

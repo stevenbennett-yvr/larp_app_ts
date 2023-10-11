@@ -1,6 +1,6 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 //import { useState } from "react"
-import { V5SphereKey, SphereSelectData, V5BackgroundRef, backgroundData, filterSelectData, handleBackgroundChange, v5BackgroundRefs, v5BackgroundLevel } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { V5SphereKey, SphereSelectData, V5BackgroundRef, backgroundData, filterSelectData, handleBackgroundChange, v5BackgroundRefs, v5BackgroundLevel, kindredBackgrounds } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { Stack, Space, Text, Center, ScrollArea, Button, Group, Table, Select, Grid, Card } from "@mantine/core"
 import { globals } from "../../../assets/globals"
 import { useState, forwardRef } from 'react'
@@ -20,7 +20,7 @@ const BackgroundPicker = ({ kindred, setKindred }: BackgroundPickerProps) => {
     const [selectedBackground, setSelectedBackground] = useState<string | null>("");
     const [selectedSphere, setSelectedSphere] = useState<V5SphereKey | null>("");
 
-    const getIcon = (name:string) => {
+    const getIcon = (name: string) => {
         if (name === "Allies") {
             return faUserGroup
         }
@@ -116,7 +116,6 @@ const BackgroundPicker = ({ kindred, setKindred }: BackgroundPickerProps) => {
 
         let newBackground = { ...newBackgroundRef, id: `${newBackgroundRef.id}-${Date.now()}}`, advantages: [] }
         if ((selectedBackground === 'Allies' || selectedBackground === 'Contacts') && selectedSphere) {
-            console.log(selectedSphere)
             newBackground = { ...newBackground, sphere: [selectedSphere] }
         }
         handleBackgroundChange(kindred, setKindred, newBackground, "creationPoints", 1)
@@ -180,7 +179,7 @@ const BackgroundPicker = ({ kindred, setKindred }: BackgroundPickerProps) => {
     const createBackgroundPick = (bRef: V5BackgroundRef) => {
         const backgroundInfo = backgroundData.find((entry) => entry.name === bRef.name)
         const icon = getIcon(bRef.name)
-        if (!backgroundInfo || !icon) {return null}
+        if (!backgroundInfo || !icon) { return null }
         return (
             <Grid.Col key={bRef.name} span={4}>
                 <Card className="hoverCard" shadow="sm" padding="lg" radius="md" h={200} style={{ cursor: "pointer" }}
@@ -190,7 +189,7 @@ const BackgroundPicker = ({ kindred, setKindred }: BackgroundPickerProps) => {
                     }}
                 >
                     <Center pt={10}>
-                        <FontAwesomeIcon size="4x"  icon={icon} style={{ color: "#e03131" }} />
+                        <FontAwesomeIcon size="4x" icon={icon} style={{ color: "#e03131" }} />
                     </Center>
 
                     <Center>
@@ -206,14 +205,12 @@ const BackgroundPicker = ({ kindred, setKindred }: BackgroundPickerProps) => {
         )
     }
 
-    const sortedBackgrounds = kindred.backgrounds.sort((a, b) => a.id.localeCompare(b.id))
+    let endBackgrounds = kindredBackgrounds(kindred)
 
     return (
-        <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
-            <Stack mt={"xl"} align="center" spacing="xl">
-
-                <ScrollArea h={height - 215} w={"100%"} p={20}>
-                    <Center>
+        <Stack mt={"xl"} align="center" spacing="xl">
+            <ScrollArea h={height - 280} w={"100%"} p={20}>
+                <Center>
                     <Select
                         data={filteredSelectData}
                         value={selectedBackground}
@@ -225,24 +222,24 @@ const BackgroundPicker = ({ kindred, setKindred }: BackgroundPickerProps) => {
                         style={{ width: '70%' }}
                         disabled={getRemainingPoints(kindred) <= 0}
                     />
-                    </Center>
-                    {getSelectedBackgroundData()}
+                </Center>
+                {getSelectedBackgroundData()}
 
 
-                    <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Owned Backgrounds</Text>
-                    <hr color="#e03131" />
+                <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Owned Backgrounds</Text>
+                <hr color="#e03131" />
 
 
-                    <Space h={"sm"} />
-                    <Grid grow m={0}>
-                        {
-                            sortedBackgrounds.map((bRef) => createBackgroundPick(bRef))
-                        }
-                    </Grid>
-                </ScrollArea>
-                <BackgroundModal kindred={kindred} setKindred={setKindred} bId={modalBackground} modalOpened={modalOpen} closeModal={handleCloseModal} />
-            </Stack>
-        </Center>
+                <Space h={"sm"} />
+
+                <Grid grow m={0}>
+                    {
+                        endBackgrounds.map((bRef) => createBackgroundPick(bRef))
+                    }
+                </Grid>
+            </ScrollArea>
+            <BackgroundModal kindred={kindred} setKindred={setKindred} bId={modalBackground} modalOpened={modalOpen} closeModal={handleCloseModal} />
+        </Stack>
     )
 }
 

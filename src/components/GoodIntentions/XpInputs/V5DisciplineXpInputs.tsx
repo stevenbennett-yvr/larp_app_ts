@@ -100,7 +100,9 @@ const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps
             { }
             <Accordion>
                 <Accordion.Item value={"In-Clan Disciplines"}>
-                    <Accordion.Control>In-Clan Disciplines</Accordion.Control>
+                    <Accordion.Control
+                        style={{ backgroundColor: "#25262B" }}
+                    >In-Clan Disciplines</Accordion.Control>
                     <Accordion.Panel>
                         <Table>
                             <thead>
@@ -125,7 +127,9 @@ const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps
                 </Accordion.Item>
 
                 <Accordion.Item value={"Out-of-Clan Disciplines"}>
-                    <Accordion.Control>Out-of-Clan Disciplines</Accordion.Control>
+                    <Accordion.Control
+                        style={{ backgroundColor: "#25262B" }}
+                    >Out-of-Clan Disciplines</Accordion.Control>
                     <Accordion.Panel>
                         <Table>
                             <thead>

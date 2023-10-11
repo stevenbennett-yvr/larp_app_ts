@@ -1,7 +1,6 @@
 
 import { Text, Center, Input, Group, Button, Table } from "@mantine/core";
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
-import { generations } from "../../../data/GoodIntentions/types/V5Generation";
 import { v5HumanityLevel, findMaxHumanity, handleHumanityChange, humanities } from "../../../data/GoodIntentions/types/V5Humanity";
 
 type V5BloodPotenceXpInputProps = {
@@ -16,17 +15,17 @@ const V5HumanityXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps) => 
             <Text mt={"xl"} ta="center" fz="xl" fw={700}>Blood Potency</Text>
             <Center>
                 <Input.Wrapper
-                    label={`Blood Potency ${v5HumanityLevel(kindred).level}`}
+                    label={`Humanity ${v5HumanityLevel(kindred).level}`}
                 >
-                    <Text size="12px" color="gray.6">Xp for Next: {v5HumanityLevel(kindred).totalXpNeeded - kindred.bloodPotency.experiencePoints}</Text>
+                    <Text size="12px" color="gray.6">Xp for Next: {v5HumanityLevel(kindred).totalXpNeeded - kindred.humanity.experiencePoints}</Text>
                     <Text size="12px" color="gray.6">Total XP Needed {v5HumanityLevel(kindred).totalXpNeeded}</Text>
                     <Group>
                         <Button
                             size="xs"
                             variant='outline'
                             color='gray'
-                            disabled={kindred.generation <= 9 && kindred.bloodPotency.experiencePoints <= 20}
-                            onClick={() => handleHumanityChange(kindred, setKindred, "experiencePoints", kindred.bloodPotency.experiencePoints - 1)}
+                            disabled={kindred.generation <= 9 && kindred.humanity.experiencePoints <= 20}
+                            onClick={() => handleHumanityChange(kindred, setKindred, "experiencePoints", kindred.humanity.experiencePoints - 1)}
                         >
                             -
                         </Button>
@@ -36,7 +35,7 @@ const V5HumanityXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps) => 
                             key={`Gnosis`}
                             min={kindred.generation <= 9? 20:0}
                             max={findMaxHumanity(kindred)}
-                            value={kindred.bloodPotency.experiencePoints}
+                            value={kindred.humanity.experiencePoints}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 const value = Number(e.target.value);
                                 handleHumanityChange(kindred, setKindred, "experiencePoints", value);
@@ -46,8 +45,8 @@ const V5HumanityXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps) => 
                             size="xs"
                             variant='outline'
                             color='gray'
-                            disabled={v5HumanityLevel(kindred).level >= generations[kindred.generation].max_bp}
-                            onClick={() => handleHumanityChange(kindred, setKindred, "experiencePoints", kindred.bloodPotency.experiencePoints + 1)}
+                            disabled={v5HumanityLevel(kindred).level >= 10}
+                            onClick={() => handleHumanityChange(kindred, setKindred, "experiencePoints", kindred.humanity.experiencePoints + 1)}
                         >
                             +
                         </Button>

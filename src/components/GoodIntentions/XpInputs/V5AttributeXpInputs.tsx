@@ -1,6 +1,6 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { globals } from "../../../assets/globals"
-import { Text, Grid, Center, Group, Input, ActionIcon } from "@mantine/core"
+import { Text, Grid, Center, Group, Input, ActionIcon, Stack } from "@mantine/core"
 import { AttributeCategory, V5AttributesKey, v5AttributeLevel, v5HandleXpAttributeChange, v5FindMaxAttribute } from "../../../data/GoodIntentions/types/V5Attributes"
 import { CirclePlus, CircleMinus } from 'tabler-icons-react';
 
@@ -18,7 +18,8 @@ const V5AttributeXpInputs = ({ kindred, setKindred }: V5AttributeXpInputsProps) 
     }
 
     return (
-        <>
+        <Center>
+            <Stack>
             <Text mt={"xl"} ta="center" fz="xl" fw={700}>Attributes</Text>
             <Grid>
                 {orderedCategories.map((category) => {
@@ -85,7 +86,8 @@ const V5AttributeXpInputs = ({ kindred, setKindred }: V5AttributeXpInputsProps) 
                     );
                 })}
             </Grid>
-        </>
+            </Stack>
+        </Center>
     )
 
 

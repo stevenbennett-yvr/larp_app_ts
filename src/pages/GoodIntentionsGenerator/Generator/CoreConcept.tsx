@@ -17,7 +17,7 @@ import { globals } from "../../../assets/globals";
 import V5Backstory from "../../../components/GoodIntentions/V5Backstory";
 
 // UI-related imports
-import { TextInput, Alert, Button, Group, Divider, Textarea, Stack, Avatar } from "@mantine/core";
+import { TextInput, Alert, Button, Group, Divider, Textarea, Stack, Avatar, Badge } from "@mantine/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
@@ -67,20 +67,69 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
     const previews = files.map((file, index) => {
         const imageUrl = URL.createObjectURL(file);
         return (
-            <Avatar
-                key={index}
-                src={imageUrl}
-                imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
-                size={250}
-                radius="xl"
-            />
+            <Stack>
+                <Badge color="gray">preview</Badge>
+                <Avatar
+                    key={index}
+                    src={imageUrl}
+                    imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
+                    size={100}
+                />
+            </Stack>
         );
     });
 
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
 
+
             <Stack>
+
+
+                <Alert color="gray" style={{ maxWidth: "700px" }}>
+                    <Group grow>
+                        {kindred.backstory.profilePic === "" ?
+                            <Center style={{ height: "100%" }}>
+                                <Stack>
+                                    <Badge color="gray">Profile Pic</Badge>
+                                    <FontAwesomeIcon icon={faUser} className="fa-6x" />
+                                </Stack>
+                            </Center>
+                            :
+                            <Center>
+                                <Stack>
+                                    <Badge color="gray">Profile Pic</Badge>
+                                    <Avatar
+                                        src={kindred.backstory.profilePic}
+                                        size={100}
+                                    />
+                                </Stack>
+                            </Center>
+                        }
+
+                        <Center>
+                            {previews}
+                        </Center>
+
+                        <Center>
+                            <Alert color="gray" title="Profile Pic" style={{ maxWidth: "400px" }}>
+                                <Dropzone accept={IMAGE_MIME_TYPE} onDrop={setFiles}>
+                                    <Text align="center">Drop images here</Text>
+                                </Dropzone>
+                                <Button
+                                    disabled={files.length === 0}
+                                    onClick={uploadImage}
+                                >
+                                    upload
+                                </Button>
+                            </Alert>
+                        </Center>
+
+                    </Group>
+                </Alert>
+
+
+
                 <Alert color="gray" style={{ maxWidth: "700px" }}>
                     <Grid columns={isPhoneScreen ? 4 : 8}>
                         <Grid.Col span={4}>
@@ -181,40 +230,7 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                 </Stack>
                 <V5Backstory kindred={kindred} setKindred={setKindred} />
 
-                <Alert color="gray" style={{ maxWidth: "700px" }}>
-                    <Group grow>
-                        {kindred.backstory.profilePic === ""?
-                    <Center style={{ height: "100%" }}>
-                        <FontAwesomeIcon icon={faUser} className="fa-6x" />
-                    </Center>
-                    :
-                    <Center>
-                    <Avatar
-                        src={kindred.backstory.profilePic}
-                        size={100}
-                    />
-                    </Center>
-                    }
 
-                    <Center>
-                        <Alert color="gray" title="Profile Pic" style={{ maxWidth: "400px" }}>
-                            <Dropzone accept={IMAGE_MIME_TYPE} onDrop={setFiles}>
-                                <Text align="center">Drop images here</Text>
-                            </Dropzone>
-                            <Button
-                                disabled={files.length === 0}
-                                onClick={uploadImage}
-                            >
-                                upload
-                            </Button>
-
-                            <Center>
-                                {previews}
-                            </Center>
-                        </Alert>
-                    </Center>
-                    </Group>
-                </Alert>
 
 
                 <Alert color="dark" variant="filled" radius="xs" style={{ zIndex: 9999, padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
@@ -231,7 +247,7 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                                 style={{ margin: "5px" }}
                                 color="gray"
                                 onClick={() => {
-                                    setKindred({...kindred, touchstones})
+                                    setKindred({ ...kindred, touchstones })
                                     nextStep()
                                 }}
                                 disabled={
