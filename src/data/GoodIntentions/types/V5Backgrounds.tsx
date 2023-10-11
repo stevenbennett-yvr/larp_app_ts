@@ -382,3 +382,17 @@ export const filterSelectData = (
         return isNotInUserBackgrounds || isException || isHerdAndObviousPredator;
     });
 }
+
+
+export const advantageStep = (advantage: V5AdvantageRef, background: V5Background): number => {
+    if (!background.advantages) { return 1 }
+    const advantageInfo = background.advantages.find(entry => entry.name === advantage.name)
+    let minCost = advantageInfo?.cost[0];
+    let maxCost = advantageInfo?.cost[advantageInfo?.cost.length - 1]
+    if (!minCost || !maxCost) { return 0 }
+    if (minCost === maxCost) {
+        return minCost;
+    } else {
+        return 1;
+    }
+}

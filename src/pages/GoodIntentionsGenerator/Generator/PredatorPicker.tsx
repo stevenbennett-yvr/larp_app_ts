@@ -27,9 +27,7 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep, backStep }: Predato
 
     };
     const [predatorData, setPredatorData] = useState<PredatorType>();
-
-    console.log(predatorData)
-
+    
     const createButton = (predatorTypeName: PredatorTypeName, color: string) => {
 
         const meritsAndFlaws = PredatorTypes[predatorTypeName].meritsAndFlaws;
