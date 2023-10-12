@@ -169,7 +169,7 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
         <Center style={{ paddingTop: isPhoneScreen ? '60px' : '60px', paddingBottom: isPhoneScreen ? '60px' : '60px' }}>
             <Stack mt={""} align="center" spacing="md">
 
-                <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Attributes</Text>
+                <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Skills</Text>
                 <Group ta={"center"}>
                     <Text style={threeStyle}>
                         Take three Skills at 3;

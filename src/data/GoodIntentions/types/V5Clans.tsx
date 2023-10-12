@@ -26,6 +26,25 @@ export const clanNameSchema = z.union([
 ])
 export type ClanName = z.infer<typeof clanNameSchema>
 
+export const allClans : ClanName[] = [
+    "Banu Haqim",
+    "Brujah",
+    "Caitiff",
+    "Gangrel",
+    "Hecata",
+    "Lasombra",
+    "Malkavian",
+    "Ministry",
+    "Nosferatu",
+    "Ravnos",
+    "Salubri",
+    "Thin-Blood",
+    "Toreador",
+    "Tremere",
+    "Tzimisce",
+    "Ventrue"
+]
+
 export const clanSchema = z.object({
     name: clanNameSchema,
     nicknames: z.string(),
@@ -222,7 +241,7 @@ export const Clans: Record<ClanName, Clan> = {
     "Ghoul": {
         name: "Ghoul",
         disciplines: [],
-        nicknames: "Thralls, Familiar, Szlachta, Renfields, Acolyte, Revenant",
+        nicknames: "Thralls, Familiars, Szlachta, Renfields, Acolytes, Revenants",
         summary: "Omnipresent servants, easily created, and heavily abused",
         description: "From the moment a mortal drinks the vitae of a vampire they become a ghoul, starting a process that simultaneously makes them more and less than they originally were. Ghouls are often taken as retainers in cases where their loyalty is required regardless of the Masquerade, especially as Kindred can Blood Bond as many ghouls as they can effectively manage.",
         logo: GoodIntentions.ghoulLogo,

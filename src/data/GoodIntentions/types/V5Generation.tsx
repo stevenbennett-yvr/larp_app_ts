@@ -5,7 +5,8 @@ const rankNameSchema = z.union([
     z.literal("Fledgeling"),
     z.literal("Neonate"),
     z.literal("Ancille"),
-    z.literal("Elder")
+    z.literal("Elder"),
+    z.literal("Ghoul"),
 ]) 
 
 const generationSchema = z.object({
@@ -18,6 +19,12 @@ const generationSchema = z.object({
 export type Generation = z.infer<typeof generationSchema>
 
 export const generations: Record<number, Generation> ={
+    0: {
+        generation: "Ghoul",
+        rank: "Ghoul",
+        max_bp:0,
+        min_bp:0,
+    },
     9: {
         generation: "9th",
         rank: "Ancille",

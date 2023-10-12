@@ -556,5 +556,45 @@
         "cost": [1],
         "description": "Your vampire Blood's supernatural effects are erratic. If you don't satisfy at least one Hunger each week by drinking from a vampire, you lose the ability to use Disciplines or Thin-Blood Alchemy. However, regaining these abilities is as simple as slaking at least one Hunger from vampire Blood.",
         "source": "LOTN5 pg.190"
+    },
+    {
+        "name": "Blood Empathy",
+        "category": "ghoul",
+        "type": "merit",
+        "cost": [2],
+        "description": "You have a unique, deep connection with your regnant, allowing you to instinctively sense their emotions and psychological state when you're with them, and you also feel a warning signal in your head when they are harmed.",
+        "source": "LOTN5 pg.182"
+    },
+    {
+        "name": "Vampiric Visage",
+        "category": "ghoul",
+        "type": "merit",
+        "cost": [1],
+        "description": "Your aura has lost its mortal vibrancy, resembling a vampire's aura, making your heartbeat, fang-like teeth, and nearly imperceptible breath advantageous in certain vampire social situations.",
+        "source": "LOTN5 pg.182"
+    },
+    {
+        "name": "Baneful Blood",
+        "category": "ghoul",
+        "type": "flaw",
+        "cost": [2,3,4],
+        "description": "Upon becoming a ghoul, you inherited your regnant's Bane, experiencing it at a level corresponding to the Bane Severity of 1, 2, or 3. This connection persists even if your regnant changes.",
+        "source": "LOTN5 pg.183"
+    },
+    {
+        "name": "Crone’s Curse",
+        "category": "ghoul",
+        "type": "flaw",
+        "cost": [4],
+        "description": "The infusion of vitae from your initial regnant unnaturally aged you by a decade, making you appear older than your actual age, and it also led to a reduction of one health box due to circulatory system damage.",
+        "source": "LOTN5 pg.183"
+    },
+    {
+        "name": "Distressing Fangs",
+        "category": "ghoul",
+        "type": "flaw",
+        "cost": [1],
+        "description": "Your regnant's Blood has mystically sharpened your teeth, and they regrow their sharpness overnight, which is unsettling to most humans and could raise suspicion, potentially leading to questioning by the Second Inquisition.",
+        "source": "LOTN5 pg.183"
     }
 ]

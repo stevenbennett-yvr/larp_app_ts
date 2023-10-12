@@ -52,6 +52,10 @@ export const kindredSchema = z.object({
     touchstones: touchstoneSchema.array(),
 
     clan: clanNameSchema,
+    domitor: z.object({
+        name: z.string(),
+        clan: clanNameSchema,
+    }),
     sect: sectNameSchema,
     generation: z.number().min(0).int(),
     predatorType: predatorTypeNameSchema,
@@ -91,6 +95,10 @@ export const getEmptyKindred = (): Kindred => {
           },
 
         clan: "",
+        domitor: {
+            name: "",
+            clan: "",
+        },
         sect: "",
         generation: 0,
         predatorType:"",

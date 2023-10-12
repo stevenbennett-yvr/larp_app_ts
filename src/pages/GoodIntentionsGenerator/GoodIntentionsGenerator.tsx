@@ -33,7 +33,7 @@ const GenerateKindred = () => {
                 )
             case 2:
                 return (
-                    <SkillsPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                    <SkillsPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + (kindred.clan==="Ghoul"? 3:1)); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             case 3:
                 return (
@@ -46,12 +46,12 @@ const GenerateKindred = () => {
             case 5:
                 // Backgrounds and Loresheets
                 return (
-                    <BackgroundLoreTabs kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                    <BackgroundLoreTabs kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - (kindred.clan==="Ghoul"? 3:1)); }} />
                 )
             case 6: 
                 // Merits and Flaws
                 return (
-                    <MeritPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + (kindred.clan==="Thin-Blood"? 2:1)); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                    <MeritPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + (kindred.clan==="Thin-Blood"||kindred.clan==="Ghoul"? 2:1)); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             case 7:
                 return (
@@ -60,7 +60,7 @@ const GenerateKindred = () => {
             case 8:
                 // Spending Init XP
                 return (
-                    <V5ExperienceAssigner kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - (kindred.clan==="Thin-Blood"? 2:1)); }} />
+                    <V5ExperienceAssigner kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - (kindred.clan==="Thin-Blood"||kindred.clan==="Ghoul"? 2:1)); }} />
                 )
             case 9:
                 // Backstory shit

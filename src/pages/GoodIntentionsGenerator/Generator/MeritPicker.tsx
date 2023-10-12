@@ -7,6 +7,7 @@ import { globals } from "../../../assets/globals";
 import { V5MeritFlaw, V5MeritFlawRef, v5MeritFlawRefs, v5MeritLevel, v5MeritFlawFilter, handleMeritFlawChange } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
 import Tally from "../../../utils/talley";
 import FormulaPicker from "./FormulaPicker";
+import GhoulModal from "./GhoulModal";
 import { useState } from "react";
 
 type MeritPickerProps = {
@@ -39,7 +40,7 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
 
     const meritFlawData = v5MeritFlawFilter(kindred)
 
-    const getTotalPoints = (kindred:Kindred) => {
+    const getTotalPoints = (kindred: Kindred) => {
         let totalFlawPoints = 0;
         let totalMeritPoints = 0;
         Object.values(kindred.meritsFlaws).forEach((mf) => {
@@ -51,13 +52,13 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
                 totalMeritPoints += mf.creationPoints
             }
         })
-        return { totalFlawPoints, totalMeritPoints}
+        return { totalFlawPoints, totalMeritPoints }
     }
 
-    const getThinBloodPoints = (kindred:Kindred) => {
+    const getThinBloodPoints = (kindred: Kindred) => {
         let totalFlawPoints = 0;
         let totalMeritPoints = 0;
-        Object.values(kindred.meritsFlaws).forEach((mf) => { 
+        Object.values(kindred.meritsFlaws).forEach((mf) => {
             let meritFlawInfo = meritFlawData.find(entry => entry.name === mf.name)
             if (meritFlawInfo?.type === "flaw" && meritFlawInfo.category === "thin-blood") {
                 totalFlawPoints += mf.creationPoints
@@ -66,7 +67,7 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
                 totalMeritPoints += mf.creationPoints
             }
         })
-        return { totalFlawPoints, totalMeritPoints}
+        return { totalFlawPoints, totalMeritPoints }
     }
 
     const getStep = (meritFlaw: V5MeritFlawRef): number => {
@@ -76,9 +77,9 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
         if (!minCost || !maxCost) { return 1 }
         if (minCost === maxCost) {
             return minCost;
-          } else {
+        } else {
             return 1;
-          }
+        }
     }
 
     const MeritInput = (merit: V5MeritFlaw) => {
@@ -95,10 +96,10 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
         return (
             <div>
                 <NumberInput
-                    disabled={getMeritPoints(meritRef)===0&&meritInfo.category==="thin-blood"&&((meritInfo.type==="flaw"&&getThinBloodPoints(kindred).totalFlawPoints>=3)||(meritInfo.type==="merit"&&getThinBloodPoints(kindred).totalMeritPoints>=3))}
+                    disabled={getMeritPoints(meritRef) === 0 && meritInfo.category === "thin-blood" && ((meritInfo.type === "flaw" && getThinBloodPoints(kindred).totalFlawPoints >= 3) || (meritInfo.type === "merit" && getThinBloodPoints(kindred).totalMeritPoints >= 3))}
                     value={getMeritPoints(meritRef)}
                     min={meritRef.freebiePoints}
-                    max={ meritInfo.cost.length===1 && meritInfo.cost[0] === 1? 1: v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo?.cost.length - 1] ? meritRef.creationPoints : meritInfo.cost[meritInfo.cost.length - 1]}
+                    max={meritInfo.cost.length === 1 && meritInfo.cost[0] === 1 ? 1 : v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo?.cost.length - 1] ? meritRef.creationPoints : meritInfo.cost[meritInfo.cost.length - 1]}
                     step={getStep(meritRef)}
                     onChange={(val) => {
                         console.log(val)
@@ -111,6 +112,10 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
 
 
     const createMeritAccordian = (category: string) => {
+
+        if ((kindred.clan !== "Thin-Blood" && category === "Thin-Blood") || (kindred.clan !== "Ghoul" && category === "Ghoul")) {
+            return null
+        }
 
         let bgc = ""
 
@@ -134,6 +139,9 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
                 bgc = theme.fn.rgba(theme.colors.red[4], 0.90); // Orange color
                 break;
             case "Thin-Blood":
+                bgc = theme.fn.rgba(theme.colors.red[3], 0.90); // Gray color
+                break;
+            case "Ghoul":
                 bgc = theme.fn.rgba(theme.colors.red[3], 0.90); // Gray color
                 break;
         }
@@ -182,26 +190,35 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
 
     }
 
-    const categoryArray = ["Thin-Blood", "Bonding", "Connection", "Feeding", "Mystical", "Physical", "Psychological"]
-    if (kindred.clan!=="Thin-Blood") {
-        categoryArray.filter(category => category !== "Thin-Blood");
-    }
+    let categoryArray = ["Thin-Blood", "Ghoul", "Bonding", "Connection", "Feeding", "Mystical", "Physical", "Psychological"]
 
     const [modalOpen, setModalOpen] = useState(false);
     const handleCloseModal = () => {
         setKindred({
             ...kindred,
             rituals: [],
-            ceremonies:[],
+            ceremonies: [],
         })
         setModalOpen(false);
+    };
+
+    const [ghoulModalOpen, setGhoulModalOpen] = useState(false);
+    const handleGhoulCloseModal = () => {
+        setKindred({
+            ...kindred,
+            domitor: {
+                name:"",
+                clan:""
+            }
+        })
+        setGhoulModalOpen(false);
     };
 
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
     const height = globals.viewportHeightPx
 
-    const thinBloodStyle = !(getThinBloodPoints(kindred).totalFlawPoints>0&&getThinBloodPoints(kindred).totalMeritPoints>0&&getThinBloodPoints(kindred).totalFlawPoints===getThinBloodPoints(kindred).totalMeritPoints) ? { fontSize: globals.smallFontSize } : { color: "grey" }
+    const thinBloodStyle = !(getThinBloodPoints(kindred).totalFlawPoints > 0 && getThinBloodPoints(kindred).totalMeritPoints > 0 && getThinBloodPoints(kindred).totalFlawPoints === getThinBloodPoints(kindred).totalMeritPoints) ? { fontSize: globals.smallFontSize } : { color: "grey" }
     const isAlchemist = kindred.meritsFlaws.find((m) => m.name === "Thin-Blood Alchemist")
     const isDiscipline = kindred.meritsFlaws.find((m) => m.name === "Discipline Affinity")
 
@@ -210,11 +227,11 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
             <Stack>
                 <ScrollArea h={height - 140} pb={20}>
                     <Text align="center" mt={"xl"} ta="center" fz="xl" fw={700}>Merits & Flaws</Text>
-                    {kindred.clan==="Thin-Blood"?
-                    <Text style={thinBloodStyle}>
-                        Thin-blood characters must choose between 1 to 3 Thin-Blood Merits and an equal number of Thin-Blood Flaws.
-                    </Text>:
-                    <></>}
+                    {kindred.clan === "Thin-Blood" ?
+                        <Text style={thinBloodStyle}>
+                            Thin-blood characters must choose between 1 to 3 Thin-Blood Merits and an equal number of Thin-Blood Flaws.
+                        </Text> :
+                        <></>}
                     <Center>
                         <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
                             {
@@ -223,7 +240,9 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
                         </Accordion>
                     </Center>
 
-                <FormulaPicker kindred={kindred} setKindred={setKindred} nextStep={nextStep} modalOpened={modalOpen} closeModal={handleCloseModal}/>
+                    <FormulaPicker kindred={kindred} setKindred={setKindred} nextStep={nextStep} modalOpened={modalOpen} closeModal={handleCloseModal} />
+                    <GhoulModal kindred={kindred} setKindred={setKindred} nextStep={nextStep} modalOpened={ghoulModalOpen} closeModal={handleGhoulCloseModal} />
+
 
                 </ScrollArea>
                 <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
@@ -240,11 +259,13 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
                                 style={{ margin: "5px" }}
                                 color="gray"
                                 onClick={
+                                    (kindred.clan==="Ghoul")?
+                                    () => setGhoulModalOpen(true):
                                     !(isAlchemist || isDiscipline)
-                                      ? nextStep
-                                      : () => setModalOpen(true)
-                                  }
-                                disabled={getTotalPoints(kindred).totalMeritPoints > 10 || getTotalPoints(kindred).totalMeritPoints !== getTotalPoints(kindred).totalFlawPoints || (kindred.clan==="Thin-Blood"&&getThinBloodPoints(kindred).totalMeritPoints===0&&getThinBloodPoints(kindred).totalFlawPoints===0)}
+                                        ? nextStep
+                                        : () => setModalOpen(true)
+                                }
+                                disabled={getTotalPoints(kindred).totalMeritPoints > 10 || getTotalPoints(kindred).totalMeritPoints !== getTotalPoints(kindred).totalFlawPoints || (kindred.clan === "Thin-Blood" && getThinBloodPoints(kindred).totalMeritPoints === 0 && getThinBloodPoints(kindred).totalFlawPoints === 0)}
                             >
                                 Next
                             </Button>

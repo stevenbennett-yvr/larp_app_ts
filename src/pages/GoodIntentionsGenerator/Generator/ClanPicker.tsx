@@ -149,10 +149,13 @@ const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
                             <Center>
                                 <Group>
                                     {clan === "Caitiff" ? (
-                                        <Text>Access to all Disciplines</Text>
+                                        <Text>Caitiff have access to three Disciplines of their choice at the start of play.</Text>
                                     ) :
                                         clan === "Thin-Blood" ? (
-                                            <Text></Text>
+                                            <Text>Thin-bloods do not automatically possess Disciplines.</Text>
+                                        ) :
+                                        clan === "Ghoul" ? (
+                                            <Text>Ghouls start with two level 1 Discipline powers from the in-clan discipline of their domitor.</Text>
                                         ) : (
                                             disciplinesForClan.map((discipline) => (
                                                 <Tooltip label={disciplines[discipline].summary} key={discipline}>
