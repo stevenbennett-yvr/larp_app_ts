@@ -1,12 +1,13 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 import { v5BackgroundLevel, V5BackgroundRef, SphereSelectData, V5Background, V5SphereKey, backgroundData, filterSelectData, v5BackgroundRefs, handleBackgroundChange, kindredBackgrounds } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { useState, forwardRef } from "react";
-import { Space, Group, Text, Table, Select, Button, Grid, Card, Center, Stack } from "@mantine/core";
+import { Space, Group, Text, Table, Select, Button, Grid, Card, Center, Stack, ScrollArea } from "@mantine/core";
 import V5AdvantageXpInputs from "./V5AdvantageXpInputs";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUserGroup, faCat, faAddressBook, faFaceGrinStars, faHouseChimney, faCow, faMasksTheater, faCoins } from "@fortawesome/free-solid-svg-icons"
 import { v5xp } from "../../../data/GoodIntentions/V5Experience";
+import { globals } from "../../../assets/globals";
 
 type v5BackgroundXpInputProps = {
     kindred: Kindred,
@@ -161,8 +162,11 @@ const V5BackgroundXpInput = ({ kindred, setKindred }: v5BackgroundXpInputProps) 
     }
 
     const ownedBackgrounds = kindredBackgrounds(kindred)
+    const height = globals.viewportHeightPx
 
     return (
+        <ScrollArea h={height - 330} w={"90%"} p={20}>
+
         <Stack mt={"xl"} align="center" spacing="xl">
             <Text fz={"30px"} ta={"center"}>Select <b>Backgrounds</b></Text>
 
@@ -192,6 +196,7 @@ const V5BackgroundXpInput = ({ kindred, setKindred }: v5BackgroundXpInputProps) 
                 }
             </Grid>
         </Stack>
+        </ScrollArea>
     )
 
 }

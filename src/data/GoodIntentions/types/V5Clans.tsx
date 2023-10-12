@@ -20,6 +20,7 @@ export const clanNameSchema = z.union([
     z.literal('Salubri'),
     z.literal('Caitiff'),
     z.literal('Thin-Blood'),
+    z.literal('Ghoul'),
 
     z.literal(''),
 ])
@@ -217,6 +218,17 @@ export const Clans: Record<ClanName, Clan> = {
         symbol: GoodIntentions.thinBloodSymbol,
         bane: "Thin-bloods do not suffer from a Bane.",
         compulsion: "Thin-bloods do not suffer from a clan Compulsion."
+    },
+    "Ghoul": {
+        name: "Ghoul",
+        disciplines: [],
+        nicknames: "Thralls, Familiar, Szlachta, Renfields, Acolyte, Revenant",
+        summary: "Omnipresent servants, easily created, and heavily abused",
+        description: "From the moment a mortal drinks the vitae of a vampire they become a ghoul, starting a process that simultaneously makes them more and less than they originally were. Ghouls are often taken as retainers in cases where their loyalty is required regardless of the Masquerade, especially as Kindred can Blood Bond as many ghouls as they can effectively manage.",
+        logo: GoodIntentions.ghoulLogo,
+        symbol: GoodIntentions.ghoulSymbol,
+        bane: "Ghouls do not suffer from a Clan Bane unless a flaw taken",
+        compulsion: "Ghouls do not suffer from clan Compulsions."
     },
     "": {
         name: "",

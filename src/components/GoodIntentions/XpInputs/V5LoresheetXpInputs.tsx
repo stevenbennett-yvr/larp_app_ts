@@ -54,8 +54,8 @@ export const LoresheetXpInputs = ({ kindred, setKindred }: LoresheetPickerProps)
 
     const height = globals.viewportHeightPx
     return (
-        <ScrollArea h={height - 330} w={"100%"} p={20}>
-            <Grid w={"100%"}>
+        <ScrollArea h={height - 330} w={"90%"} p={20}>
+            <Grid w={"90%"}>
                 {openLoresheet ? (
                     <OpenedLoresheet
                         ls={openLoresheet}

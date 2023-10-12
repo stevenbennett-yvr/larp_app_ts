@@ -15,7 +15,7 @@ const GenerationPicker = ({ kindred, setKindred, nextStep, backStep }: Generatio
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
 
-    const [generation, setGeneration] = useState<string| null>("13");
+    const [generation, setGeneration] = useState<string | null>(kindred.clan === 'Thin-Blood' ? '14' : '13');
     const showAlert = generation === '9';
     const selectData =
         kindred.clan === "Thin-Blood" ?
@@ -32,23 +32,25 @@ const GenerationPicker = ({ kindred, setKindred, nextStep, backStep }: Generatio
                 { value: '9', label: '9: Ancillae - I barely remember' }
             ]
 
-    const handleGenerationChange = (generation:string|null) => {
+    const handleGenerationChange = (generation: string | null) => {
         if (generation === null) { return }
         let genInt = parseInt(generation ?? "0")
         let creationPoints = genInt < 14 ? 1 : 0;
         let experiencePoints = genInt < 10 ? 20 : 0;
         console.log(creationPoints)
-        setKindred({ ...kindred, 
-            generation: genInt, 
-            bloodPotency: {...kindred.bloodPotency, creationPoints, experiencePoints}
+        setKindred({
+            ...kindred,
+            generation: genInt,
+            bloodPotency: { ...kindred.bloodPotency, creationPoints, experiencePoints }
         })
     }
 
     return (
         <div style={{ width: "100%" }}>
             <Text fz={"30px"} ta={"center"}>Pick your <b>Generation</b></Text>
-            <Text style={{ fontSize: "25px", color: "grey" }} ta={"center"}>Most common choice is &apos;13 - Neonate&apos;</Text>
-
+            {kindred.clan === "Thin-Blood" ? <></> :
+                <Text style={{ fontSize: "25px", color: "grey" }} ta={"center"}>Most common choice is &apos;13 - Neonate&apos;</Text>
+            }
 
             <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Generation</Text>
             <hr color="#e03131" />
@@ -87,7 +89,7 @@ const GenerationPicker = ({ kindred, setKindred, nextStep, backStep }: Generatio
                     })}
                     style={{ width: "100%" }}
                     value={generation}
-                    onChange={ (val) => {
+                    onChange={(val) => {
                         setGeneration(val)
                         handleGenerationChange(val)
                     }}

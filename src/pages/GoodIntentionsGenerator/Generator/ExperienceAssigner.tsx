@@ -13,6 +13,7 @@ import V5MeritFlawInputs from '../../../components/GoodIntentions/XpInputs/V5Mer
 import V5BloodPotenceXpInput from '../../../components/GoodIntentions/XpInputs/V5BloodPotenceXpInputs'
 import V5HumanityXpInput from '../../../components/GoodIntentions/XpInputs/V5HumanityXpInputs'
 import LoresheetXpInputs from '../../../components/GoodIntentions/XpInputs/V5LoresheetXpInputs'
+import V5FormulaeXpInputs from '../../../components/GoodIntentions/XpInputs/V5FormulaeXpInputs'
 
 import { globals } from '../../../assets/globals'
 import { v5DisciplineLevel } from '../../../data/GoodIntentions/types/V5Disciplines'
@@ -31,6 +32,7 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
 
     const [ritualModalOpen, setRitualModalOpen] = useState(false);
     const [ceremonyModalOpen, setCeremonyModalOpen] = useState(false);
+    const [formulaModalOpen, setFormulaModalOpen] = useState(false);
 
     const openRitualsModal = () => {
         setRitualModalOpen(true)
@@ -48,6 +50,14 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
         setCeremonyModalOpen(false)
     };
 
+    const openFormulaModal = () => {
+        setFormulaModalOpen(true)
+    };
+
+    const closeFormulaModal = () => {
+        setFormulaModalOpen(false)
+    };
+
     const height = globals.viewportHeightPx
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px' }}>
@@ -60,6 +70,8 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                 <V5PowersInputs kindred={kindred} setKindred={setKindred} />
                 <V5RitualsXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ritualModalOpen} closeModal={closeRitualsModal} />
                 <V5CeremoniesXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ceremonyModalOpen} closeModal={closeCeremoniesModal} />
+                <V5FormulaeXpInputs kindred={kindred} setKindred={setKindred} modalOpened={formulaModalOpen} closeModal={closeFormulaModal} />
+
                 <Space h="md" />
                 <Center>
                     <Group>
@@ -70,6 +82,11 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                         }
                         {v5DisciplineLevel(kindred, 'oblivion').level > 0 ?
                             <Button color={"gray"} onClick={openCeremoniesModal}>Get Ceremonies</Button>
+                            :
+                            <></>
+                        }
+                        {v5DisciplineLevel(kindred, 'thin-blood alchemy').level > 0 ?
+                            <Button color={"gray"} onClick={openFormulaModal}>Get Formulae</Button>
                             :
                             <></>
                         }

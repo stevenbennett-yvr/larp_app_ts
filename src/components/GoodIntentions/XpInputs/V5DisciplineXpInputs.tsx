@@ -13,13 +13,13 @@ type V5DisciplineXpInputsProps = {
 
 const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps) => {
 
-
     let mostDisciplines = allDisciplines.filter((disciplineName) => {
+        if (kindred.clan==="Thin-Blood")
+        { return disciplineName !== "thin-blood alchemy" && kindred.disciplines[disciplineName].creationPoints !== 0 }
         return disciplineName !== "thin-blood alchemy";
     })
-    const disciplinesForClan = kindred.clan === "Caitiff" ? mostDisciplines : Clans[kindred.clan].disciplines;
+    const disciplinesForClan = kindred.clan==="Thin-Blood"? ["thin-blood alchemy"]: kindred.clan === "Caitiff" ? mostDisciplines : Clans[kindred.clan].disciplines;
     const otherDisciplines = mostDisciplines.filter((disciplineName) => {
-        // Add a condition to filter out "thin blood alchemy"
         return !disciplinesForClan.includes(disciplineName);
     });
 
@@ -97,12 +97,11 @@ const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps
     return (
         <>
             <Text mt={"xl"} ta="center" fz="xl" fw={700}>Disciplines</Text>
-            { }
             <Accordion>
                 <Accordion.Item value={"In-Clan Disciplines"}>
                     <Accordion.Control
                         style={{ backgroundColor: "#25262B" }}
-                    >In-Clan Disciplines</Accordion.Control>
+                    >{kindred.clan === "Caitiff"? 'Caitiff Disciplines':'In-Clan Disciplines'}</Accordion.Control>
                     <Accordion.Panel>
                         <Table>
                             <thead>
@@ -125,7 +124,7 @@ const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps
                         </Table>
                     </Accordion.Panel>
                 </Accordion.Item>
-
+                {kindred.clan==="Caitiff"?<></>:
                 <Accordion.Item value={"Out-of-Clan Disciplines"}>
                     <Accordion.Control
                         style={{ backgroundColor: "#25262B" }}
@@ -152,6 +151,7 @@ const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps
                         </Table>
                     </Accordion.Panel>
                 </Accordion.Item>
+                }
             </Accordion>
         </>
     )

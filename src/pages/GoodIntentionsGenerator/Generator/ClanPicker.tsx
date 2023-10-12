@@ -109,6 +109,13 @@ const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
                         }
                     </Grid>
 
+                    <Text ta="center" fz="xl" fw={700} mb={"sm"} mt={"md"} c="rgb(175,175,175)">Pretenders</Text>
+                    <Grid grow m={0}>
+                        {
+                            ["Thin-Blood", "Ghoul"].map((c) => clanNameSchema.parse(c)).map((clan) => createClanPick(clan, theme.fn.rgba(theme.colors.gray[6], 0.90)))
+                        }
+                    </Grid>
+
                 </ScrollArea>
 
                 {clan && (
@@ -143,16 +150,19 @@ const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
                                 <Group>
                                     {clan === "Caitiff" ? (
                                         <Text>Access to all Disciplines</Text>
-                                    ) : (
-                                        disciplinesForClan.map((discipline) => (
-                                            <Tooltip label={disciplines[discipline].summary} key={discipline}>
-                                                <Group>
-                                                    <Avatar size="sm" src={disciplines[discipline].logo} />
-                                                    <Text>{upcase(discipline)}</Text>
-                                                </Group>
-                                            </Tooltip>
-                                        ))
-                                    )}
+                                    ) :
+                                        clan === "Thin-Blood" ? (
+                                            <Text></Text>
+                                        ) : (
+                                            disciplinesForClan.map((discipline) => (
+                                                <Tooltip label={disciplines[discipline].summary} key={discipline}>
+                                                    <Group>
+                                                        <Avatar size="sm" src={disciplines[discipline].logo} />
+                                                        <Text>{upcase(discipline)}</Text>
+                                                    </Group>
+                                                </Tooltip>
+                                            ))
+                                        )}
                                 </Group>
                             </Center>
                             <Divider my="sm" />
@@ -171,14 +181,14 @@ const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
 
                         <Button
                             onClick={() => {
-                                setKindred({ 
-                                    ...kindred, clan, 
-                                    predatorType: "", 
+                                setKindred({
+                                    ...kindred, clan,
+                                    predatorType: "",
                                     meritsFlaws: [],
-                                    backgrounds: [], 
-                                    disciplines: getEmptyDisciplines, 
+                                    backgrounds: [],
+                                    disciplines: getEmptyDisciplines,
                                     powers: [],
-                                    loresheet:{name:"",benefits:[]},
+                                    loresheet: { name: "", benefits: [] },
                                 })
                                 nextStep()
                             }}

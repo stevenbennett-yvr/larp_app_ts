@@ -11,6 +11,7 @@ import { Power, powerRefSchema } from './V5Powers';
 import { v5MeritFlawRefSchema } from './V5MeritsOrFlaws';
 import { ceremonyRefSchema } from './V5Ceremonies';
 import { loresheetRefSchema, sectNameSchema } from './V5Loresheets'
+import { formulaRefSchema } from './V5Alchemy';
 
 export const v5BackgroundSchema = z.object({
     history: z.string(),
@@ -64,6 +65,7 @@ export const kindredSchema = z.object({
     powers: powerRefSchema.array(),
     rituals: ritualRefSchema.array(),
     ceremonies: ceremonyRefSchema.array(),
+    formulae: formulaRefSchema.array(),
 
     backgrounds: v5BackgroundRefSchema.array(),
     meritsFlaws: v5MeritFlawRefSchema.array(),
@@ -159,6 +161,7 @@ export const getEmptyKindred = (): Kindred => {
         powers: [],
         rituals: [],
         ceremonies: [],
+        formulae: [],
 
         backgrounds: [],
         meritsFlaws: [],

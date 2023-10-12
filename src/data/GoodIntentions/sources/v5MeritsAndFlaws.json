@@ -494,22 +494,6 @@
         "source": "LOTN5 pg.189"
     },
     {
-        "name": "Thin-Blood Alchemist",
-        "category": "thin-blood",
-        "type": "merit",
-        "cost": [1],
-        "description": "Instead of taking damage as a mortal, you now take damage as if you were a true vampire.",
-        "source": "LOTN5 pg.189"
-    },
-    {
-        "name": "Baby Teeth",
-        "category": "thin-blood",
-        "type": "flaw",
-        "cost": [1],
-        "description": "After your embrace, you didn't develop fangs. To feed directly, you must either cut your victims or use a syringe to extract blood. You can't simply Sip from a human; to get a Non-Harmful drink, you need to succeed in a Strength + Brawl (or Weaponry) roll to incapacitate or render them unconscious first.",
-        "source": "LOTN5 pg.190"
-    },
-    {
         "name": "Baby Teeth",
         "category": "thin-blood",
         "type": "flaw",

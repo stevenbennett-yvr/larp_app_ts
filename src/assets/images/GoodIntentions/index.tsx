@@ -30,6 +30,7 @@ import tzimisceSymbol from './clanSymbols/Tzimisce.webp'
 import ventrueSymbol from './clanSymbols/Ventrue.webp'
 import caitiffSymbol from './clanSymbols/Caitiff_symbol.png'
 import thinBloodSymbol from './clanSymbols/Thinblood_symbol.png'
+import ghoulSymbol from './clanSymbols/Ghoul.png'
 
 import banuHaqimLogo from './clanLogos/Banu_Haqim_Logo.png'
 import brujahLogo from './clanLogos/Brujah_logo.png'
@@ -47,5 +48,6 @@ import tzimisceLogo from './clanLogos/Tzimisce_logo.png'
 import ventrueLogo from './clanLogos/Ventrue_logo.png'
 import caitiffLogo from './clanLogos/Caitiff_logo.png'
 import thinBloodLogo from './clanLogos/Thinblood_logo.png'
+import ghoulLogo from './clanLogos/Ghoul_logo.png'
 
-export {v5Logo, alchemyLogo, animalismLogo, auspexLogo, bloodSorceryLogo, celerityLogo, dominateLogo, fortitudeLogo, obfuscateLogo, oblivionLogo, potenceLogo, presenceLogo, proteanLogo, banuHaqimLogo, brujahLogo, gangrelLogo, hecataLogo, lasombraLogo, malkavianLogo, ministryLogo, nosferatuLogo, ravnosLogo, salubriLogo, toreadorLogo, tremereLogo, tzimisceLogo, ventrueLogo, banuHaqimSymbol, brujahSymbol, gangrelSymbol, hecataSymbol, lasombraSymbol, malkavianSymbol, ministrySymbol, nosferatuSymbol, ravnosSymbol, salubriSymbol, toreadorSymbol, tremereSymbol, tzimisceSymbol, ventrueSymbol, caitiffLogo, caitiffSymbol, thinBloodSymbol, thinBloodLogo}
+export {v5Logo, alchemyLogo, animalismLogo, auspexLogo, bloodSorceryLogo, celerityLogo, dominateLogo, fortitudeLogo, obfuscateLogo, oblivionLogo, potenceLogo, presenceLogo, proteanLogo, banuHaqimLogo, brujahLogo, gangrelLogo, hecataLogo, lasombraLogo, malkavianLogo, ministryLogo, nosferatuLogo, ravnosLogo, salubriLogo, toreadorLogo, tremereLogo, tzimisceLogo, ventrueLogo, banuHaqimSymbol, brujahSymbol, gangrelSymbol, hecataSymbol, lasombraSymbol, malkavianSymbol, ministrySymbol, nosferatuSymbol, ravnosSymbol, salubriSymbol, toreadorSymbol, tremereSymbol, tzimisceSymbol, ventrueSymbol, caitiffLogo, caitiffSymbol, thinBloodSymbol, thinBloodLogo, ghoulSymbol, ghoulLogo}
