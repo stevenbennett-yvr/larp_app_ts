@@ -3,7 +3,7 @@ import { ActionIcon, Checkbox, CheckboxProps, Modal, NumberInput, Accordion, Tex
 import Tally from "../../../utils/talley"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons"
-import { handleAdvantageChange, emptyAdvantage, handleBackgroundRemove, V5AdvantageRef, V5BackgroundRef, v5BackgroundLevel, handleBackgroundChange, backgroundData, v5HandleXpBackgroundChange, v5FindMaxBackground, v5HandleXpAdvantageChange, v5AdvantageLevel } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { emptyAdvantage, handleAdvantageChange, handleBackgroundRemove, V5BackgroundRef, v5BackgroundLevel, handleBackgroundChange, backgroundData, v5HandleXpBackgroundChange, v5HandleXpAdvantageChange, v5AdvantageLevel } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { Droplet, CirclePlus, CircleMinus } from 'tabler-icons-react';
 
 type V5AdvantageXpInputsProps = {
@@ -47,23 +47,32 @@ const V5AdvantageXpInputs = ({ kindred, setKindred, bId, modalOpened, closeModal
 
     const BackgroundInput = (backgroundRef: V5BackgroundRef) => {
         if (!backgroundRef) { return }
+
+        const resourcesRef = kindred.backgrounds.find((entry) => entry.name === "Resources");
+        const resourceLevel = resourcesRef ? v5BackgroundLevel(resourcesRef).level : 0;
+        const havenMax = resourceLevel === 3 ? 3 : resourceLevel === 1 ? 2 : 1;
+        const backgroundMax = backgroundRef.name==="Haven"?havenMax:3
+        const starPowerAdvantage = bRef.advantages.find(advantage => advantage.name === "Star Power") || emptyAdvantage;
+        const fameBool = (bRef.name === "Fame" && v5AdvantageLevel(starPowerAdvantage).level > 0); 
+
         return (
             <Center>
                 <Stack>
                     <Center>
-                        <ActionIcon variant="filled" radius="xl" color="dark" disabled={ backgroundRef.freebiePoints === 0 && backgroundRef.creationPoints=== 0 && backgroundRef.experiencePoints === 3} onClick={() => v5HandleXpBackgroundChange(kindred, setKindred, backgroundRef, backgroundRef.experiencePoints - 1)}>
+                        <ActionIcon variant="filled" radius="xl" color="dark" disabled={fameBool||(backgroundRef.freebiePoints === 0 && backgroundRef.creationPoints === 0 && backgroundRef.experiencePoints === 3)} onClick={() => v5HandleXpBackgroundChange(kindred, setKindred, backgroundRef, backgroundRef.experiencePoints - 1)}>
                             <CircleMinus strokeWidth={1.5} color="gray" />
                         </ActionIcon>
                         <NumberInput
+                            disabled={fameBool}
                             value={backgroundRef.experiencePoints}
-                            min={backgroundRef.freebiePoints === 0 && backgroundRef.creationPoints=== 0? 3:0}
-                            max={v5FindMaxBackground(kindred, backgroundRef)}
+                            min={backgroundRef.freebiePoints === 0 && backgroundRef.creationPoints === 0 ? 3 : 0}
+                            max={v5BackgroundLevel(backgroundRef).level === backgroundMax? backgroundRef.experiencePoints: undefined}
                             onChange={(val: number) => {
                                 v5HandleXpBackgroundChange(kindred, setKindred, backgroundRef, val)
                             }}
                             style={{ width: "100px" }}
                         />
-                        <ActionIcon variant="filled" radius="xl" color="dark" disabled={v5FindMaxBackground(kindred, backgroundRef) === backgroundRef.experiencePoints} onClick={() => v5HandleXpBackgroundChange(kindred, setKindred, backgroundRef, backgroundRef.experiencePoints + 1)}>
+                        <ActionIcon variant="filled" radius="xl" color="dark" disabled={v5BackgroundLevel(backgroundRef).level === backgroundMax} onClick={() => v5HandleXpBackgroundChange(kindred, setKindred, backgroundRef, backgroundRef.experiencePoints + 1)}>
                             <CirclePlus strokeWidth={1.5} color="gray" />
                         </ActionIcon>
                     </Center>
@@ -80,19 +89,6 @@ const V5AdvantageXpInputs = ({ kindred, setKindred, bId, modalOpened, closeModal
             </Center>
         )
     }
-
-    const havenSizeMax = bRef.name === "Haven" ? v5BackgroundLevel(bRef).level : 0;
-    let freeAdvantagePoints = Math.max(0, havenSizeMax - 1)
-    const advantagesWithFreebiePoints = bRef.advantages.filter((advantage) => {
-        return advantage.freebiePoints > 0;
-    });
-    let freeAdvantage = bRef.freeAdvantage ?? [];
-
-    console.log()
-
-    let predatorType = kindred.predatorType
-    const numberOfAdvantagesWithFreebiePoints =
-        advantagesWithFreebiePoints.length + (predatorType === "Farmer" || predatorType === "Hitcher" || predatorType === "Graverobber" ? 1 : 0);
 
     return (
         <Modal
@@ -115,26 +111,26 @@ const V5AdvantageXpInputs = ({ kindred, setKindred, bId, modalOpened, closeModal
                     <></>
                 }
                 <Text size="sm" color="dimmed" dangerouslySetInnerHTML={{ __html: `${backgroundInfo.description}` }}></Text>
-                {(bRef.advantages.length > 0 && backgroundInfo.advantages )?
-                <Table>
-                    <thead>
-                        <tr>
-                            Owned Advantages
-                        </tr>
-                    </thead>
-                    {bRef.advantages.map((aRef) => {
-                        const advantage = backgroundInfo.advantages?.find((a) => a.name === aRef.name)
-                        if (!advantage || v5AdvantageLevel(aRef).level === 0) {return null}
-                        const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
-                        return (
+                {(bRef.advantages.length > 0 && backgroundInfo.advantages) ?
+                    <Table>
+                        <thead>
                             <tr>
-                            <Text align="center">{icon} &nbsp;{advantage.name} {v5AdvantageLevel(aRef).level}</Text>
+                                Owned Advantages
                             </tr>
-                        )
-                    })}
-                </Table>
-                :
-                <></>
+                        </thead>
+                        {bRef.advantages.map((aRef) => {
+                            const advantage = backgroundInfo.advantages?.find((a) => a.name === aRef.name)
+                            if (!advantage || v5AdvantageLevel(aRef).level === 0) { return null }
+                            const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
+                            return (
+                                <tr>
+                                    <Text align="center">{icon} &nbsp;{advantage.name} {v5AdvantageLevel(aRef).level}</Text>
+                                </tr>
+                            )
+                        })}
+                    </Table>
+                    :
+                    <></>
                 }
 
                 {backgroundInfo.advantages && backgroundInfo.advantages.length > 0 ?
@@ -145,9 +141,13 @@ const V5AdvantageXpInputs = ({ kindred, setKindred, bId, modalOpened, closeModal
                                 <Table>
                                     <tbody>
                                         {backgroundInfo.advantages.map((advantage) => {
+                                            const havenFreebies = bRef.name === "Haven" ? bRef.advantages.filter(advantage => advantage.havenBool).length : 0;
+                                            const freebieBool = havenFreebies >= v5BackgroundLevel(bRef).level - 1;
                                             const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
                                             const advantageRef = bRef.advantages.find((a) => a.name === advantage.name) || { ...emptyAdvantage, name: advantage.name }
-                                            const havenBoolean = bRef.name === "Haven" && v5BackgroundLevel(bRef).level <= v5AdvantageLevel(advantageRef).level 
+                                            const havenBoolean = bRef.name === "Haven" && v5BackgroundLevel(bRef).level <= v5AdvantageLevel(advantageRef).level
+                                            const pointBool = advantageRef.freebiePoints > 0 || advantageRef.creationPoints > 0 || advantageRef.experiencePoints > 0
+                                            const starPowerBool = bRef.name === "Fame" && advantage.name === "Star Power" && v5BackgroundLevel(bRef).level < 3
                                             return (
                                                 <>
                                                     <tr>
@@ -162,37 +162,29 @@ const V5AdvantageXpInputs = ({ kindred, setKindred, bId, modalOpened, closeModal
                                                                         <CircleMinus strokeWidth={1.5} color="gray" />
                                                                     </ActionIcon>
                                                                     <NumberInput
+                                                                        disabled={starPowerBool}
                                                                         value={advantageRef.experiencePoints}
                                                                         style={{ width: "100px" }}
                                                                         min={0}
-                                                                        max={(advantage.cost[advantage.cost.length-1] === v5AdvantageLevel(advantageRef).level)||havenBoolean?advantageRef.experiencePoints: undefined}
+                                                                        max={(advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level) || havenBoolean ? advantageRef.experiencePoints : undefined}
                                                                         onChange={(val: number) => {
-                                                                            v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, val)                                                                        }}
+                                                                            v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, val)
+                                                                        }}
                                                                     />
-                                                                    <ActionIcon variant="filled" radius="xl" color="dark" disabled={havenBoolean || (advantage.cost[advantage.cost.length-1] === v5AdvantageLevel(advantageRef).level)} onClick={() => v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, advantageRef.experiencePoints + 1)}>
+                                                                    <ActionIcon variant="filled" radius="xl" color="dark" disabled={havenBoolean || starPowerBool || (advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level)} onClick={() => v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, advantageRef.experiencePoints + 1)}>
                                                                         <CirclePlus strokeWidth={1.5} color="gray" />
                                                                     </ActionIcon>
                                                                     {bRef.name === "Haven" && advantage.type === "advantage" ?
                                                                         <Checkbox
+                                                                            disabled={(pointBool||freebieBool)&&(!advantageRef.havenBool)}
                                                                             color="red"
                                                                             icon={CheckboxIcon}
-                                                                            disabled={
-                                                                                advantageRef.creationPoints > 0 ||
-                                                                                (advantageRef.freebiePoints > 0 && !(freeAdvantage.includes(advantage.name))) ||
-                                                                                (freeAdvantagePoints - numberOfAdvantagesWithFreebiePoints === 0 && !(freeAdvantage.includes(advantage.name)))
-                                                                            }
-                                                                            checked={freeAdvantage.includes(advantage.name)}
                                                                             onClick={() => {
-                                                                                if (advantageRef.freebiePoints === 0) {
-                                                                                    handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "freebiePoints", 1)
-                                                                                    freeAdvantage.push(advantageRef.name)
-                                                                                    handleBackgroundChange(kindred, setKindred, bRef, "freeAdvantage", freeAdvantage)
+                                                                                if (advantageRef.havenBool) {
+                                                                                    handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "havenBool", false)
                                                                                 }
                                                                                 else {
-                                                                                    bRef.advantages = bRef.advantages.filter((entry: V5AdvantageRef) => entry.name !== advantageRef.name);
-                                                                                    freeAdvantage = freeAdvantage.filter((name: string) => name !== advantageRef.name);
-                                                                                    console.log(bRef); // This should show the updated bRef
-                                                                                    handleBackgroundChange(kindred, setKindred, bRef, "freeAdvantage", freeAdvantage);
+                                                                                    handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "havenBool", true)
                                                                                 }
                                                                             }}
                                                                         />

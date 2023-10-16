@@ -32,13 +32,15 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep, backStep }: Predato
 
         const meritsAndFlaws = PredatorTypes[predatorTypeName].meritsAndFlaws;
         const ventrueMeritNamesToCheck = ["Iron Gullet", "Farmer", "Prey Exclusion"];
-//        const ravnosMeritsToCheck = ["Haven"]
         const ventrueHasDesiredMerits = meritsAndFlaws.some(merit => ventrueMeritNamesToCheck.includes(merit.name));
-//        const ravnosHasDesiredMerits = PredatorTypes[predatorTypeName].backgrounds.some(merit => ravnosMeritsToCheck.includes(merit.name));
+        const thinbloodAdvantageToCheck = "Retainer"
+        const thinbloodHasDesiredAdvantage = PredatorTypes[predatorTypeName].backgrounds.some(background => background.advantages.some(advantage => thinbloodAdvantageToCheck.includes(advantage.name)))
+
+        const disabled = (isVentrue && ventrueHasDesiredMerits) || (thinbloodAdvantageToCheck && thinbloodHasDesiredAdvantage)
 
         return (
             <Tooltip label={PredatorTypes[predatorTypeName].summary} key={predatorTypeName} transitionProps={{ transition: 'slide-up', duration: 200 }}>
-                <Button disabled={(isVentrue && ventrueHasDesiredMerits)} color={color} onClick={() => {
+                <Button disabled={disabled} color={color} onClick={() => {
                     setPickedPredatorType(predatorTypeName)
                     setModalOpen(true)
                     setPredatorData(PredatorTypes[predatorTypeName])

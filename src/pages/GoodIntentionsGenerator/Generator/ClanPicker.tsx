@@ -183,6 +183,7 @@ const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
                         <Divider my="sm" />
 
                         <Button
+                            disabled={clan==="Ghoul"}
                             onClick={() => {
                                 setKindred({
                                     ...kindred, clan,

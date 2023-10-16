@@ -103,7 +103,7 @@ export const getEmptyKindred = (): Kindred => {
         generation: 0,
         predatorType:"",
         bloodPotency: {creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
-        humanity: {creationPoints: 0, freebiePoints: 0, experiencePoints: 0 },
+        humanity: {creationPoints: 7, freebiePoints: 0, experiencePoints: 0 },
 
         attributes: {
             strength: {creationPoints: 1, freebiePoints: 0, experiencePoints: 0, category: 'physical' },

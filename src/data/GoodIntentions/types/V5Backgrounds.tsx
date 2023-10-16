@@ -48,6 +48,7 @@ export const v5AdvantageRefSchema = z.object({
     creationPoints: z.number(),
     freebiePoints: z.number(),
     experiencePoints: z.number(),
+    havenBool: z.boolean().optional()
 })
 
 export type V5AdvantageRef = z.infer<typeof v5AdvantageRefSchema>
@@ -68,7 +69,6 @@ export const v5BackgroundRefSchema = z.object({
     note: z.string(),
     advantages: z.array(v5AdvantageRefSchema),
     sphere: z.array(sphereOfInfluenceSchema).optional(),
-    freeAdvantage: z.array(z.string()).optional(),
 })
 export type V5BackgroundRef = z.infer<typeof v5BackgroundRefSchema>
 
@@ -201,16 +201,16 @@ export const v5BackgroundLevel = (v5BackgroundRef: V5BackgroundRef) => {
 export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
     let totalXpNeeded = 0;
     let pastXpNeeded = [0];
-    let { experiencePoints, creationPoints, freebiePoints } = AdvantageRef;
+    let { experiencePoints, creationPoints, freebiePoints, havenBool } = AdvantageRef;
 
     if (experiencePoints === 0) {
-        let level = creationPoints + freebiePoints;
+        let level = creationPoints + freebiePoints + (havenBool? 1:0);
         let xpNeeded = 3;
         totalXpNeeded = xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
         return { level, totalXpNeeded, pastXpNeeded };
     } else {
-        let level = creationPoints + freebiePoints;
+        let level = creationPoints + freebiePoints + (havenBool? 1:0);
         let xpNeeded = 3;
         totalXpNeeded += xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
@@ -227,14 +227,14 @@ export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
     }
 }
 
-type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "freeAdvantage";
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "havenBool";
 
 export const handleBackgroundChange = (
     kindred: Kindred,
     setKindred: Function,
     background: V5BackgroundRef,
     type: VariableKeys,
-    newPoints: number | string | string[],
+    newPoints: number | string ,
 ) => {
     const existingBackground = kindred.backgrounds.find((b) => b.id === background.id);
     if (existingBackground) {
@@ -298,7 +298,7 @@ export const handleAdvantageChange = (
     bRef: V5BackgroundRef,
     aRef: V5AdvantageRef,
     type: VariableKeys,
-    newPoints: number | string,
+    newPoints: number | string | boolean,
 ) => {
     const existingAdvantage = bRef.advantages.find((a) => a.name === aRef.name);
     if (!existingAdvantage) {

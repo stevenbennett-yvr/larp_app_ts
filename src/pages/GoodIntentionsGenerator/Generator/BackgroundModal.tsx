@@ -47,8 +47,10 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
 
     const resourcesRef = kindred.backgrounds.find((entry => entry.name === "Resources"))
     const resourceLevel = resourcesRef ? v5BackgroundLevel(resourcesRef).level : 0;
-    const havenMax = resourceLevel === 3 ? 3 : resourceLevel === 1 ? 2 : 1
-    const BackgroundInput = (backgroundRef: V5BackgroundRef) => {
+    const havenMax = bRef.id==="farmer-haven" ? Math.max(resourceLevel, 2): resourceLevel === 3 ? 3 : resourceLevel === 1 ? 2 : 1
+    const starPowerAdvantage = bRef.advantages.find(advantage => advantage.name === "Star Power") || emptyAdvantage;
+    const fameMin = (bRef.name === "Fame" && v5AdvantageLevel(starPowerAdvantage).level > 0) ? 3 : 1;
+        const BackgroundInput = (backgroundRef: V5BackgroundRef) => {
         if (!backgroundRef) { return }
         return (
             <Center>
@@ -56,7 +58,7 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
                     <Center>
                         <NumberInput
                             value={v5BackgroundLevel(backgroundRef).level}
-                            min={Math.max(backgroundRef.freebiePoints, 1)}
+                            min={Math.max(backgroundRef.freebiePoints, fameMin)}
                             max={backgroundRef.name === "Haven" ? havenMax : v5BackgroundLevel(backgroundRef).level === 3 ? backgroundRef.creationPoints : 3}
                             onChange={(val: number) => {
                                 let creationPoints = val - backgroundRef.freebiePoints
@@ -87,16 +89,6 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
     }
 
     const havenSizeMax = bRef.name === "Haven" ? v5BackgroundLevel(bRef).level : 0;
-    let freeAdvantagePoints = Math.max(0, havenSizeMax - 1)
-    const advantagesWithFreebiePoints = bRef.advantages.filter((advantage) => {
-        return advantage.freebiePoints > 0;
-    });
-    let freeAdvantage = bRef.freeAdvantage ?? [];
-
-    let predatorType = kindred.predatorType
-    const numberOfAdvantagesWithFreebiePoints =
-        advantagesWithFreebiePoints.length + (predatorType === "Farmer" || predatorType === "Hitcher" || predatorType === "Graverobber" ? 1 : 0);
-
 
     const advantageStep = (advantage: V5AdvantageRef, background: V5Background): number => {
         if (!background.advantages) { return 1 }
@@ -133,24 +125,24 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
                 }
                 <Text size="sm" color="dimmed" dangerouslySetInnerHTML={{ __html: `${backgroundInfo.description}` }}></Text>
                 {bRef.advantages.length > 0 ?
-                <Table>
-                    <thead>
-                        <tr>
-                            Owned Advantages
-                        </tr>
-                    </thead>
-                    {bRef.advantages.map((aRef) => {
-                        const advantage = backgroundInfo.advantages?.find((a) => a.name === aRef.name)
-                        if (!advantage || v5AdvantageLevel(aRef).level === 0) {return null}
-                        const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
-                        return (
+                    <Table>
+                        <thead>
                             <tr>
-                            <Text align="center">{icon} &nbsp;{advantage.name} {v5AdvantageLevel(aRef).level}</Text>
+                                Owned Advantages
                             </tr>
-                        )
-                    })}
-                </Table>
-                :<></>}
+                        </thead>
+                        {bRef.advantages.map((aRef) => {
+                            const advantage = backgroundInfo.advantages?.find((a) => a.name === aRef.name)
+                            if (!advantage || v5AdvantageLevel(aRef).level === 0) { return null }
+                            const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
+                            return (
+                                <tr>
+                                    <Text align="center">{icon} &nbsp;{advantage.name} {v5AdvantageLevel(aRef).level}</Text>
+                                </tr>
+                            )
+                        })}
+                    </Table>
+                    : <></>}
                 {backgroundInfo.advantages && backgroundInfo.advantages.length > 0 ?
                     <Accordion variant="contained">
                         <Accordion.Item value={bRef.name}>
@@ -159,51 +151,47 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
                                 <Table>
                                     <tbody>
                                         {backgroundInfo.advantages.map((advantage) => {
+                                            const havenFreebies = bRef.name === "Haven" ? bRef.advantages.filter(advantage => advantage.havenBool).length : 0;
+                                            const freebieBool = havenFreebies >= v5BackgroundLevel(bRef).level - 1;
                                             const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
                                             const advantageRef = bRef.advantages.find((a) => a.name === advantage.name) || { ...emptyAdvantage, name: advantage.name }
+                                            const starPowerBool = bRef.name === "Fame" && advantage.name === "Star Power" && v5BackgroundLevel(bRef).level < 3
                                             return (
                                                 <>
                                                     <tr>
                                                         <td>
-                                                            <Text align="center">{icon} &nbsp;{advantage.name} {getAdvantagePoints(advantageRef)}</Text>
+                                                            <Text align="center">{icon} &nbsp;{advantage.name} {v5AdvantageLevel(advantageRef).level}</Text>
                                                             <Center>
                                                                 {getRating(advantage.cost)}
                                                             </Center>
                                                             <Center>
                                                                 <Group>
                                                                     <NumberInput
-                                                                        value={advantageRef.creationPoints}
+                                                                        disabled={starPowerBool}
+                                                                        value={v5AdvantageLevel(advantageRef).level}
                                                                         style={{ width: "100px" }}
-                                                                        min={0}
+                                                                        min={advantageRef.havenBool?1:advantageRef.freebiePoints}
                                                                         step={advantageStep(advantageRef, backgroundInfo)}
                                                                         max={bRef.name === "Haven" && advantage.type === "advantage" ?
-                                                                            havenSizeMax : getAdvantagePoints(advantageRef) === advantage.cost[advantage.cost.length - 1] ?
+                                                                            havenSizeMax : v5AdvantageLevel(advantageRef).level === advantage.cost[advantage.cost.length - 1] ?
                                                                                 advantageRef.creationPoints : advantage.cost[advantage.cost.length - 1]}
-                                                                        onChange={(val) => {
-                                                                            handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "creationPoints", val)
+                                                                        onChange={(val:number) => {
+                                                                            let trueVal = val - advantageRef.freebiePoints - (advantageRef.havenBool?1:0)
+                                                                            handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "creationPoints", trueVal)
                                                                         }}
                                                                     />
                                                                     {bRef.name === "Haven" && advantage.type === "advantage" ?
                                                                         <Checkbox
+                                                                            disabled={((getAdvantagePoints(advantageRef) > 0) || freebieBool) && (!advantageRef.havenBool)}
                                                                             color="red"
                                                                             icon={CheckboxIcon}
-                                                                            disabled={
-                                                                                advantageRef.creationPoints > 0 ||
-                                                                                (advantageRef.freebiePoints > 0 && !(freeAdvantage.includes(advantage.name))) ||
-                                                                                (freeAdvantagePoints - numberOfAdvantagesWithFreebiePoints === 0 && !(freeAdvantage.includes(advantage.name)))
-                                                                            }
-                                                                            checked={freeAdvantage.includes(advantage.name)}
+                                                                            checked={advantageRef.havenBool}
                                                                             onClick={() => {
-                                                                                if (advantageRef.freebiePoints === 0) {
-                                                                                    handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "freebiePoints", 1)
-                                                                                    freeAdvantage.push(advantageRef.name)
-                                                                                    handleBackgroundChange(kindred, setKindred, bRef, "freeAdvantage", freeAdvantage)
+                                                                                if (advantageRef.havenBool) {
+                                                                                    handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "havenBool", false)
                                                                                 }
                                                                                 else {
-                                                                                    bRef.advantages = bRef.advantages.filter((entry: V5AdvantageRef) => entry.name !== advantageRef.name);
-                                                                                    freeAdvantage = freeAdvantage.filter((name: string) => name !== advantageRef.name);
-                                                                                    console.log(bRef); // This should show the updated bRef
-                                                                                    handleBackgroundChange(kindred, setKindred, bRef, "freeAdvantage", freeAdvantage);
+                                                                                    handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "havenBool", true)
                                                                                 }
                                                                             }}
                                                                         />
