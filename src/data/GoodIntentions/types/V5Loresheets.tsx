@@ -1034,6 +1034,49 @@ export const loresheets: Loresheet[] = [
             }
         ]
     },
+    {
+        name: "FIRSTLIGHT",
+        description: "Tonight’s vampires have managed to do something which has, historically, never been done. They have presented a threat so broad in scope that the intelligence agencies of the world have banded together to hunt them. FIRSTLIGHT was born out of a need to protect the mortals of the world. Most operatives within FIRSTLIGHT have no idea that they are hunting vampires, and incident reports after the fact will support that they were dismantling terrorist cells around the globe. Through a combination of old-world investigative techniques and top-of-the-line modern technology, FIRSTLIGHT has its eyes and ears in all sectors. Code words such as “blankbodies,” fuzzy images of Lasombra on recordings, and pushy TSA agents are part of the effort to protect mortals and dismantle the stranglehold Kindred have on mortal societies.",
+        prereq: "",
+        benefits: [
+            {
+                name: "No Records Found",
+                level: 1,
+                description: "You have managed to erase yourself from FIRSTLIGHT records entirely. You gain a free three-dot Mask and the Zeroed Merit.",
+                skillBonus: [],
+                selectableBackgrounds: { options: [], totalPoints: 0 },
+                backgrounds: [
+                    {
+                        ...emptyBackground, id: "firstlight-mask", name: "Mask", freebiePoints: 3, sphere: [], advantages: []
+                    }
+                ],
+                meritsAndFlaws: [
+                    { ...emptyMeritFlaw, id: 'firstlight-Zeroed', name: "Zeroed", freebiePoints: 2, note: "No Records Found" },
+                ],
+                selectableSkills: []
+            },
+            {
+                name: "Evasion",
+                level: 2,
+                description: "You have learned how to expertly avoid being followed. As long as your path leads through an urban area, it is not possible to follow you without using supernatural powers specifically designed to track",
+                skillBonus: [],
+                selectableBackgrounds: { options: [], totalPoints: 0 },
+                backgrounds: [],
+                meritsAndFlaws: [],
+                selectableSkills: []
+            },
+            {
+                name: "Friend on the Inside",
+                level: 3,
+                description: "You have a mole on the inside whom you have manipulated into reporting back to you at key moments. Discuss with your Storyteller whether your control over this “friend” takes the form of supernatural coercion, blackmail, threats, or bribery. The mole alerts you if FIRSTLIGHT is coming after you, and, once every three months, they will commit an act of minor sabotage (destroying evidence, screwing up an operation, etc.) on your orders. This mole does not count as a Contact or Ally.",
+                skillBonus: [],
+                selectableBackgrounds: { options: [], totalPoints: 0 },
+                backgrounds: [],
+                meritsAndFlaws: [],
+                selectableSkills: []
+            }
+        ]
+    },
 ] 
 
 /* 

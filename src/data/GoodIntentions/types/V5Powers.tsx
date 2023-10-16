@@ -28,6 +28,7 @@ export const powerSchema = z.object({
     rouseChecks: z.number().min(0).int(),
     amalgamPrerequisites: amalgamPrerequisiteSchema.array(),
     powerPrerequisite: z.string().array(),
+    duration: z.string(),
 })
 export type Power = z.infer<typeof powerSchema>
 

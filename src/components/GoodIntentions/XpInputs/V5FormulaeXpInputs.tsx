@@ -1,5 +1,5 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { Formulae, formulaRefs } from "../../../data/GoodIntentions/types/V5Alchemy"
+import { Formulae, formulaRefs } from "../../../data/GoodIntentions/types/V5Formulae"
 import { globals } from "../../../assets/globals"
 import { Grid, Card, Group, Text, Badge, Button, Space, ScrollArea, Stack, Center, Modal, Image } from "@mantine/core"
 import { upcase } from "../../../utils/case"
@@ -79,6 +79,8 @@ const V5FormulaeXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: Fo
         return Formulae.map((formula) => {
             const formulaRef = formulaRefs.find((entry) => entry.name === formula.name)
             const isCeremonySelected = kindred.formulae.some((r) => r.name === formula.name)
+            const isFreebieSelected = kindred.formulae.some((f) =>f.freebiePoints===formula.level||f.creationPoints===formula.level)
+            
             let check = formulaRef
             if (isCeremonySelected) {
                 check = kindred.formulae.find((r) => r.name === formula.name);
@@ -86,11 +88,15 @@ const V5FormulaeXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: Fo
 
             if (!formulaRef || !check) { return null }
 
-            const onClick = () => {
-
-                const updatedFormulae = [...kindred.formulae, { ...formulaRef, experiencePoints: formula.level * v5xp.formula }];
-                setKindred({ ...kindred, formulae: updatedFormulae });
-            };
+            const onClick = (freebie: boolean) => () => {
+                if (freebie) {
+                  const updatedFormulae = [...kindred.formulae, { ...formulaRef, freebiePoints: formula.level }];
+                  setKindred({ ...kindred, formulae: updatedFormulae });
+                } else {
+                  const updatedFormulae = [...kindred.formulae, { ...formulaRef, experiencePoints: formula.level * v5xp.formula }];
+                  setKindred({ ...kindred, formulae: updatedFormulae });
+                }
+              };
             const deselect = () => {
                 const updatedFormulae = kindred.formulae.filter(formula => formula.name !== formulaRef.name);
                 setKindred({ ...kindred, formulae: updatedFormulae });
@@ -125,11 +131,11 @@ const V5FormulaeXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: Fo
 
                             <div style={{ position: "absolute", bottom: "0", width: "100%", padding: "inherit", left: 0 }}>
                                 {isCeremonySelected ?
-                                    <Button onClick={deselect} disabled={check?.creationPoints > 0} variant="light" color="red" fullWidth radius="md">
+                                    <Button onClick={deselect} disabled={(check?.creationPoints > 0)} variant="light" color="red" fullWidth radius="md">
                                         <Text truncate>Deselect {formula.name}</Text>
                                     </Button>
                                     :
-                                    <Button onClick={onClick} variant="light" color="blue" fullWidth radius="md">
+                                    <Button onClick={onClick(!isFreebieSelected)} variant="light" color="blue" fullWidth radius="md">
                                         <Text truncate>Buy {formula.name}</Text>
                                     </Button>
                                 }

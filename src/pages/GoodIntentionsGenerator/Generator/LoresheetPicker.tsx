@@ -395,6 +395,7 @@ const BackgroundSelectModal = ({
                                                     <Table>
                                                         <tbody>
                                                             {backgroundInfo.advantages.map((advantage) => {
+                                                                if (advantage?.type ===  "disadvantage") {return null}
                                                                 const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
                                                                 const advantageRef = option.advantages.find((a) => a.name === advantage.name) || { ...emptyAdvantage, name: advantage.name }
                                                                 const havenSizeMax = option.name === "Haven" ? v5BackgroundLevel(option).level : 0;

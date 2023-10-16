@@ -5,6 +5,7 @@ import { Clans } from "../../../data/GoodIntentions/types/V5Clans"
 import { CirclePlus, CircleMinus } from 'tabler-icons-react';
 import { upcase } from "../../../utils/case";
 import { allPowers } from "../../../data/GoodIntentions/types/V5Powers";
+import { Formulae } from "../../../data/GoodIntentions/types/V5Formulae";
 
 type V5DisciplineXpInputsProps = {
     kindred: Kindred,
@@ -31,6 +32,17 @@ const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps
     };
 
     const disciplineXpInputs = (discipline: DisciplineKey) => {
+
+        let highestFormulaLevel = 0;  // Initialize the highest level to 0
+
+        kindred.formulae.forEach((formula) => {
+          const formulaRecord = Formulae.find((record) => record.name === formula.name);
+          if (formulaRecord && formulaRecord.level > highestFormulaLevel) {
+            highestFormulaLevel = formulaRecord.level;
+          }
+        });
+
+        console.log(highestFormulaLevel)
 
         return (
             <tr key={discipline}>
@@ -59,7 +71,7 @@ const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps
                             radius="xl"
                             color="dark"
                             onClick={() => v5HandleXpDisciplineChange(kindred, setKindred, discipline, kindred.disciplines[discipline].experiencePoints - 1)}
-                            disabled={(getSelectedPowers(kindred, discipline).length >= v5DisciplineLevel(kindred, discipline).level)}
+                            disabled={(getSelectedPowers(kindred, discipline).length >= v5DisciplineLevel(kindred, discipline).level) || (discipline === "thin-blood alchemy" && highestFormulaLevel >= v5DisciplineLevel(kindred, discipline).level)}
                         >
                             <CircleMinus strokeWidth={1.5} color="gray" />
                         </ActionIcon>
@@ -67,7 +79,7 @@ const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps
                             style={{ width: '60px', margin: '0 8px' }}
                             type="number"
                             key={`${discipline}-input`}
-                            min={(getSelectedPowers(kindred, discipline).length >= v5DisciplineLevel(kindred, discipline).level) ? kindred.disciplines[discipline].experiencePoints : 0}
+                            min={(getSelectedPowers(kindred, discipline).length >= v5DisciplineLevel(kindred, discipline).level) || (discipline === "thin-blood alchemy" && highestFormulaLevel >= v5DisciplineLevel(kindred, discipline).level) ? kindred.disciplines[discipline].experiencePoints : 0}
                             max={v5FindMaxDiscipline(kindred, discipline)}
                             value={kindred.disciplines[discipline].experiencePoints}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

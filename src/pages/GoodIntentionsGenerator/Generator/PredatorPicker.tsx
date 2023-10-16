@@ -17,6 +17,7 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep, backStep }: Predato
     const isSmallScreen = globals.isSmallScreen
 
     const isVentrue = kindred.clan === "Ventrue" ? true : false
+    const isThinblood = kindred.clan === "Thin-Blood" ? true : false
 //    const isRavnos = kindred.clan === "Ravnos" ? true : false
 
     const [pickedPredatorType, setPickedPredatorType] = useState<PredatorTypeName>("")
@@ -36,7 +37,7 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep, backStep }: Predato
         const thinbloodAdvantageToCheck = "Retainer"
         const thinbloodHasDesiredAdvantage = PredatorTypes[predatorTypeName].backgrounds.some(background => background.advantages.some(advantage => thinbloodAdvantageToCheck.includes(advantage.name)))
 
-        const disabled = (isVentrue && ventrueHasDesiredMerits) || (thinbloodAdvantageToCheck && thinbloodHasDesiredAdvantage)
+        const disabled = (isVentrue && ventrueHasDesiredMerits) || (isThinblood && thinbloodHasDesiredAdvantage)
 
         return (
             <Tooltip label={PredatorTypes[predatorTypeName].summary} key={predatorTypeName} transitionProps={{ transition: 'slide-up', duration: 200 }}>

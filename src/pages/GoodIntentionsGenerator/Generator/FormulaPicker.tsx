@@ -3,7 +3,7 @@ import { globals } from "../../../assets/globals"
 import { Select, Grid, Card, Group, Text, Badge, Button, Space, ScrollArea, Stack, Center, Modal, Image } from "@mantine/core"
 import { upcase } from "../../../utils/case"
 import { disciplines, allDisciplines, DisciplineKey } from "../../../data/GoodIntentions/types/V5Disciplines"
-import { FormulaRef, Formulae, formulaRefs } from "../../../data/GoodIntentions/types/V5Alchemy"
+import { FormulaRef, Formulae, formulaRefs } from "../../../data/GoodIntentions/types/V5Formulae"
 import { useState } from "react"
 
 type FormulaPickerProps = {

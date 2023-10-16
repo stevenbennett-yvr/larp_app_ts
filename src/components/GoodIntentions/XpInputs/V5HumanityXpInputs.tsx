@@ -12,7 +12,7 @@ const V5HumanityXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps) => 
 
     return (
         <div>
-            <Text mt={"xl"} ta="center" fz="xl" fw={700}>Blood Potency</Text>
+            <Text mt={"xl"} ta="center" fz="xl" fw={700}>Humanity</Text>
             <Center>
                 <Input.Wrapper
                     label={`Humanity ${v5HumanityLevel(kindred).level}`}

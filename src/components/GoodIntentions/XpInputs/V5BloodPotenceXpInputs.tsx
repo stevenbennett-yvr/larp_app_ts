@@ -2,7 +2,7 @@
 import { Text, Center, Input, Group, Button, Table } from "@mantine/core";
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 import { generations } from "../../../data/GoodIntentions/types/V5Generation";
-import { bloodPotencies, v5BloodPotencyLevel, findMaxBloodPotency, handleBloodPotencyChange } from "../../../data/GoodIntentions/types/V5BloodPotency";
+import { bloodPotencies, v5BloodPotencyLevel, handleBloodPotencyChange } from "../../../data/GoodIntentions/types/V5BloodPotency";
 
 type V5BloodPotenceXpInputProps = {
     kindred: Kindred,
@@ -10,6 +10,13 @@ type V5BloodPotenceXpInputProps = {
 }
 
 const V5BloodPotenceXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps) => {
+
+    let hasIronGullet = kindred.meritsFlaws.some((mf) => mf.name === "Iron Gullet")
+    let hasFarmer = kindred.meritsFlaws.some((mf) => mf.name === "Farmer")
+
+    let bp3 = hasIronGullet || hasFarmer
+
+    let disabled = bp3? v5BloodPotencyLevel(kindred).level >= 2:v5BloodPotencyLevel(kindred).level >= generations[kindred.generation].max_bp
 
     return (
         <div>
@@ -35,7 +42,7 @@ const V5BloodPotenceXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps)
                             type="number"
                             key={`Gnosis`}
                             min={kindred.generation <= 9? 20:0}
-                            max={findMaxBloodPotency(kindred)}
+                            max={disabled?kindred.bloodPotency.experiencePoints:undefined}
                             value={kindred.bloodPotency.experiencePoints}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 const value = Number(e.target.value);
@@ -46,7 +53,7 @@ const V5BloodPotenceXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps)
                             size="xs"
                             variant='outline'
                             color='gray'
-                            disabled={v5BloodPotencyLevel(kindred).level >= generations[kindred.generation].max_bp}
+                            disabled={disabled}
                             onClick={() => handleBloodPotencyChange(kindred, setKindred, "experiencePoints", kindred.bloodPotency.experiencePoints + 1)}
                         >
                             +

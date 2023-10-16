@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { allPowers } from './V5Powers';
 
 export const formulaSchema = z.object({
     name: z.string(),
@@ -30,15 +31,16 @@ export const Formulae: Formula[] = [
         level: 1,
         duration: "Once scene"
     },
-    {
-        name:"Counterfeit Power (Level 1)",
-        summary: "Blood alchemists with two dots of Blood Alchemy may develop Formulae that counterfeit Level 1 Discipline powers.",
-        ingredients: "Alchemist's Blood, Blood Resonance listed for the Discipline from which the counterfeit power belongs.",
+    ...allPowers.filter(power=>power.level===1).map(power => (
+        {
+        name: `Counterfeit ${power.name}`,
+        summary: `Blood alchemists with two dots of Blood Alchemy may develop Formulae that counterfeits ${power.name}.`,
+        ingredients: `Alchemist's Blood, Blood Resonance listed for the Discipline ${power.discipline}`,
         rouseChecks: 0,
         dicePool: "As per Power",
-        level: 2,
-        duration: "As per Power"
-    },
+        level: power.level + 1, // You can adjust the level as needed
+        duration: "As per Power",
+      })),
     {
         name:"Envelop",
         summary: "You have learned a Formula to collect those tiny bits of mist from the air around you and coalesce them into something you can direct. ",
@@ -48,15 +50,16 @@ export const Formulae: Formula[] = [
         level: 2,
         duration: "15m"
     },
-    {
-        name:"Counterfeit Power (Level 2)",
-        summary: "Blood alchemists with three dots of Blood Alchemy may develop Formulae that counterfeit Level 2 Discipline powers.",
-        ingredients: "Alchemist's Blood, Blood Resonance listed for the Discipline from which the counterfeit power belongs.",
+    ...allPowers.filter(power=>power.level===2).map(power => (
+        {
+        name: `Counterfeit ${power.name}`,
+        summary: `Blood alchemists with three dots of Blood Alchemy may develop Formulae that counterfeits ${power.name}.`,
+        ingredients: `Alchemist's Blood, Blood Resonance listed for the Discipline ${power.discipline}`,
         rouseChecks: 0,
         dicePool: "As per Power",
-        level: 3,
-        duration: "As per Power"
-    },
+        level: power.level + 1, // You can adjust the level as needed
+        duration: "As per Power",
+      })),
     {
         name:"Defractionate",
         summary: "You’ve developed a solution to the problem of a tasteless bloodbag—a Formula that lets anyone feed from a blood bag as if it’s from a human body. It may not taste as good, but it gets the job done.",
@@ -66,24 +69,26 @@ export const Formulae: Formula[] = [
         level: 3,
         duration: "24hours or indefinite if refrigerated"
     },
-    {
-        name:"Counterfeit Power (Level 3)",
-        summary: "Blood alchemists with four dots of Blood Alchemy may develop Formulae that counterfeit Level 3 Discipline powers.",
-        ingredients: "Alchemist's Blood, Blood Resonance listed for the Discipline from which the counterfeit power belongs, a drop of Blood from a vampire who possesses at least one dot in the counterfeit Discipline or from whom the Discipline is in-clan.",
+    ...allPowers.filter(power=>power.level===3).map(power => (
+        {
+        name: `Counterfeit ${power.name}`,
+        summary: `Blood alchemists with four dots of Blood Alchemy may develop Formulae that counterfeits ${power.name}.`,
+        ingredients: `Alchemist's Blood, Blood Resonance listed for the Discipline ${power.discipline}`,
         rouseChecks: 0,
         dicePool: "As per Power",
-        level: 4,
-        duration: "As per Power"
-    },
-    {
-        name:"Counterfeit Power (Level 4)",
-        summary: "Blood alchemists with five dots of Blood Alchemy may develop Formulae that counterfeit Level 4 Discipline powers.",
-        ingredients: "Alchemist's Blood, Blood Resonance listed for the Discipline from which the counterfeit power belongs, a drop of Blood from a vampire who possesses at least one dot in the counterfeit Discipline or from whom the Discipline is in-clan.",
+        level: power.level + 1, // You can adjust the level as needed
+        duration: "As per Power",
+      })),
+    ...allPowers.filter(power=>power.level===4).map(power => (
+        {
+        name: `Counterfeit ${power.name}`,
+        summary: `Blood alchemists with five dots of Blood Alchemy may develop Formulae that counterfeits ${power.name}.`,
+        ingredients: `Alchemist's Blood, Blood Resonance listed for the Discipline ${power.discipline}`,
         rouseChecks: 0,
         dicePool: "As per Power",
-        level: 5,
-        duration: "As per Power"
-    },
+        level: power.level + 1, // You can adjust the level as needed
+        duration: "As per Power",
+      })),
     {
         name:"Awaken the Sleeper",
         summary: "With this Formula, Blood Potency no longer matters; you can force anyone awake from a Torpid state. ",
