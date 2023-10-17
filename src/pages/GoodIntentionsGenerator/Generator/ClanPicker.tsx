@@ -5,7 +5,7 @@ import { ClanName, Clans, clanNameSchema } from "../../../data/GoodIntentions/ty
 import { globals } from "../../../assets/globals";
 import { upcase } from "../../../utils/case";
 import { disciplines, getEmptyDisciplines } from "../../../data/GoodIntentions/types/V5Disciplines";
-import { v5EmptySkills } from "../../../data/GoodIntentions/types/V5Skills";
+import { loresheetCleanup } from "../../../data/GoodIntentions/types/V5Loresheets";
 
 type ClanPickerProps = {
     kindred: Kindred,
@@ -187,6 +187,7 @@ const ClanPicker = ({ kindred, setKindred, nextStep, backStep }: ClanPickerProps
                         <Button
                             disabled={clan==="Ghoul"}
                             onClick={() => {
+                                const filteredOptions = loresheetCleanup(kindred)
                                 setKindred({
                                     ...kindred, clan,
                                     predatorType: "",
@@ -197,8 +198,8 @@ const ClanPicker = ({ kindred, setKindred, nextStep, backStep }: ClanPickerProps
                                     rituals: [],
                                     ceremonies: [],
                                     formulae: [],
-                                    loresheet: { name: "", benefits: [] },
-                                    skills: v5EmptySkills,
+                                    skills: filteredOptions?.skills,
+                                    loresheet: {name:"", benefits:[]}
                                 })
                                 nextStep()
                             }}

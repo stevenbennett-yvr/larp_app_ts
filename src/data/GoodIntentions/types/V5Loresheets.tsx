@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { clanNameSchema } from "./V5Clans";
-import { v5skillsKeySchema } from "./V5Skills";
+import { V5SkillsKey, v5skillsKeySchema } from "./V5Skills";
 import { v5BackgroundRefSchema, emptyBackground, emptyAdvantage } from "./V5Backgrounds";
 import { v5MeritFlawRefSchema, emptyMeritFlaw } from "./V5MeritsOrFlaws";
 import { Kindred } from "./Kindred";
@@ -1119,3 +1119,49 @@ export const loresheetFilter = (kindred: Kindred) => {
   
     return filteredloreSheets;
   };
+
+
+  export const loresheetCleanup = (kindred: Kindred) => {
+    let loresheet = loresheets.find(ls => ls.name === kindred.loresheet.name);
+    if (!loresheet) { return null; }
+
+    let filteredSkills = JSON.parse(JSON.stringify(kindred.skills));
+    let filteredBackgrounds = JSON.parse(JSON.stringify(kindred.backgrounds));
+    let filteredMerits = JSON.parse(JSON.stringify(kindred.meritsFlaws));
+
+    loresheet.benefits.forEach((benefit) => {
+        // Update skills
+        for (const skillName in filteredSkills) {
+            let skill = skillName as V5SkillsKey;
+            filteredSkills[skill].freebiePoints = 0;
+        }
+
+        // Filter backgrounds
+        if (benefit.backgrounds.length > 0) {
+            benefit.backgrounds.forEach((bg) => {
+                filteredBackgrounds = filteredBackgrounds.filter((background: any) => background.id !== bg.id);
+            });
+        }
+
+        // Filter selectable backgrounds
+        if (benefit.selectableBackgrounds.options.length > 0) {
+            benefit.selectableBackgrounds.options.forEach((bg) => {
+                filteredBackgrounds = filteredBackgrounds.filter((background: any) => background.id !== bg.id);
+            });
+        }
+
+        // Filter merits and flaws
+        if (benefit.meritsAndFlaws.length > 0) {
+            benefit.meritsAndFlaws.forEach((m) => {
+                filteredMerits = filteredMerits.filter((merit: any) => merit.id !== m.id);
+            });
+        }
+    });
+
+    // Return an object with filtered options
+    return {
+        skills: filteredSkills,
+        backgrounds: filteredBackgrounds,
+        meritsFlaws: filteredMerits,
+    };
+};
