@@ -183,7 +183,9 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
                                                                         }}
                                                                     />
                                                                     {bRef.name === "Haven" && advantage.type === "advantage" ?
+                                                                        
                                                                         <Checkbox
+                                                                            label="Haven Freebie"
                                                                             disabled={((getAdvantagePoints(advantageRef) > 0) || freebieBool) && (!advantageRef.havenBool)}
                                                                             color="red"
                                                                             icon={CheckboxIcon}

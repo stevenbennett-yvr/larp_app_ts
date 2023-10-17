@@ -178,6 +178,7 @@ const V5AdvantageXpInputs = ({ kindred, setKindred, bId, modalOpened, closeModal
                                                                     </ActionIcon>
                                                                     {bRef.name === "Haven" && advantage.type === "advantage" ?
                                                                         <Checkbox
+                                                                            label="Haven Freebie"
                                                                             disabled={(pointBool||freebieBool)&&(!advantageRef.havenBool)}
                                                                             color="red"
                                                                             icon={CheckboxIcon}
