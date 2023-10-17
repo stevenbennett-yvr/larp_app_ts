@@ -4,6 +4,7 @@ import { useAuth } from "./AuthContext";
 import { useUser } from "./UserContext";
 import {
   getDocs,
+  getDoc,
   collection,
   addDoc,
   updateDoc,
@@ -131,9 +132,27 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
     []
   );
 
-  const getAwakenedById = useCallback((id:string) => {
-    return domainAwakenedList.find((character:any) => character.id === id)
-  }, [domainAwakenedList])
+  const getAwakenedById = useCallback(async (id: string) => {
+    if (!currentUser || !userData) return null;
+  
+    const awakenedDocRef = doc(collectionRef, id);
+  
+    try {
+      const docSnapshot = await getDoc(awakenedDocRef);
+      if (docSnapshot.exists()) {
+        const awakenedData = docSnapshot.data();
+        return {
+          ...awakenedData,
+          id: docSnapshot.id,
+        };
+      } else {
+        return null; // Character with the given ID not found
+      }
+    } catch (err) {
+      console.error(err);
+      return null; // Error occurred while fetching the character
+    }
+  }, [collectionRef, currentUser, userData]);
 
 
 
