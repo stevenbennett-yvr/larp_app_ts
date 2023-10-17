@@ -32,10 +32,10 @@
         "id": "CND-098",
         "location": "Vancouver, BC, Canada",
         "status": "active",
-        "currentChronicles": ["Tattered Veil"],
+        "currentChronicles": ["Tattered Veil", "Good Intentions"],
         "coordinator": {
-            "name": "",
-            "email": ""
+            "name": "Jilian Christensen",
+            "email": "dc.098@canadaatmidnight.com"
         },
         "links": {
             "facebook": "https://www.facebook.com/groups/2249230082"
@@ -54,30 +54,32 @@
         }
         },
     {
-        "name": "CND-008 Toronto",
+        "name": "CND-008 Toronto - Dire Epiphany",
         "id": "CND-008",
         "location": "Toronto, ON, Canada",
-        "status": "inactive",
+        "status": "active",
+        "currentChronicles": ["Good Intentions"],
         "coordinator": {
+            "name": "Hugh Montgomerie",
             "email": "dc.008@canadaatmidnight.com"
         }
     },
     {
-        "name": "CND-014 Hamilton",
+        "name": "CND-014 Hamilton - Katharsis",
         "id": "CND-014",
         "location": "Hamilton, ON, Canada",
-        "status": "inactive",
+        "status": "active",
         "coordinator": {
             "email": "dc.014@canadaatmidnight.com"
         }
     },
     {
-        "name": "CND-015 Montreal - Berceau de la Rébellion",
+        "name": "CND-015 Montreal - La Cité Lumière",
         "id": "CND-015",
         "location": "Montreal, QC, Canada",
-        "status": "inactive",
+        "status": "active",
         "coordinator": {
-            "name": "Ivan Vasilini",
+            "name": "Sophie Ricard",
             "email": "dc.015@canadaatmidnight.com"
         },
         "links": {
@@ -294,6 +296,16 @@
         "location": "Tampa, Florida",
         "coordinator": {
             "email": "dc.120@canadaatmidnight.com"
+        }
+    },
+    {
+        "name": "CND-121 Spokane",
+        "id": "CND-120",
+        "location": "Spokane, Washington, USA",
+        "currentChronicles": ["Good Intentions"],
+        "coordinator": {
+            "name": "Shawn Harrison",
+            "email": "dc.121@canadaatmidnight.com"
         }
     }
 ]

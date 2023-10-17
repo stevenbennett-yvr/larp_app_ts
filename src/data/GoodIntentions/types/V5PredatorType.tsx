@@ -269,7 +269,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         summary: "Seduce prey and take their blood",
         backgrounds: [],
         meritsAndFlaws: [
-            { ...emptyMeritFlaw, id: 'siren-Enemy', name: "Enemy", freebiePoints: 1, note: "(spurned lover or jealous partner)" },
+            { ...emptyMeritFlaw, id: 'siren-Enemy', name: "Enemy", freebiePoints: 2, note: "(spurned lover or jealous partner)" },
         ],
         humanityChange: 0,
         huntingPool: { attribute: "charisma", skill: "subterfuge" },

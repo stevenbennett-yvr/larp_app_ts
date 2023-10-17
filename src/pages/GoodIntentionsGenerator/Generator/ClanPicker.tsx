@@ -5,6 +5,7 @@ import { ClanName, Clans, clanNameSchema } from "../../../data/GoodIntentions/ty
 import { globals } from "../../../assets/globals";
 import { upcase } from "../../../utils/case";
 import { disciplines, getEmptyDisciplines } from "../../../data/GoodIntentions/types/V5Disciplines";
+import { v5EmptySkills } from "../../../data/GoodIntentions/types/V5Skills";
 
 type ClanPickerProps = {
     kindred: Kindred,
@@ -113,7 +114,7 @@ const ClanPicker = ({ kindred, setKindred, nextStep, backStep }: ClanPickerProps
                     <Text ta="center" fz="xl" fw={700} mb={"sm"} mt={"md"} c="rgb(175,175,175)">Pretenders</Text>
                     <Grid grow m={0}>
                         {
-                            ["Thin-Blood", "Ghoul"].map((c) => clanNameSchema.parse(c)).map((clan) => createClanPick(clan, theme.fn.rgba(theme.colors.gray[6], 0.90)))
+                            ["Thin-Blood", "Ghoul"].map((c) => clanNameSchema.parse(c)).map((clan) => createClanPick(clan, theme.fn.rgba(theme.colors.yellow[8], 0.90)))
                         }
                     </Grid>
 
@@ -193,7 +194,11 @@ const ClanPicker = ({ kindred, setKindred, nextStep, backStep }: ClanPickerProps
                                     backgrounds: [],
                                     disciplines: getEmptyDisciplines,
                                     powers: [],
+                                    rituals: [],
+                                    ceremonies: [],
+                                    formulae: [],
                                     loresheet: { name: "", benefits: [] },
+                                    skills: v5EmptySkills,
                                 })
                                 nextStep()
                             }}
