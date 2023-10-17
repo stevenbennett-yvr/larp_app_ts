@@ -1,4 +1,4 @@
-import { Button, Card, Center, Grid, Group, Image, Stack, ScrollArea, Text, Title, useMantineTheme, Modal, Avatar, Tooltip, Divider } from "@mantine/core";
+import { Alert, Button, Card, Center, Grid, Group, Image, Stack, ScrollArea, Text, Title, useMantineTheme, Modal, Avatar, Tooltip, Divider } from "@mantine/core";
 import { useState } from "react";
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 import { ClanName, Clans, clanNameSchema } from "../../../data/GoodIntentions/types/V5Clans";
@@ -10,10 +10,11 @@ type ClanPickerProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void
     nextStep: () => void
+    backStep: () => void
 }
 
 
-const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
+const ClanPicker = ({ kindred, setKindred, nextStep, backStep }: ClanPickerProps) => {
 
     const theme = useMantineTheme()
 
@@ -199,7 +200,19 @@ const ClanPicker = ({ kindred, setKindred, nextStep }: ClanPickerProps) => {
                         >Confirm Clan</Button>
                     </Modal>
                 )}
-
+            <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen ? "15%" : "30%" }}>
+                <Group>
+                    <Button.Group>
+                        <Button
+                            style={{ margin: "5px" }}
+                            color="gray"
+                            onClick={backStep}
+                        >
+                            Back
+                        </Button>
+                    </Button.Group>
+                </Group>
+            </Alert>
             </Stack>
         </Center >
     )

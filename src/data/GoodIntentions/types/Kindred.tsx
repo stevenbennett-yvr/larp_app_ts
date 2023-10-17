@@ -10,8 +10,9 @@ import { ritualRefSchema } from './V5Rituals';
 import { Power, powerRefSchema } from './V5Powers';
 import { v5MeritFlawRefSchema } from './V5MeritsOrFlaws';
 import { ceremonyRefSchema } from './V5Ceremonies';
-import { loresheetRefSchema, sectNameSchema } from './V5Loresheets'
+import { loresheetRefSchema } from './V5Loresheets'
 import { formulaRefSchema } from './V5Formulae';
+import { sectNameSchema } from './V5Sect';
 
 export const v5BackgroundSchema = z.object({
     history: z.string(),

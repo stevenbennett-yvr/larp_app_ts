@@ -50,4 +50,12 @@ import caitiffLogo from './clanLogos/Caitiff_logo.png'
 import thinBloodLogo from './clanLogos/Thinblood_logo.png'
 import ghoulLogo from './clanLogos/Ghoul_logo.png'
 
-export {v5Logo, alchemyLogo, animalismLogo, auspexLogo, bloodSorceryLogo, celerityLogo, dominateLogo, fortitudeLogo, obfuscateLogo, oblivionLogo, potenceLogo, presenceLogo, proteanLogo, banuHaqimLogo, brujahLogo, gangrelLogo, hecataLogo, lasombraLogo, malkavianLogo, ministryLogo, nosferatuLogo, ravnosLogo, salubriLogo, toreadorLogo, tremereLogo, tzimisceLogo, ventrueLogo, banuHaqimSymbol, brujahSymbol, gangrelSymbol, hecataSymbol, lasombraSymbol, malkavianSymbol, ministrySymbol, nosferatuSymbol, ravnosSymbol, salubriSymbol, toreadorSymbol, tremereSymbol, tzimisceSymbol, ventrueSymbol, caitiffLogo, caitiffSymbol, thinBloodSymbol, thinBloodLogo, ghoulSymbol, ghoulLogo}
+import anarchLogo from './sectLogos/AnarchTitleV5.webp'
+import autarkisLogo from "./sectLogos/Autarkis_logo.png"
+import camarillaLogo from "./sectLogos/CamarillaTitleV5.webp"
+
+import anarchSymbol from './sectSymbols/Anarch_symbol.png'
+import autarkisSymbol from './sectSymbols/Independent_symbol.png'
+import camarillaSymbol from './sectSymbols/Camarilla_symbol.png'
+
+export {v5Logo, anarchLogo, anarchSymbol, autarkisLogo, autarkisSymbol, camarillaLogo, camarillaSymbol, alchemyLogo, animalismLogo, auspexLogo, bloodSorceryLogo, celerityLogo, dominateLogo, fortitudeLogo, obfuscateLogo, oblivionLogo, potenceLogo, presenceLogo, proteanLogo, banuHaqimLogo, brujahLogo, gangrelLogo, hecataLogo, lasombraLogo, malkavianLogo, ministryLogo, nosferatuLogo, ravnosLogo, salubriLogo, toreadorLogo, tremereLogo, tzimisceLogo, ventrueLogo, banuHaqimSymbol, brujahSymbol, gangrelSymbol, hecataSymbol, lasombraSymbol, malkavianSymbol, ministrySymbol, nosferatuSymbol, ravnosSymbol, salubriSymbol, toreadorSymbol, tremereSymbol, tzimisceSymbol, ventrueSymbol, caitiffLogo, caitiffSymbol, thinBloodSymbol, thinBloodLogo, ghoulSymbol, ghoulLogo}

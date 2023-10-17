@@ -1,6 +1,7 @@
 import { Kindred, getEmptyKindred } from "../../data/GoodIntentions/types/Kindred"
 import { useLocalStorage } from "@mantine/hooks"
 
+import SectPicker from "./Generator/SectPicker"
 import ClanPicker from "./Generator/ClanPicker"
 import AttributePicker from "./Generator/AttributePicker"
 import SkillsPicker from './Generator/SkillsPicker'
@@ -25,49 +26,53 @@ const GenerateKindred = () => {
         switch (selectedStep) {
             case 0:
                 return (
-                    <ClanPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} />
+                    <SectPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} />
                 );
             case 1:
                 return (
-                    <AttributePicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
-                )
+                    <ClanPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                );
             case 2:
                 return (
-                    <SkillsPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + (kindred.clan==="Ghoul"? 3:1)); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                    <AttributePicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             case 3:
                 return (
+                    <SkillsPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + (kindred.clan==="Ghoul"? 3:1)); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                )
+            case 4:
+                return (
                     <GenerationPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
-            case 4: 
+            case 5: 
                 return (
                     <PredatorTypePicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
-            case 5:
+            case 6:
                 // Backgrounds and Loresheets
                 return (
                     <BackgroundLoreTabs kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - (kindred.clan==="Ghoul"? 3:1)); }} />
                 )
-            case 6: 
+            case 7: 
                 // Merits and Flaws
                 return (
                     <MeritPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + (kindred.clan==="Thin-Blood"||kindred.clan==="Ghoul"? 2:1)); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
-            case 7:
+            case 8:
                 return (
                     <DisciplinesPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
-            case 8:
+            case 9:
                 // Spending Init XP
                 return (
                     <V5ExperienceAssigner kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - (kindred.clan==="Thin-Blood"||kindred.clan==="Ghoul"? 2:1)); }} />
                 )
-            case 9:
+            case 10:
                 // Backstory shit
                 return (
                     <CoreConcept kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
-            case 10:
+            case 11:
                 return (
                     <V5PrintSheet kindred={kindred} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )

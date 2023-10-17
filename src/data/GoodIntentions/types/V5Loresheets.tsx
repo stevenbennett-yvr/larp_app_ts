@@ -4,21 +4,7 @@ import { v5skillsKeySchema } from "./V5Skills";
 import { v5BackgroundRefSchema, emptyBackground, emptyAdvantage } from "./V5Backgrounds";
 import { v5MeritFlawRefSchema, emptyMeritFlaw } from "./V5MeritsOrFlaws";
 import { Kindred } from "./Kindred";
-
-export const sectNameSchema = z.union([
-    z.literal('Anarch'),
-    z.literal('Ashirra'),
-    z.literal('Camarilla'),
-    z.literal('Sabbat'),
-    z.literal('Inconnu'),
-    z.literal('Independent'),
-    z.literal('Hecata'),
-    z.literal("Tal'Mahe'Ra"),
-
-    z.literal(''),
-])
-
-export type SectName = z.infer<typeof sectNameSchema>
+import { sectNameSchema } from "./V5Sect";
 
 const benefitRefSchema = z.object({
     name: z.string(),

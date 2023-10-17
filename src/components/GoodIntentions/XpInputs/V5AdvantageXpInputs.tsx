@@ -148,6 +148,8 @@ const V5AdvantageXpInputs = ({ kindred, setKindred, bId, modalOpened, closeModal
                                             const havenBoolean = bRef.name === "Haven" && v5BackgroundLevel(bRef).level <= v5AdvantageLevel(advantageRef).level
                                             const pointBool = advantageRef.freebiePoints > 0 || advantageRef.creationPoints > 0 || advantageRef.experiencePoints > 0
                                             const starPowerBool = bRef.name === "Fame" && advantage.name === "Star Power" && v5BackgroundLevel(bRef).level < 3
+                                            const isCatenating = kindred.meritsFlaws.some((mf) => mf.name === "Catenating blood")
+                                            const canGhoul = !isCatenating && advantage.name==="Retainer" && (kindred.clan==="Thin-Blood")
                                             return (
                                                 <>
                                                     <tr>
@@ -162,7 +164,7 @@ const V5AdvantageXpInputs = ({ kindred, setKindred, bId, modalOpened, closeModal
                                                                         <CircleMinus strokeWidth={1.5} color="gray" />
                                                                     </ActionIcon>
                                                                     <NumberInput
-                                                                        disabled={starPowerBool}
+                                                                        disabled={starPowerBool||canGhoul}
                                                                         value={advantageRef.experiencePoints}
                                                                         style={{ width: "100px" }}
                                                                         min={0}

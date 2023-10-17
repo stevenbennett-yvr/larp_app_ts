@@ -50,7 +50,7 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
     const havenMax = bRef.id==="farmer-haven" ? Math.max(resourceLevel, 2): resourceLevel === 3 ? 3 : resourceLevel === 1 ? 2 : 1
     const starPowerAdvantage = bRef.advantages.find(advantage => advantage.name === "Star Power") || emptyAdvantage;
     const fameMin = (bRef.name === "Fame" && v5AdvantageLevel(starPowerAdvantage).level > 0) ? 3 : 1;
-        const BackgroundInput = (backgroundRef: V5BackgroundRef) => {
+    const BackgroundInput = (backgroundRef: V5BackgroundRef) => {
         if (!backgroundRef) { return }
         return (
             <Center>
@@ -156,6 +156,8 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
                                             const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
                                             const advantageRef = bRef.advantages.find((a) => a.name === advantage.name) || { ...emptyAdvantage, name: advantage.name }
                                             const starPowerBool = bRef.name === "Fame" && advantage.name === "Star Power" && v5BackgroundLevel(bRef).level < 3
+                                            const isCatenating = kindred.meritsFlaws.some((mf) => mf.name === "Catenating blood")
+                                            const canGhoul = !isCatenating && advantage.name==="Retainer" && (kindred.clan==="Thin-Blood")
                                             return (
                                                 <>
                                                     <tr>
@@ -167,7 +169,7 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
                                                             <Center>
                                                                 <Group>
                                                                     <NumberInput
-                                                                        disabled={starPowerBool}
+                                                                        disabled={starPowerBool||canGhoul}
                                                                         value={v5AdvantageLevel(advantageRef).level}
                                                                         style={{ width: "100px" }}
                                                                         min={advantageRef.havenBool?1:advantageRef.freebiePoints}
