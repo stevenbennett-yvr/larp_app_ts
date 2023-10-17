@@ -1,6 +1,6 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { generations } from "../../../data/GoodIntentions/types/V5Generation"
-import { Clans } from "../../../data/GoodIntentions/types/V5Clans"
+import { ClanName, Clans } from "../../../data/GoodIntentions/types/V5Clans"
 import { Center, Grid, Avatar, Stack, Text, Title, Group, Alert, Button, Card, Table, Divider } from "@mantine/core"
 import { globals } from "../../../assets/globals"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -37,10 +37,15 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
         const generation = generations[kindred.generation].generation
         const predatorType = kindred.predatorType
         const compulsion = Clans[kindred.clan].compulsion
-        const clanBane = Clans[kindred.clan].bane
+        let clanBane = Clans[kindred.clan].bane
         const health = v5AttributeLevel(kindred, "stamina").level + 3
         const willpower = v5AttributeLevel(kindred, "resolve").level + v5AttributeLevel(kindred, "composure").level
         const humanity = v5HumanityLevel(kindred).level
+        const isCursed = kindred.meritsFlaws.find((m) => m.name === "Clan Curse")
+        if (isCursed) {
+            clanBane = Clans[(isCursed.note as ClanName)].bane
+        }
+        
         return (
             <Grid columns={globals.isPhoneScreen ? 3 : 9}>
                 <Grid.Col span={3} style={{ borderRight: !globals.isPhoneScreen ? "1px solid #ccc" : "none" }}>

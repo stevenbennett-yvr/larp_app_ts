@@ -77,6 +77,7 @@ export const kindredSchema = z.object({
     loresheet: loresheetRefSchema,
     startDate: z.string().datetime(),
 })
+
 export type Kindred = z.infer<typeof kindredSchema>
 
 export const getEmptyKindred = (): Kindred => {

@@ -6,7 +6,7 @@ import { Alert, Button, Stack, Accordion, Center, NumberInput, useMantineTheme, 
 import { globals } from "../../../assets/globals";
 import { V5MeritFlaw, V5MeritFlawRef, v5MeritFlawRefs, v5MeritLevel, v5MeritFlawFilter, handleMeritFlawChange } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
 import Tally from "../../../utils/talley";
-import FormulaPicker from "./FormulaPicker";
+import FormulaPicker from "./ThinBloodModal";
 import GhoulModal from "./GhoulModal";
 import { useState } from "react";
 
@@ -221,6 +221,7 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
     const thinBloodStyle = !(getThinBloodPoints(kindred).totalFlawPoints > 0 && getThinBloodPoints(kindred).totalMeritPoints > 0 && getThinBloodPoints(kindred).totalFlawPoints === getThinBloodPoints(kindred).totalMeritPoints) ? { fontSize: globals.smallFontSize } : { color: "grey" }
     const isAlchemist = kindred.meritsFlaws.find((m) => m.name === "Thin-Blood Alchemist")
     const isDiscipline = kindred.meritsFlaws.find((m) => m.name === "Discipline Affinity")
+    const isCursed = kindred.meritsFlaws.find((m) => m.name === "Clan Curse")
 
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px' }}>
@@ -261,7 +262,7 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
                                 onClick={
                                     (kindred.clan==="Ghoul")?
                                     () => setGhoulModalOpen(true):
-                                    !(isAlchemist || isDiscipline)
+                                    !(isAlchemist || isDiscipline || isCursed)
                                         ? nextStep
                                         : () => setModalOpen(true)
                                 }

@@ -5,6 +5,8 @@ import { upcase } from "../../../utils/case"
 import { disciplines, allDisciplines, DisciplineKey } from "../../../data/GoodIntentions/types/V5Disciplines"
 import { FormulaRef, Formulae, formulaRefs } from "../../../data/GoodIntentions/types/V5Formulae"
 import { useState } from "react"
+import { allClans, ClanName, Clans } from "../../../data/GoodIntentions/types/V5Clans"
+import { handleMeritFlawChange } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws"
 
 type FormulaPickerProps = {
     kindred: Kindred,
@@ -80,15 +82,22 @@ const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal 
 
     const isAlchemist = kindred.meritsFlaws.find((m) => m.name === "Thin-Blood Alchemist")
     const isDiscipline = kindred.meritsFlaws.find((m) => m.name === "Discipline Affinity")
-    //const isCursed = kindred.meritsFlaws.find((m) => m.name === "Clan Curse")
-    //const isBestial = kindred.meritsFlaws.find((m) => m.name === "Bestial Temper")
-    //const isCatenating = kindred.meritsFlaws.find((m) => m.name === "Catenating blood")
 
     let mostDisciplines = allDisciplines.filter((disciplineName) => {
         return disciplineName !== "thin-blood alchemy";
     })
     const [pickedDiscipline, setPickedDiscipline] = useState("")
     const height = globals.viewportHeightPx
+
+
+    const isCursed = kindred.meritsFlaws.find((m) => m.name === "Clan Curse")
+    const isBestial = kindred.meritsFlaws.find((m) => m.name === "Bestial Temper")
+    const isCatenating = kindred.meritsFlaws.find((m) => m.name === "Catenating blood")
+    const [clan, setClan] = useState<ClanName>(kindred.clan)
+    let curseData = allClans.filter(clan => clan !== "Thin-Blood" && clan !== "Ghoul" && clan !== "Caitiff");
+    if (isBestial) { curseData = ["Brujah", "Gangrel"] }
+    if (isCatenating) { curseData = [ "Tremere" ] }
+
 
     return (
         <Modal
@@ -110,6 +119,25 @@ const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal 
                                 }}
                             />
                             : <></>}
+                    </Center>
+                    <Space h={"lg"} />
+                    <Center>
+                        <Stack>
+                    {isCursed ? 
+                            <Select
+                            label="Choose A Clan Curse"
+                            value={clan}
+                            data={curseData}
+                            onChange={(val:ClanName) => {
+                                if (val === null) return (null)
+                                setClan(val)
+                            }}
+                        />
+                        :<></>}
+                        {clan?
+                        <Text align="center">{Clans[clan].bane}</Text>
+                        :<></>}
+                        </Stack>
                     </Center>
                     <Space h={"lg"} />
                     <Center>
@@ -163,6 +191,9 @@ const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal 
                                     
                                 }
                             })
+                        }
+                        if (clan !== "" && isCursed) {
+                            handleMeritFlawChange(kindred, setKindred, isCursed, "note", clan)
                         }
                         nextStep()
                     }}
