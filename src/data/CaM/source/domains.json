@@ -90,6 +90,7 @@
         "id": "CND-024",
         "location": "Ottawa, ON, Canada",
         "status": "active",
+        "currentChronicles": ["Good Intentions"],
         "coordinator": {
             "name": "Dave Desgagnes",
             "email": "dc.024@canadaatmidnight.com"
@@ -130,6 +131,7 @@
         "id": "CND-102",
         "location": "Seattle, Washington",
         "status": "active",
+        "currentChronicles": ["Good Intentions"],
         "coordinator": {
             "name": "Denise Perez",
             "email": "dc.102@canadaatmidnight.com"
@@ -194,6 +196,7 @@
         "id": "CND-108",
         "location": "Los Angeles, California",
         "status": "active",
+        "currentChronicles": ["Good Intentions"],
         "coordinator": {
             "name": "Taylor Hars",
             "email": "dc.108@canadaatmidnight.com"
