@@ -116,16 +116,15 @@ const SectPicker = ({ kindred, setKindred, nextStep }: SectPickerProps) => {
                             <Center>
                                 <Group>
                                     {
-                                        Sects[sect].clans.map((clan) => 
+                                        Sects[sect].clans.map((clan) =>
                                         (
                                             <Tooltip label={Clans[clan.name].summary} key={clan.name}>
-                                            <Group>
-                                                <Image width={24} src={Clans[clan.name].symbol} style={{ filter: "invert(80%)" }} />
-                                                <Text>{upcase(clan.name)} {clan.note!==""?`(${clan.note})`:``}</Text>
-                                            </Group>
-                                        </Tooltip>
+                                                <Group>
+                                                    <Image width={24} src={Clans[clan.name].symbol} style={{ filter: "invert(80%)" }} />
+                                                    <Text>{upcase(clan.name)} {clan.note !== "" ? `(${clan.note})` : ``}</Text>
+                                                </Group>
+                                            </Tooltip>
                                         ))
-
                                     }
                                 </Group>
                             </Center>
@@ -140,7 +139,7 @@ const SectPicker = ({ kindred, setKindred, nextStep }: SectPickerProps) => {
                         <Button
                             onClick={() => {
                                 setKindred({
-                                    ...kindred, 
+                                    ...kindred,
                                     sect
                                 })
                                 nextStep()

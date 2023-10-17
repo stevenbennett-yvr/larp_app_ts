@@ -14,7 +14,7 @@
         }
         },
     {
-        "name": "Vancouver - Nova Albion",
+        "name": "CND-001 Vancouver - Nova Albion",
         "id": "CND-001",
         "location": "Vancouver, BC, Canada",
         "status": "active",
@@ -28,7 +28,7 @@
         }
         },
     {
-        "name": "Dark Aurora",
+        "name": "CND-098 Dark Aurora",
         "id": "CND-098",
         "location": "Vancouver, BC, Canada",
         "status": "active",
@@ -72,7 +72,7 @@
         }
     },
     {
-        "name": "Montreal - Berceau de la Rébellion",
+        "name": "CND-015 Montreal - Berceau de la Rébellion",
         "id": "CND-015",
         "location": "Montreal, QC, Canada",
         "status": "inactive",
@@ -89,7 +89,7 @@
         "name": "CND-024 Ottawa",
         "id": "CND-024",
         "location": "Ottawa, ON, Canada",
-        "status": "inactive",
+        "status": "active",
         "coordinator": {
             "name": "Dave Desgagnes",
             "email": "dc.024@canadaatmidnight.com"
@@ -101,7 +101,7 @@
         }
         },
     {
-        "name": "Northern Winds Virtual Domain",
+        "name": "CND-099 Northern Winds Virtual Domain",
         "id": "CND-099",
         "location": "Thunder Bay, ON, Canada",
         "status": "inactive",
@@ -116,7 +116,7 @@
         }
         },
     {
-        "name": "Little Rock @ Midnight",
+        "name": "CND-101 Little Rock @ Midnight",
         "id": "CND-101",
         "location": "Little Rock, Arkansas",
         "status": "inactive",
@@ -126,12 +126,12 @@
         }
     },
     {
-        "name": "Seattle - Night Symphonies",
+        "name": "CND-102 Seattle - Night Symphonies",
         "id": "CND-102",
         "location": "Seattle, Washington",
-        "status": "inactive",
+        "status": "active",
         "coordinator": {
-            "name": "John Finkbiner",
+            "name": "Denise Perez",
             "email": "dc.102@canadaatmidnight.com"
         },
         "links": {
@@ -193,8 +193,9 @@
         "name": "CND-108 Los Angeles, California",
         "id": "CND-108",
         "location": "Los Angeles, California",
-        "status": "inactive",
+        "status": "active",
         "coordinator": {
+            "name": "Taylor Hars",
             "email": "dc.108@canadaatmidnight.com"
         }
     },

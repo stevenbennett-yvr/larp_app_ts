@@ -46,7 +46,7 @@ export const Sects: Record<SectName, Sect> = {
     },
     Autarkis:{
         name: "Autarkis",
-        nicknames: "The Independent",
+        nicknames: "The Unbound",
         summary: "A diverse collection of vampires who don't align with any Sect",
         description: `The Autarkis are Kindred who remain unbound to political sects, either through refusal to allow other sects to move into their domain or by simply refusing to align themselves to any cause but their own. Their ambitions usually lie in protecting their own unlives or lineage, and they care little for others.`,
         logo:GoodIntentions.autarkisLogo,
