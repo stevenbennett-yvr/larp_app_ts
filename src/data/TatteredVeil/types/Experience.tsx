@@ -1,17 +1,24 @@
 import { Awakened } from "./Awakened";
 
 const getChronicleStartDate = () => {
-    return new Date(2023, 6, 1); // July 1st, 2023
+    return new Date(2023, 6, 1);
 };
+
 
 const getStartDate = (awakened: Awakened) => {
     const creationDate = new Date(awakened.startDate);
 
     const chronicleStartDate = getChronicleStartDate();
-    const awakenedStartDate = creationDate < chronicleStartDate ? chronicleStartDate : creationDate;
+    let awakenedStartDate = new Date(creationDate.getFullYear(), creationDate.getMonth(), 1);
 
-    return new Date(awakenedStartDate).toISOString();
+    // Check if the awakenedStartDate is earlier than the chronicleStartDate
+    if (awakenedStartDate < chronicleStartDate) {
+        awakenedStartDate = chronicleStartDate;
+    }
+
+    return awakenedStartDate.toISOString();
 }
+
 
 export const calculateMaxXp = () => {
     const chronicleStart = getChronicleStartDate();

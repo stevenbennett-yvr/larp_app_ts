@@ -14,6 +14,7 @@ import CoreConcept from "./Generator/CoreConcept"
 import V5PrintSheet from './Generator/PrintSheet'
 import BackgroundLoreTabs from './Generator/BackgroundLoreTabs'
 import SideSheet from "./Generator/sidebars/SideSheet"
+import AsideBar from "./Generator/sidebars/GeneratorAside"
 
 import { Center } from "@mantine/core"
 
@@ -86,6 +87,7 @@ const GenerateKindred = () => {
     return (
         <Center h={"100%"}>
             <SideSheet kindred={kindred}/>
+            <AsideBar selectedStep={selectedStep} kindred={kindred} />
             {getStepComponent()}
         </Center>
     )

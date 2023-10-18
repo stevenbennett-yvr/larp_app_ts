@@ -1,17 +1,23 @@
 import { Kindred } from "./Kindred";
 
 const getChronicleStartDate = () => {
-    return new Date(2023, 9, 1); // July 1st, 2023
+    return new Date(2023, 9, 1);
 }
 
 const getCreationDate = (kindred: Kindred) => {
     const creationDate = new Date(kindred.startDate);
 
     const chronicleStartDate = getChronicleStartDate();
-    const awakenedStartDate = creationDate < chronicleStartDate ? chronicleStartDate : creationDate;
+    let awakenedStartDate = new Date(creationDate.getFullYear(), creationDate.getMonth(), 1);
 
-    return new Date(awakenedStartDate).toISOString();
+    // Check if the awakenedStartDate is earlier than the chronicleStartDate
+    if (awakenedStartDate < chronicleStartDate) {
+        awakenedStartDate = chronicleStartDate;
+    }
+
+    return awakenedStartDate.toISOString();
 }
+
 
 export const calculateXpCap = () => {
     const chronicleStart = getChronicleStartDate();
@@ -107,7 +113,6 @@ export const formulaExperience = (kindred: Kindred): number => {
     });
     return ceremonyXp;
 };
-
 
 export const backgroundExperience = (kindred:Kindred): number => {
     let backgroundXp = 0;
