@@ -1,5 +1,5 @@
 //Technical Imports
-import { Navbar, Center, ScrollArea, Stack, Grid, Title, Text } from '@mantine/core';
+import { Navbar, Center, ScrollArea, Stack, Grid, Title, Text, Group } from '@mantine/core';
 import { useEffect, useState } from 'react'
 //Asset Imports
 import { globals } from '../../../../assets/globals';
@@ -27,9 +27,20 @@ const SideSheet = ({ kindred }: SideSheetProps) => {
             <ScrollArea h={height - 60} type="never">
                 <Stack style={{ paddingBottom: "50px" }}>
                     <Stack>
+                        <Group>
+                        {kindred.sect !== "" ? (
+                            <Text fz="xl">
+                                <Center>{kindred.sect}</Center>
+                            </Text>
+                        ) : null}
+                        {kindred.clan !== "" ? (
+                            <Text fz="xl">
+                                <Center>{kindred.clan}</Center>
+                            </Text>
+                        ) : null}
+                        </Group>
                         {v5AttributesCheckTotalPoints(kindred) ?
                             <>
-                                <Title order={3}>Attributes</Title>
                                 <Grid>
                                 <Grid.Col span={4}>
                                         <Title order={4}>Physical</Title>

@@ -13,7 +13,7 @@ import V5ExperienceAssigner from './Generator/ExperienceAssigner'
 import CoreConcept from "./Generator/CoreConcept"
 import V5PrintSheet from './Generator/PrintSheet'
 import BackgroundLoreTabs from './Generator/BackgroundLoreTabs'
-import SideSheet from "./Generator/utils/SideSheet"
+import SideSheet from "./Generator/sidebars/SideSheet"
 
 import { Center } from "@mantine/core"
 
