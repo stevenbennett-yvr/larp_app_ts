@@ -9,6 +9,7 @@ import Tally from "../../../utils/talley";
 import FormulaPicker from "./ThinBloodModal";
 import GhoulModal from "./GhoulModal";
 import { useState } from "react";
+import { DisciplineKey } from "../../../data/GoodIntentions/types/V5Disciplines";
 
 type MeritPickerProps = {
     kindred: Kindred,
@@ -102,7 +103,6 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
                     max={meritInfo.cost.length === 1 && meritInfo.cost[0] === 1 ? 1 : v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo?.cost.length - 1] ? meritRef.creationPoints : meritInfo.cost[meritInfo.cost.length - 1]}
                     step={getStep(meritRef)}
                     onChange={(val) => {
-                        console.log(val)
                         handleMeritFlawChange(kindred, setKindred, meritRef, "creationPoints", val)
                     }}
                 />
@@ -207,8 +207,8 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
         setKindred({
             ...kindred,
             domitor: {
-                name:"",
-                clan:""
+                name: "",
+                clan: ""
             }
         })
         setGhoulModalOpen(false);
@@ -259,13 +259,36 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
                             <Button
                                 style={{ margin: "5px" }}
                                 color="gray"
-                                onClick={
-                                    (kindred.clan==="Ghoul")?
-                                    () => setGhoulModalOpen(true):
-                                    !(isAlchemist || isDiscipline || isCursed)
-                                        ? nextStep
-                                        : () => setModalOpen(true)
-                                }
+                                onClick={() => {
+                                    if (kindred.clan === "Thin-Blood" && !isDiscipline) {
+                                        const updatedDisciplines = { ...kindred.disciplines };
+                                        for (const disciplineKey in updatedDisciplines) {
+                                            let key = disciplineKey as DisciplineKey
+                                            if (key !== "thin-blood alchemy") {
+                                                updatedDisciplines[key] = {
+                                                    ...updatedDisciplines[key],
+                                                    creationPoints: 0,
+                                                    freebiePoints: 0,
+                                                };
+                                            }
+                                        }
+                                        setKindred({
+                                            ...kindred,
+                                            disciplines: updatedDisciplines,
+                                            powers: [],
+                                        });
+                                        nextStep();
+                                    } else if (kindred.clan === "Ghoul") {
+                                        // Handle the Ghoul case
+                                        setGhoulModalOpen(true);
+                                    } else if (!(isAlchemist || isDiscipline || isCursed)) {
+                                        // Handle other conditions
+                                        nextStep();
+                                    } else {
+                                        // Handle the default case
+                                        setModalOpen(true);
+                                    }
+                                }}
                                 disabled={getTotalPoints(kindred).totalMeritPoints > 10 || getTotalPoints(kindred).totalMeritPoints !== getTotalPoints(kindred).totalFlawPoints || (kindred.clan === "Thin-Blood" && getThinBloodPoints(kindred).totalMeritPoints === 0 && getThinBloodPoints(kindred).totalFlawPoints === 0)}
                             >
                                 Next

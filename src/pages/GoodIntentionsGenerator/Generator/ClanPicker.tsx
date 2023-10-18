@@ -6,7 +6,7 @@ import { globals } from "../../../assets/globals";
 import { upcase } from "../../../utils/case";
 import { disciplines, getEmptyDisciplines } from "../../../data/GoodIntentions/types/V5Disciplines";
 import { loresheetCleanup } from "../../../data/GoodIntentions/types/V5Loresheets";
-import { v5EmptySkills } from "../../../data/GoodIntentions/types/V5Skills";
+//import { v5EmptySkills } from "../../../data/GoodIntentions/types/V5Skills";
 
 type ClanPickerProps = {
     kindred: Kindred,
@@ -192,6 +192,7 @@ const ClanPicker = ({ kindred, setKindred, nextStep, backStep }: ClanPickerProps
                                 setKindred({
                                     ...kindred, clan,
                                     predatorType: "",
+                                    generation: 0,
                                     meritsFlaws: [],
                                     backgrounds: [],
                                     disciplines: getEmptyDisciplines,
@@ -199,7 +200,7 @@ const ClanPicker = ({ kindred, setKindred, nextStep, backStep }: ClanPickerProps
                                     rituals: [],
                                     ceremonies: [],
                                     formulae: [],
-                                    skills: filteredOptions?.skills || v5EmptySkills,
+                                    skills: filteredOptions?.skills || kindred.skills,
                                     loresheet: {name:"", benefits:[]}
                                 })
                                 nextStep()

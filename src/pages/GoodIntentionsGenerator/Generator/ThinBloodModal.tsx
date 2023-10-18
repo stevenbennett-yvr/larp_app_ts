@@ -86,7 +86,14 @@ const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal 
     let mostDisciplines = allDisciplines.filter((disciplineName) => {
         return disciplineName !== "thin-blood alchemy";
     })
-    const [pickedDiscipline, setPickedDiscipline] = useState("")
+    let defaultDiscipline = ""
+    for (const discipline in kindred.disciplines) {
+        let key = discipline as DisciplineKey
+        if (kindred.disciplines[key].creationPoints > 0) {
+            defaultDiscipline=discipline
+        }
+    }
+    const [pickedDiscipline, setPickedDiscipline] = useState(defaultDiscipline)
     const height = globals.viewportHeightPx
 
 
@@ -115,6 +122,7 @@ const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal 
                                 data={mostDisciplines}
                                 onChange={(val) => {
                                     if (val === null) return (null)
+
                                     setPickedDiscipline(val)
                                 }}
                             />
@@ -179,6 +187,16 @@ const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal 
                             });
                         }
                         if (pickedDiscipline !== "") {
+                            
+                            for (const disciplineKey in kindred.disciplines) {
+                                let key = disciplineKey as DisciplineKey
+                                if (key !== "thin-blood alchemy") {
+                                    kindred.disciplines[key] = {
+                                        ...kindred.disciplines[key],
+                                        creationPoints: 0,
+                                    };
+                                }
+                            }
                             let discipline = pickedDiscipline as DisciplineKey
                             setKindred({
                                 ...kindred,
@@ -188,8 +206,8 @@ const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal 
                                         ...kindred.disciplines[discipline],
                                         creationPoints:1
                                     }
-                                    
-                                }
+                                },
+                                powers: []
                             })
                         }
                         if (clan !== "" && isCursed) {
