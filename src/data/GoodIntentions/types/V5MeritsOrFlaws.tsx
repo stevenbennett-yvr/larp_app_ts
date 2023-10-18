@@ -31,7 +31,8 @@ export const v5MeritFlawRefSchema = z.object({
     creationPoints: z.number(),
     freebiePoints: z.number(),
     experiencePoints: z.number(),
-    note: z.string()
+    note: z.string(),
+    userNote: z.string(),
 })
 
 export type V5MeritFlawRef = z.infer<typeof v5MeritFlawRefSchema>
@@ -42,7 +43,8 @@ export const v5MeritFlawRefs: V5MeritFlawRef[] = meritFlawDataJson.map((mf) => (
     creationPoints: 0,
     freebiePoints: 0,
     experiencePoints: 0,
-    note: ""
+    note: "",
+    userNote: "",
 }))
 
 export const v5MeritFlawSchema = z.object({
@@ -74,6 +76,7 @@ export const emptyMeritFlaw: V5MeritFlawRef = {
     freebiePoints: 0,
     experiencePoints: 0,
     note: "",
+    userNote: "",
 }
 
 export const v5GetMeritByName = (name: string) => {
@@ -124,7 +127,7 @@ export const v5MeritLevel = (v5MeritFlawRef: V5MeritFlawRef) => {
     }
 }
 
-type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "note";
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "note" | "userNote";
 export const handleMeritFlawChange = (
     kindred: Kindred,
     setKindred: Function,

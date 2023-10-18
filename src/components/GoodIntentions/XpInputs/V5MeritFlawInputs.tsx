@@ -1,5 +1,5 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
-import { Button, ActionIcon, Stack, Select, Accordion, Center, NumberInput, useMantineTheme, Table, Text, Group } from "@mantine/core";
+import { Button, ActionIcon, Stack, Select, Accordion, Center, NumberInput, useMantineTheme, Table, Text, Group, TextInput } from "@mantine/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons"
 import { CirclePlus, CircleMinus } from 'tabler-icons-react';
@@ -61,7 +61,7 @@ const V5MeritFlawInputs = ({ kindred, setKindred }: V5MeritFlawInputsProps) => {
     const filteredData = meritFlawData.filter((merit) => {
         return (
             merit.type !== "flaw" &&
-            merit.category !== "thin-blood" &&
+            (merit.category !== "thin-blood" && merit.category !== "ghoul") &&
             !kindred.meritsFlaws.some((existingMerit) => existingMerit.name === merit.name)
         );
     });
@@ -124,6 +124,7 @@ const V5MeritFlawInputs = ({ kindred, setKindred }: V5MeritFlawInputsProps) => {
                                     </td>
                                     <td dangerouslySetInnerHTML={{ __html: `${selectedMeritInfo.description}` }} />
                                 </tr>
+
                             </tbody>
                         </Table>
                     </>
@@ -157,7 +158,7 @@ const V5MeritFlawInputs = ({ kindred, setKindred }: V5MeritFlawInputsProps) => {
                         variant="filled"
                         radius="xl"
                         color="dark"
-                        disabled={(meritInfo.cost.length === 1)||(meritRef.freebiePoints === 0 && meritRef.creationPoints === 0 && meritRef.experiencePoints === 3) || (v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo.cost.length - 1] && meritRef.experiencePoints === 0)}
+                        disabled={(meritInfo.cost.length === 1) || (meritRef.freebiePoints === 0 && meritRef.creationPoints === 0 && meritRef.experiencePoints === 3) || (v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo.cost.length - 1] && meritRef.experiencePoints === 0)}
                         onClick={() => v5HandleXpMeritChange(kindred, setKindred, meritRef, meritRef.experiencePoints - 1)}
                     >
                         <CircleMinus strokeWidth={1.5} color="gray" />
@@ -252,18 +253,31 @@ const V5MeritFlawInputs = ({ kindred, setKindred }: V5MeritFlawInputsProps) => {
                                     if (!meritInfo) { return null }
                                     const icon = meritInfo.type === "flaw" ? flawIcon() : meritIcon()
                                     return (
-                                        <tr key={`${meritFlaw.name} ${meritInfo.type}`}>
-                                            <td style={{ minWidth: "220px" }}>
-                                                <Stack>
-                                                <Text>{icon} &nbsp; {meritInfo.name} <b>Level: {v5MeritLevel(meritFlaw).level}</b></Text>
-                                                <Group>Rating: {getRating(meritInfo.cost)}</Group>
-                                                {meritInfo.type === "merit"?
-                                                <>{MeritInput(meritFlaw)}</>
-                                                :<></>}
-                                                </Stack>
-                                            </td>
-                                            <td dangerouslySetInnerHTML={{ __html: `${meritInfo.description}` }} />
-                                        </tr>
+                                        <>
+                                            <tr key={`${meritFlaw.name} ${meritInfo.type}`}>
+                                                <td style={{ minWidth: "220px" }}>
+                                                    <Stack>
+                                                        <Text>{icon} &nbsp; {meritInfo.name} <b>Level: {v5MeritLevel(meritFlaw).level}</b></Text>
+                                                        <Group>Rating: {getRating(meritInfo.cost)}</Group>
+                                                        {meritInfo.type === "merit" ?
+                                                            <>{MeritInput(meritFlaw)}</>
+                                                            : <></>}
+                                                    </Stack>
+                                                </td>
+                                                <td dangerouslySetInnerHTML={{ __html: `${meritInfo.description}` }} />
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={2}>
+                                                    <TextInput
+                                                        label="Merit Notes"
+                                                        value={meritFlaw.userNote}
+                                                        onChange={(event) => {
+                                                            handleMeritFlawChange(kindred, setKindred, meritFlaw, "userNote", event.target.value)
+                                                        }}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        </>
                                     )
                                 })}
                             </tbody>
@@ -280,28 +294,28 @@ const V5MeritFlawInputs = ({ kindred, setKindred }: V5MeritFlawInputsProps) => {
     meritTypes.sort((a, b) => a.localeCompare(b));
 
     return (
-            <Stack>
-                <Text mt={"xl"} ta="center" fz="xl" fw={700}>Merits & Flaws</Text>
-                <Select
-                    data={selectData}
-                    value={selectedMerit}
-                    onChange={(val) => setSelectedMerit(val)}
-                    placeholder="Select Merit to buy"
-                    itemComponent={SelectItem}
-                    searchable
-                    allowDeselect
-                />
-                <Center>
-                    {getSelectedMeritData()}
-                </Center>
-                <Center>
-                    <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
-                        {
-                            meritTypes.map((c) => createMeritAccordian(c))
-                        }
-                    </Accordion>
-                </Center>
-            </Stack>
+        <Stack>
+            <Text mt={"xl"} ta="center" fz="xl" fw={700}>Merits & Flaws</Text>
+            <Select
+                data={selectData}
+                value={selectedMerit}
+                onChange={(val) => setSelectedMerit(val)}
+                placeholder="Select Merit to buy"
+                itemComponent={SelectItem}
+                searchable
+                allowDeselect
+            />
+            <Center>
+                {getSelectedMeritData()}
+            </Center>
+            <Center>
+                <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
+                    {
+                        meritTypes.map((c) => createMeritAccordian(c))
+                    }
+                </Accordion>
+            </Center>
+        </Stack>
     )
 
 }

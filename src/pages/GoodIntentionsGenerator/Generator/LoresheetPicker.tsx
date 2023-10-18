@@ -4,7 +4,7 @@ import { Table, Title, Group, ScrollArea, Grid, Card, Text, Button, Stack, Selec
 import { Loresheet, loresheetFilter } from "../../../data/GoodIntentions/types/V5Loresheets"
 import { useState } from "react"
 import { V5SkillsKey } from "../../../data/GoodIntentions/types/V5Skills"
-import { V5BackgroundRef, backgroundData, advantageStep, v5BackgroundLevel, V5AdvantageRef, emptyAdvantage } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { SphereSelectData, V5BackgroundRef, backgroundData, advantageStep, v5BackgroundLevel, V5AdvantageRef, emptyAdvantage } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons"
 import getRating from "../../../utils/getRating"
@@ -100,6 +100,7 @@ const OpenedLoresheet = ({
             </Text>
             <Stack>
                 {ls.benefits.map((benefit) => {
+
                     let updatedSkills = JSON.parse(JSON.stringify(kindred.skills));
                     let filteredSkills = JSON.parse(JSON.stringify(kindred.skills));
                     for (const skillName in filteredSkills) {
@@ -316,8 +317,7 @@ const BackgroundSelectModal = ({
 }: BackgroundSelectModalProps) => {
 
     let pass = true
-
-    const [benefitData, setBenefitData] = useState(benefit);
+    const [benefitData, setBenefitData] = useState(JSON.parse(JSON.stringify(benefit)));
 
     const options = benefitData.selectableBackgrounds.options
     const totalPoints = benefitData.selectableBackgrounds.totalPoints
@@ -334,163 +334,181 @@ const BackgroundSelectModal = ({
         <Modal
             opened={backgroundModalOpened}
             onClose={backgroundCloseModal}
-            size={600}
+            size={700}
         >
             <ScrollArea h={height - 330} w={"100%"} p={20}>
-            <Stack>
-                <Group position="apart">
-                    <Text maw={"80%"} fz={"xl"}>
-                        {`Pick ${totalPoints} from: `}
-                    </Text>
-                    <Text>
-                        Remaining: <Title ta={"center"} c={"red"}>{`${totalPoints - spentPoints}`}</Title>
-                    </Text>
-                </Group>
-                {options.map((option: V5BackgroundRef) => {
-                    if (totalPoints - spentPoints === 0) { pass = true } else { pass = false }
-                    const backgroundInfo = backgroundData.find((entry) => entry.name === option.name)
-                    const getAdvantagePoints = (advantage: V5AdvantageRef) => {
-                        const advantageInfo = option.advantages.find((a) => a.name === advantage.name)
-                        const creation = advantageInfo ? advantageInfo.creationPoints : 0
-                        const freebie = advantageInfo ? advantageInfo.freebiePoints : 0
-                        return creation + freebie
-                    }
-                    if (!backgroundInfo) {
-                        return null;
-                    } else {
-                        return (
-                            <div>
-                                <Group>
-                                    <Tooltip
-                                        disabled={backgroundInfo.summary === ""}
-                                        label={backgroundInfo.summary}
-                                        transitionProps={{ transition: "slide-up", duration: 200 }}
-                                        events={{ hover: true, focus: true, touch: true }}
-                                    >
-                                        <Text w={"140px"}>{option.name}</Text>
-                                    </Tooltip>
-                                    <NumberInput
-                                        value={option.freebiePoints}
-                                        min={0}
-                                        max={totalPoints - spentPoints === 0 ? option.freebiePoints : 3}
-                                        width={"50%"}
-                                        onChange={(val: number) => {
-                                            setBenefitData({
-                                                ...benefitData,
-                                                selectableBackgrounds: {
-                                                    ...benefitData.selectableBackgrounds,
-                                                    options: benefitData.selectableBackgrounds.options.map((b: any) =>
-                                                        b.id === option.id ? { ...b, freebiePoints: val } : b
-                                                    )
-                                                }
-                                            })
-                                        }}
-                                        style={{ width: "100px" }}
-                                    />
-                                    {backgroundInfo.advantages && backgroundInfo.advantages.length > 0 ?
-                                        <Accordion variant="contained">
-                                            <Accordion.Item value={backgroundInfo.name}>
-                                                <Accordion.Control>Advantages</Accordion.Control>
-                                                <Accordion.Panel>
-                                                    <Table>
-                                                        <tbody>
-                                                            {backgroundInfo.advantages.map((advantage) => {
-                                                                if (advantage?.type ===  "disadvantage") {return null}
-                                                                const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
-                                                                const advantageRef = option.advantages.find((a) => a.name === advantage.name) || { ...emptyAdvantage, name: advantage.name }
-                                                                const havenSizeMax = option.name === "Haven" ? v5BackgroundLevel(option).level : 0;
-                                                                if (!advantageRef) { return null }
-                                                                return (
-                                                                    <tr>
-                                                                        <td>
-                                                                            <Text align="center">{icon} &nbsp;{advantage.name}</Text>
-                                                                            <Center>
-                                                                                {getRating(advantage.cost)}
-                                                                            </Center>
-                                                                            <Center>
-                                                                                <NumberInput
-                                                                                    value={advantageRef.freebiePoints}
-                                                                                    min={0}
-                                                                                    step={advantageStep(advantageRef, backgroundInfo)}
-                                                                                    max={
-                                                                                        backgroundInfo.name === "Haven" && advantage.type === "advantage"
-                                                                                            ? havenSizeMax
-                                                                                            : getAdvantagePoints(advantageRef) === advantage.cost[advantage.cost.length - 1]
-                                                                                                ? advantageRef.creationPoints
-                                                                                                : advantage.cost[advantage.cost.length - 1]
-                                                                                    }
-                                                                                    onChange={(val: number) => {
-
-                                                                                        const existingAdvantage = option.advantages.find((a) => a.name === advantageRef.name);
-                                                                                        if (!existingAdvantage) {
-                                                                                            option.advantages.push({ ...advantageRef, freebiePoints: val })
+                <Stack>
+                    <Group position="apart">
+                        <Text maw={"80%"} fz={"xl"}>
+                            {`Pick ${totalPoints} from: `}
+                        </Text>
+                        <Text>
+                            Remaining: <Title ta={"center"} c={"red"}>{`${totalPoints - spentPoints}`}</Title>
+                        </Text>
+                    </Group>
+                    {options.map((option: V5BackgroundRef) => {
+                        if (totalPoints - spentPoints === 0) { pass = true } else { pass = false }
+                        const backgroundInfo = backgroundData.find((entry) => entry.name === option.name)
+                        const getAdvantagePoints = (advantage: V5AdvantageRef) => {
+                            const advantageInfo = option.advantages.find((a) => a.name === advantage.name)
+                            const creation = advantageInfo ? advantageInfo.creationPoints : 0
+                            const freebie = advantageInfo ? advantageInfo.freebiePoints : 0
+                            return creation + freebie
+                        }
+                        if (!backgroundInfo) {
+                            return null;
+                        } else {
+                            return (
+                                <div>
+                                    <Group>
+                                        <Tooltip
+                                            disabled={backgroundInfo.summary === ""}
+                                            label={backgroundInfo.summary}
+                                            transitionProps={{ transition: "slide-up", duration: 200 }}
+                                            events={{ hover: true, focus: true, touch: true }}
+                                        >
+                                            <Text w={"80px"}>{option.name}</Text>
+                                        </Tooltip>
+                                        <NumberInput
+                                            value={option.freebiePoints}
+                                            min={0}
+                                            max={totalPoints - spentPoints === 0 ? option.freebiePoints : 3}
+                                            width={"50%"}
+                                            onChange={(val: number) => {
+                                                setBenefitData({
+                                                    ...benefitData,
+                                                    selectableBackgrounds: {
+                                                        ...benefitData.selectableBackgrounds,
+                                                        options: benefitData.selectableBackgrounds.options.map((b: any) =>
+                                                            b.id === option.id ? { ...b, freebiePoints: val } : b
+                                                        )
+                                                    }
+                                                })
+                                            }}
+                                            style={{ width: "100px" }}
+                                        />
+                                        {backgroundInfo.advantages && backgroundInfo.advantages.length > 0 ?
+                                            <Accordion variant="contained">
+                                                <Accordion.Item value={backgroundInfo.name}>
+                                                    <Accordion.Control>Advantages</Accordion.Control>
+                                                    <Accordion.Panel>
+                                                        <Table>
+                                                            <tbody>
+                                                                {backgroundInfo.advantages.map((advantage) => {
+                                                                    if (advantage?.type === "disadvantage") { return null }
+                                                                    const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
+                                                                    const advantageRef = option.advantages.find((a) => a.name === advantage.name) || { ...emptyAdvantage, name: advantage.name }
+                                                                    const havenSizeMax = option.name === "Haven" ? v5BackgroundLevel(option).level : 0;
+                                                                    if (!advantageRef) { return null }
+                                                                    return (
+                                                                        <tr>
+                                                                            <td>
+                                                                                <Text align="center">{icon} &nbsp;{advantage.name}</Text>
+                                                                                <Center>
+                                                                                    {getRating(advantage.cost)}
+                                                                                </Center>
+                                                                                <Center>
+                                                                                    <NumberInput
+                                                                                        value={advantageRef.freebiePoints}
+                                                                                        min={0}
+                                                                                        step={advantageStep(advantageRef, backgroundInfo)}
+                                                                                        max={
+                                                                                            backgroundInfo.name === "Haven" && advantage.type === "advantage"
+                                                                                                ? havenSizeMax
+                                                                                                : getAdvantagePoints(advantageRef) === advantage.cost[advantage.cost.length - 1]
+                                                                                                    ? advantageRef.creationPoints
+                                                                                                    : advantage.cost[advantage.cost.length - 1]
                                                                                         }
+                                                                                        onChange={(val: number) => {
 
-                                                                                        const updatedOption = {
-                                                                                            ...option,
-                                                                                            advantages: option.advantages.map((advantage) =>
-                                                                                                advantage.name === advantageRef.name ? { ...advantage, freebiePoints: val } : advantage
-                                                                                            ),
-                                                                                        };
+                                                                                            const existingAdvantage = option.advantages.find((a) => a.name === advantageRef.name);
+                                                                                            if (!existingAdvantage) {
+                                                                                                option.advantages.push({ ...advantageRef, freebiePoints: val })
+                                                                                            }
 
-                                                                                        // Create a copy of benefitData and update the options array
-                                                                                        const updatedBenefitData = {
-                                                                                            ...benefitData,
-                                                                                            selectableBackgrounds: {
-                                                                                                ...benefitData.selectableBackgrounds,
-                                                                                                options: benefitData.selectableBackgrounds.options.map((o: any) =>
-                                                                                                    o.name === option.name ? updatedOption : o
+                                                                                            const updatedOption = {
+                                                                                                ...option,
+                                                                                                advantages: option.advantages.map((advantage) =>
+                                                                                                    advantage.name === advantageRef.name ? { ...advantage, freebiePoints: val } : advantage
                                                                                                 ),
-                                                                                            },
-                                                                                        };
+                                                                                            };
 
-                                                                                        // Set the updated benefitData
-                                                                                        console.log(updatedOption)
-                                                                                        setBenefitData(updatedBenefitData);
-                                                                                    }}
-                                                                                />
-                                                                            </Center>
-                                                                        </td>
-                                                                    </tr>
-                                                                )
-                                                            })}
-                                                        </tbody>
-                                                    </Table>
-                                                </Accordion.Panel>
-                                            </Accordion.Item>
-                                        </Accordion>
-                                        : <></>}
-                                </Group>
-                            </div>
-                        )
-                    }
-                })}
+                                                                                            // Create a copy of benefitData and update the options array
+                                                                                            const updatedBenefitData = {
+                                                                                                ...benefitData,
+                                                                                                selectableBackgrounds: {
+                                                                                                    ...benefitData.selectableBackgrounds,
+                                                                                                    options: benefitData.selectableBackgrounds.options.map((o: any) =>
+                                                                                                        o.name === option.name ? updatedOption : o
+                                                                                                    ),
+                                                                                                },
+                                                                                            };
+                                                                                            setBenefitData(updatedBenefitData);
+                                                                                        }}
+                                                                                    />
+                                                                                </Center>
+                                                                            </td>
+                                                                        </tr>
+                                                                    )
+                                                                })}
+                                                            </tbody>
+                                                        </Table>
+                                                    </Accordion.Panel>
+                                                </Accordion.Item>
+                                            </Accordion>
+                                            : <></>}
+                                        {option.name === "Allies" || option.name === "Contacts"?
+                                        <Select
+                                            label="Pick Sphere for Background"
+                                            placeholder="Pick sphere"
+                                            data={SphereSelectData}
+                                            defaultValue=""
+                                            w={180}
+                                            onChange={(val) => {
+                                                setBenefitData({
+                                                    ...benefitData,
+                                                    selectableBackgrounds: {
+                                                        ...benefitData.selectableBackgrounds,
+                                                        options: benefitData.selectableBackgrounds.options.map((b: any) =>
+                                                            b.id === option.id ? { ...b, sphere: val } : b
+                                                        )
+                                                    }
+                                                })
+                                            }}
+                                        />
+                                        :<></>}
+                                    </Group>
+                                </div>
+                            )
+                        }
+                    })}
 
-                <Button
-                    disabled={!(pass)}
-                    onClick={() => {
-                        const selectableBackgrounds = benefitData.selectableBackgrounds.options.filter((option: any) => option.freebiePoints > 0);
-                        const combinedBackgrounds = [
-                            ...kindred.backgrounds,
-                            ...selectableBackgrounds
-                        ]
-                        setKindred({
-                            ...kindred,
-                            backgrounds: combinedBackgrounds,
-                            loresheet: {
-                                ...kindred.loresheet,
-                                name: loresheet.name,
-                                benefits: [...kindred.loresheet.benefits, {
-                                    name: benefit.name, creationPoints: benefit.level, freebiePoints: 0, experiencePoints: 0
-                                }],
-                            },
-                        })
-                        backgroundCloseModal()
-                    }}
-                >
-                    Confirm
-                </Button>
-            </Stack>
+                    <Button
+                        disabled={!(pass)}
+                        onClick={() => {
+                            const selectableBackgrounds = benefitData.selectableBackgrounds.options.filter((option: any) => option.freebiePoints > 0);
+                            const combinedBackgrounds = [
+                                ...kindred.backgrounds,
+                                ...selectableBackgrounds
+                            ]
+                            setKindred({
+                                ...kindred,
+                                backgrounds: combinedBackgrounds,
+                                loresheet: {
+                                    ...kindred.loresheet,
+                                    name: loresheet.name,
+                                    benefits: [...kindred.loresheet.benefits, {
+                                        name: benefit.name, creationPoints: benefit.level, freebiePoints: 0, experiencePoints: 0
+                                    }],
+                                },
+                            })
+                            console.log(benefit)
+                            backgroundCloseModal()
+                        }}
+                    >
+                        Confirm
+                    </Button>
+                </Stack>
             </ScrollArea>
         </Modal>
     )

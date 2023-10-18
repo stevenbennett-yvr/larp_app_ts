@@ -11,22 +11,27 @@ import {
     Select,
     Divider,
     NumberInput,
-    Tooltip
-  } from "@mantine/core";
+    Tooltip,
+    Accordion,
+    Table,
+    Center
+} from "@mantine/core";
 
 
 // Data Types
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 import {
-  PredatorType,
-  PredatorTypeName,
-  PredatorTypes,
+    PredatorType,
+    PredatorTypeName,
+    PredatorTypes,
 } from "../../../data/GoodIntentions/types/V5PredatorType";
 import {
-  v5BackgroundLevel,
-  v5AdvantageLevel,
-  V5SphereKey,
-  V5BackgroundRef,
+    v5BackgroundLevel,
+    v5AdvantageLevel,
+    V5SphereKey,
+    V5BackgroundRef,
+    emptyAdvantage,
+    advantageStep,
 } from "../../../data/GoodIntentions/types/V5Backgrounds";
 import { V5MeritFlawRef, v5MeritLevel } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
 import { SphereSelectData } from "../../../data/GoodIntentions/types/V5Backgrounds";
@@ -120,6 +125,84 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
 
                                     </Text>
 
+                                    {PredatorTypes[pickedPredatorType].advantagePoints ?
+                                        <Accordion variant="contained">
+                                            <Accordion.Item value={backgroundInfo.name}>
+                                                <Accordion.Control>Advantages</Accordion.Control>
+                                                <Accordion.Panel>
+                                                    <Table>
+                                                        <tbody>
+                                                            {backgroundInfo.advantages?.map((advantage) => {
+                                                                if (!backgroundInfo) return (null)
+                                                                if (advantage?.type === "disadvantage") { return null }
+                                                                const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
+                                                                const advantageRef = background.advantages.find((a) => a.name === advantage.name) || { ...emptyAdvantage, name: advantage.name }
+                                                                if (!advantageRef) { return null }
+                                                                return (
+                                                                    <tr>
+                                                                        <td>
+                                                                            <Text align="center">{icon} &nbsp;{advantage.name}</Text>
+                                                                            <Center>
+                                                                                {getRating(advantage.cost)}
+                                                                            </Center>
+                                                                            <Center>
+                                                                                <NumberInput
+                                                                                    disabled={advantageRef.freebiePoints === 0 && background.advantages.length > 0}
+                                                                                    value={advantageRef.freebiePoints}
+                                                                                    min={0}
+                                                                                    step={advantageStep(advantageRef, backgroundInfo)}
+                                                                                    max={1}
+                                                                                    onChange={(val: number) => {
+                                                                                        const existingAdvantageIndex = background.advantages.findIndex((a) => a.name === advantageRef.name);
+
+                                                                                        if (val === 0) {
+                                                                                            // If the value is set to 0, remove the advantage from the list
+                                                                                            if (existingAdvantageIndex !== -1) {
+                                                                                                background.advantages.splice(existingAdvantageIndex, 1);
+                                                                                            }
+                                                                                        } else {
+                                                                                            // Otherwise, update the freebiePoints value
+                                                                                            if (existingAdvantageIndex !== -1) {
+                                                                                                background.advantages[existingAdvantageIndex].freebiePoints = val;
+                                                                                            } else {
+                                                                                                // If the advantage doesn't exist in the list, add it
+                                                                                                background.advantages.push({ ...advantageRef, freebiePoints: val });
+                                                                                            }
+                                                                                        }
+
+                                                                                        const updatedOption = {
+                                                                                            ...background,
+                                                                                            // No need to update advantages here, as we already did so above
+                                                                                        };
+
+                                                                                        // Create a copy of predatorData and update the backgrounds array
+                                                                                        const updatedBenefitData = {
+                                                                                            ...predatorData,
+                                                                                            backgrounds: predatorData.backgrounds.map((background: any) => {
+                                                                                                if (background.name === updatedOption.name) {
+                                                                                                    return updatedOption;
+                                                                                                } else {
+                                                                                                    return background;
+                                                                                                }
+                                                                                            }),
+                                                                                        };
+
+                                                                                        setPredatorData(updatedBenefitData);
+                                                                                    }}
+                                                                                />
+                                                                            </Center>
+                                                                        </td>
+                                                                    </tr>
+                                                                )
+                                                            })}
+                                                        </tbody>
+                                                    </Table>
+                                                </Accordion.Panel>
+                                            </Accordion.Item>
+                                        </Accordion>
+
+                                        : <></>}
+
                                     {(() => {
                                         if (background.sphere && background.sphere.length > 1) {
                                             predatorData.backgrounds.forEach((b: any) => {
@@ -211,60 +294,81 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                         spentPoints += option.freebiePoints;
                     });
                     return (
-                        <>
+                        <Stack>
                             <Group position="apart">
-                            <Text maw={"80%"} fz={"xl"}>
+                                <Text maw={"80%"} fz={"xl"}>
                                     {`Pick ${totalPoints} from: `}
                                 </Text>
                                 <Text>
                                     Remaining: <Title ta={"center"} c={"red"}>{`${totalPoints - spentPoints}`}</Title>
                                 </Text>
-                                <Stack>
-                                    {options.map((option: V5BackgroundRef) => {
-                                        if (totalPoints - spentPoints === 0) { pass = true } else { pass = false }
-                                        const backgroundInfo = backgroundData.find((entry) => entry.name === option.name);
-                                        if (!backgroundInfo) {
-                                            return null;
-                                        } else {
-                                            return (
-                                                <div>
-                                                    <Group>
-                                                        <Tooltip
-                                                            disabled={backgroundInfo.summary === ""}
-                                                            label={backgroundInfo.summary}
-                                                            transitionProps={{ transition: "slide-up", duration: 200 }}
-                                                            events={{ hover: true, focus: true, touch: true }}
-                                                        >
-                                                            <Text w={"140px"}>{option.name}</Text>
-                                                        </Tooltip>
-                                                        <NumberInput
-                                                            value={option.freebiePoints}
-                                                            min={0}
-                                                            max={totalPoints - spentPoints === 0 ? option.freebiePoints : 3}
-                                                            width={"50%"}
-                                                            onChange={(val: number) => {
-                                                                setPredatorData({
-                                                                    ...predatorData,
-                                                                    selectableBackground: {
-                                                                        ...predatorData.selectableBackground,
-                                                                        options: predatorData.selectableBackground.options.map((b: any) =>
-                                                                            b.id === option.id
-                                                                                ? { ...b, freebiePoints: val }
-                                                                                : b
-                                                                        ),
-                                                                    },
-                                                                });
-                                                            }}
-                                                            style={{ width: "100px" }}
-                                                        />
-                                                    </Group>
-                                                </div>
-                                            );
-                                        }
-                                    })}
-                                </Stack>
                             </Group>
-                        </>
+
+                            {options.map((option: V5BackgroundRef) => {
+                                if (totalPoints - spentPoints === 0) { pass = true } else { pass = false }
+                                const backgroundInfo = backgroundData.find((entry) => entry.name === option.name);
+                                if (!backgroundInfo) {
+                                    return null;
+                                } else {
+                                    return (
+                                        <div>
+                                            <Group align="center">
+                                                <Tooltip
+                                                    disabled={backgroundInfo.summary === ""}
+                                                    label={backgroundInfo.summary}
+                                                    transitionProps={{ transition: "slide-up", duration: 200 }}
+                                                    events={{ hover: true, focus: true, touch: true }}
+                                                >
+                                                    <Text w={"140px"}>{option.name}</Text>
+                                                </Tooltip>
+                                                <NumberInput
+                                                    value={option.freebiePoints}
+                                                    min={0}
+                                                    max={totalPoints - spentPoints === 0 ? option.freebiePoints : 3}
+                                                    width={"50%"}
+                                                    onChange={(val: number) => {
+                                                        setPredatorData({
+                                                            ...predatorData,
+                                                            selectableBackground: {
+                                                                ...predatorData.selectableBackground,
+                                                                options: predatorData.selectableBackground.options.map((b: any) =>
+                                                                    b.id === option.id
+                                                                        ? { ...b, freebiePoints: val }
+                                                                        : b
+                                                                ),
+                                                            },
+                                                        });
+                                                    }}
+                                                    style={{ width: "100px" }}
+                                                />
+                                                {option.name === "Allies" || option.name === "Contacts" ?
+                                                    <Select
+                                                        label="Pick Sphere for Background"
+                                                        placeholder="Pick sphere"
+                                                        data={SphereSelectData}
+                                                        defaultValue=""
+                                                        onChange={(val) => {
+                                                            setPredatorData({
+                                                                ...predatorData,
+                                                                selectableBackground: {
+                                                                    ...predatorData.selectableBackground,
+                                                                    options: predatorData.selectableBackground.options.map((b: any) =>
+                                                                        b.id === option.id
+                                                                            ? { ...b, sphere: [val] }
+                                                                            : b
+                                                                    ),
+                                                                },
+                                                            });
+                                                        }}
+                                                    /> :
+                                                    <></>
+                                                }
+                                            </Group>
+                                        </div>
+                                    );
+                                }
+                            })}
+                        </Stack>
                     );
                 })()}
 
@@ -283,13 +387,31 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                             if (!meritFlawInfo) return (null)
                             const icon = meritFlawInfo?.type === "flaw" ? flawIcon() : meritIcon()
                             return (
-                                <div key={meritFlawInfo.id}>
+                                <Group key={meritFlawInfo.id}>
                                     <Text fz={globals.smallerFontSize} style={{ textAlign: "left" }}>
                                         {icon} &nbsp;
                                         <b>{meritFlawInfo.name}</b> {v5MeritLevel(meritFlaw).level}
                                         <div dangerouslySetInnerHTML={{ __html: meritFlaw.note }} />
                                     </Text>
-                                </div>
+                                    {meritFlaw.name === "Enemy" ?
+                                        <Select
+                                            label="Pick Sphere for Enemy"
+                                            placeholder="Pick sphere"
+                                            data={SphereSelectData}
+                                            defaultValue=""
+                                            onChange={(val) => {
+                                                setPredatorData({
+                                                    ...predatorData,
+                                                    meritsAndFlaws: predatorData.meritsAndFlaws.map((b: any) =>
+                                                        b.id === meritFlaw.id
+                                                            ? { ...b, sphere: [val as V5SphereKey] }
+                                                            : b
+                                                    ),
+                                                });
+                                            }}
+                                        />
+                                        : <></>}
+                                </Group>
                             )
                         })}
                     </Stack>
@@ -301,7 +423,6 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                     let spentPoints = 0;
                     options.forEach((option: V5MeritFlawRef) => {
                         spentPoints += option.freebiePoints;
-                        console.log(spentPoints)
                     });
                     return (
                         <>
@@ -369,10 +490,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                             <b>Humanity Change:</b> {PredatorTypes[pickedPredatorType].humanityChange}
                         </Text>
                     </>
-
                     : null}
-
-
             </Stack>
 
             <Divider my="sm" />
@@ -398,7 +516,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                         predatorType: predatorData.name as PredatorTypeName,
                         backgrounds: combinedBackgrounds,
                         meritsFlaws: combinedMeritsFlaws,
-                        loresheet:{name:"",benefits:[]},
+                        loresheet: { name: "", benefits: [] },
                         humanity: {
                             ...kindred.humanity,
                             creationPoints: 7 + PredatorTypes[pickedPredatorType].humanityChange

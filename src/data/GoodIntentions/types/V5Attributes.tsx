@@ -151,3 +151,15 @@ export const v5FindMaxAttribute = (
     }
     return max;
 };
+
+export const v5AttributesCheckTotalPoints = (
+    kindred: Kindred,
+) => {
+    let attributes = kindred.attributes
+    let count = 0
+    for (const attribute in attributes) {
+        const attributeKey = attribute as V5AttributesKey
+        count += attributes[attributeKey].creationPoints
+    }
+    return count === 22
+}

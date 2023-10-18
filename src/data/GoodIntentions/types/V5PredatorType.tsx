@@ -44,6 +44,7 @@ export const predatorTypeSchema = z.object({
     name: predatorTypeNameSchema,
     summary: z.string(),
     backgrounds: v5BackgroundRefSchema.array(),
+    advantagePoints: z.number().optional(),
     meritsAndFlaws: v5MeritFlawRefSchema.array(),
     humanityChange: z.number().int(),
     huntingPool: huntingPoolSchema.optional(),
@@ -109,6 +110,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         backgrounds: [
             { ...emptyBackground, id: "consensualist-herd", name: "Herd", freebiePoints: 3, advantages: [] }
         ],
+        advantagePoints: 1,
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'consensualist-DarkSecret', name: "Dark Secret", freebiePoints: 1, note: "Masquerade Breacher" },
             { ...emptyMeritFlaw, id: 'consensualist-PreyExclusion', name: "Prey Exclusion", freebiePoints: 1, note: "Can't feed on the non-consenting" },
@@ -126,14 +128,15 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         backgrounds: [
             { ...emptyBackground, id: "extortionist-resources", name: "Resources", freebiePoints: 1, advantages: [] },
         ],
+        advantagePoints: 1,
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'extortionist-Enemy', name: "Enemy", freebiePoints: 2, note: "(Police or Victim)" },
         ],
         humanityChange: 0,
         huntingPool: { attribute: "manipulation", skill: "intimidation" },
         selectableBackground: { options: [
-            { ...emptyBackground, id: "extortionist-contacts", name: "Contacts", freebiePoints: 0, sphere: [], advantages: [] },
-            { ...emptyBackground, id: "extortionist-allies", name: "Allies", freebiePoints: 0, sphere: [], advantages: [] }, 
+            { ...emptyBackground, id: "extortionist-contacts", name: "Contacts", freebiePoints: 0, sphere: [""], advantages: [] },
+            { ...emptyBackground, id: "extortionist-allies", name: "Allies", freebiePoints: 0, sphere: [""], advantages: [] }, 
         ], totalPoints: 3},
         selectableMeritFlaw: { options: [], totalPoints: 0},
         selectableSpheres: [],

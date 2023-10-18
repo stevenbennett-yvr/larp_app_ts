@@ -254,3 +254,15 @@ export const v5FindMaxSkill = (
     }
     return max;
 };
+
+export const v5SkillsCheckTotalPoints = (
+    kindred: Kindred,
+) => {
+    let skills = kindred.skills
+    let count = 0
+    for (const skill in skills) {
+        const attributeKey = skill as V5SkillsKey
+        count += skills[attributeKey].creationPoints
+    }
+    return count === 26
+}
