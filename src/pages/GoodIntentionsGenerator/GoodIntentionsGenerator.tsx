@@ -10,7 +10,7 @@ import PredatorTypePicker from "./Generator/PredatorPicker"
 import DisciplinesPicker from "./Generator/DisciplinePicker"
 import MeritPicker from "./Generator/MeritPicker"
 import V5ExperienceAssigner from './Generator/ExperienceAssigner'
-import CoreConcept from "./Generator/CoreConcept"
+import CoreConcept from "./Generator/Basics"
 import V5PrintSheet from './Generator/PrintSheet'
 import BackgroundLoreTabs from './Generator/BackgroundLoreTabs'
 import SideSheet from "./Generator/sidebars/SideSheet"

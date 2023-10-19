@@ -38,15 +38,25 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
 
-    const initial = kindred.touchstones.length > 0 ? kindred.touchstones : [{ name: "", description: "", conviction: "" }]
+    const initial = kindred.touchstones.length > 0 ? kindred.touchstones : [{ name: "", description: "", conviction: "", pic: "" }]
     const [touchstones, setTouchstones] = useState<Touchstone[]>(initial)
+    const [touchstonesPics, setTouchstonesPics] = useState<Map<number, FileWithPath[]>>(new Map());
     const [files, setFiles] = useState<FileWithPath[]>([]);
 
-    const updateTouchstone = (i: number, updatedTouchstone: { name?: string; description?: string; conviction?: string }) => {
+    const updateTouchstone = (i: number, updatedTouchstone: { name?: string; description?: string; conviction?: string; pic?: string }) => {
         const newTouchstones = [...touchstones]
         newTouchstones[i] = { ...touchstones[i], ...updatedTouchstone }
         setTouchstones(newTouchstones)
+        setKindred({...kindred, touchstones: newTouchstones})
     }
+
+    const handleTouchstoneImageUpload = (touchstoneIndex: number, acceptedFiles: any) => {
+        // If no images for this touchstone yet, simply set the acceptedFiles
+        const newTouchstonesPics = new Map(touchstonesPics);
+        newTouchstonesPics.set(touchstoneIndex, acceptedFiles);
+        setTouchstonesPics(newTouchstonesPics);
+    };
+
 
     const uploadImage = async () => {
         await Promise.all(
@@ -68,7 +78,6 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
         const imageUrl = URL.createObjectURL(file);
         return (
             <Stack>
-                <Badge color="gray">preview</Badge>
                 <Avatar
                     key={index}
                     src={imageUrl}
@@ -79,13 +88,50 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
         );
     });
 
+    const uploadTouchstoneImages = async (i: number) => {
+        if (touchstonesPics.has(i)) {
+            const images = touchstonesPics.get(i) || [];
+            await Promise.all(
+                images.map((image) => {
+                    const imageRef = ref(storage, `mage/${currentUser?.uid}/${image.path}`);
+                    return uploadBytes(imageRef, image, { contentType: 'image/jpeg' })
+                        .then(async () => {
+                            const downloadURL = await getDownloadURL(imageRef);
+                            updateTouchstone(i, { pic: downloadURL })
+                        })
+                        .catch((error) => {
+                            console.error('Error uploading image:', error);
+                        });
+                })
+            );
+            const updatedTouchstonesPics = new Map(touchstonesPics);
+            updatedTouchstonesPics.delete(i);
+            setTouchstonesPics(updatedTouchstonesPics);
+        }
+    };
+
+    const touchstonePreview = (touchstoneIndex: number) => {
+        if (touchstonesPics.has(touchstoneIndex)) {
+            const images = touchstonesPics.get(touchstoneIndex) || [];
+            return images.map((file, index) => {
+                const touchstoneURL = URL.createObjectURL(file);
+                return (
+                    <Stack key={index}>
+                        <Avatar
+                            src={touchstoneURL}
+                            imageProps={{ onLoad: () => URL.revokeObjectURL(touchstoneURL) }}
+                            size={100}
+                        />
+                    </Stack>
+                );
+            });
+        }
+        return null;
+    };
+
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
-
-
             <Stack>
-
-
                 <Alert color="gray" style={{ maxWidth: "700px" }}>
                     <Group grow>
                         {kindred.backstory.profilePic === "" ?
@@ -106,15 +152,15 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                                 </Stack>
                             </Center>
                         }
-
-                        <Center>
-                            {previews}
-                        </Center>
-
                         <Center>
                             <Alert color="gray" title="Profile Pic" style={{ maxWidth: "400px" }}>
                                 <Dropzone accept={IMAGE_MIME_TYPE} onDrop={setFiles}>
-                                    <Text align="center">Drop images here</Text>
+                                    {files.length > 0 ?
+                                        <Center>
+                                            {previews}
+                                        </Center> :
+                                        <Text align="center">Drop images here</Text>
+                                    }
                                 </Dropzone>
                                 <Button
                                     disabled={files.length === 0}
@@ -127,9 +173,6 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
 
                     </Group>
                 </Alert>
-
-
-
                 <Alert color="gray" style={{ maxWidth: "700px" }}>
                     <Grid columns={isPhoneScreen ? 4 : 8}>
                         <Grid.Col span={4}>
@@ -152,24 +195,29 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                         </Grid.Col>
                     </Grid>
                 </Alert>
-
                 <Stack>
                     <Alert color="gray" style={{ maxWidth: "700px" }}>
                         {touchstones.map((touchstone, i) => {
                             return (
                                 <Stack key={i} mt={"20px"}>
-                                    <Grid style={{ width: "100%" }}>
+                                    <Grid columns={12} style={{ width: "100%" }}>
                                         {i !== 0 ? <Divider style={{ width: "100%" }} /> : null}
 
                                         {globals.isPhoneScreen ? null : (
                                             <Grid.Col span={2}>
                                                 <Center style={{ height: "100%" }}>
-                                                    <FontAwesomeIcon icon={faUser} className="fa-6x" />
+                                                    {touchstone.pic !== "" ?
+                                                        <Avatar
+                                                            src={touchstone.pic}
+                                                            size={100}
+                                                        /> :
+                                                        <FontAwesomeIcon icon={faUser} className="fa-6x" />
+                                                    }
                                                 </Center>
                                             </Grid.Col>
                                         )}
 
-                                        <Grid.Col span={globals.isPhoneScreen ? 12 : 4}>
+                                        <Grid.Col span={3}>
                                             <TextInput
                                                 withAsterisk
                                                 style={{ width: globals.isPhoneScreen ? "100%" : "250px" }}
@@ -189,7 +237,7 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                                             />
                                         </Grid.Col>
 
-                                        <Grid.Col span={globals.isSmallScreen ? 12 : 4} offset={globals.isSmallScreen ? 0 : 1}>
+                                        <Grid.Col span={4} offset={globals.isSmallScreen ? 0 : 1}>
                                             <Textarea
                                                 value={touchstone.description}
                                                 onChange={(event) => updateTouchstone(i, { description: event.currentTarget.value })}
@@ -199,6 +247,30 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                                                 minRows={4}
                                             />
                                         </Grid.Col>
+
+                                        {globals.isPhoneScreen ? null : (
+                                            <Grid.Col span={3}>
+                                                <Center>
+                                                    <Alert color="gray" title="Profile Pic" style={{ maxWidth: "400px" }}>
+                                                        <Dropzone accept={IMAGE_MIME_TYPE} onDrop={(acceptedFiles) => handleTouchstoneImageUpload(i, acceptedFiles)}>
+                                                            {touchstonesPics.has(i) ?
+                                                                <>{touchstonePreview(i)}</>
+                                                                : <Text align="center">Drop images here</Text>}
+
+
+                                                        </Dropzone>
+                                                        <Button
+                                                            disabled={!touchstonesPics.has(i)}
+                                                            onClick={() => {
+                                                                uploadTouchstoneImages(i)
+                                                            }}
+                                                        >
+                                                            upload
+                                                        </Button>
+                                                    </Alert>
+                                                </Center>
+                                            </Grid.Col>
+                                        )}
                                     </Grid>
                                     <Group>
                                         <Button
@@ -221,7 +293,7 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                             color="gray"
                             disabled={touchstones.length >= 3}
                             onClick={() => {
-                                setTouchstones([...touchstones, { name: "", description: "", conviction: "" }])
+                                setTouchstones([...touchstones, { name: "", description: "", conviction: "", pic: "" }])
                             }}
                         >
                             Add Touchstone
@@ -229,10 +301,6 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                     </Alert>
                 </Stack>
                 <V5Backstory kindred={kindred} setKindred={setKindred} />
-
-
-
-
                 <Alert color="dark" variant="filled" radius="xs" style={{ zIndex: 9999, padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                     <Group>
                         <Button.Group>
@@ -247,7 +315,6 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                                 style={{ margin: "5px" }}
                                 color="gray"
                                 onClick={() => {
-                                    setKindred({ ...kindred, touchstones })
                                     nextStep()
                                 }}
                                 disabled={
@@ -261,12 +328,6 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                         </Button.Group>
                     </Group>
                 </Alert>
-
-                <Stack>
-
-                </Stack>
-
-
             </Stack>
         </Center>
     )
