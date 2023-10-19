@@ -19,7 +19,8 @@ const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps
         { return disciplineName !== "thin-blood alchemy" && kindred.disciplines[disciplineName].creationPoints !== 0 }
         return disciplineName !== "thin-blood alchemy";
     })
-    const disciplinesForClan = kindred.clan==="Thin-Blood"? ["thin-blood alchemy"]: kindred.clan === "Caitiff" ? mostDisciplines : Clans[kindred.clan].disciplines;
+    const thinBloodAlchemy = kindred.meritsFlaws.some((mf) => mf.name === "Thin-Blood Alchemist")
+    const disciplinesForClan = kindred.clan==="Thin-Blood" && thinBloodAlchemy ? ["thin-blood alchemy"]: kindred.clan === "Caitiff" ? mostDisciplines : Clans[kindred.clan].disciplines;
     const otherDisciplines = mostDisciplines.filter((disciplineName) => {
         return !disciplinesForClan.includes(disciplineName);
     });
@@ -110,6 +111,7 @@ const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps
         <>
             <Text mt={"xl"} ta="center" fz="xl" fw={700}>Disciplines</Text>
             <Accordion>
+                {disciplinesForClan.length>0?
                 <Accordion.Item value={"In-Clan Disciplines"}>
                     <Accordion.Control
                         style={{ backgroundColor: "#25262B" }}
@@ -136,6 +138,7 @@ const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps
                         </Table>
                     </Accordion.Panel>
                 </Accordion.Item>
+                :<></>}
                 {kindred.clan==="Caitiff"?<></>:
                 <Accordion.Item value={"Out-of-Clan Disciplines"}>
                     <Accordion.Control

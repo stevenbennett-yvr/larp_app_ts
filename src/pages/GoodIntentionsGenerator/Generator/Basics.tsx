@@ -220,7 +220,7 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                                         <Grid.Col span={3}>
                                             <TextInput
                                                 withAsterisk
-                                                style={{ width: globals.isPhoneScreen ? "100%" : "250px" }}
+                                                style={{ width: globals.isPhoneScreen ? "100%" : "200px" }}
                                                 value={touchstone.name}
                                                 onChange={(event) => updateTouchstone(i, { name: event.currentTarget.value })}
                                                 placeholder="Max Mustermann"
@@ -229,7 +229,7 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
 
                                             <TextInput
                                                 withAsterisk
-                                                style={{ width: globals.isPhoneScreen ? "100%" : "250px" }}
+                                                style={{ width: globals.isPhoneScreen ? "100%" : "200px" }}
                                                 value={touchstone.conviction}
                                                 onChange={(event) => updateTouchstone(i, { conviction: event.currentTarget.value })}
                                                 placeholder="Never betray your friends"
@@ -237,7 +237,7 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                                             />
                                         </Grid.Col>
 
-                                        <Grid.Col span={4} offset={globals.isSmallScreen ? 0 : 1}>
+                                        <Grid.Col span={3} offset={globals.isSmallScreen ? 0 : 1}>
                                             <Textarea
                                                 value={touchstone.description}
                                                 onChange={(event) => updateTouchstone(i, { description: event.currentTarget.value })}

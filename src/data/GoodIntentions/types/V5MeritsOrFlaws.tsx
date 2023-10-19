@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import meritFlawDataJson from '../sources/v5MeritsAndFlaws.json'
 import { Kindred } from './Kindred'
-import { V5BackgroundRef, v5BackgroundLevel } from './V5Backgrounds'
+import { v5BackgroundLevel } from './V5Backgrounds'
 import { getNumberBelow } from '../../../utils/getNumberBelow'
 import { v5BloodPotencyLevel } from './V5BloodPotency'
 
@@ -179,43 +179,45 @@ export const v5HandleMeritRemove = (kindred:Kindred, setKindred:Function, meritR
 export const v5MeritFlawFilter = (kindred: Kindred) => {
     let filteredData = meritFlawData;
 
-    if (kindred.clan === "Ravnos" || kindred.backgrounds.find((bRef:V5BackgroundRef) => bRef.name === "Haven")) {
-        filteredData = filteredData.filter(merit => merit.name !== "No Haven");
+    if (kindred.clan === "Ravnos" || kindred.backgrounds.some((bRef) => bRef.name === "Haven")) {
+        filteredData = filteredData.filter((merit) => merit.name !== "No Haven");
     }
-    if (kindred.clan === "Ventrue" || v5BloodPotencyLevel(kindred).level >= 3){
-        filteredData = filteredData.filter(merit => merit.name !== "Iron Gullet");
-        filteredData = filteredData.filter(merit => merit.name !== "Farmer");
+
+    if (kindred.clan === "Ventrue" || v5BloodPotencyLevel(kindred).level >= 3) {
+        filteredData = filteredData.filter((merit) => merit.name !== "Iron Gullet" && merit.name !== "Farmer");
     }
-    if (kindred.clan === "Ventrue"){
-        filteredData = filteredData.filter(merit => merit.name !== "Prey Exclusion");
+
+    if (kindred.clan === "Ventrue") {
+        filteredData = filteredData.filter((merit) => merit.name !== "Prey Exclusion");
     }
+
     if (kindred.generation > 9) {
-        filteredData = filteredData.filter(merit => merit.name !== "Archaic");
+        filteredData = filteredData.filter((merit) => merit.name !== "Archaic");
     }
-    let maxMask = 0
-    kindred.backgrounds.forEach((bRef) => {
-        if (bRef.name === "Mask") {
-            maxMask = Math.max(v5BackgroundLevel(bRef).level, maxMask)
-        }
-    })
+
+    const maxMask = kindred.backgrounds
+        .filter((bRef) => bRef.name === "Mask")
+        .reduce((max, bRef) => Math.max(v5BackgroundLevel(bRef).level, max), 0);
+
     if (maxMask > 0) {
-        filteredData = filteredData.filter(merit => merit.name !== "Known Corpse");
+        filteredData = filteredData.filter((merit) => merit.name !== "Known Corpse" && merit.name !== "Known Blankbody");
     }
-    if (maxMask > 0) {
-        filteredData = filteredData.filter(merit => merit.name !== "Known Blankbody");
-    }
+
     if (maxMask < 2) {
-        filteredData = filteredData.filter(merit => merit.name !== "Cobbler");
+        filteredData = filteredData.filter((merit) => merit.name !== "Cobbler");
     }
+
     if (maxMask < 3) {
-        filteredData = filteredData.filter(merit => merit.name !== "Zeroed");
+        filteredData = filteredData.filter((merit) => merit.name !== "Zeroed");
     }
-    if (kindred.backgrounds.find((bRef:V5BackgroundRef) => bRef.name === "Resources")) {
-        filteredData = filteredData.filter(merit => merit.name !== "Poor");
+
+    if (kindred.backgrounds.some((bRef) => bRef.name === "Resources")) {
+        filteredData = filteredData.filter((merit) => merit.name !== "Poor");
     }
-    if (kindred.backgrounds.find((bRef:V5BackgroundRef) => bRef.name === "Herd")) {
-        filteredData = filteredData.filter(merit => merit.name !== "Obvious Predator");
+
+    if (kindred.backgrounds.some((bRef) => bRef.name === "Herd")) {
+        filteredData = filteredData.filter((merit) => merit.name !== "Obvious Predator");
     }
 
     return filteredData;
-}
+};

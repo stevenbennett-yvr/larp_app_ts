@@ -15,8 +15,9 @@ const V5BloodPotenceXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps)
     let hasFarmer = kindred.meritsFlaws.some((mf) => mf.name === "Farmer")
 
     let bp3 = hasIronGullet || hasFarmer
+    let bp0 = kindred.clan==="Thin-Blood"||kindred.clan==="Ghoul"
 
-    let disabled = bp3? v5BloodPotencyLevel(kindred).level >= 2:v5BloodPotencyLevel(kindred).level >= generations[kindred.generation].max_bp
+    let disabled = bp0? true: bp3? v5BloodPotencyLevel(kindred).level >= 2:v5BloodPotencyLevel(kindred).level >= generations[kindred.generation].max_bp
 
     return (
         <div>

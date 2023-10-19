@@ -376,10 +376,10 @@ export const filterSelectData = (
         const isException = backgroundsToExclude.includes(backgroundName);
 
         // Check if the backgroundName is "Herd" and the user has "Obvious Predator"
-        const isHerdAndObviousPredator = backgroundName === "Herd" && hasObviousPredator;
+        if ( backgroundName === "Herd" && hasObviousPredator ) { return null }
 
         // Keep the background if it's not in userBackgrounds, is an exception, or is "Herd" with "Obvious Predator"
-        return isNotInUserBackgrounds || isException || isHerdAndObviousPredator;
+        return isNotInUserBackgrounds || isException;
     });
 }
 

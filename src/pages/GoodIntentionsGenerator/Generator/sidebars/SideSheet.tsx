@@ -143,7 +143,7 @@ const SideSheet = ({ kindred }: SideSheetProps) => {
                         <Stack>
                             <Title order={4}>Backgrounds</Title>
                             <Grid>
-                                <Grid.Col span={8}>
+                                <Grid.Col span={12}>
                                     <List>
                                         {kindredBackgrounds(kindred).map((background) => {
                                             return (

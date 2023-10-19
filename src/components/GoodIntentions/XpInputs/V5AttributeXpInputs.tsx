@@ -10,7 +10,7 @@ type V5AttributeXpInputsProps = {
 }
 const V5AttributeXpInputs = ({ kindred, setKindred }: V5AttributeXpInputsProps) => {
 
-    const orderedCategories = ['mental', 'physical', 'social'];
+    const orderedCategories = ['physical', 'social', 'mental'];
     const orderedAttributes = {
         'physical': ['strength', 'dexterity', 'stamina'],
         'social': ["charisma", 'manipulation', 'composure'],

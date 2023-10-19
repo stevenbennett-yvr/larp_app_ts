@@ -110,13 +110,25 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep, backStep }: Predato
             }
             <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                 <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>
-                    <Button
-                        style={{ margin: "5px" }}
-                        color="gray"
-                        onClick={backStep}
-                    >
-                        Back
-                    </Button>
+                <Button.Group>
+                            <Button
+                                style={{ margin: "5px" }}
+                                color="gray"
+                                onClick={backStep}
+                            >
+                                Back
+                            </Button>
+                            <Button
+                                style={{ margin: "5px" }}
+                                color="gray"
+                                onClick={() => {
+                                    nextStep()
+                                }}
+                                disabled={kindred.predatorType===""}
+                            >
+                                Next
+                            </Button>
+                        </Button.Group>
 
                 </Alert>
             </Button.Group>

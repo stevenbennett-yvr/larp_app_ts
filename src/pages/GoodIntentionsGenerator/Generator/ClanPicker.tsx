@@ -188,6 +188,7 @@ const ClanPicker = ({ kindred, setKindred, nextStep, backStep }: ClanPickerProps
                         <Button
                             disabled={clan==="Ghoul"}
                             onClick={() => {
+                                if (kindred.clan === clan) {nextStep()}
                                 const filteredOptions = loresheetCleanup(kindred)
                                 setKindred({
                                     ...kindred, clan,
