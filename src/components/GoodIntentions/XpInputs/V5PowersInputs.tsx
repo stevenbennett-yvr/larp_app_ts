@@ -163,18 +163,26 @@ const V5PowersInputs = ({ kindred, setKindred }: V5PowersXpInputsProps) => {
                     <Text mt={"xl"} ta="center" fz="xl" fw={700}>In Clan Powers</Text>
                 }
                 <Accordion>
-                    {
-                        (knownInClan as DisciplineKey[]).map((d) => createPowerAccordion(d))
-                    }
+                {knownInClan.map((discipline) => {
+                        let disciplineKey = discipline as DisciplineKey
+                        return (
+                        <div key={disciplineKey}>
+                            {createPowerAccordion(disciplineKey)}
+                        </div>
+                    )})}
                 </Accordion>
 
                 {knownOutClan.length > 0 ?
                     <>
                         <Text mt={"xl"} ta="center" fz="xl" fw={700}>Out Clan Powers</Text>
                         <Accordion>
-                            {
-                                (knownOutClan as DisciplineKey[]).map((d) => createPowerAccordion(d))
-                            }
+                        {knownOutClan.map((discipline) => {
+                        let disciplineKey = discipline as DisciplineKey
+                        return (
+                        <div key={disciplineKey}>
+                            {createPowerAccordion(disciplineKey)}
+                        </div>
+                    )})}
                         </Accordion>
                     </>
                     : <></>}

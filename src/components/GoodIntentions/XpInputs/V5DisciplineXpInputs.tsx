@@ -43,8 +43,6 @@ const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps
           }
         });
 
-        console.log(highestFormulaLevel)
-
         return (
             <tr key={discipline}>
                 <td>

@@ -31,7 +31,7 @@ export const LoresheetXpInputs = ({ kindred, setKindred }: LoresheetPickerProps)
     const getLoresheetCol = (loresheet: Loresheet) => {
 
         return (
-            <Grid.Col>
+            <Grid.Col key={loresheet.name}>
                 <Card
                     mb={20}
                     h={350}
@@ -144,7 +144,7 @@ const OpenedLoresheet = ({
                     let existingBenefit = kindred.loresheet.benefits.find((b) => b.name === benefit.name)
 
                     return (
-                        <Card style={{ minHeight: "200px" }}>
+                        <Card key={benefit.name} style={{ minHeight: "200px" }}>
                             <Text fz={"sm"}>{benefit.name}: {benefit.description}</Text>
                             {existingBenefit ? 
                                 <>

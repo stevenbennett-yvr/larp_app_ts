@@ -173,7 +173,7 @@ const SideSheet = ({ kindred }: SideSheetProps) => {
                             <List>
                                 {kindred.loresheet.benefits.map((benefit) => {
                                     return (
-                                        <List.Item>
+                                        <List.Item key={benefit.name}>
                                             <Text style={textStyle}>{benefit.name}</Text>
                                         </List.Item>
                                     )

@@ -131,6 +131,7 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
                                 Owned Advantages
                             </tr>
                         </thead>
+                        <tbody>
                         {bRef.advantages.map((aRef) => {
                             const advantage = backgroundInfo.advantages?.find((a) => a.name === aRef.name)
                             if (!advantage || v5AdvantageLevel(aRef).level === 0) { return null }
@@ -141,6 +142,7 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal }: 
                                 </tr>
                             )
                         })}
+                        </tbody>
                     </Table>
                     : <></>}
                 {backgroundInfo.advantages && backgroundInfo.advantages.length > 0 ?

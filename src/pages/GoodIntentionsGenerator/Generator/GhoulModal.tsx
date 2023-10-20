@@ -80,7 +80,7 @@ const GhoulModal = ({ kindred, setKindred, nextStep, modalOpened, closeModal }: 
         const isMaxedOut = totalPoints === 2;
 
         return (
-            <Grid.Col key={discipline} span={2}>
+            <Grid.Col key={`${discipline} ghoul picker`} span={2}>
                 <Tooltip
                     multiline
                     width={220}

@@ -7,7 +7,7 @@ import { globals } from "../../../assets/globals";
 import { V5MeritFlaw, V5MeritFlawRef, v5MeritFlawRefs, v5MeritLevel, v5MeritFlawFilter, handleMeritFlawChange } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
 import Tally from "../../../utils/talley";
 import FormulaPicker from "./ThinBloodModal";
-import GhoulModal from "./GhoulModal";
+//import GhoulModal from "./GhoulModal";
 import { useState } from "react";
 import { DisciplineKey } from "../../../data/GoodIntentions/types/V5Disciplines";
 
@@ -95,18 +95,17 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
             return creation + freebie
         }
         return (
-            <div>
-                <NumberInput
-                    disabled={getMeritPoints(meritRef) === 0 && meritInfo.category === "thin-blood" && ((meritInfo.type === "flaw" && getThinBloodPoints(kindred).totalFlawPoints >= 3) || (meritInfo.type === "merit" && getThinBloodPoints(kindred).totalMeritPoints >= 3))}
-                    value={getMeritPoints(meritRef)}
-                    min={meritRef.freebiePoints}
-                    max={meritInfo.cost.length === 1 && meritInfo.cost[0] === 1 ? 1 : v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo?.cost.length - 1] ? meritRef.creationPoints : meritInfo.cost[meritInfo.cost.length - 1]}
-                    step={getStep(meritRef)}
-                    onChange={(val) => {
-                        handleMeritFlawChange(kindred, setKindred, meritRef, "creationPoints", val)
-                    }}
-                />
-            </div>
+            <NumberInput
+                key={merit.name}
+                disabled={getMeritPoints(meritRef) === 0 && meritInfo.category === "thin-blood" && ((meritInfo.type === "flaw" && getThinBloodPoints(kindred).totalFlawPoints >= 3) || (meritInfo.type === "merit" && getThinBloodPoints(kindred).totalMeritPoints >= 3))}
+                value={getMeritPoints(meritRef)}
+                min={meritRef.freebiePoints}
+                max={meritInfo.cost.length === 1 && meritInfo.cost[0] === 1 ? 1 : v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo?.cost.length - 1] ? meritRef.creationPoints : meritInfo.cost[meritInfo.cost.length - 1]}
+                step={getStep(meritRef)}
+                onChange={(val) => {
+                    handleMeritFlawChange(kindred, setKindred, meritRef, "creationPoints", val)
+                }}
+            />
         )
     }
 
@@ -152,40 +151,38 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
 
 
         return (
-            <div>
-                <Accordion.Item value={category}>
-                    <Accordion.Control style={{ color: "white", backgroundColor: bgc }}>{category.toUpperCase()}</Accordion.Control>
-                    <Accordion.Panel>
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <th>
-                                        Merit
-                                    </th>
-                                    <th>
-                                        Description
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {meritFlawDisplay.map((meritFlaw) => {
-                                    const icon = meritFlaw.type === "flaw" ? flawIcon() : meritIcon()
-                                    return (
-                                        <tr key={`${meritFlaw.name} ${meritFlaw.type}`}>
-                                            <td style={{ minWidth: "150px" }}>
-                                                <Text>{icon} &nbsp; {meritFlaw.name}</Text>
-                                                {getRating(meritFlaw.cost)}
-                                                {MeritInput(meritFlaw)}
-                                            </td>
-                                            <td dangerouslySetInnerHTML={{ __html: `${meritFlaw.description}` }} />
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </Table>
-                    </Accordion.Panel>
-                </Accordion.Item>
-            </div>
+            <Accordion.Item key={category} value={category}>
+                <Accordion.Control style={{ color: "white", backgroundColor: bgc }}>{category.toUpperCase()}</Accordion.Control>
+                <Accordion.Panel>
+                    <Table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    Merit
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {meritFlawDisplay.map((meritFlaw) => {
+                                const icon = meritFlaw.type === "flaw" ? flawIcon() : meritIcon()
+                                return (
+                                    <tr key={`${meritFlaw.name} ${meritFlaw.type}`}>
+                                        <td style={{ minWidth: "150px" }}>
+                                            <Text key={`${meritFlaw.name}-${meritFlaw.type}`}>{icon} &nbsp; {meritFlaw.name}</Text>
+                                            {getRating(meritFlaw.cost)}
+                                            {MeritInput(meritFlaw)}
+                                        </td>
+                                        <td dangerouslySetInnerHTML={{ __html: `${meritFlaw.description}` }} />
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </Table>
+                </Accordion.Panel>
+            </Accordion.Item>
         )
 
     }
@@ -202,7 +199,7 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
         setModalOpen(false);
     };
 
-    const [ghoulModalOpen, setGhoulModalOpen] = useState(false);
+/*     const [ghoulModalOpen, setGhoulModalOpen] = useState(false);
     const handleGhoulCloseModal = () => {
         setKindred({
             ...kindred,
@@ -213,7 +210,7 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
         })
         setGhoulModalOpen(false);
     };
-
+ */
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
     const height = globals.viewportHeightPx
@@ -242,7 +239,6 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
                     </Center>
 
                     <FormulaPicker kindred={kindred} setKindred={setKindred} nextStep={nextStep} modalOpened={modalOpen} closeModal={handleCloseModal} />
-                    <GhoulModal kindred={kindred} setKindred={setKindred} nextStep={nextStep} modalOpened={ghoulModalOpen} closeModal={handleGhoulCloseModal} />
 
 
                 </ScrollArea>
@@ -280,7 +276,7 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
                                         nextStep();
                                     } else if (kindred.clan === "Ghoul") {
                                         // Handle the Ghoul case
-                                        setGhoulModalOpen(true);
+                                        //setGhoulModalOpen(true);
                                     } else if (!(isAlchemist || isDiscipline || isCursed)) {
                                         // Handle other conditions
                                         nextStep();

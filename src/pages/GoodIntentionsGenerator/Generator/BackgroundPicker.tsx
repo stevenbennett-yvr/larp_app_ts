@@ -181,7 +181,7 @@ const BackgroundPicker = ({ kindred, setKindred }: BackgroundPickerProps) => {
         const icon = getIcon(bRef.name)
         if (!backgroundInfo || !icon) { return null }
         return (
-            <Grid.Col key={bRef.name} span={4}>
+            <Grid.Col key={bRef.id} span={4}>
                 <Card className="hoverCard" shadow="sm" padding="lg" radius="md" h={200} style={{ cursor: "pointer" }}
                     onClick={() => {
                         setModalBackground(bRef.id);

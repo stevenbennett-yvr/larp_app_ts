@@ -3,7 +3,7 @@ import { Button, ActionIcon, Stack, Select, Accordion, Center, NumberInput, useM
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons"
 import { CirclePlus, CircleMinus } from 'tabler-icons-react';
-import { forwardRef, useState } from "react";
+import React, { forwardRef, useState } from "react";
 
 import { globals } from "../../../assets/globals";
 import { v5HandleMeritRemove, meritFlawData, V5MeritFlawRef, v5MeritFlawRefs, v5MeritLevel, v5MeritFlawFilter, v5HandleXpMeritChange, V5MeritFlaw, handleMeritFlawChange } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
@@ -77,7 +77,7 @@ const V5MeritFlawInputs = ({ kindred, setKindred }: V5MeritFlawInputsProps) => {
     }
     const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
         ({ label, bgc, ...others }: ItemProps, ref) => (
-            <div id={`${label}`} ref={ref} {...others} style={{ backgroundColor: bgc, border: '1px solid white' }}>
+            <div key={label} id={`${label}`} ref={ref} {...others} style={{ backgroundColor: bgc, border: '1px solid white' }}>
                 <Group noWrap>
                     <div>
                         <Text size="sm" color="white">{label}</Text>
@@ -99,35 +99,33 @@ const V5MeritFlawInputs = ({ kindred, setKindred }: V5MeritFlawInputsProps) => {
             const selectedMeritInfo = meritFlawData.find((merit) => merit.name === selectedMerit);
             if (selectedMeritInfo) {
                 return (
-                    <>
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <td>Merit</td>
-                                    <td>Description</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <Text>{selectedMeritInfo.name}</Text>
-                                        <Text>{getRating(selectedMeritInfo.cost)}</Text>
-                                        <Button
-                                            color="gray"
-                                            onClick={() => {
-                                                handleMeritBuy(selectedMeritInfo)
-                                                setSelectedMerit("")
-                                            }}
-                                        >
-                                            Buy Merit
-                                        </Button>
-                                    </td>
-                                    <td dangerouslySetInnerHTML={{ __html: `${selectedMeritInfo.description}` }} />
-                                </tr>
+                    <Table key={selectedMerit}>
+                        <thead>
+                            <tr>
+                                <td>Merit</td>
+                                <td>Description</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <Text>{selectedMeritInfo.name}</Text>
+                                    <Text>{getRating(selectedMeritInfo.cost)}</Text>
+                                    <Button
+                                        color="gray"
+                                        onClick={() => {
+                                            handleMeritBuy(selectedMeritInfo)
+                                            setSelectedMerit("")
+                                        }}
+                                    >
+                                        Buy Merit
+                                    </Button>
+                                </td>
+                                <td dangerouslySetInnerHTML={{ __html: `${selectedMeritInfo.description}` }} />
+                            </tr>
 
-                            </tbody>
-                        </Table>
-                    </>
+                        </tbody>
+                    </Table>
                 )
             }
         }
@@ -152,7 +150,7 @@ const V5MeritFlawInputs = ({ kindred, setKindred }: V5MeritFlawInputsProps) => {
         if (!meritRef || !meritInfo) { return }
 
         return (
-            <>
+            <div key={merit.name}>
                 <Group spacing="xs">
                     <ActionIcon
                         variant="filled"
@@ -196,7 +194,7 @@ const V5MeritFlawInputs = ({ kindred, setKindred }: V5MeritFlawInputsProps) => {
                     :
                     <></>
                 }
-            </>
+            </div>
         )
     }
 
@@ -232,59 +230,57 @@ const V5MeritFlawInputs = ({ kindred, setKindred }: V5MeritFlawInputsProps) => {
         }
 
         return (
-            <div>
-                <Accordion.Item value={category}>
-                    <Accordion.Control style={{ color: "white", backgroundColor: bgc }}>{category.toUpperCase()}</Accordion.Control>
-                    <Accordion.Panel>
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <th>
-                                        Merit
-                                    </th>
-                                    <th>
-                                        Description
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {sortedMerits.map((meritFlaw: V5MeritFlawRef) => {
-                                    const meritInfo = v5GetMeritByName(meritFlaw.name)
-                                    if (!meritInfo) { return null }
-                                    const icon = meritInfo.type === "flaw" ? flawIcon() : meritIcon()
-                                    return (
-                                        <>
-                                            <tr key={`${meritFlaw.name} ${meritInfo.type}`}>
-                                                <td style={{ minWidth: "220px" }}>
-                                                    <Stack>
-                                                        <Text>{icon} &nbsp; {meritInfo.name} <b>Level: {v5MeritLevel(meritFlaw).level}</b></Text>
-                                                        <Group>Rating: {getRating(meritInfo.cost)}</Group>
-                                                        {meritInfo.type === "merit" ?
-                                                            <>{MeritInput(meritFlaw)}</>
-                                                            : <></>}
-                                                    </Stack>
-                                                </td>
-                                                <td dangerouslySetInnerHTML={{ __html: `${meritInfo.description}` }} />
-                                            </tr>
-                                            <tr>
-                                                <td colSpan={2}>
-                                                    <TextInput
-                                                        label="Merit Notes"
-                                                        value={meritFlaw.userNote}
-                                                        onChange={(event) => {
-                                                            handleMeritFlawChange(kindred, setKindred, meritFlaw, "userNote", event.target.value)
-                                                        }}
-                                                    />
-                                                </td>
-                                            </tr>
-                                        </>
-                                    )
-                                })}
-                            </tbody>
-                        </Table>
-                    </Accordion.Panel>
-                </Accordion.Item>
-            </div>
+            <Accordion.Item value={`${category} accordion`}>
+                <Accordion.Control style={{ color: "white", backgroundColor: bgc }}>{category.toUpperCase()}</Accordion.Control>
+                <Accordion.Panel>
+                    <Table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    Merit
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {sortedMerits.map((meritFlaw: V5MeritFlawRef) => {
+                                const meritInfo = v5GetMeritByName(meritFlaw.name)
+                                if (!meritInfo) { return null }
+                                const icon = meritInfo.type === "flaw" ? flawIcon() : meritIcon()
+                                return (
+                                    <React.Fragment key={meritFlaw.name}>
+                                        <tr key={`${meritFlaw.name} ${meritInfo.type}`}>
+                                            <td style={{ minWidth: "220px" }}>
+                                                <Stack>
+                                                    <Text>{icon} &nbsp; {meritInfo.name} <b>Level: {v5MeritLevel(meritFlaw).level}</b></Text>
+                                                    <Group>Rating: {getRating(meritInfo.cost)}</Group>
+                                                    {meritInfo.type === "merit" ?
+                                                        <>{MeritInput(meritFlaw)}</>
+                                                        : <></>}
+                                                </Stack>
+                                            </td>
+                                            <td dangerouslySetInnerHTML={{ __html: `${meritInfo.description}` }} />
+                                        </tr>
+                                        <tr>
+                                            <td colSpan={2}>
+                                                <TextInput
+                                                    label="Merit Notes"
+                                                    value={meritFlaw.userNote}
+                                                    onChange={(event) => {
+                                                        handleMeritFlawChange(kindred, setKindred, meritFlaw, "userNote", event.target.value)
+                                                    }}
+                                                />
+                                            </td>
+                                        </tr>
+                                    </React.Fragment>
+                                )
+                            })}
+                        </tbody>
+                    </Table>
+                </Accordion.Panel>
+            </Accordion.Item>
         )
 
     }
@@ -310,9 +306,13 @@ const V5MeritFlawInputs = ({ kindred, setKindred }: V5MeritFlawInputsProps) => {
             </Center>
             <Center>
                 <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
-                    {
-                        meritTypes.map((c) => createMeritAccordian(c))
-                    }
+                    {meritTypes.map((type) => {
+                        return (
+                            <div key={type}>
+                                {createMeritAccordian(type)}
+                            </div>
+                        )
+                    })}
                 </Accordion>
             </Center>
         </Stack>

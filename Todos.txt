@@ -1,5 +1,3 @@
-
-
 Project Restructure:
 
     src: root 
@@ -7,19 +5,5 @@ Project Restructure:
         components: form components, ui components
         context: context items, database
         data: json data and constants
-        pages: different pages.
-        features: seperate major features, types.
+        pages: different pages/ Types.
         utils: utility functions (pure functions)
-        layouts:
-        services: service based api calls.
-
-
-Sort Imports by
-//Technical Imports
-//Asset Imports
-//Component Imports
-//Context Imports
-//Data Imports
-//Layout Imports
-//Page Imports
-//Util Imports

@@ -24,7 +24,7 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
         setKindred({
             ...kindred,
             rituals: [],
-            ceremonies:[],
+            ceremonies: [],
         })
         setModalOpen(false);
     };
@@ -80,7 +80,7 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
 
 
         return (
-            <Grid.Col key={discipline} span={2}>
+            <Grid.Col key={`${discipline} Card`} span={2}>
                 <Tooltip
                     multiline
                     width={220}
@@ -113,7 +113,7 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
                                 </Title>
                             </Center>
                             <NumberInput
-                                key={`${discipline}`}
+                                key={`${discipline} input`}
                                 min={0}
                                 max={maxPoints}
                                 disabled={isDisabled}
@@ -125,7 +125,6 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
                             </NumberInput>
                         </Card.Section>
                     </Card>
-
                 </Tooltip>
             </Grid.Col>
         )
@@ -180,7 +179,7 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
         return selectedPowers.length < v5DisciplineLevel(kindred, discipline).level;
     };
 
-    const createPowerAccordion = (discipline: DisciplineKey) => {
+    const createPowerAccordion = (discipline: DisciplineKey, index: number) => {
         const filteredPowers = learnablePowers.filter((power) => power.discipline.toLowerCase() === discipline.toLowerCase())
 
         filteredPowers.sort((a, b) => {
@@ -195,14 +194,14 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
 
         return (
             <div>
-                <Accordion.Item value={discipline}>
-                    <Accordion.Control 
-                        style={{ backgroundColor:"#25262B"}}
+                <Accordion.Item key={`${discipline}-${index}`} value={discipline}>
+                    <Accordion.Control
+                        style={{ backgroundColor: "#25262B" }}
                         icon={<Image height={20} width={20} src={disciplines[discipline].logo} />}>
-                            {discipline.toUpperCase()} 
-                            {selectedPowersInDiscipline.length < kindred.disciplines[discipline].creationPoints? 
-                                <Text><b style={{ color: "#880808" }}>{kindred.disciplines[discipline].creationPoints - selectedPowersInDiscipline.length} Remaining</b></Text>:
-                                <></>}
+                        {discipline.toUpperCase()}
+                        {selectedPowersInDiscipline.length < kindred.disciplines[discipline].creationPoints ?
+                            <Text><b style={{ color: "#880808" }}>{kindred.disciplines[discipline].creationPoints - selectedPowersInDiscipline.length} Remaining</b></Text> :
+                            <></>}
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Table>
@@ -217,7 +216,7 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
                                 {filteredPowers.map((power) => {
                                     const isPowerSelected = selectedPowersInDiscipline.some((p) => p.name === power.name);
                                     return (
-                                        <tr key={`${power.name} desktop`}>
+                                        <tr key={`${power.name} item`}>
                                             <td>
                                                 <Text fz={globals.smallerFontSize} style={{ color: "white" }}>{power.name}</Text>
                                                 <Image
@@ -252,6 +251,8 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
             </div>
         )
     }
+
+
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '120px' : '60px' }}>
             <Stack mt={"xl"} align="center" spacing="xl">
@@ -270,7 +271,7 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
                 <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">In-Clan</Text>
 
                 {kindred.clan === "Caitiff" ?
-                    <Grid columns={isPhoneScreen ? 4 : 8} grow m={0}>
+                    <Grid key="Caitiff disciplines" columns={isPhoneScreen ? 4 : 8} grow m={0}>
                         {
                             disciplinesForClan.map((o) => disciplineKeySchema.parse(o)).map((discipline) => createDisciplinePicker(discipline, true))
                         }
@@ -293,11 +294,15 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
                 }
 
 
-                    <Accordion variant="contained" >
-                        {
-                            (knownDisciplines as DisciplineKey[]).map((d) => createPowerAccordion(d))
-                        }
-                    </Accordion>
+                <Accordion variant="contained" >
+                    {knownDisciplines.map((discipline, index) => {
+                        let disciplineKey = discipline as DisciplineKey
+                        return (
+                        <div key={disciplineKey}>
+                            {createPowerAccordion(disciplineKey, index)}
+                        </div>
+                    )})}
+                </Accordion>
             </Stack>
 
             <RitualsModal modalOpened={modalOpen} closeModal={handleCloseModal} kindred={kindred} setKindred={setKindred} nextStep={nextStep} />
@@ -316,9 +321,7 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
                             style={{ margin: "5px" }}
                             color="gray"
                             onClick={() => {
-                                if (v5DisciplineLevel(kindred,"blood sorcery").level === 0 && v5DisciplineLevel(kindred,"oblivion").level === 0)
-                                { nextStep( ) } else 
-                                { setModalOpen(true) }
+                                if (v5DisciplineLevel(kindred, "blood sorcery").level === 0 && v5DisciplineLevel(kindred, "oblivion").level === 0) { nextStep() } else { setModalOpen(true) }
                             }}
                             disabled={(knownDisciplines as DisciplineKey[]).some((d) => disciplinePowersSelected(kindred, d))}
                         >

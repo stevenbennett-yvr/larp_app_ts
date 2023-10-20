@@ -31,7 +31,7 @@ export const LoresheetsPicker = ({ kindred, setKindred }: LoresheetPickerProps) 
     const getLoresheetCol = (loresheet: Loresheet) => {
 
         return (
-            <Grid.Col>
+            <Grid.Col key={loresheet.name}>
                 <Card
                     mb={20}
                     h={350}
@@ -59,6 +59,7 @@ export const LoresheetsPicker = ({ kindred, setKindred }: LoresheetPickerProps) 
             <Grid w={"100%"}>
                 {openLoresheet ? (
                     <OpenedLoresheet
+                        key={openLoresheet.name}
                         ls={openLoresheet}
                         setOpenLoresheetTitle={setOpenLoresheetTitle}
                         kindred={kindred}
@@ -144,7 +145,7 @@ const OpenedLoresheet = ({
                     }
 
                     return (
-                        <Card style={{ minHeight: "200px" }}>
+                        <Card key={benefit.name} style={{ minHeight: "200px" }}>
                             <Text fz={"sm"}>{benefit.name}: {benefit.description}</Text>
                             {kindred.loresheet.benefits.find((b) => b.name === benefit.name) ?
                                 <>
