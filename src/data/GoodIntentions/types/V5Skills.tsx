@@ -19,7 +19,7 @@ const skillSchema = z.object({
 export const v5skillsSchema = z.object({
     athletics: skillSchema,
     brawl: skillSchema,
-    craft: skillSchema,
+    crafts: skillSchema,
     drive: skillSchema,
     firearms: skillSchema,
     melee: skillSchema,
@@ -54,7 +54,7 @@ export type V5SkillsKey = z.infer<typeof v5skillsKeySchema>
 export const v5allSkills: V5SkillsKey[] = [
     "athletics",
     "brawl",
-    "craft",
+    "crafts",
     "drive",
     "firearms",
     "melee",
@@ -86,7 +86,7 @@ export const v5allSkills: V5SkillsKey[] = [
 export const v5EmptySkills: V5Skills = {
     athletics: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},
     brawl: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},
-    craft: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},
+    crafts: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},
     drive: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},
     firearms: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},
     melee: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},
@@ -119,7 +119,7 @@ export const v5EmptySkills: V5Skills = {
 export const skillsDescriptions: Record<V5SkillsKey, string> = {
     athletics: "Running, jumping and climbing",
     brawl: "Unarmed combat",
-    craft: "Crafting, building, repairing",
+    crafts: "Crafting, building, repairing",
     drive: "Operating vehicles (not needed for basic driving)",
     firearms: "Using ranged weapons",
     melee: "Armed melee combat",

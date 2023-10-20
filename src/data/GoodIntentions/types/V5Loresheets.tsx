@@ -337,7 +337,7 @@ export const loresheets: Loresheet[] = [
                 selectableBackgrounds: { options: [], totalPoints: 0 },
                 backgrounds: [],
                 meritsAndFlaws: [],
-                selectableSkills: [{skill:"craft",level:5},{skill:"performance",level:5}]
+                selectableSkills: [{skill:"crafts",level:5},{skill:"performance",level:5}]
             },
             {
                 name: "Popular",

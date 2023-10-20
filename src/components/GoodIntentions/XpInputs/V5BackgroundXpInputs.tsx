@@ -1,204 +1,38 @@
-import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
-import { v5BackgroundLevel, V5BackgroundRef, SphereSelectData, V5Background, V5SphereKey, backgroundData, filterSelectData, v5BackgroundRefs, handleBackgroundChange, kindredBackgrounds } from "../../../data/GoodIntentions/types/V5Backgrounds"
-import { useState, forwardRef } from "react";
-import { Space, Group, Text, Table, Select, Button, Grid, Card, Center, Stack, ScrollArea } from "@mantine/core";
-import V5AdvantageXpInputs from "./V5AdvantageXpInputs";
+import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
+import { Stack, ScrollArea } from "@mantine/core"
+import { globals } from "../../../assets/globals"
+import { useState } from 'react'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUserGroup, faCat, faAddressBook, faFaceGrinStars, faHouseChimney, faCow, faMasksTheater, faCoins } from "@fortawesome/free-solid-svg-icons"
-import { v5xp } from "../../../data/GoodIntentions/V5Experience";
-import { globals } from "../../../assets/globals";
+import BackgroundBuy from "../../../components/GoodIntentions/Inputs/BackgroundBuy"
+import BackgroundModal from "../../../components/GoodIntentions/Inputs/BackgroundModal"
+import BackgroundGrid from "../../../components/GoodIntentions/Inputs/BackgroundGrid"
 
-type v5BackgroundXpInputProps = {
+type BackgroundPickerProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void
 }
 
-const V5BackgroundXpInput = ({ kindred, setKindred }: v5BackgroundXpInputProps) => {
+const V5BackgroundXpInputs = ({ kindred, setKindred }: BackgroundPickerProps) => {
+    const height = globals.viewportHeightPx
 
-    const [selectedBackground, setSelectedBackground] = useState<string | null>("");
-    const [selectedSphere, setSelectedSphere] = useState<V5SphereKey | null>("");
-
-    const [modalBackground, setModalBackground] = useState<string>("")
     const [modalOpen, setModalOpen] = useState(false);
+
     const handleCloseModal = () => {
         setModalBackground("");
         setModalOpen(false);
     };
 
-    const getIcon = (name: string) => {
-        if (name === "Allies") {
-            return faUserGroup
-        }
-        if (name === "Familiar") {
-            return faCat
-        }
-        if (name === "Contacts") {
-            return faAddressBook
-        }
-        if (name === "Fame") {
-            return faFaceGrinStars
-        }
-        if (name === "Haven") {
-            return faHouseChimney
-        }
-        if (name === "Herd") {
-            return faCow
-        }
-        if (name === "Mask") {
-            return faMasksTheater
-        }
-        if (name === "Resources") {
-            return faCoins
-        }
-    }
-
-    const filterData = filterSelectData(kindred, backgroundData)
-
-    const selectData = filterData.map((b: V5Background) => ({
-        value: `${b.name}`,
-        label: `${b.name}`,
-    }))
-    interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
-        label: string;
-        bgc: string;
-    }
-    const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
-        ({ label, bgc, ...others }: ItemProps, ref) => (
-            <div id={`${label}`} ref={ref} {...others} style={{ backgroundColor: bgc, border: '1px solid white' }}>
-                <Group noWrap>
-                    <div>
-                        <Text size="sm" color="white">{label}</Text>
-                    </div>
-                </Group>
-            </div>
-        )
-    );
-
-    const handleBackgroundBuy = (selectedBackground: string) => {
-        let newBackgroundRef = v5BackgroundRefs.find((b) => b.name === selectedBackground)
-        if (!newBackgroundRef) { return }
-
-        let newBackground = { ...newBackgroundRef, id: `${newBackgroundRef.id}-${Date.now()}}`, advantages: [] }
-        if ((selectedBackground === 'Allies' || selectedBackground === 'Contacts') && selectedSphere) {
-            console.log(selectedSphere)
-            newBackground = { ...newBackground, sphere: [selectedSphere] }
-        }
-        handleBackgroundChange(kindred, setKindred, newBackground, "experiencePoints", v5xp.background)
-    }
-
-    const getSelectedBackgroundData = () => {
-        if (selectedBackground) {
-            const selectedBackgroundData = backgroundData.find((b) => b.name === selectedBackground)
-            if (selectedBackgroundData) {
-                return (
-                    <Table>
-                        <thead>
-                            <tr>
-                                <th>Background</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style={{ minWidth: "150px" }}>
-                                    <Text color="white">{selectedBackgroundData.name}</Text>
-                                    {selectedBackground === "Allies" || selectedBackground === "Contacts" ?
-                                        <Select
-                                            data={SphereSelectData}
-                                            value={selectedSphere} // Make sure selectedSphere contains the correct value
-                                            onChange={(val) => {
-                                                let sphere = val as V5SphereKey
-                                                setSelectedSphere(sphere);
-                                            }}
-                                            placeholder={`${selectedSphere}`}
-                                        />
-                                        : <></>}
-                                    <Button
-                                        color="gray"
-                                        disabled={(selectedBackground === "Allies" || selectedBackground === "Contacts") && selectedSphere === ""}
-                                        onClick={() => {
-                                            handleBackgroundBuy(selectedBackground)
-                                            setSelectedBackground("")
-                                            setSelectedSphere("")
-                                        }}>Buy</Button>
-                                </td>
-                                <td dangerouslySetInnerHTML={{ __html: `${selectedBackgroundData.description}` }} />
-                            </tr>
-                        </tbody>
-                    </Table>
-                )
-            }
-        }
-    }
-
-    const createBackgroundPick = (bRef: V5BackgroundRef) => {
-        const backgroundInfo = backgroundData.find((entry) => entry.name === bRef.name)
-        const icon = getIcon(bRef.name)
-        if (!backgroundInfo || !icon) { return null }
-        return (
-            <Grid.Col key={bRef.id} span={4}>
-                <Card className="hoverCard" shadow="sm" padding="lg" radius="md" h={200} style={{ cursor: "pointer" }}
-                    onClick={() => {
-                        setModalBackground(bRef.id);
-                        setModalOpen(true);
-                    }}
-                >
-                    <Center pt={10}>
-                        <FontAwesomeIcon size="4x" icon={icon} style={{ color: "#e03131" }} />
-                    </Center>
-
-                    <Center>
-                        <Text mt={"xl"} ta="center" fz="xl" fw={700}>{bRef.name} Level {v5BackgroundLevel(bRef).level} {bRef.sphere}</Text>
-
-                    </Center>
-
-                    <Text h={55} size="sm" color="dimmed" ta="center">
-                        {backgroundInfo?.summary}
-                    </Text>
-                </Card>
-            </Grid.Col>
-        )
-    }
-
-    const ownedBackgrounds = kindredBackgrounds(kindred)
-    const height = globals.viewportHeightPx
+    const [modalBackground, setModalBackground] = useState<string>("")
 
     return (
-        <ScrollArea h={height - 330} w={"90%"} p={20}>
-
         <Stack mt={"xl"} align="center" spacing="xl">
-            <Text fz={"30px"} ta={"center"}>Select <b>Backgrounds</b></Text>
-
-            <V5AdvantageXpInputs kindred={kindred} setKindred={setKindred} bId={modalBackground} modalOpened={modalOpen} closeModal={handleCloseModal} />
-
-            <Center>
-                <Select
-                    data={selectData}
-                    value={selectedBackground}
-                    onChange={(val) => setSelectedBackground(val)}
-                    itemComponent={SelectItem}
-                    searchable
-                    allowDeselect
-                    placeholder="Select Background to Buy"
-                    style={{ width: '70%' }}
-                />
-            </Center>
-            {getSelectedBackgroundData()}
-
-
-            <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Owned Backgrounds</Text>
-
-            <Space h={"sm"} />
-            <Grid grow m={0}>
-                {
-                    ownedBackgrounds.map((bRef) => createBackgroundPick(bRef))
-                }
-            </Grid>
+            <ScrollArea h={height - 280} w={"100%"} p={20}>
+                <BackgroundBuy kindred={kindred} setKindred={setKindred} type="experiencePoints" />
+                <BackgroundGrid kindred={kindred} setKindred={setKindred} setModalBackground={setModalBackground} setModalOpen={setModalOpen} />
+            </ScrollArea>
+            <BackgroundModal kindred={kindred} setKindred={setKindred} bId={modalBackground} modalOpened={modalOpen} closeModal={handleCloseModal} type="experiencePoints" />
         </Stack>
-        </ScrollArea>
     )
-
 }
 
-export default V5BackgroundXpInput
+export default V5BackgroundXpInputs

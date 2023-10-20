@@ -1,13 +1,10 @@
-import { Grid, Text, Tooltip, NumberInput, Center, Stack, Button, Group, Alert, Divider } from "@mantine/core"
+import { Text, Center, Stack, Button, Group, Alert } from "@mantine/core"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { V5SkillsKey, skillsDescriptions, getV5SkillCPArray, v5SkillLevel } from "../../../data/GoodIntentions/types/V5Skills"
+import { V5SkillsKey, getV5SkillCPArray, v5SkillLevel } from "../../../data/GoodIntentions/types/V5Skills"
 import { globals } from "../../../assets/globals"
-import { upcase } from "../../../utils/case"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBrain, faComment, faHandFist } from "@fortawesome/free-solid-svg-icons"
-import { SkillCategory } from "../../../data/nWoD1e/nWoD1eSkills"
 import { SpecialtyModal } from "./SpecialtyModal"
 import { useState } from "react"
+import SkillGrid from "../../../components/GoodIntentions/Generator/SkillGrid"
 
 type SkillsPickerProps = {
     kindred: Kindred,
@@ -15,9 +12,6 @@ type SkillsPickerProps = {
     nextStep: () => void,
     backStep: () => void,
 }
-
-
-
 
 const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerProps) => {
     const isPhoneScreen = globals.isPhoneScreen
@@ -62,32 +56,8 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
     }
     const check = checkSkillArray(pointsArray).individualResults
 
-    function changeCreationPoints(
-        skill: V5SkillsKey,
-        creationPoints: number,
-    ): void {
 
-        const updatedAttributes = {
-            ...kindred.skills,
-            [skill]: {
-                ...kindred.skills[skill],
-                creationPoints
-            }
-        }
-
-
-        const clearedSpecialities = kindred.skillSpecialties.filter(entry => entry.skill !== skill)
-
-        const updatedCharacter = {
-            ...kindred,
-            skills: updatedAttributes,
-            skillSpecialties: clearedSpecialities,
-        }
-
-        setKindred(updatedCharacter)
-    }
-
-    const specialtySkills: V5SkillsKey[] = ["craft", "performance", "academics", "science"];
+    const specialtySkills: V5SkillsKey[] = ["crafts", "performance", "academics", "science"];
 
     let totalSpecialtySkillLevel = 0;
 
@@ -96,70 +66,6 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
 
         totalSpecialtySkillLevel += skillLevel;
     }
-
-
-    const categoryIcons = {
-        mental: faBrain,
-        physical: faHandFist,
-        social: faComment,
-    }
-
-    const skillCategories = ['physical', 'social', 'mental'] as SkillCategory[]
-
-    const skillInputs = skillCategories.map(category => {
-        return (
-            <Grid.Col
-                span={globals.isPhoneScreen ? "content" : 4}
-                key={`${category} Skills`}
-            >
-                <Text c={"red"} fw={500} fz="lg" color="dimmed" ta="center">
-                    <FontAwesomeIcon icon={categoryIcons[category]} /> {' '}
-                    {upcase(category)}
-                </Text>
-                <Divider my="sm" color={"red"} />
-                {Object.entries(kindred.skills).map(([skill, skillInfo]) => {
-                    const typedAttribute = skill as V5SkillsKey
-                    if (skillInfo.category === category) {
-                        return (
-                            <div
-                                key={`${skill} input`}
-                            >
-                                <Tooltip
-                                    multiline
-                                    width={220}
-                                    withArrow
-                                    offset={20}
-                                    transitionProps={{ duration: 200 }}
-                                    label={skillsDescriptions[typedAttribute]}
-                                    position={globals.isPhoneScreen ? "bottom" : "top"}
-                                    events={{ hover: true, focus: false, touch: false }}
-                                >
-                                    <NumberInput
-                                        key={`${category}-${skill}`}
-                                        label={`${upcase(skill)}`}
-                                        min={
-                                            0
-                                        }
-                                        max={!check[3] ? 3 : !check[2] ? 2 : !check[1] ? 1 : 0}
-                                        value={skillInfo.creationPoints}
-                                        onChange={(val: number) => {
-                                            changeCreationPoints(typedAttribute, val);
-                                        }}
-
-                                    />
-                                </Tooltip>
-                            </div>
-                        )
-                    }
-                    else {
-                        return null
-                    };
-                })}
-            </Grid.Col>
-        )
-
-    })
-
 
     const threeStyle = !check[3] ? { fontSize: globals.smallFontSize } : { color: "grey" }
     const twoStyle = !check[2] ? { fontSize: globals.smallFontSize } : { color: "grey" }
@@ -182,9 +88,7 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
                     </Text>
                 </Group>
 
-                <Grid gutter="lg" justify="center">
-                    {skillInputs}
-                </Grid>
+                <SkillGrid kindred={kindred} setKindred={setKindred} check={check} />
 
                 <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                     <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>

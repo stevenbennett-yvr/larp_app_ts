@@ -125,7 +125,7 @@ export const getEmptyKindred = (): Kindred => {
         skills: {
             athletics: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},
             brawl: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},
-            craft: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},
+            crafts: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},
             drive: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},
             firearms: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},
             melee: { creationPoints: 0, freebiePoints: 0, experiencePoints: 0, category: 'physical'},

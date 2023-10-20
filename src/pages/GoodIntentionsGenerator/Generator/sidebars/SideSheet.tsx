@@ -89,7 +89,7 @@ const SideSheet = ({ kindred }: SideSheetProps) => {
                                 <Grid.Col span={4}>
                                     {["athletics",
                                         "brawl",
-                                        "craft",
+                                        "crafts",
                                         "drive",
                                         "firearms",
                                         "melee",

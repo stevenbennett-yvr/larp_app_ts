@@ -8,7 +8,6 @@ import V5DisciplineXpInputs from '../../../components/GoodIntentions/XpInputs/V5
 import V5PowersInputs from '../../../components/GoodIntentions/XpInputs/V5PowersInputs'
 import V5RitualsXpInputs from '../../../components/GoodIntentions/XpInputs/V5RitualsXpInputs'
 import V5CeremoniesXpInputs from '../../../components/GoodIntentions/XpInputs/V5CeremonyXpInputs'
-import V5BackgroundXpInput from '../../../components/GoodIntentions/XpInputs/V5BackgroundXpInputs'
 import V5MeritFlawInputs from '../../../components/GoodIntentions/XpInputs/V5MeritFlawInputs'
 import V5BloodPotenceXpInput from '../../../components/GoodIntentions/XpInputs/V5BloodPotenceXpInputs'
 import V5HumanityXpInput from '../../../components/GoodIntentions/XpInputs/V5HumanityXpInputs'
@@ -18,6 +17,7 @@ import V5FormulaeXpInputs from '../../../components/GoodIntentions/XpInputs/V5Fo
 import { globals } from '../../../assets/globals'
 import { v5DisciplineLevel } from '../../../data/GoodIntentions/types/V5Disciplines'
 import { spentExperience } from '../../../data/GoodIntentions/types/V5Experience'
+import V5BackgroundXpInputs from '../../../components/GoodIntentions/XpInputs/V5BackgroundXpInputs'
 
 type V5ExperienceAssignerProps = {
     kindred: Kindred,
@@ -105,7 +105,7 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                     </Tabs.List>
 
                     <Tabs.Panel value="backgrounds">
-                        <V5BackgroundXpInput kindred={kindred} setKindred={setKindred} />
+                        <V5BackgroundXpInputs kindred={kindred} setKindred={setKindred} />
                     </Tabs.Panel>
 
                     <Tabs.Panel value="loresheet">

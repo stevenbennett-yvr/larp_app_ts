@@ -17,7 +17,7 @@ export const V5SpecialtyModal = ({ modalOpened, closeModal, setCharacter, charac
     const smallScreen = globals.isSmallScreen;
     const phoneScreen = globals.isPhoneScreen;
     const inputW = phoneScreen ? 140 : 200
-    const specialtySkills: V5SkillsKey[] = ["craft", "performance", "academics", "science"];
+    const specialtySkills: V5SkillsKey[] = ["crafts", "performance", "academics", "science"];
 
     const specialties = character.skillSpecialties;
 
