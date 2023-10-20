@@ -1,7 +1,7 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { Center, Tabs, Stack, Alert, Group, Button, Text } from "@mantine/core"
 import { globals } from "../../../assets/globals"
-import BackgroundPicker from "./BackgroundPicker"
+import BackgroundFull from "../../../components/GoodIntentions/Inputs/BackgroundFull"
 import LoresheetsPicker from "./LoresheetPicker"
 import { backgroundData } from "../../../data/GoodIntentions/types/V5Backgrounds"
 
@@ -87,7 +87,7 @@ const BackgroundLoreTabs = ({kindred, setKindred, nextStep, backStep}:Background
           </Center>
   
           <Tabs.Panel value="background" pt="xs">
-            <BackgroundPicker kindred={kindred} setKindred={setKindred} />
+            <BackgroundFull kindred={kindred} setKindred={setKindred} type="creationPoints" />
           </Tabs.Panel>
   
           <Tabs.Panel value="loresheet" pt="xs">
@@ -96,8 +96,6 @@ const BackgroundLoreTabs = ({kindred, setKindred, nextStep, backStep}:Background
 
           </Stack>
         </Tabs>
-
-
         
         <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen ? "15%" : "30%" }}>
                     <Group>

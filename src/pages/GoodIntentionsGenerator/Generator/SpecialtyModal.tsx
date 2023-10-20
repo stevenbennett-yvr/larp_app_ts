@@ -4,7 +4,7 @@ import { Button, Divider, Group, Modal, Stack, Text } from "@mantine/core"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { globals } from "../../../assets/globals"
 import { V5SkillsKey, v5SkillLevel } from "../../../data/GoodIntentions/types/V5Skills"
-import SpecialtyGrid from "../../../components/GoodIntentions/Generator/SpecialityGrid"
+import SpecialtyGrid from "../../../components/GoodIntentions/Inputs/SpecialityGrid"
 import { upcase } from "../../../utils/case"
 
 type SpecialtyModalProps = {
