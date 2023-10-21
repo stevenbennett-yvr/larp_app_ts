@@ -33,10 +33,10 @@ const V5PowersInputs = ({ kindred, setKindred }: V5PowersXpInputsProps) => {
 
     const knownOutClan = knownDisciplines.filter((disciplineName) => {
         const discipline = disciplineName as DisciplineKey;
-      
+
         // Exclude "thin-blood alchemy" from the result
         return discipline !== "thin-blood alchemy" && !disciplinesForClan.includes(discipline);
-      });
+    });
 
 
     const handleSelect = (power: Power) => {
@@ -159,30 +159,32 @@ const V5PowersInputs = ({ kindred, setKindred }: V5PowersXpInputsProps) => {
     return (
         <Center>
             <Stack>
-                {kindred.clan === "Thin-Blood"? <></>:
+                {kindred.clan === "Thin-Blood" ? <></> :
                     <Text mt={"xl"} ta="center" fz="xl" fw={700}>In Clan Powers</Text>
                 }
                 <Accordion>
-                {knownInClan.map((discipline) => {
+                    {knownInClan.map((discipline) => {
                         let disciplineKey = discipline as DisciplineKey
                         return (
-                        <div key={disciplineKey}>
-                            {createPowerAccordion(disciplineKey)}
-                        </div>
-                    )})}
+                            <div key={disciplineKey}>
+                                {createPowerAccordion(disciplineKey)}
+                            </div>
+                        )
+                    })}
                 </Accordion>
 
                 {knownOutClan.length > 0 ?
                     <>
                         <Text mt={"xl"} ta="center" fz="xl" fw={700}>Out Clan Powers</Text>
                         <Accordion>
-                        {knownOutClan.map((discipline) => {
-                        let disciplineKey = discipline as DisciplineKey
-                        return (
-                        <div key={disciplineKey}>
-                            {createPowerAccordion(disciplineKey)}
-                        </div>
-                    )})}
+                            {knownOutClan.map((discipline) => {
+                                let disciplineKey = discipline as DisciplineKey
+                                return (
+                                    <div key={disciplineKey}>
+                                        {createPowerAccordion(disciplineKey)}
+                                    </div>
+                                )
+                            })}
                         </Accordion>
                     </>
                     : <></>}

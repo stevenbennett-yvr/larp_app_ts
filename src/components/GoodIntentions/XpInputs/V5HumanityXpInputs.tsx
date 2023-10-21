@@ -2,6 +2,8 @@
 import { Text, Center, Input, Group, Button, Table } from "@mantine/core";
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 import { v5HumanityLevel, findMaxHumanity, handleHumanityChange, humanities } from "../../../data/GoodIntentions/types/V5Humanity";
+import { globals } from "../../../assets/globals";
+import { useEffect, useState } from "react";
 
 type V5BloodPotenceXpInputProps = {
     kindred: Kindred,
@@ -9,6 +11,11 @@ type V5BloodPotenceXpInputProps = {
 }
 
 const V5HumanityXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps) => {
+    const width = globals.viewportWidthPx
+
+
+    const [showTable, setShowTable] = useState(!globals.isSmallScreen)
+    useEffect(() => { setShowTable(!globals.isSmallScreen) }, [globals.isSmallScreen])
 
     return (
         <div>
@@ -53,7 +60,8 @@ const V5HumanityXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps) => 
                     </Group>
                 </Input.Wrapper>
             </Center>
-            <Table striped highlightOnHover withColumnBorders>
+            {showTable?
+            <Table w={width - 700} align="center" striped highlightOnHover withColumnBorders>
                     <thead>
                         <tr>
                             <td>Frenzy Resist</td>
@@ -70,6 +78,7 @@ const V5HumanityXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps) => 
                         </tr>
                     </tbody>
                 </Table>
+                :<></>}
         </div>
     )
 }

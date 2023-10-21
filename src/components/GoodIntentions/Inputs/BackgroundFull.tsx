@@ -18,6 +18,7 @@ type BackgroundPickerProps = {
 
 const BackgroundFull = ({ kindred, setKindred, type }: BackgroundPickerProps) => {
     const height = globals.viewportHeightPx
+    const width = globals.viewportWidthPx
 
     const [modalOpen, setModalOpen] = useState(false);
     const [modalBackground, setModalBackground] = useState<V5BackgroundRef|null>(null)
@@ -27,10 +28,9 @@ const BackgroundFull = ({ kindred, setKindred, type }: BackgroundPickerProps) =>
         setModalOpen(false);
     };
 
-
     return (
         <Stack mt={"xl"} align="center" spacing="xl">
-            <ScrollArea h={height - 280} w={"100%"} p={20}>
+            <ScrollArea h={height - 280} w={width - 700} p={20}>
                 <BackgroundBuy kindred={kindred} setKindred={setKindred} type={type} />
                 <BackgroundGrid kindred={kindred} setKindred={setKindred} setModalBackground={setModalBackground} setModalOpen={setModalOpen} />
             </ScrollArea>

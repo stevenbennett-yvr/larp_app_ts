@@ -96,7 +96,7 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                 <Divider my="sm" />
 
                 <Tabs variant="pills" defaultValue="backgrounds">
-                    <Tabs.List>
+                    <Tabs.List grow>
                         <Tabs.Tab value="backgrounds">
                             Backgrounds
                         </Tabs.Tab>

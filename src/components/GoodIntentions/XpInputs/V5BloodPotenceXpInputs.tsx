@@ -3,6 +3,8 @@ import { Text, Center, Input, Group, Button, Table } from "@mantine/core";
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 import { generations } from "../../../data/GoodIntentions/types/V5Generation";
 import { bloodPotencies, v5BloodPotencyLevel, handleBloodPotencyChange } from "../../../data/GoodIntentions/types/V5BloodPotency";
+import { globals } from "../../../assets/globals";
+import { useEffect, useState } from "react";
 
 type V5BloodPotenceXpInputProps = {
     kindred: Kindred,
@@ -10,6 +12,7 @@ type V5BloodPotenceXpInputProps = {
 }
 
 const V5BloodPotenceXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps) => {
+    const width = globals.viewportWidthPx
 
     let hasIronGullet = kindred.meritsFlaws.some((mf) => mf.name === "Iron Gullet")
     let hasFarmer = kindred.meritsFlaws.some((mf) => mf.name === "Farmer")
@@ -18,6 +21,11 @@ const V5BloodPotenceXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps)
     let bp0 = kindred.clan==="Thin-Blood"||kindred.clan==="Ghoul"
 
     let disabled = bp0? true: bp3? v5BloodPotencyLevel(kindred).level >= 2:v5BloodPotencyLevel(kindred).level >= generations[kindred.generation].max_bp
+
+
+    const [showTable, setShowTable] = useState(!globals.isSmallScreen)
+    useEffect(() => { setShowTable(!globals.isSmallScreen) }, [globals.isSmallScreen])
+
 
     return (
         <div>
@@ -61,9 +69,9 @@ const V5BloodPotenceXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps)
                         </Button>
                     </Group>
                 </Input.Wrapper>
-
             </Center>
-            <Table striped highlightOnHover withColumnBorders>
+            {showTable?
+            <Table w={width - 700} align="center" striped highlightOnHover withColumnBorders>
                     <thead>
                         <tr>
                             <td>Blood Surge Bonus</td>
@@ -86,6 +94,7 @@ const V5BloodPotenceXpInput = ({kindred, setKindred}:V5BloodPotenceXpInputProps)
                         </tr>
                     </tbody>
                 </Table>
+                :<></>}
         </div>
     )
 }

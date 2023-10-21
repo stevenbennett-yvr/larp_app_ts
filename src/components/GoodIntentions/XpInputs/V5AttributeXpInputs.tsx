@@ -21,7 +21,7 @@ const V5AttributeXpInputs = ({ kindred, setKindred }: V5AttributeXpInputsProps) 
         <Center>
             <Stack>
             <Text mt={"xl"} ta="center" fz="xl" fw={700}>Attributes</Text>
-            <Grid>
+            <Grid grow>
                 {orderedCategories.map((category) => {
                     let categoryKey = category as AttributeCategory
                     const orderedAttributesForCategory = orderedAttributes[categoryKey];

@@ -1,5 +1,5 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { Image, Group, ActionIcon, Input, Table, Text, Accordion } from "@mantine/core"
+import { Center, Image, Group, ActionIcon, Input, Table, Text, Accordion } from "@mantine/core"
 import { DisciplineKey, allDisciplines, disciplines, v5HandleXpDisciplineChange, v5FindMaxDiscipline, disciplineKeySchema, v5DisciplineLevel } from "../../../data/GoodIntentions/types/V5Disciplines"
 import { Clans } from "../../../data/GoodIntentions/types/V5Clans"
 import { CirclePlus, CircleMinus } from 'tabler-icons-react';
@@ -108,12 +108,13 @@ const DisciplineAccordion = ({ kindred, setKindred }: DisciplineAccordionProps) 
     return (
         <>
             <Text mt={"xl"} ta="center" fz="xl" fw={700}>Disciplines</Text>
+            <Center>
             <Accordion>
                 {disciplinesForClan.length>0?
                 <Accordion.Item value={"In-Clan Disciplines"}>
                     <Accordion.Control
                         style={{ backgroundColor: "#25262B" }}
-                    >{kindred.clan === "Caitiff"? 'Caitiff Disciplines':'In-Clan Disciplines'}</Accordion.Control>
+                    ><Text>{kindred.clan === "Caitiff"? 'Caitiff Disciplines':'In-Clan Disciplines'}</Text></Accordion.Control>
                     <Accordion.Panel>
                         <Table>
                             <thead>
@@ -141,7 +142,7 @@ const DisciplineAccordion = ({ kindred, setKindred }: DisciplineAccordionProps) 
                 <Accordion.Item value={"Out-of-Clan Disciplines"}>
                     <Accordion.Control
                         style={{ backgroundColor: "#25262B" }}
-                    >Out-of-Clan Disciplines</Accordion.Control>
+                    ><Text>Out-of-Clan Disciplines</Text></Accordion.Control>
                     <Accordion.Panel>
                         <Table>
                             <thead>
@@ -166,6 +167,7 @@ const DisciplineAccordion = ({ kindred, setKindred }: DisciplineAccordionProps) 
                 </Accordion.Item>
                 }
             </Accordion>
+            </Center>
         </>
     )
 }

@@ -38,7 +38,7 @@ const V5SkillXpInputs = ({ kindred, setKindred }: V5SkillXpInputsProps) => {
             <Center>
             <Button onClick={openModal} size="compact-xs" color="gray">Open Specialties</Button>
             </Center>
-            <Grid>
+            <Grid grow>
                 {orderedCategories.map((category) => {
                     let categoryKey = category as SkillCategory
                     return (
