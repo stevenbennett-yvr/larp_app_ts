@@ -7,12 +7,12 @@ import { upcase } from "../../../utils/case";
 import { allPowers } from "../../../data/GoodIntentions/types/V5Powers";
 import { Formulae } from "../../../data/GoodIntentions/types/V5Formulae";
 
-type V5DisciplineXpInputsProps = {
+type DisciplineAccordionProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void,
 }
 
-const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps) => {
+const DisciplineAccordion = ({ kindred, setKindred }: DisciplineAccordionProps) => {
 
     let mostDisciplines = allDisciplines.filter((disciplineName) => {
         if (kindred.clan==="Thin-Blood")
@@ -170,4 +170,4 @@ const V5DisciplineXpInputs = ({ kindred, setKindred }: V5DisciplineXpInputsProps
     )
 }
 
-export default V5DisciplineXpInputs
+export default DisciplineAccordion

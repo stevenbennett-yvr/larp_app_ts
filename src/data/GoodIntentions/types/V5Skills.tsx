@@ -161,13 +161,13 @@ export const v5SkillLevel = (
     let pastXpNeeded = [0];
   
     if (experiencePoints === 0) {
-      let level = creationPoints + freebiePoints;
+      let level = Math.max(creationPoints, freebiePoints)
       let xpNeeded = (level + 1) * v5xp.skill;
       totalXpNeeded = xpNeeded;
       pastXpNeeded.push(totalXpNeeded);
       return { level, totalXpNeeded, pastXpNeeded };
     } else {
-      let level = creationPoints + freebiePoints;
+      let level = Math.max(creationPoints, freebiePoints)
       let xpNeeded = (level + 1) * v5xp.skill;
       totalXpNeeded += xpNeeded;
       pastXpNeeded.push(totalXpNeeded);

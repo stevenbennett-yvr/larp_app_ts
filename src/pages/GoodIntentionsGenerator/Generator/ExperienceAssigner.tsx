@@ -1,14 +1,11 @@
-import { Alert, Group, Button, Divider, Center, Text, Space, ScrollArea, Tabs } from '@mantine/core'
+import { Alert, Stack, Group, Button, Divider, Center, Text, Space, ScrollArea, Tabs } from '@mantine/core'
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { useState } from 'react'
 
 import V5AttributeXpInputs from '../../../components/GoodIntentions/XpInputs/V5AttributeXpInputs'
 import V5SkillXpInputs from '../../../components/GoodIntentions/XpInputs/V5SkillXpInputs'
-import V5DisciplineXpInputs from '../../../components/GoodIntentions/XpInputs/V5DisciplineXpInputs'
-import V5PowersInputs from '../../../components/GoodIntentions/XpInputs/V5PowersInputs'
 import V5RitualsXpInputs from '../../../components/GoodIntentions/XpInputs/V5RitualsXpInputs'
 import V5CeremoniesXpInputs from '../../../components/GoodIntentions/XpInputs/V5CeremonyXpInputs'
-import V5MeritFlawInputs from '../../../components/GoodIntentions/XpInputs/V5MeritFlawInputs'
 import V5BloodPotenceXpInput from '../../../components/GoodIntentions/XpInputs/V5BloodPotenceXpInputs'
 import V5HumanityXpInput from '../../../components/GoodIntentions/XpInputs/V5HumanityXpInputs'
 import V5FormulaeXpInputs from '../../../components/GoodIntentions/XpInputs/V5FormulaeXpInputs'
@@ -18,6 +15,10 @@ import { v5DisciplineLevel } from '../../../data/GoodIntentions/types/V5Discipli
 import { spentExperience } from '../../../data/GoodIntentions/types/V5Experience'
 import BackgroundFull from '../../../components/GoodIntentions/Inputs/BackgroundFull'
 import LoresheetInputs from '../../../components/GoodIntentions/Inputs/LoresheetPicker'
+import MeritsGrid from '../../../components/GoodIntentions/Inputs/MeritsGrid'
+import MeritBuy from '../../../components/GoodIntentions/Inputs/MeritsBuy'
+import DisciplineAccordion from '../../../components/GoodIntentions/Inputs/DisciplineAccordion'
+import PowerAccordion from '../../../components/GoodIntentions/Inputs/PowerAccordion'
 
 type V5ExperienceAssignerProps = {
     kindred: Kindred,
@@ -66,8 +67,8 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                 <Divider my="sm" />
                 <V5SkillXpInputs kindred={kindred} setKindred={setKindred} />
                 <Divider my="sm" />
-                <V5DisciplineXpInputs kindred={kindred} setKindred={setKindred}></V5DisciplineXpInputs>
-                <V5PowersInputs kindred={kindred} setKindred={setKindred} />
+                <DisciplineAccordion kindred={kindred} setKindred={setKindred} />
+                <PowerAccordion kindred={kindred} setKindred={setKindred} type='experiencePoints' />
                 <V5RitualsXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ritualModalOpen} closeModal={closeRitualsModal} />
                 <V5CeremoniesXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ceremonyModalOpen} closeModal={closeCeremoniesModal} />
                 <V5FormulaeXpInputs kindred={kindred} setKindred={setKindred} modalOpened={formulaModalOpen} closeModal={closeFormulaModal} />
@@ -114,10 +115,14 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
 
                 </Tabs>
 
-
                 <Divider my="sm" />
 
-                <V5MeritFlawInputs kindred={kindred} setKindred={setKindred} />
+                <Center>
+                    <Stack>
+                    <MeritBuy kindred={kindred} setKindred={setKindred} />
+                    <MeritsGrid kindred={kindred} setKindred={setKindred} type="experiencePoints" />
+                    </Stack>
+                </Center>
                 <Divider my="sm" />
 
                 <V5BloodPotenceXpInput kindred={kindred} setKindred={setKindred} />

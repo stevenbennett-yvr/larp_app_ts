@@ -38,35 +38,35 @@ const LoresheetCard = ({ loresheet, setOpenLoresheetTitle, kindred, setKindred, 
                         {kindred.loresheet.benefits.find((b) => b.name === benefit.name) ? (
                             // Deselect button
                             <Button
-                            onClick={() => {
-                                const filteredBenefits = kindred.loresheet.benefits.filter(
-                                    (b) => b.name !== benefit.name
-                                );
-                                if (filteredBenefits.length === 0) {
-                                    setKindred({
-                                        ...kindred,
-                                        loresheet: {
-                                            name: "",
-                                            benefits: [],
-                                        },
-                                        skills: updateSkills(kindred, benefit).filteredSkills,
-                                        backgrounds: updateBackgrounds(kindred, benefit).filteredBackgrounds,
-                                        meritsFlaws: updateMeritsFlaws(kindred, benefit).filteredMerits,
-                                    });
-                                } else {
-                                    setKindred({
-                                        ...kindred,
-                                        loresheet: {
-                                            ...kindred.loresheet,
-                                            name: loresheet.name,
-                                            benefits: filteredBenefits,
-                                        },
-                                        skills: updateSkills(kindred, benefit).filteredSkills,
-                                        backgrounds: updateBackgrounds(kindred, benefit).filteredBackgrounds,
-                                        meritsFlaws: updateMeritsFlaws(kindred, benefit).filteredMerits,
-                                    });
-                                }
-                            }}
+                                onClick={() => {
+                                    const filteredBenefits = kindred.loresheet.benefits.filter(
+                                        (b) => b.name !== benefit.name
+                                    );
+                                    if (filteredBenefits.length === 0) {
+                                        setKindred({
+                                            ...kindred,
+                                            loresheet: {
+                                                name: "",
+                                                benefits: [],
+                                            },
+                                            skills: updateSkills(kindred, benefit).filteredSkills,
+                                            backgrounds: updateBackgrounds(kindred, benefit).filteredBackgrounds,
+                                            meritsFlaws: updateMeritsFlaws(kindred, benefit).filteredMerits,
+                                        });
+                                    } else {
+                                        setKindred({
+                                            ...kindred,
+                                            loresheet: {
+                                                ...kindred.loresheet,
+                                                name: loresheet.name,
+                                                benefits: filteredBenefits,
+                                            },
+                                            skills: updateSkills(kindred, benefit).filteredSkills,
+                                            backgrounds: updateBackgrounds(kindred, benefit).filteredBackgrounds,
+                                            meritsFlaws: updateMeritsFlaws(kindred, benefit).filteredMerits,
+                                        });
+                                    }
+                                }}
 
                             >
                                 Deselect
@@ -87,8 +87,12 @@ const LoresheetCard = ({ loresheet, setOpenLoresheetTitle, kindred, setKindred, 
                                 Buy (cost: {benefit.level})
                             </Button>
                         )}
-                        <SkillSelectModal kindred={kindred} setKindred={setKindred} skillModalOpened={skillModalOpened} closeSkillModal={closeSkillModal} loresheet={loresheet} benefit={benefit} type={type} />
-                        <BackgroundSelectModal backgroundModalOpened={backgroundModalOpened} backgroundCloseModal={backgroundCloseModal} kindred={kindred} setKindred={setKindred} loresheet={loresheet} benefit={benefit} type={type} />
+                        {benefit.selectableSkills.length > 0 ?
+                            <SkillSelectModal kindred={kindred} setKindred={setKindred} skillModalOpened={skillModalOpened} closeSkillModal={closeSkillModal} loresheet={loresheet} benefit={benefit} type={type} />
+                            : <></>}
+                        {benefit.selectableBackgrounds.options.length > 0 ?
+                            <BackgroundSelectModal backgroundModalOpened={backgroundModalOpened} backgroundCloseModal={backgroundCloseModal} kindred={kindred} setKindred={setKindred} loresheet={loresheet} benefit={benefit} type={type} />
+                            : <></>}
                     </Card>
                 ))}
             </Stack>

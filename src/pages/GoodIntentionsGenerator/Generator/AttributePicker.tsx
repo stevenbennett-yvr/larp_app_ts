@@ -119,7 +119,6 @@ const AttributePicker = ({ kindred, setKindred, nextStep, backStep }: AttributeP
                                                 val
                                             )
                                         }
-
                                     />
                                 </Tooltip>
                             </div>

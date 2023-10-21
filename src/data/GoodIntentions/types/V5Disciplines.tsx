@@ -142,8 +142,9 @@ export const v5DisciplineLevel = (kindred:Kindred, discipline:DisciplineKey) => 
     const disciplinesForClan = Clans[clan].disciplines;
     let inClan = disciplinesForClan.includes(discipline)
     let isCaitiff = clan === "Caitiff"
+    let isAlchemist = discipline === "thin-blood alchemy"
 
-    const xpCost = inClan? v5xp.inClanDisciplines : isCaitiff? v5xp.caitiffDiscipline : v5xp.outOfClanDiscipline
+    const xpCost = inClan || isAlchemist? v5xp.inClanDisciplines : isCaitiff? v5xp.caitiffDiscipline : v5xp.outOfClanDiscipline
 
     let xp = experiencePoints
     let totalXpNeeded = 0

@@ -816,7 +816,7 @@ export const loresheets: Loresheet[] = [
             {
                 name: "Peacemaker",
                 level: 1,
-                description: ": Your ability to bring together Kindred of opposing ideals and have them peacefully discuss their differences is renowned. Once per night, when you or a vampire in your presence is required to take a Frenzy test resulting from a political disagreement, you can allow them to pass a failed test. You also gain the first two dots of the Etiquette and Politics Skills.",
+                description: "Your ability to bring together Kindred of opposing ideals and have them peacefully discuss their differences is renowned. Once per night, when you or a vampire in your presence is required to take a Frenzy test resulting from a political disagreement, you can allow them to pass a failed test. You also gain the first two dots of the Etiquette and Politics Skills.",
                 skillBonus: [{skill:"etiquette", level:2}, {skill:"politics", level:2}],
                 selectableBackgrounds: { options: [], totalPoints: 0 },
                 backgrounds: [],
@@ -826,7 +826,7 @@ export const loresheets: Loresheet[] = [
             {
                 name: "Revitalization",
                 level: 2,
-                description: "",
+                description: "Negotiating peace is the first step to rebuilding threatened Camarilla cities. Rebuilding is the second step. You are an expert at bringing resources to bear to help. You may choose six free dots of the Contacts, Resources, or Allies Backgrounds or their associated Advantages, representing the support of other allied Camarilla cities. You may only use these backgrounds in a city where a Camarilla Authority exists.",
                 skillBonus: [],
                 selectableBackgrounds: { options: [
                     {...emptyBackground, id:"camarilla-contacts", name:"Contacts", sphere:[]},
@@ -989,7 +989,7 @@ export const loresheets: Loresheet[] = [
                 skillBonus: [],
                 selectableBackgrounds: { options: [], totalPoints: 0 },
                 backgrounds: [
-                    {...emptyBackground, id:"nightmares-Haven", name:"Haven", advantages: [
+                    {...emptyBackground, id:"nightmares-Haven", name:"Haven", freebiePoints:2, advantages: [
                         {...emptyAdvantage, name:"Luxury", freebiePoints:1},
                         {...emptyAdvantage, name:"Security", freebiePoints:1},
                         {...emptyAdvantage, name:"Guardsmen", freebiePoints:1},
