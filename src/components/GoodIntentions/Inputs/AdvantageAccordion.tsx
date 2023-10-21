@@ -3,16 +3,20 @@ import { ActionIcon, Checkbox, CheckboxProps, NumberInput, Accordion, Text, Grou
 import Tally from "../../../utils/talley"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons"
-import { v5AdvantageLevel, handleAdvantageChange, emptyAdvantage, V5AdvantageRef, v5HandleXpAdvantageChange, v5BackgroundLevel, backgroundData, V5Background } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { V5BackgroundRef, v5AdvantageLevel, handleAdvantageChange, emptyAdvantage, V5AdvantageRef, v5HandleXpAdvantageChange, v5BackgroundLevel, backgroundData, V5Background } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { Droplet, CirclePlus, CircleMinus } from 'tabler-icons-react';
+import { handleBenefitAdvantageChange, Benefit } from "../../../data/GoodIntentions/types/V5Loresheets"
 
-export type TypeCategory = 'creationPoints' | 'experiencePoints';
+
+export type TypeCategory = 'creationPoints' | 'experiencePoints' | 'freebiePoints';
 
 type AdvantageAccordionProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void,
-    bId: string,
+    bRef: V5BackgroundRef|null,
     type: TypeCategory
+    benefitData?: Benefit
+    setBenefitData?: (benefitData:Benefit) => void
 }
 
 const flawIcon = () => {
@@ -36,10 +40,9 @@ const getRating = (array: number[]) => {
     }
 }
 
-const AdvantageAccordion = ({ kindred, setKindred, bId, type }: AdvantageAccordionProps) => {
-
-    const bRef = kindred.backgrounds.find((entry) => entry.id === bId)
+const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setBenefitData }: AdvantageAccordionProps) => {
     if (!bRef) { return null }
+
     const backgroundInfo = backgroundData.find((entry) => entry.name === bRef.name)
     if (!backgroundInfo || backgroundInfo.advantages === undefined) { return null }
 
@@ -106,25 +109,42 @@ const AdvantageAccordion = ({ kindred, setKindred, bId, type }: AdvantageAccordi
                                                                     handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "creationPoints", trueVal)
                                                                 }}
                                                             />
-                                                            :
-                                                            <>
-                                                                <ActionIcon variant="filled" radius="xl" color="dark" onClick={() => v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, advantageRef.experiencePoints - 1)}>
-                                                                    <CircleMinus strokeWidth={1.5} color="gray" />
-                                                                </ActionIcon>
+                                                            : type === "freebiePoints" ?
                                                                 <NumberInput
-                                                                    disabled={starPowerBool || canGhoul}
-                                                                    value={advantageRef.experiencePoints}
-                                                                    style={{ width: "100px" }}
+                                                                    value={advantageRef.freebiePoints}
                                                                     min={0}
-                                                                    max={(advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level) || havenBoolean ? advantageRef.experiencePoints : undefined}
-                                                                    onChange={(val: number) => {
-                                                                        v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, val)
-                                                                    }}
+                                                                    step={advantageStep(advantageRef, backgroundInfo)}
+                                                                    max={
+                                                                        backgroundInfo.name === "Haven" && advantage.type === "advantage"
+                                                                            ? havenSizeMax
+                                                                            : getAdvantagePoints(advantageRef) === advantage.cost[advantage.cost.length - 1]
+                                                                                ? advantageRef.creationPoints
+                                                                                : advantage.cost[advantage.cost.length - 1]
+                                                                    }
+                                                                    onChange={(val:number) => {
+                                                                        if (!benefitData || !setBenefitData) {return null}
+                                                                        handleBenefitAdvantageChange(bRef, advantageRef, benefitData, setBenefitData, val)
+                                                                    }
+                                                                    }
                                                                 />
-                                                                <ActionIcon variant="filled" radius="xl" color="dark" disabled={havenBoolean || starPowerBool || (advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level)} onClick={() => v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, advantageRef.experiencePoints + 1)}>
-                                                                    <CirclePlus strokeWidth={1.5} color="gray" />
-                                                                </ActionIcon>
-                                                            </>
+                                                                : <>
+                                                                    <ActionIcon variant="filled" radius="xl" color="dark" onClick={() => v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, advantageRef.experiencePoints - 1)}>
+                                                                        <CircleMinus strokeWidth={1.5} color="gray" />
+                                                                    </ActionIcon>
+                                                                    <NumberInput
+                                                                        disabled={starPowerBool || canGhoul}
+                                                                        value={advantageRef.experiencePoints}
+                                                                        style={{ width: "100px" }}
+                                                                        min={0}
+                                                                        max={(advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level) || havenBoolean ? advantageRef.experiencePoints : undefined}
+                                                                        onChange={(val: number) => {
+                                                                            v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, val)
+                                                                        }}
+                                                                    />
+                                                                    <ActionIcon variant="filled" radius="xl" color="dark" disabled={havenBoolean || starPowerBool || (advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level)} onClick={() => v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, advantageRef.experiencePoints + 1)}>
+                                                                        <CirclePlus strokeWidth={1.5} color="gray" />
+                                                                    </ActionIcon>
+                                                                </>
                                                         }
                                                         {bRef.name === "Haven" && advantage.type === "advantage" ?
 

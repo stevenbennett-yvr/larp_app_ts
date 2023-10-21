@@ -10,7 +10,7 @@ export type TypeCategory = 'creationPoints' | 'experiencePoints';
 type BackgroundGridProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void
-    setModalBackground: (id: string) => void
+    setModalBackground: (modalBackground:V5BackgroundRef|null) => void
     setModalOpen: (modalOpen: boolean) => void
 }
 
@@ -51,7 +51,7 @@ const BackgroundGrid = ({ kindred, setModalBackground, setModalOpen }: Backgroun
             <Grid.Col key={bRef.id} span={4}>
                 <Card className="hoverCard" shadow="sm" padding="lg" radius="md" h={200} style={{ cursor: "pointer" }}
                     onClick={() => {
-                        setModalBackground(bRef.id);
+                        setModalBackground(bRef);
                         setModalOpen(true);
                     }}
                 >

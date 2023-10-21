@@ -11,7 +11,7 @@ export type TypeCategory = 'creationPoints' | 'experiencePoints' ;
 type BackgroundModalProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void,
-    bId: string,
+    bRef: V5BackgroundRef|null,
     modalOpened: boolean,
     closeModal: () => void
     type: TypeCategory
@@ -24,10 +24,10 @@ const meritIcon = () => {
     return <FontAwesomeIcon icon={faCircleUp} style={{ color: "rgb(47, 158, 68)", }} />
 }
 
-const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal, type }: BackgroundModalProps) => {
-
-    const bRef = kindred.backgrounds.find((entry) => entry.id === bId)
+const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, type }: BackgroundModalProps) => {
     if (!bRef) { return null }
+    let BackgroundRef = kindred.backgrounds.find((entry) => entry.id === bRef.id)
+    if (!BackgroundRef) { return null }
 
     const backgroundInfo = backgroundData.find((entry) => entry.name === bRef.name)
     if (!backgroundInfo) { return null }
@@ -43,16 +43,17 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal, ty
         if (!backgroundRef) { return }
         const backgroundMax = backgroundRef.name==="Haven"?havenMax:3
         return (
-            <Center>
+            <Center key={backgroundRef.id}>
                 <Stack>
                     <Center>
                         {type==="creationPoints"?
                         <NumberInput
-                            value={v5BackgroundLevel(backgroundRef).level}
+                            value={Math.max(backgroundRef.freebiePoints,v5BackgroundLevel(backgroundRef).level)}
                             min={Math.max(backgroundRef.freebiePoints, fameMin)}
                             max={backgroundRef.name === "Haven" ? havenMax : v5BackgroundLevel(backgroundRef).level === 3 ? backgroundRef.creationPoints : 3}
                             onChange={(val: number) => {
                                 let creationPoints = val - backgroundRef.freebiePoints
+                                if (creationPoints < 0) { creationPoints = 0 }
                                 handleBackgroundChange(kindred, setKindred, backgroundRef, "creationPoints", creationPoints)
                             }}
                             style={{ width: "100px" }}
@@ -99,10 +100,10 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal, ty
             size={600}
         >
             <Stack>
-                <Text fz={"30px"} ta={"center"}>{backgroundInfo.name}: {v5BackgroundLevel(bRef).level} {bRef.sphere}</Text>
+                <Text fz={"30px"} ta={"center"}>{backgroundInfo.name}: {v5BackgroundLevel(BackgroundRef).level} {BackgroundRef.sphere}</Text>
 
-                {BackgroundInput(bRef)}
-                {bRef.freebiePoints === 0 ?
+                {BackgroundInput(BackgroundRef)}
+                {BackgroundRef.freebiePoints === 0 ?
                     <Button
                         color="gray"
                         onClick={() => {
@@ -113,7 +114,7 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal, ty
                     <></>
                 }
                 <Text size="sm" color="dimmed" dangerouslySetInnerHTML={{ __html: `${backgroundInfo.description}` }}></Text>
-                {bRef.advantages.length > 0 ?
+                {BackgroundRef.advantages.length > 0 ?
                     <Table>
                         <thead>
                             <tr>
@@ -121,7 +122,7 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal, ty
                             </tr>
                         </thead>
                         <tbody>
-                        {bRef.advantages.map((aRef) => {
+                        {BackgroundRef.advantages.map((aRef) => {
                             const advantage = backgroundInfo.advantages?.find((a) => a.name === aRef.name)
                             if (!advantage || v5AdvantageLevel(aRef).level === 0) { return null }
                             const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
@@ -134,7 +135,7 @@ const BackgroundModal = ({ kindred, setKindred, bId, modalOpened, closeModal, ty
                         </tbody>
                     </Table>
                     : <></>}
-                <AdvantageAccordion kindred={kindred} setKindred={setKindred} bId={bId} type={type} />
+                <AdvantageAccordion kindred={kindred} setKindred={setKindred} bRef={BackgroundRef} type={type} />
             </Stack>
         </Modal>
 

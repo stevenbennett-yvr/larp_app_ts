@@ -2,6 +2,7 @@ import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { Stack, ScrollArea } from "@mantine/core"
 import { globals } from "../../../assets/globals"
 import { useState } from 'react'
+import { V5BackgroundRef } from "../../../data/GoodIntentions/types/V5Backgrounds"
 
 import BackgroundBuy from "../../../components/GoodIntentions/Inputs/BackgroundBuy"
 import BackgroundModal from "../../../components/GoodIntentions/Inputs/BackgroundModal"
@@ -19,13 +20,13 @@ const BackgroundFull = ({ kindred, setKindred, type }: BackgroundPickerProps) =>
     const height = globals.viewportHeightPx
 
     const [modalOpen, setModalOpen] = useState(false);
+    const [modalBackground, setModalBackground] = useState<V5BackgroundRef|null>(null)
 
     const handleCloseModal = () => {
-        setModalBackground("");
+        setModalBackground(null);
         setModalOpen(false);
     };
 
-    const [modalBackground, setModalBackground] = useState<string>("")
 
     return (
         <Stack mt={"xl"} align="center" spacing="xl">
@@ -33,7 +34,7 @@ const BackgroundFull = ({ kindred, setKindred, type }: BackgroundPickerProps) =>
                 <BackgroundBuy kindred={kindred} setKindred={setKindred} type={type} />
                 <BackgroundGrid kindred={kindred} setKindred={setKindred} setModalBackground={setModalBackground} setModalOpen={setModalOpen} />
             </ScrollArea>
-            <BackgroundModal kindred={kindred} setKindred={setKindred} bId={modalBackground} modalOpened={modalOpen} closeModal={handleCloseModal} type={type} />
+            <BackgroundModal kindred={kindred} setKindred={setKindred} bRef={modalBackground} modalOpened={modalOpen} closeModal={handleCloseModal} type={type} />
         </Stack>
     )
 }

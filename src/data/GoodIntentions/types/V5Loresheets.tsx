@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { clanNameSchema } from "./V5Clans";
 import { V5SkillsKey, v5skillsKeySchema } from "./V5Skills";
-import { v5BackgroundRefSchema, emptyBackground, emptyAdvantage } from "./V5Backgrounds";
+import { v5BackgroundRefSchema, emptyBackground, emptyAdvantage, V5BackgroundRef, V5AdvantageRef } from "./V5Backgrounds";
 import { v5MeritFlawRefSchema, emptyMeritFlaw } from "./V5MeritsOrFlaws";
 import { Kindred } from "./Kindred";
 import { sectNameSchema } from "./V5Sect";
@@ -1165,3 +1165,133 @@ export const loresheetFilter = (kindred: Kindred) => {
         meritsFlaws: filteredMerits,
     };
 };
+
+
+export const updateSkills = (kindred:Kindred, benefit:Benefit) => {
+    const updatedSkills = JSON.parse(JSON.stringify(kindred.skills));
+    const filteredSkills = JSON.parse(JSON.stringify(kindred.skills));
+    
+    // Clear freebiePoints for all skills
+    for (const skillName in filteredSkills) {
+        const skill = skillName as V5SkillsKey;
+        filteredSkills[skill].freebiePoints = 0;
+    }
+    
+    // Apply skill bonuses if any
+    if (benefit.skillBonus.length > 0) {
+        benefit.skillBonus.forEach((bonus) => {
+            const skill = bonus.skill;
+            updatedSkills[skill].freebiePoints = 2;
+        });
+    }
+    
+    return { updatedSkills, filteredSkills };
+}
+
+export const updateBackgrounds = (kindred:Kindred, benefit:Benefit) => {
+    const updatedBackgrounds = JSON.parse(JSON.stringify(kindred.backgrounds));
+    let filteredBackgrounds = JSON.parse(JSON.stringify(kindred.backgrounds));
+    
+    // Add specified backgrounds
+    if (benefit.backgrounds.length > 0) {
+        benefit.backgrounds.forEach((bg) => {
+            updatedBackgrounds.push(bg);
+            filteredBackgrounds = filteredBackgrounds.filter((background: any) => background.id !== bg.id);
+        });
+    }
+    
+    // Filter selectable backgrounds
+    if (benefit.selectableBackgrounds.options.length > 0) {
+        benefit.selectableBackgrounds.options.forEach((bg) => {
+            filteredBackgrounds = filteredBackgrounds.filter((background: any) => background.id !== bg.id);
+        });
+    }
+    
+    return { updatedBackgrounds, filteredBackgrounds };
+}
+
+export const updateMeritsFlaws = (kindred:Kindred, benefit:Benefit) => {
+    const updatedMerits = JSON.parse(JSON.stringify(kindred.meritsFlaws));
+    let filteredMerits = JSON.parse(JSON.stringify(kindred.meritsFlaws));
+    
+    // Add merits and flaws
+    if (benefit.meritsAndFlaws.length > 0) {
+        benefit.meritsAndFlaws.forEach((m) => {
+            updatedMerits.push(m);
+            filteredMerits = filteredMerits.filter((merit: any) => merit.id !== m.id);
+        });
+    }
+    
+    return { updatedMerits, filteredMerits };
+}
+
+type TypeCategory = 'creationPoints' | 'experiencePoints' ;
+export const buyBenefit = (
+    kindred: Kindred,
+    loresheet: Loresheet,
+    benefit: Benefit,
+    type: TypeCategory,
+    setKindred: Function
+  ) => {
+    // Initialize variables for creation and experience points
+    let creationPoints = 0;
+    let experiencePoints = 0;
+  
+    // Calculate points based on the type of benefit
+    if (type === "creationPoints") {
+      creationPoints = benefit.level;
+    } else if (type === "experiencePoints") {
+      experiencePoints = benefit.level * 3;
+    }
+  
+    // Create a new benefit object for the selected benefit
+    const newBenefit = {
+      name: benefit.name,
+      creationPoints,
+      freebiePoints: 0,
+      experiencePoints,
+    };
+  
+    // Add the new benefit to the purchased benefits array
+    const updatedBenefits = [...kindred.loresheet.benefits, newBenefit];
+  
+    // Update the kindred object with the purchased benefit
+    setKindred({
+      ...kindred,
+      loresheet: {
+        ...kindred.loresheet,
+        name: loresheet.name,
+        benefits: updatedBenefits,
+      },
+      skills:updateSkills(kindred, benefit).updatedSkills, // Update skills with the new benefit
+      backgrounds:updateBackgrounds(kindred, benefit).updatedBackgrounds, // Update backgrounds with the new benefit
+      updateBackgrounds:updateMeritsFlaws(kindred, benefit).updatedMerits, // Update merits/flaws with the new benefit
+    });
+  };
+
+export const handleBenefitAdvantageChange = (backgroundRef: V5BackgroundRef, advantageRef: V5AdvantageRef, benefitData: Benefit, setBenefitData: Function, val: number) => {
+    const existingAdvantage = backgroundRef.advantages.find((a) => a.name === advantageRef.name);
+    if (!existingAdvantage) {
+      backgroundRef.advantages.push({ ...advantageRef, freebiePoints: val });
+    }
+  
+    const updatedOption = {
+      ...backgroundRef,
+      advantages: backgroundRef.advantages.map((advantage) =>
+        advantage.name === advantageRef.name ? { ...advantage, freebiePoints: val } : advantage
+      ),
+    };
+  
+    const updatedBenefitData = {
+      ...benefitData,
+      selectableBackgrounds: {
+        ...benefitData.selectableBackgrounds,
+        options: benefitData.selectableBackgrounds.options.map((o: any) =>
+          o.name === backgroundRef.name ? updatedOption : o
+        ),
+      },
+    };
+  
+    setBenefitData(updatedBenefitData);
+  };
+  

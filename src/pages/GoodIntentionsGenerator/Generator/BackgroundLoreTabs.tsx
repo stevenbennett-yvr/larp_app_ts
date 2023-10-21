@@ -2,8 +2,9 @@ import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { Center, Tabs, Stack, Alert, Group, Button, Text } from "@mantine/core"
 import { globals } from "../../../assets/globals"
 import BackgroundFull from "../../../components/GoodIntentions/Inputs/BackgroundFull"
-import LoresheetsPicker from "./LoresheetPicker"
+import LoresheetInputs from "../../../components/GoodIntentions/Inputs/LoresheetPicker"
 import { backgroundData } from "../../../data/GoodIntentions/types/V5Backgrounds"
+
 
 type BackgroundLoreTabsProps = {
     kindred: Kindred,
@@ -91,7 +92,7 @@ const BackgroundLoreTabs = ({kindred, setKindred, nextStep, backStep}:Background
           </Tabs.Panel>
   
           <Tabs.Panel value="loresheet" pt="xs">
-            <LoresheetsPicker kindred={kindred} setKindred={setKindred} />
+            <LoresheetInputs kindred={kindred} setKindred={setKindred} type="creationPoints" />
           </Tabs.Panel>
 
           </Stack>
