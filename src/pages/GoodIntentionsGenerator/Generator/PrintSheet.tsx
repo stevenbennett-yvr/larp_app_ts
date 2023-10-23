@@ -121,7 +121,7 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
                 <Grid columns={12}>
                     <Grid.Col span={4} key={'mental-skills'}>
                         <Title order={4} align='center'>physical</Title>
-                        {["athletics", "brawl", "craft", "drive", "firearms", "melee", "larceny", "stealth", "survival"].map((skill) => {
+                        {["athletics", "brawl", "crafts", "drive", "firearms", "melee", "larceny", "stealth", "survival"].map((skill) => {
                             let skillName = skill as V5SkillsKey;
                             return (
                                 <Center key={skillName}>
