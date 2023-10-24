@@ -38,6 +38,7 @@ const LoresheetCard = ({ loresheet, setOpenLoresheetTitle, kindred, setKindred, 
                         {kindred.loresheet.benefits.find((b) => b.name === benefit.name) ? (
                             // Deselect button
                             <Button
+                                disabled={type==="experiencePoints" && kindred.loresheet.benefits.find((b) => b.name === benefit.name)?.experiencePoints === 0}
                                 onClick={() => {
                                     const filteredBenefits = kindred.loresheet.benefits.filter(
                                         (b) => b.name !== benefit.name

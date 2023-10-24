@@ -2,18 +2,23 @@ import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { globals } from "../../../assets/globals"
 import { Grid, Card, Text, Button } from "@mantine/core"
 import { Loresheet, loresheetFilter } from "../../../data/GoodIntentions/types/V5Loresheets"
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS";
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints';
 
 type LoresheetGridProps = {
     kindred: Kindred
     setOpenLoresheetTitle: (title:string) => void
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
-export const LoresheetGrid = ({ kindred, setOpenLoresheetTitle }: LoresheetGridProps) => {
+export const LoresheetGrid = ({ kindred, setOpenLoresheetTitle, venueData }: LoresheetGridProps) => {
+    let { bannedLoresheets } = venueData.goodIntentionsVariables
     let loresheets = loresheetFilter(kindred)
 
     const getLoresheetCol = (loresheet: Loresheet) => {
+
+        if (bannedLoresheets.includes(loresheet.name)) {return null}
 
         return (
             <Grid.Col key={loresheet.name}>

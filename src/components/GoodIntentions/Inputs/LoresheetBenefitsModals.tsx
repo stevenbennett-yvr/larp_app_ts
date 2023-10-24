@@ -112,8 +112,6 @@ export const BackgroundSelectModal = ({
     type,
 }: BackgroundSelectModalProps) => {
 
-    console.log(benefit)
-
     let Totalpass = true
     let advantagePass = true
 

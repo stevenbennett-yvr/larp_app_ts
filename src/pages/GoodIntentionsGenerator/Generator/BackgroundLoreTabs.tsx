@@ -4,6 +4,7 @@ import { globals } from "../../../assets/globals"
 import BackgroundFull from "../../../components/GoodIntentions/Inputs/BackgroundFull"
 import LoresheetInputs from "../../../components/GoodIntentions/Inputs/LoresheetPicker"
 import { backgroundData } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS"
 
 
 type BackgroundLoreTabsProps = {
@@ -11,9 +12,10 @@ type BackgroundLoreTabsProps = {
     setKindred: (kindred: Kindred) => void
     nextStep: () => void
     backStep: () => void
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
-const BackgroundLoreTabs = ({kindred, setKindred, nextStep, backStep}:BackgroundLoreTabsProps) => {
+const BackgroundLoreTabs = ({kindred, setKindred, nextStep, backStep, venueData}:BackgroundLoreTabsProps) => {
 
     
     const getFlawPoints = (kindred: Kindred): number => {
@@ -92,7 +94,7 @@ const BackgroundLoreTabs = ({kindred, setKindred, nextStep, backStep}:Background
           </Tabs.Panel>
   
           <Tabs.Panel value="loresheet" pt="xs">
-            <LoresheetInputs kindred={kindred} setKindred={setKindred} type="creationPoints" />
+            <LoresheetInputs kindred={kindred} setKindred={setKindred} venueData={venueData} type="creationPoints" />
           </Tabs.Panel>
 
           </Stack>

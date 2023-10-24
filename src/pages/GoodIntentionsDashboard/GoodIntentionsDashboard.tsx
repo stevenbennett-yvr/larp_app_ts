@@ -1,5 +1,6 @@
 import { Center, Stack, Card, Button, Avatar, Text, List } from "@mantine/core"
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+
 import { GoodIntentionsVSSs } from "../../data/CaM/types/VSS";
 
 import { DiscordLogo } from "../../assets/images/CaM"
@@ -8,10 +9,12 @@ import { upcase } from "../../utils/case";
 
 export default function GoodIntentionsDashboard() {
     const { venueId } = useParams();
+    const navigate = useNavigate();
     const venueData = GoodIntentionsVSSs.find((venue) => venue.venueStyleSheet.id === venueId);
 
     if (!venueData) {
-        return <div>Loading...</div>;
+        console.log("invalid venue id")
+        return <Center h={"100%"}><div>Invalid Venue ID</div></Center>;
     }
 
     const {
@@ -65,6 +68,13 @@ export default function GoodIntentionsDashboard() {
                                 ))}
                             </List>
                         </Stack>
+                    </Center>
+                    <Center>
+                        <Button
+                            onClick={() => navigate(`/create-kindred/${venueId}`)}
+                        >
+                            Create Kindred for Venue
+                        </Button>
                     </Center>
                     <Center>
                         <a href="https://bynightstudios.com/products/laws-of-the-night-v5-pdf-pre-order.html" target="_blank" rel="noopener noreferrer">

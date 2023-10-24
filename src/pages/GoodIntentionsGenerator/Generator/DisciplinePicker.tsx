@@ -7,17 +7,19 @@ import { useState } from "react"
 import RitualsModal from "./RitualModal"
 import DisciplineGrid from "../../../components/GoodIntentions/Inputs/DisciplineGrid"
 import PowerAccordion from "../../../components/GoodIntentions/Inputs/PowerAccordion"
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS"
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints';
 
 type DisciplinesPickerProps = {
-    kindred: Kindred,
-    setKindred: (kindred: Kindred) => void
-    nextStep: () => void
-    backStep: () => void
+    kindred: Kindred;
+    setKindred: (kindred: Kindred) => void;
+    nextStep: () => void;
+    backStep: () => void;
+    venueData: GoodIntentionsVenueStyleSheet;
 }
 
-const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: DisciplinesPickerProps) => {
+const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep, venueData }: DisciplinesPickerProps) => {
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
 
@@ -69,11 +71,11 @@ const DisciplinesPicker = ({ kindred, setKindred, nextStep, backStep }: Discipli
 
                 <DisciplineGrid kindred={kindred} setKindred={setKindred} />
 
-                <PowerAccordion kindred={kindred} setKindred={setKindred} type="creationPoints" />
+                <PowerAccordion kindred={kindred} setKindred={setKindred} venueData={venueData} type="creationPoints" />
 
             </Stack>
 
-            <RitualsModal modalOpened={modalOpen} closeModal={handleCloseModal} kindred={kindred} setKindred={setKindred} nextStep={nextStep} />
+            <RitualsModal modalOpened={modalOpen} closeModal={handleCloseModal} venueData={venueData} kindred={kindred} setKindred={setKindred} nextStep={nextStep} />
 
             <Alert color="dark" variant="filled" radius="md" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                 <Group>

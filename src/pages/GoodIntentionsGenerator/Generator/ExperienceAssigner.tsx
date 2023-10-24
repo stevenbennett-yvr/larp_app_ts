@@ -19,15 +19,17 @@ import MeritsGrid from '../../../components/GoodIntentions/Inputs/MeritsGrid'
 import MeritBuy from '../../../components/GoodIntentions/Inputs/MeritsBuy'
 import DisciplineAccordion from '../../../components/GoodIntentions/Inputs/DisciplineAccordion'
 import PowerAccordion from '../../../components/GoodIntentions/Inputs/PowerAccordion'
+import { GoodIntentionsVenueStyleSheet } from '../../../data/CaM/types/VSS'
 
 type V5ExperienceAssignerProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void
     nextStep: () => void
     backStep: () => void
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
-const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5ExperienceAssignerProps) => {
+const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep, venueData }: V5ExperienceAssignerProps) => {
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
 
@@ -68,9 +70,9 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                 <V5SkillXpInputs kindred={kindred} setKindred={setKindred} />
                 <Divider my="sm" />
                 <DisciplineAccordion kindred={kindred} setKindred={setKindred} />
-                <PowerAccordion kindred={kindred} setKindred={setKindred} type='experiencePoints' />
-                <V5RitualsXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ritualModalOpen} closeModal={closeRitualsModal} />
-                <V5CeremoniesXpInputs kindred={kindred} setKindred={setKindred} modalOpened={ceremonyModalOpen} closeModal={closeCeremoniesModal} />
+                <PowerAccordion kindred={kindred} setKindred={setKindred} venueData={venueData} type='experiencePoints' />
+                <V5RitualsXpInputs kindred={kindred} setKindred={setKindred} venueData={venueData} modalOpened={ritualModalOpen} closeModal={closeRitualsModal} />
+                <V5CeremoniesXpInputs kindred={kindred} setKindred={setKindred} venueData={venueData} modalOpened={ceremonyModalOpen} closeModal={closeCeremoniesModal} />
                 <V5FormulaeXpInputs kindred={kindred} setKindred={setKindred} modalOpened={formulaModalOpen} closeModal={closeFormulaModal} />
 
                 <Space h="md" />
@@ -95,7 +97,7 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                 </Center>
                 <Divider my="sm" />
 
-                <Tabs variant="pills" defaultValue="backgrounds">
+                <Tabs defaultValue="backgrounds">
                     <Tabs.List grow>
                         <Tabs.Tab value="backgrounds">
                             Backgrounds
@@ -110,7 +112,7 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
                     </Tabs.Panel>
 
                     <Tabs.Panel value="loresheet">
-                        <LoresheetInputs kindred={kindred} setKindred={setKindred} type='experiencePoints' />
+                        <LoresheetInputs kindred={kindred} setKindred={setKindred} venueData={venueData} type='experiencePoints' />
                     </Tabs.Panel>
 
                 </Tabs>
@@ -119,8 +121,8 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep }: V5Exp
 
                 <Center>
                     <Stack>
-                    <MeritBuy kindred={kindred} setKindred={setKindred} />
-                    <MeritsGrid kindred={kindred} setKindred={setKindred} type="experiencePoints" />
+                    <MeritBuy kindred={kindred} setKindred={setKindred} venueData={venueData} />
+                    <MeritsGrid kindred={kindred} setKindred={setKindred} venueData={venueData} type="experiencePoints" />
                     </Stack>
                 </Center>
                 <Divider my="sm" />

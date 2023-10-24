@@ -5,16 +5,18 @@ import { ClanName } from "../../../data/GoodIntentions/types/V5Clans";
 import { globals } from "../../../assets/globals";
 import ClanGrid from "../../../components/GoodIntentions/Generator/ClanGrid";
 import ClanModal from "../../../components/GoodIntentions/Generator/ClanModal";
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS";
 
 type ClanPickerProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void
     nextStep: () => void
     backStep: () => void
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
 
-const ClanPicker = ({ kindred, setKindred, nextStep, backStep }: ClanPickerProps) => {
+const ClanPicker = ({ kindred, setKindred, nextStep, backStep, venueData }: ClanPickerProps) => {
 
     const [clan, setClan] = useState<ClanName>(kindred.clan)
 
@@ -33,7 +35,7 @@ const ClanPicker = ({ kindred, setKindred, nextStep, backStep }: ClanPickerProps
 
                 <ScrollArea h={height - 215} w={"100%"} p={20}>
 
-                    <ClanGrid setClan={setClan} setModalOpen={setModalOpen} />
+                    <ClanGrid setClan={setClan} setModalOpen={setModalOpen} venueData={venueData} />
 
                 </ScrollArea>
 

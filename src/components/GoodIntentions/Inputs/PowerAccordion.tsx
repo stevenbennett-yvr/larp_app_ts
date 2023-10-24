@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import { Accordion, Text, Image, Button, Table, Center, Stack } from "@mantine/core"
 import { globals } from "../../../assets/globals"
 import { Clans } from "../../../data/GoodIntentions/types/V5Clans"
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS"
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints';
 
@@ -12,9 +13,11 @@ type PowerAccordionProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void,
     type: TypeCategory
+    venueData: GoodIntentionsVenueStyleSheet;
 }
 
-const PowerAccordion = ({ kindred, setKindred, type }: PowerAccordionProps) => {
+const PowerAccordion = ({ kindred, setKindred, type, venueData }: PowerAccordionProps) => {
+    const { bannedPowers } = venueData.goodIntentionsVariables
 
     const [learnablePowers, setLearnablePowers] = useState<Power[]>(getFilteredPower(kindred))
     useEffect(() => {
@@ -94,7 +97,7 @@ const PowerAccordion = ({ kindred, setKindred, type }: PowerAccordionProps) => {
     };
 
     const createPowerAccordion = (discipline: DisciplineKey) => {
-        const filteredPowers = learnablePowers.filter((power) => power.discipline.toLowerCase() === discipline.toLowerCase())
+        const filteredPowers = learnablePowers.filter((power) => (power.discipline.toLowerCase() === discipline.toLowerCase()) && !(bannedPowers.includes(power.name)))
 
         filteredPowers.sort((a, b) => {
             if (a.level !== b.level) {

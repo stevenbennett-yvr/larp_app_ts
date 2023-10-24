@@ -14,15 +14,17 @@ import FormulaPicker from "./ThinBloodModal";
 import { useState } from "react";
 import { DisciplineKey } from "../../../data/GoodIntentions/types/V5Disciplines";
 import MeritsGrid from "../../../components/GoodIntentions/Inputs/MeritsGrid";
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS";
 
 type MeritPickerProps = {
   kindred: Kindred;
   setKindred: (kindred: Kindred) => void;
   nextStep: () => void;
   backStep: () => void;
+  venueData: GoodIntentionsVenueStyleSheet;
 };
 
-const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerProps) => {
+const MeritPicker = ({ kindred, setKindred, nextStep, backStep, venueData }: MeritPickerProps) => {
   const meritFlawData = v5MeritFlawFilter(kindred);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -95,7 +97,7 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep }: MeritPickerPro
                         </Text> :
                         <></>}
                     <Center>
-                        <MeritsGrid kindred={kindred} setKindred={setKindred} type="creationPoints" />
+                        <MeritsGrid kindred={kindred} setKindred={setKindred} type="creationPoints" venueData={venueData} />
                     </Center>
 
                     <FormulaPicker kindred={kindred} setKindred={setKindred} nextStep={nextStep} modalOpened={modalOpen} closeModal={handleCloseModal} />

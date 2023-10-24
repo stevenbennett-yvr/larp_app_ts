@@ -1,27 +1,43 @@
 import { Card, Center, Grid, Image, Stack, Text, Title, useMantineTheme } from "@mantine/core";
 import { ClanName, Clans, clanNameSchema } from "../../../data/GoodIntentions/types/V5Clans";
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS";
 
 type ClanGridProps = {
     setClan: (clan:ClanName) => void
     setModalOpen: (modalOpen:boolean) => void
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
 
-const ClanGrid = ({setClan, setModalOpen }: ClanGridProps) => {
+const ClanGrid = ({setClan, setModalOpen, venueData }: ClanGridProps) => {
+
+    const bannedClans = venueData.goodIntentionsVariables.bannedClans
 
     const theme = useMantineTheme()
 
     const c1 = "rgba(26, 27, 30, 0.90)"
 
     const createClanPick = (clan: ClanName, c2: string) => {
-        const bgColor = theme.fn.linearGradient(0, c1, c2)
+
+        const isBannedClan = bannedClans.includes(clan);
+        const gray = theme.fn.rgba(theme.colors.gray[8], 0.90)
+        const bgColor = isBannedClan ? theme.fn.linearGradient(0, c1, gray) : theme.fn.linearGradient(0, c1, c2)
+
+        const cardStyle = {
+            background: bgColor,
+            cursor: isBannedClan ? 'not-allowed' : 'pointer',
+        };
 
         return (
             <Grid.Col key={clan} span={4}>
-                <Card className="hoverCard" shadow="sm" padding="lg" radius="md" h={275} style={{ background: bgColor, cursor: "pointer", }}
+                <Card className={`${isBannedClan ? 'disabled' : 'hoverCard'}`} shadow="sm" padding="lg" radius="md" h={275} style={cardStyle}
                     onClick={() => {
-                        setClan(clan)
-                        setModalOpen(true);
+                        if (isBannedClan) {
+                            console.log("Banned Clan")
+                        } else {
+                            setClan(clan)
+                            setModalOpen(true);
+                        }
                     }}>
                     <Card.Section>
                         <Center pt={10}>

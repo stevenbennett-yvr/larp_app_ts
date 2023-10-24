@@ -5,6 +5,7 @@ import { globals } from "../../../assets/globals"
 import { loresheetFilter, Loresheet } from "../../../data/GoodIntentions/types/V5Loresheets"
 import LoresheetGrid from "./LoresheetGrid"
 import LoresheetCard from "./LoresheetCard"
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS"
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints';
 
@@ -12,9 +13,10 @@ type LoresheetInputsProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void,
     type: TypeCategory
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
-const LoresheetInputs = ({ kindred, setKindred, type }: LoresheetInputsProps) => {
+const LoresheetInputs = ({ kindred, setKindred, type, venueData }: LoresheetInputsProps) => {
     let loresheets = loresheetFilter(kindred)
 
     const [openLoresheetTitle, setOpenLoresheetTitle] = useState(kindred.loresheet.name)
@@ -38,7 +40,7 @@ const LoresheetInputs = ({ kindred, setKindred, type }: LoresheetInputsProps) =>
                             type={type}
                         />
                         :
-                        <LoresheetGrid kindred={kindred} setOpenLoresheetTitle={setOpenLoresheetTitle} />
+                        <LoresheetGrid kindred={kindred} setOpenLoresheetTitle={setOpenLoresheetTitle} venueData={venueData} />
                     }
                 </Grid>
             </ScrollArea>

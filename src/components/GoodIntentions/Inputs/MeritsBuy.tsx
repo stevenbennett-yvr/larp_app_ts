@@ -5,10 +5,12 @@ import React, { forwardRef, useState } from "react";
 import { meritFlawData, v5MeritFlawRefs, v5MeritFlawFilter, V5MeritFlaw, handleMeritFlawChange } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
 import Tally from "../../../utils/talley";
 import { v5xp } from "../../../data/GoodIntentions/V5Experience";
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS";
 
 type MeritBuyProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
 const getRating = (array: number[]) => {
@@ -41,13 +43,15 @@ const v5GetMeritByName = (name: string) => {
     }
 }
 
-const MeritBuy = ({ kindred, setKindred }: MeritBuyProps) => {
+const MeritBuy = ({ kindred, setKindred, venueData }: MeritBuyProps) => {
 
     const [selectedMerit, setSelectedMerit] = useState<string | null>("");
+    const { bannedMerits } = venueData.goodIntentionsVariables
 
     const meritFlawData = v5MeritFlawFilter(kindred)
     const filteredData = meritFlawData.filter((merit) => {
         return (
+            !bannedMerits.includes(merit.name) &&
             merit.type !== "flaw" &&
             (merit.category !== "thin-blood" && merit.category !== "ghoul") &&
             !kindred.meritsFlaws.some((existingMerit) => existingMerit.name === merit.name)

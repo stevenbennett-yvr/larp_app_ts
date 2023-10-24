@@ -5,6 +5,7 @@ import { globals } from "../../../assets/globals"
 import { Grid, Card, Group, Text, Badge, Button, Space, ScrollArea, Stack, Center, Modal, Image } from "@mantine/core"
 import { upcase } from "../../../utils/case"
 import { disciplines } from "../../../data/GoodIntentions/types/V5Disciplines"
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS"
 
 type RitualsModalProps = {
     kindred: Kindred,
@@ -12,16 +13,17 @@ type RitualsModalProps = {
     nextStep: () => void,
     modalOpened: boolean
     closeModal: () => void
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
-const RitualsModal = ({ kindred, setKindred, nextStep, modalOpened, closeModal }: RitualsModalProps) => {
+const RitualsModal = ({ kindred, setKindred, nextStep, modalOpened, closeModal, venueData }: RitualsModalProps) => {
     const phoneScreen = globals.isPhoneScreen
     const smallScreen = globals.isSmallScreen
-
+    const { bannedCeremonies, bannedRituals } = venueData.goodIntentionsVariables
 
     const getRitualCardCols = () => {
         return Rituals.map((ritual) => {
-            if (ritual.level > 1) {return null}
+            if (ritual.level > 1 || bannedRituals.includes(ritual.name)) {return null}
             const ritualRef = ritualRefs.find((entry) => entry.name === ritual.name)
             if (!ritualRef) { return null }
 
@@ -78,7 +80,7 @@ const RitualsModal = ({ kindred, setKindred, nextStep, modalOpened, closeModal }
 
     const getCeremonyCardCols = () => {
         return Ceremonies.map((ceremony) => {
-            if (ceremony.level > 1) {return null}
+            if (ceremony.level > 1 || bannedCeremonies.includes(ceremony.name)) {return null}
             const ceremonyRef = ceremonyRefs.find((entry) => entry.name === ceremony.name)
             if (!ceremonyRef) { return null }
             const onClick = () => {

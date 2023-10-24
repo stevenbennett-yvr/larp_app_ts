@@ -2,19 +2,22 @@ import { Button, Divider, Grid, Stack, Tooltip, Text } from "@mantine/core"
 import { PredatorTypes, PredatorTypeName, PredatorType } from "../../../data/GoodIntentions/types/V5PredatorType"
 import { globals } from "../../../assets/globals"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS"
 
 type PredatorGridProps = {
     kindred: Kindred,
     setPickedPredatorType: (predatorTypeName: PredatorTypeName) => void
     setModalOpen: (opened: boolean) => void
     setPredatorData: (predatorData: PredatorType) => void
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
-const PredatorGrid = ({ kindred, setPickedPredatorType, setModalOpen, setPredatorData }: PredatorGridProps) => {
+const PredatorGrid = ({ kindred, setPickedPredatorType, setModalOpen, setPredatorData, venueData }: PredatorGridProps) => {
     const isPhoneScreen = globals.isPhoneScreen
 
     const isVentrue = kindred.clan === "Ventrue" ? true : false
     const isThinblood = kindred.clan === "Thin-Blood" ? true : false
+    const { bannedPredatorTypes } = venueData.goodIntentionsVariables
 
     const createButton = (predatorTypeName: PredatorTypeName, color: string) => {
 
@@ -24,7 +27,8 @@ const PredatorGrid = ({ kindred, setPickedPredatorType, setModalOpen, setPredato
         const thinbloodAdvantageToCheck = "Retainer"
         const thinbloodHasDesiredAdvantage = PredatorTypes[predatorTypeName].backgrounds.some(background => background.advantages.some(advantage => thinbloodAdvantageToCheck.includes(advantage.name)))
 
-        const disabled = (isVentrue && ventrueHasDesiredMerits) || (isThinblood && thinbloodHasDesiredAdvantage)
+        const isBanned = bannedPredatorTypes.includes(predatorTypeName)
+        const disabled = isBanned || (isVentrue && ventrueHasDesiredMerits) || (isThinblood && thinbloodHasDesiredAdvantage)
 
         return (
             <Tooltip label={PredatorTypes[predatorTypeName].summary} key={predatorTypeName} transitionProps={{ transition: 'slide-up', duration: 200 }}>

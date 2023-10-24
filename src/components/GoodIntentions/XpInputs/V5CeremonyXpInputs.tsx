@@ -5,18 +5,21 @@ import { Grid, Card, Group, Text, Badge, Button, Space, ScrollArea, Stack, Cente
 import { upcase } from "../../../utils/case"
 import { disciplines, v5DisciplineLevel } from "../../../data/GoodIntentions/types/V5Disciplines"
 import { v5xp } from "../../../data/GoodIntentions/V5Experience"
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS"
 
 type CeremoniesModalProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void,
     modalOpened: boolean
     closeModal: () => void
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
-const V5CeremoniesXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: CeremoniesModalProps) => {
+const V5CeremoniesXpInputs = ({ kindred, setKindred, modalOpened, closeModal, venueData }: CeremoniesModalProps) => {
     const phoneScreen = globals.isPhoneScreen
     const smallScreen = globals.isSmallScreen
 
+    const { bannedCeremonies } = venueData.goodIntentionsVariables
 
     const getCeremonyCardColsFreebie = () => {
         return Ceremonies.map((ceremony) => {
@@ -33,7 +36,7 @@ const V5CeremoniesXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: 
             const isCeremonySelected = kindred.ceremonies.some((r) => r.name === ceremony.name)
             let cardHeight = phoneScreen ? 180 : 215
             if (ceremony.name.length > 15) cardHeight += 25
-            if (ceremony.level > 1) { return null }
+            if (ceremony.level > 1 || bannedCeremonies.includes(ceremony.name)) { return null }
             return (
                 <Grid.Col key={ceremony.name} span={smallScreen ? 12 : 6}>
                     <Card mb={20} h={cardHeight} style={{ backgroundColor: "rgba(26, 27, 30, 0.90)" }}>
@@ -84,7 +87,7 @@ const V5CeremoniesXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: 
                 check = kindred.ceremonies.find((r) => r.name === ceremony.name);
             }
 
-            if (!ceremonyRef || !check) { return null }
+            if (!ceremonyRef || !check || bannedCeremonies.includes(ceremony.name)) { return null }
 
             const onClick = () => {
 

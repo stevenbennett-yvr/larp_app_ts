@@ -73,7 +73,7 @@ function AuthenticatedApp() {
           <Route path="/awakened-sheet/:characterId" element={<PrivateRoute><AwakenedPage/></PrivateRoute>}/>
           <Route path="/good-intentions/:venueId" element={<PrivateRoute><GoodIntentionsDashboard/></PrivateRoute>}/>
           <Route path='/awakened-full-edit/:characterId' element={<PrivateRoute><AwakenedSTEditor></AwakenedSTEditor></PrivateRoute>}/>
-          <Route path='/create-kindred' element={<PrivateRoute><GenerateKindred/></PrivateRoute>}/>
+          <Route path='/create-kindred/:venueId' element={<PrivateRoute><GenerateKindred/></PrivateRoute>}/>
         </Routes>
       </Container>
     </AppShell>

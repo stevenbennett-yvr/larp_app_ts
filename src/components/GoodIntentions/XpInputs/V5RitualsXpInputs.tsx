@@ -5,18 +5,21 @@ import { Grid, Card, Group, Text, Badge, Button, Space, ScrollArea, Stack, Cente
 import { upcase } from "../../../utils/case"
 import { disciplines, v5DisciplineLevel } from "../../../data/GoodIntentions/types/V5Disciplines"
 import { v5xp } from "../../../data/GoodIntentions/V5Experience"
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS"
 
 type RitualsModalProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void,
     modalOpened: boolean
     closeModal: () => void
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
-const V5RitualsXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: RitualsModalProps) => {
+const V5RitualsXpInputs = ({ kindred, setKindred, modalOpened, closeModal, venueData }: RitualsModalProps) => {
     const phoneScreen = globals.isPhoneScreen
     const smallScreen = globals.isSmallScreen
 
+    const { bannedRituals } = venueData.goodIntentionsVariables
 
     const getRitualCardColsFreebie = () => {
         return Rituals.map((ritual) => {
@@ -33,7 +36,7 @@ const V5RitualsXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: Rit
             const isRitualSelected = kindred.rituals.some((r) => r.name === ritual.name)
             let cardHeight = phoneScreen ? 180 : 215
             if (ritual.name.length > 15) cardHeight += 25
-            if (ritual.level > 1) { return null }
+            if (ritual.level > 1 || bannedRituals.includes(ritual.name)) { return null }
             return (
                 <Grid.Col key={ritual.name} span={smallScreen ? 12 : 6}>
                     <Card mb={20} h={cardHeight} style={{ backgroundColor: "rgba(26, 27, 30, 0.90)" }}>
@@ -84,7 +87,7 @@ const V5RitualsXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: Rit
                 check = kindred.rituals.find((r) => r.name === ritual.name);
             }
 
-            if (!ritualRef || !check) { return null; }
+            if (!ritualRef || !check || bannedRituals.includes(ritual.name)) { return null; }
 
             const onClick = () => {
 

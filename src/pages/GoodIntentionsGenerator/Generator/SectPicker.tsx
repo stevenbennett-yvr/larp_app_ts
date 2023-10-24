@@ -3,16 +3,18 @@ import { useState } from "react";
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 import { globals } from "../../../assets/globals";
 import { SectName } from "../../../data/GoodIntentions/types/V5Sect";
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS";
 import SectGrid from "../../../components/GoodIntentions/Generator/SectGrid";
 import SectModal from "../../../components/GoodIntentions/Generator/SectModal";
 
 type SectPickerProps = {
-    kindred: Kindred,
-    setKindred: (kindred: Kindred) => void
-    nextStep: () => void
+    kindred: Kindred;
+    setKindred: (kindred: Kindred) => void;
+    nextStep: () => void;
+    venueData: GoodIntentionsVenueStyleSheet;
 }
 
-const SectPicker = ({ kindred, setKindred, nextStep }: SectPickerProps) => {
+const SectPicker = ({ kindred, setKindred, nextStep, venueData }: SectPickerProps) => {
 
     const [sect, setSect] = useState<SectName>(kindred.sect)
 
@@ -23,6 +25,7 @@ const SectPicker = ({ kindred, setKindred, nextStep }: SectPickerProps) => {
         setModalOpen(false);
     };
 
+
     const height = globals.viewportHeightPx
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '60px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
@@ -32,7 +35,7 @@ const SectPicker = ({ kindred, setKindred, nextStep }: SectPickerProps) => {
                 <ScrollArea h={height - 215} w={"100%"} p={20}>
 
                     <Grid grow m={0}>
-                        <SectGrid setSect={setSect} setModalOpen={setModalOpen} />
+                        <SectGrid setSect={setSect} setModalOpen={setModalOpen} venueData={venueData} />
                     </Grid>
 
                 </ScrollArea>

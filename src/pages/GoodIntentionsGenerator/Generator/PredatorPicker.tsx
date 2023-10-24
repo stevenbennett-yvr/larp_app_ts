@@ -5,15 +5,17 @@ import { globals } from "../../../assets/globals"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import PredatorModal from "./PredatorModal"
 import PredatorGrid from "../../../components/GoodIntentions/Generator/PredatorGrid"
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS"
 
 type PredatorTypePickerProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void
     nextStep: () => void
     backStep: () => void
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
-const PredatorTypePicker = ({ kindred, setKindred, nextStep, backStep }: PredatorTypePickerProps) => {
+const PredatorTypePicker = ({ kindred, setKindred, nextStep, backStep, venueData }: PredatorTypePickerProps) => {
     const isPhoneScreen = globals.isPhoneScreen
     const isSmallScreen = globals.isSmallScreen
 
@@ -33,9 +35,9 @@ const PredatorTypePicker = ({ kindred, setKindred, nextStep, backStep }: Predato
 
             {height < heightBreakPoint
                 ? <ScrollArea h={height - 230}>
-                    <PredatorGrid kindred={kindred} setPickedPredatorType={setPickedPredatorType} setModalOpen={setModalOpen} setPredatorData={setPredatorData} />
+                    <PredatorGrid kindred={kindred} setPickedPredatorType={setPickedPredatorType} setModalOpen={setModalOpen} setPredatorData={setPredatorData} venueData={venueData} />
                 </ScrollArea>
-                :<PredatorGrid kindred={kindred} setPickedPredatorType={setPickedPredatorType} setModalOpen={setModalOpen} setPredatorData={setPredatorData} />
+                :<PredatorGrid kindred={kindred} setPickedPredatorType={setPickedPredatorType} setModalOpen={setModalOpen} setPredatorData={setPredatorData} venueData={venueData} />
             }
 
             {!predatorData ? null :

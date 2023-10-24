@@ -9,6 +9,7 @@ import { globals } from "../../../assets/globals";
 import { v5HandleMeritRemove, meritFlawData, V5MeritFlawRef, V5MeritFlaw, v5MeritFlawRefs, v5MeritLevel, v5MeritFlawFilter, v5HandleXpMeritChange, handleMeritFlawChange } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
 import Tally from "../../../utils/talley";
 import { upcase } from "../../../utils/case";
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS";
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints' ;
 
@@ -16,6 +17,7 @@ type MeritsGridProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void
     type: TypeCategory
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
 const flawIcon = () => {
@@ -55,7 +57,7 @@ const v5GetMeritByName = (name: string) => {
     }
 }
 
-const MeritsGrid = ({ kindred, setKindred, type }:MeritsGridProps) => {
+const MeritsGrid = ({ kindred, setKindred, type, venueData }:MeritsGridProps) => {
     const theme = useMantineTheme()
 
     const meritFlawData = v5MeritFlawFilter(kindred)
@@ -177,8 +179,9 @@ const MeritsGrid = ({ kindred, setKindred, type }:MeritsGridProps) => {
             return null;
         }
     
+        const { bannedMerits } = venueData.goodIntentionsVariables
         const sortedMerits = kindred.meritsFlaws
-            .filter((merit) => v5GetMeritByName(merit.name)?.category.toLowerCase() === category.toLowerCase())
+            .filter((merit) => (v5GetMeritByName(merit.name)?.category.toLowerCase() === category.toLowerCase()))
             .sort((a, b) => a.id.localeCompare(b.id));
     
             let bgc = ""
@@ -261,7 +264,7 @@ const MeritsGrid = ({ kindred, setKindred, type }:MeritsGridProps) => {
                                 })
                             ) : (
                                 meritFlawData
-                                    .filter((mf) => mf.category.toLocaleLowerCase() === category.toLowerCase())
+                                    .filter(((mf) => mf.category.toLocaleLowerCase() === category.toLowerCase() && !bannedMerits.includes(mf.name)))
                                     .map((meritFlaw) => (
                                         <tr key={`${meritFlaw.name} ${meritFlaw.type}`}>
                                             <td style={{ minWidth: "150px" }}>
