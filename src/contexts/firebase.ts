@@ -2,7 +2,6 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth"
 import { getFirestore } from 'firebase/firestore'
 import { getStorage, ref as sRef } from "firebase/storage"
-import { getDatabase, ref as dbRef } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCG2ZgFb_E21MuCn6A8J9WxcX_6AOLC66k",
@@ -19,8 +18,6 @@ export const auth = getAuth(app)
 
 // DB Ref
 export const db = getFirestore(app)
-export const rtdb = getDatabase(app)
-export const realTimeDatabaseRef = dbRef(rtdb, 'users/'); // Use the databaseRef function for database references
 
 // Storage References
 export const storage = getStorage(app)

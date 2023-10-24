@@ -57,7 +57,7 @@ export const DomainCard = ({ userData }: DomainCardProps) => {
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Text fz={globals.largeFontSize} mb={"lg"}>Domain</Text>
         <Text fz={globals.smallerFontSize}>Name: {domain.name}</Text>
-        <Text fz={globals.smallerFontSize}>Coordinator: {domain.coordinator.email}</Text>
+        <Text fz={globals.smallerFontSize}>Coordinator: {domain.coordinator}</Text>
         <Button.Group>
           {domain.links?.facebook ? <Button variant='link' onClick={() => window.open(domain.links.facebook)}><Avatar radius="xs" size="sm" src={FacebookLogo} /> Facebook</Button> : <></>}
           {domain.links?.discord ? <Button variant='link' onClick={() => window.open(domain.links.discord)}><Avatar radius="xs" size="sm" src={DiscordLogo} /> Discord</Button> : <></>}

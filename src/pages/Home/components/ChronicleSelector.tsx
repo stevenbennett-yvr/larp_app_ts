@@ -1,20 +1,20 @@
 import { Grid, Card, Center, Image, useMantineTheme, Title } from '@mantine/core'
-import { Chronciles, ChronicleName, chronicleNameSchema } from '../../../data/CaM/types/Chronicles'
+import { Chronciles } from '../../../data/CaM/types/Chronicles'
 import { useNavigate } from 'react-router-dom';
-import domains from '../../../data/CaM/source/domains.json'
+import { VenueStyleSheets } from '../../../data/CaM/types/VSS';
+import { GoodIntentionsVenueStyleSheet, TatteredVeilStyleSheet } from '../../../data/CaM/types/VSS';
 
 const ChroncileSelector = (userData: any) => {
     const theme = useMantineTheme();
     const navigate = useNavigate();
 
-    const domain = domains.find((domain) => domain.id === userData.domain)
     const c1 = "rgba(26, 27, 30, 0.90)"
 
-    let currentChronicles = domain?.currentChronicles
+    let matchingVenues = VenueStyleSheets.filter((venue) => venue.venueStyleSheet.domainCode === userData.domain);
 
-    const createChroniclePicker = (chronicle: ChronicleName) => {
+    const createChroniclePicker = (venue:(GoodIntentionsVenueStyleSheet | TatteredVeilStyleSheet)) => {
+        let chronicle = venue.venueStyleSheet.chronicle
         const bgColor = theme.fn.linearGradient(0, c1, Chronciles[chronicle].color)
-
 
 
         return (
@@ -25,7 +25,7 @@ const ChroncileSelector = (userData: any) => {
                     padding="lg" 
                     radius="md"  
                     style={{ background: bgColor }}
-                    onClick={() => navigate(Chronciles[chronicle].path)}
+                    onClick={() => navigate(`${Chronciles[chronicle].path}/${venue.venueStyleSheet.id}`)}
                 >
                     <Card.Section>
                         <Center>
@@ -50,7 +50,7 @@ const ChroncileSelector = (userData: any) => {
     }
 
     return (
-        currentChronicles?.map((c) => chronicleNameSchema.parse(c)).map((chronicle) => createChroniclePicker(chronicle))
+        matchingVenues?.map((c) => createChroniclePicker(c))
     )
 }
 

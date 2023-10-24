@@ -39,7 +39,6 @@ export default function TatteredVeilVenueDashboard() {
     const [showAsideBar, setShowAsideBar] = useState(!globals.isSmallScreen)
     useEffect(() => { setShowAsideBar(!globals.isSmallScreen) }, [globals.isSmallScreen])
 
-    const isVst = userData.roles?.some(role => role.title === "vst" && role.venue === "tattered veil")
     // Define the debounced version of your fetch function with a 10-second delay
     const debouncedFetchUserAwakened = debounce(fetchUserAwakened, 300); // Adjust the delay (300 milliseconds) as needed
     const debouncedFetchDomainAwakened = debounce(fetchDomainAwakened, 300); // Adjust the delay (300 milliseconds) as needed
@@ -62,11 +61,10 @@ export default function TatteredVeilVenueDashboard() {
                 <Center>
                     {showAsideBar ? <Card style={{ maxWidth: 600 }}><MageCarousel /></Card> : <></>}
                 </Center>
-                {isVst ? <CharacterCard awakenedList={domainAwakenedList} isSt={isVst} /> :
-                    <Center>
-                        <CharacterCard awakenedList={userAwakenedList} isSt={false} />
-                    </Center>
-                }
+                <Center>
+                    <CharacterCard awakenedList={userAwakenedList} isSt={false} />
+                </Center>
+                
             </Stack>
         </Center>
     )

@@ -27,6 +27,7 @@ export const chronicleSchema = z.object({
     documents: z.string(),
     startDate: z.string().datetime(),
     endDate: z.string().datetime(),
+    staff: z.string().array(),
 })
 
 export type Chronicle = z.infer<typeof chronicleSchema>
@@ -42,7 +43,8 @@ export const Chronciles: Record<ChronicleName, Chronicle> = {
         color: "#134f5c",
         documents: "https://docs.google.com/document/d/14Bj_az4YHf7G4utiwAK0-QMoYzok5gd5mbtsjngQ43I/",
         startDate: new Date(2023, 7, 1).toISOString(),
-        endDate: ""
+        endDate: "",
+        staff: []
     },
     "Good Intentions": {
         name: "Good Intentions",
@@ -50,9 +52,10 @@ export const Chronciles: Record<ChronicleName, Chronicle> = {
         gameLine: "Laws of the Night V5",
         logo: v5Logo,
         color: "#86306c",
-        documents: "",
-        startDate: "",
-        endDate: ""
+        documents: "https://www.goodintentions.canadaatmidnight.com",
+        startDate: new Date(2023, 9, 1).toISOString(),
+        endDate: "",
+        staff: ["creative.director@canadaatmidnight.com", "good.intentions@canadaatmidnight.com", "good.intentions.second@canadaatmidnight.com", "good.intentions.hermeticorder@canadaatmidnight.com", "good.intentions.hestiafoundation@canadaatmidnight.com", "good.intentions.scarletedict@canadaatmidnight.com", "good.intentions.media@canadaatmidnight.com", "nta@canadaatmidnight.com"]
     },
     "": {
         name: "",
@@ -62,6 +65,7 @@ export const Chronciles: Record<ChronicleName, Chronicle> = {
         color: "",
         documents: "",
         startDate: "",
-        endDate: ""
+        endDate: "",
+        staff: []
     },
 }

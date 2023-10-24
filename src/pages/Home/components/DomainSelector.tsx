@@ -38,7 +38,7 @@ const DomainSelector = ({showDomainSelector, setShowDomainSelector, userData}: D
         }
     }
 
-    const activeDomains = domains.filter((domain) => domain.status === "active");
+    const activeDomains = domains.filter((domain) => domain.active);
 
     const selectData = activeDomains.map((domain) => ({
         value: domain.name,

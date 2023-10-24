@@ -3,12 +3,9 @@
         "name": "Playtest Domain",
         "id": "CND-000",
         "location": "Jakarta, Indonesia",
-        "status": "active",
+        "active": true,
         "currentChronicles": ["Tattered Veil", "Good Intentions"],
-        "coordinator": {
-            "name": "Steven Bennett",
-            "email": "stevenbennett90@gmail.com"
-        },
+        "coordinator": "stevenbennett90@gmail.com",
         "links": {
             "discord":"https://discord.gg/NeqSXv89rj"
         }
@@ -17,12 +14,9 @@
         "name": "CND-001 Vancouver - Nova Albion",
         "id": "CND-001",
         "location": "Vancouver, BC, Canada",
-        "status": "active",
+        "active": true,
         "currentChronicles": ["Tattered Veil", "Good Intentions"],
-        "coordinator": {
-            "name": "Murdock Uriel",
-            "email": "dc.001@canadaatmidnight.com"
-        },
+        "coordinator":"dc.001@canadaatmidnight.com",
         "links": {
             "facebook": "https://www.facebook.com/groups/2249230082"
         }
@@ -31,12 +25,9 @@
         "name": "CND-098 Dark Aurora",
         "id": "CND-098",
         "location": "Vancouver, BC, Canada",
-        "status": "active",
+        "active": true,
         "currentChronicles": ["Tattered Veil", "Good Intentions"],
-        "coordinator": {
-            "name": "Jilian Christensen",
-            "email": "dc.098@canadaatmidnight.com"
-        },
+        "coordinator": "dc.098@canadaatmidnight.com",
         "links": {
             "facebook": "https://www.facebook.com/groups/2249230082"
         }
@@ -45,10 +36,8 @@
         "name": "CND-002 Saint John",
         "id": "CND-002",
         "location": "Saint John, NB, Canada",
-        "status": "inactive",
-        "coordinator": {
-            "email": "dc.002@canadaatmidnight.com"
-        },
+        "active": false,
+        "coordinator":  "dc.002@canadaatmidnight.com",
         "links": {
             "website": "https://c-a-m-house-of-dark-tidings-cnd-002.obsidianportal.com/"
         }
@@ -57,31 +46,22 @@
         "name": "CND-008 Toronto - Dire Epiphany",
         "id": "CND-008",
         "location": "Toronto, ON, Canada",
-        "status": "active",
+        "active": true,
         "currentChronicles": ["Good Intentions"],
-        "coordinator": {
-            "name": "Hugh Montgomerie",
-            "email": "dc.008@canadaatmidnight.com"
-        }
+        "coordinator": "dc.008@canadaatmidnight.com"
     },
     {
         "name": "CND-014 Hamilton - Katharsis",
         "id": "CND-014",
         "location": "Hamilton, ON, Canada",
-        "status": "active",
-        "coordinator": {
-            "email": "dc.014@canadaatmidnight.com"
-        }
-    },
+        "active": true,
+        "coordinator":"dc.014@canadaatmidnight.com"},
     {
         "name": "CND-015 Montreal - La Cité Lumière",
         "id": "CND-015",
         "location": "Montreal, QC, Canada",
-        "status": "active",
-        "coordinator": {
-            "name": "Sophie Ricard",
-            "email": "dc.015@canadaatmidnight.com"
-        },
+        "active": true,
+        "coordinator":"dc.015@canadaatmidnight.com",
         "links": {
         "website":"https://sites.google.com/canadaatmidnight.com/cnd-015/",
         "discord":"https://discord.com/invite/jExsBVdREW"
@@ -91,12 +71,9 @@
         "name": "CND-024 Ottawa",
         "id": "CND-024",
         "location": "Ottawa, ON, Canada",
-        "status": "active",
+        "active": true,
         "currentChronicles": ["Good Intentions"],
-        "coordinator": {
-            "name": "Dave Desgagnes",
-            "email": "dc.024@canadaatmidnight.com"
-        },
+        "coordinator":  "dc.024@canadaatmidnight.com",
         "links": {
             "website":"https://sites.google.com/canadaatmidnight.com/cnd-024-ottawa/home",
             "discord":"https://discord.com/invite/XYEcPtETyf",
@@ -107,11 +84,8 @@
         "name": "CND-099 Northern Winds Virtual Domain",
         "id": "CND-099",
         "location": "Thunder Bay, ON, Canada",
-        "status": "inactive",
-        "coordinator": {
-            "name": "Yvonne Day",
-            "email": "dc.099@canadaatmidnight.com"
-        },
+        "active": false,
+        "coordinator": "dc.099@canadaatmidnight.com",
         "links": {
             "website":"https://sites.google.com/canadaatmidnight.com/cnd-099/",
             "discord":"https://discord.com/invite/R8b37Xk",
@@ -122,22 +96,16 @@
         "name": "CND-101 Little Rock @ Midnight",
         "id": "CND-101",
         "location": "Little Rock, Arkansas",
-        "status": "inactive",
-        "coordinator": {
-            "name": "Justin Green",
-            "email": "dc.101@canadaatmidnight.com"
-        }
+        "active": false,
+        "coordinator": "dc.101@canadaatmidnight.com"
     },
     {
         "name": "CND-102 Seattle - Night Symphonies",
         "id": "CND-102",
         "location": "Seattle, Washington",
-        "status": "active",
+        "active": true,
         "currentChronicles": ["Good Intentions"],
-        "coordinator": {
-            "name": "Denise Perez",
-            "email": "dc.102@canadaatmidnight.com"
-        },
+        "coordinator": "dc.102@canadaatmidnight.com",
         "links": {
             "website":"https://sites.google.com/canadaatmidnight.com/102/home",
             "facebook":"https://www.facebook.com/groups/2545111105817775/"
@@ -147,28 +115,22 @@
         "name": "CND-103 Austin, Texas",
         "id": "CND-103",
         "location": "Austin, Texas",
-        "status": "inactive",
-        "coordinator": {
-            "email": "dc.103@canadaatmidnight.com"
-        }
+        "active": false,
+        "coordinator":  "dc.103@canadaatmidnight.com"
     },
     {
         "name": "CND-104 Dallas, Texas",
         "id": "CND-104",
         "location": "Dallas, Texas",
-        "status": "inactive",
-        "coordinator": {
-            "email": "dc.104@canadaatmidnight.com"
-        }
+        "active": false,
+        "coordinator": "dc.104@canadaatmidnight.com"
     },
     {
         "name": "CND-105 Portland, Oregon",
         "id": "CND-105",
         "location": "Portland, Oregon",
-        "status": "inactive",
-        "coordinator": {
-            "email": "dc.105@canadaatmidnight.com"
-        },
+        "active": false,
+        "coordinator":"dc.105@canadaatmidnight.com",
         "links": {
             "website":"https://sites.google.com/canadaatmidnight.com/cnd-105/",
             "discord":"https://discord.com/invite/R8b37Xk",
@@ -179,133 +141,107 @@
         "name": "CND-106 San Diego, California",
         "id": "CND-106",
         "location": "San Diego, California",
-        "status": "inactive",
-        "coordinator": {
-            "email": "dc.106@canadaatmidnight.com"
-        }
+        "active": false,
+        "coordinator":"dc.106@canadaatmidnight.com"
     },
     {
         "name": "CND-107 Savannah, Georgia",
         "id": "CND-107",
         "location": "Savannah, Georgia",
-        "status": "inactive",
-        "coordinator": {
-            "email": "dc.107@canadaatmidnight.com"
-        }
+        "active": false,
+        "coordinator": "dc.107@canadaatmidnight.com"
     },
     {
         "name": "CND-108 Los Angeles, California",
         "id": "CND-108",
         "location": "Los Angeles, California",
-        "status": "active",
+        "active": true,
         "currentChronicles": ["Good Intentions"],
-        "coordinator": {
-            "name": "Taylor Hars",
-            "email": "dc.108@canadaatmidnight.com"
-        }
+        "coordinator": "dc.108@canadaatmidnight.com"
     },
     {
         "name": "CND-109 Houston, Texas",
         "id": "CND-109",
         "location": "Houston, Texas",
-        "status": "inactive",
-        "coordinator": {
-            "email": "dc.109@canadaatmidnight.com"
-        }
+        "active": false,
+        "coordinator":"dc.109@canadaatmidnight.com"
     },
     {
         "name": "CND-110 Boston, Massachusetts",
         "id": "CND-110",
         "location": "Boston, Massachusetts",
-        "status": "inactive",
-        "coordinator": {
-            "email": "dc.110@canadaatmidnight.com"
-        }
+        "active": false,
+        "coordinator": "dc.110@canadaatmidnight.com"
     },
     {
         "name": "CND-111 Tucson, Arizona",
         "id": "CND-111",
         "location": "Tucson, Arizona",
-        "status": "inactive",
-        "coordinator": {
-            "email": "dc.111@canadaatmidnight.com"
-        }
+        "active": false,
+        "coordinator": "dc.111@canadaatmidnight.com"
     },
     {
         "name": "CND-112 Atlanta, Georgia",
         "id": "CND-112",
         "location": "Atlanta, Georgia",
-        "status": "inactive",
-        "coordinator": {
-            "email": "dc.112@canadaatmidnight.com"
-        }
+        "active": false,
+        "coordinator": "dc.112@canadaatmidnight.com"
     },
     {
         "name": "CND-113 Portland, Maine",
         "id": "CND-113",
         "location": "Portland, Maine",
-        "status": "inactive",
-        "coordinator": {
-            "email": "dc.113@canadaatmidnight.com"
-        }
+        "active": false,
+        "coordinator": "dc.113@canadaatmidnight.com"
     },
     {
         "name": "CND-114 Detroit, Michigan",
         "id": "CND-114",
         "location": "Detroit, Michigan",
-        "status": "inactive",
-        "coordinator": {
-            "email": "dc.114@canadaatmidnight.com"
-        }
+        "active": false,
+        "coordinator": "dc.114@canadaatmidnight.com"
     },
     {
         "name": "CND-115 Knoxville, Tennessee",
         "id": "CND-115",
+        "active": false,
         "location": "Knoxville, Tennessee",
-        "coordinator": {
-            "email": "dc.115@canadaatmidnight.com"
-        }
+        "coordinator":"dc.115@canadaatmidnight.com"
     },
     {
         "name": "CND-116 Contra Costa, California",
         "id": "CND-116",
+        "active": false,
         "location": "Contra Costa, California",
-        "coordinator": {
-            "email": "dc.116@canadaatmidnight.com"
-        }
+        "coordinator":"dc.116@canadaatmidnight.com"
     },
     {
         "name": "CND-117 Kennewick, Washington",
         "id": "CND-117",
+        "active": false,
         "location": "Kennewick, Washington",
-        "coordinator": {
-            "email": "dc.117@canadaatmidnight.com"
-        }
+        "coordinator": "dc.117@canadaatmidnight.com"
     },
     {
         "name": "CND-118 Baltimore, Maryland",
         "id": "CND-118",
+        "active": false,
         "location": "Baltimore, Maryland",
-        "coordinator": {
-            "email": "dc.118@canadaatmidnight.com"
-        }
+        "coordinator": "dc.118@canadaatmidnight.com"
     },
     {
         "name": "CND-120 Tampa, Florida",
         "id": "CND-120",
+        "active": false,
         "location": "Tampa, Florida",
-        "coordinator": {
-            "email": "dc.120@canadaatmidnight.com"
-        }
+        "coordinator": "dc.120@canadaatmidnight.com"
     },
     {
         "name": "CND-121 Spokane",
-        "id": "CND-120",
+        "id": "CND-121",
+        "active": true,
         "location": "Spokane, Washington, USA",
         "currentChronicles": ["Good Intentions"],
-        "coordinator": {
-            "name": "Shawn Harrison",
-            "email": "dc.121@canadaatmidnight.com"
-        }
+        "coordinator": "dc.121@canadaatmidnight.com"
     }
 ]

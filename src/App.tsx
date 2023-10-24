@@ -69,9 +69,9 @@ function AuthenticatedApp() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/create-mage" element={<PrivateRoute><GenerateAwakened/></PrivateRoute>}/>
-          <Route path="/tattered-veil" element={<PrivateRoute><TatteredVeilVenueDashboard/></PrivateRoute>}/>
+          <Route path="/tattered-veil/:venueId" element={<PrivateRoute><TatteredVeilVenueDashboard/></PrivateRoute>}/>
           <Route path="/awakened-sheet/:characterId" element={<PrivateRoute><AwakenedPage/></PrivateRoute>}/>
-          <Route path="/good-intentions" element={<PrivateRoute><GoodIntentionsDashboard/></PrivateRoute>}/>
+          <Route path="/good-intentions/:venueId" element={<PrivateRoute><GoodIntentionsDashboard/></PrivateRoute>}/>
           <Route path='/awakened-full-edit/:characterId' element={<PrivateRoute><AwakenedSTEditor></AwakenedSTEditor></PrivateRoute>}/>
           <Route path='/create-kindred' element={<PrivateRoute><GenerateKindred/></PrivateRoute>}/>
         </Routes>

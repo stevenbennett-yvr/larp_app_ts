@@ -161,7 +161,7 @@ export const fetchAwakenedCharacter = async (characterId:string, currentUser:Use
     }
   } else {
     const character = await getAwakenedById(characterId);
-    if (character && currentUser && (character.uid === currentUser.uid || currentUser.roles?.some(role => role.title === "vst" && role.venue === 'tattered veil'))) {
+    if (character && currentUser && (character.uid === currentUser.uid)) {
       setAwakened(character);
       localStorage.setItem(`awakened id ${characterId}`, JSON.stringify(character));
       setInitialAwakened(character)

@@ -1,7 +1,7 @@
 import { Kindred } from "./Kindred";
 
 const getChronicleStartDate = () => {
-    return new Date(2023, 9, 1);
+    return new Date(2023, 9, 1); //October 1st. Note month index zero.
 }
 
 const getCreationDate = (kindred: Kindred) => {
@@ -114,20 +114,20 @@ export const formulaExperience = (kindred: Kindred): number => {
     return ceremonyXp;
 };
 
-export const backgroundExperience = (kindred:Kindred): number => {
+export const backgroundExperience = (kindred: Kindred): number => {
     let backgroundXp = 0;
-    Object.entries(kindred.backgrounds).map(([,background]) => {
-        backgroundXp += background.experiencePoints
-        Object.entries(background.advantages).map(([,advantageInfo]) => {
-            backgroundXp += advantageInfo.experiencePoints
-        })
-    })
-    return backgroundXp
-}
+    Object.entries(kindred.backgrounds).forEach(([, background]) => {
+        backgroundXp += background.experiencePoints;
+        Object.entries(background.advantages).forEach(([, advantageInfo]) => {
+            backgroundXp += advantageInfo.experiencePoints;
+        });
+    });
+    return backgroundXp;
+};
 
 export const meritExperience = (kindred:Kindred): number => {
     let meritXp = 0;
-    Object.entries(kindred.meritsFlaws).map(([,merit]) => {
+    Object.entries(kindred.meritsFlaws).forEach(([,merit]) => {
         meritXp += merit.experiencePoints
     })
     return meritXp

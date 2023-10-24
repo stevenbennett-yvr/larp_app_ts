@@ -41,18 +41,7 @@ export function UserProvider({ children }: { children: React.ReactNode}): JSX.El
 
   const charactersCollectionRef = useMemo(() => {
     if (!currentUser || !userData) return null;
-
-    if (userData.roles?.some(role => role.title === "vst")) {
-      console.log('charactersCollectionRef VST query')
-      const vstRole = userData.roles.find(role => role.title === "vst");
-      return query(collectionRef, 
-        where("chronicle", "==", vstRole?.venue),
-        where("domain", "==", vstRole?.domain)
-      );
-    } else {
-      console.log('characterCollectionRef query')
       return query(collectionRef, where("uid", "==", currentUser.uid));
-    }
   }, []);
 
   const [characterList, setCharacterList] = useState<{ id: string }[]>([]);
