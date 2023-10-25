@@ -180,7 +180,7 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                                 withAsterisk
                                 style={{ width: "300px" }}
                                 value={kindred.name}
-                                label="Name"
+                                label="Character Name"
                                 onChange={(event) => setKindred({ ...kindred, name: event.target.value })}
                             />
                         </Grid.Col>
@@ -189,7 +189,7 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                                 withAsterisk
                                 style={{ width: "300px" }}
                                 value={kindred.concept}
-                                label="Concept"
+                                label="Character Concept"
                                 onChange={(event) => setKindred({ ...kindred, concept: event.target.value })}
                             />
                         </Grid.Col>
@@ -217,7 +217,7 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                                             </Grid.Col>
                                         )}
 
-                                        <Grid.Col span={3}>
+                                        <Grid.Col span={isPhoneScreen?6:3}>
                                             <TextInput
                                                 withAsterisk
                                                 style={{ width: globals.isPhoneScreen ? "100%" : "200px" }}
@@ -227,17 +227,18 @@ const CoreConcept = ({ kindred, setKindred, nextStep, backStep }: CoreConceptPro
                                                 label="Touchstone name"
                                             />
 
-                                            <TextInput
+                                            <Textarea
                                                 withAsterisk
                                                 style={{ width: globals.isPhoneScreen ? "100%" : "200px" }}
                                                 value={touchstone.conviction}
                                                 onChange={(event) => updateTouchstone(i, { conviction: event.currentTarget.value })}
                                                 placeholder="Never betray your friends"
                                                 label="Conviction"
+                                                minRows={2}
                                             />
                                         </Grid.Col>
 
-                                        <Grid.Col span={3} offset={globals.isSmallScreen ? 0 : 1}>
+                                        <Grid.Col span={isPhoneScreen?6:3} offset={globals.isSmallScreen ? 0 : 1}>
                                             <Textarea
                                                 value={touchstone.description}
                                                 onChange={(event) => updateTouchstone(i, { description: event.currentTarget.value })}

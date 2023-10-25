@@ -1,45 +1,18 @@
 import { Grid, Text, Tooltip, NumberInput, Divider } from "@mantine/core"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { V5SkillsKey, skillsDescriptions } from "../../../data/GoodIntentions/types/V5Skills"
 import { globals } from "../../../assets/globals"
 import { upcase } from "../../../utils/case"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBrain, faComment, faHandFist } from "@fortawesome/free-solid-svg-icons"
-import { SkillCategory } from "../../../data/nWoD1e/nWoD1eSkills"
+import { AttributeCategory, V5AttributesKey, attributeDescriptions } from "../../../data/GoodIntentions/types/V5Attributes"
 
-
-type SkillsPickerProps = {
+type AttributesPickerProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void
     check: any
 }
 
-const SkillGrid = ({ kindred, setKindred, check }: SkillsPickerProps) => {
-
-    function changeCreationPoints(
-        skill: V5SkillsKey,
-        creationPoints: number,
-    ): void {
-
-        const updatedAttributes = {
-            ...kindred.skills,
-            [skill]: {
-                ...kindred.skills[skill],
-                creationPoints
-            }
-        }
-
-
-        const clearedSpecialities = kindred.skillSpecialties.filter(entry => entry.skill !== skill)
-
-        const updatedCharacter = {
-            ...kindred,
-            skills: updatedAttributes,
-            skillSpecialties: clearedSpecialities,
-        }
-
-        setKindred(updatedCharacter)
-    }
+const AttributeGrid = ({ kindred, setKindred, check }: AttributesPickerProps) => {
 
     const categoryIcons = {
         mental: faBrain,
@@ -47,25 +20,47 @@ const SkillGrid = ({ kindred, setKindred, check }: SkillsPickerProps) => {
         social: faComment,
     }
 
-    const skillCategories = ['physical', 'social', 'mental'] as SkillCategory[]
 
-    const skillInputs = skillCategories.map(category => {
+    function changeCreationPoints(
+        attribute: V5AttributesKey,
+        creationPoints: number,
+    ): void {
+
+        const updatedAttributes = {
+            ...kindred.attributes,
+            [attribute]: {
+                ...kindred.attributes[attribute],
+                creationPoints
+            }
+        }
+
+        const updatedCharacter = {
+            ...kindred,
+            attributes: updatedAttributes
+        }
+
+        setKindred(updatedCharacter)
+    }
+
+    const attributeCategories = ['physical', 'social', 'mental'] as AttributeCategory[]
+
+    const attributeInputs = attributeCategories.map(category => {
         return (
             <Grid.Col
                 span={4}
-                key={`${category} Skills`}
+                key={`${category} Attributes`}
             >
                 <Text c={"red"} fw={500} fz="lg" color="dimmed" ta="center">
                     <FontAwesomeIcon icon={categoryIcons[category]} /> {' '}
                     {upcase(category)}
                 </Text>
                 <Divider my="sm" color={"red"} />
-                {Object.entries(kindred.skills).map(([skill, skillInfo]) => {
-                    const typedAttribute = skill as V5SkillsKey
-                    if (skillInfo.category === category) {
+                {Object.entries(kindred.attributes).map(([attribute, attributeInfo]) => {
+                    const typedAttribute = attribute as V5AttributesKey
+                    if (attributeInfo.category === category) {
                         return (
                             <div
-                                key={`${skill} input`}
+                                key={`${attribute} input`}
                             >
                                 <Tooltip
                                     multiline
@@ -73,22 +68,24 @@ const SkillGrid = ({ kindred, setKindred, check }: SkillsPickerProps) => {
                                     withArrow
                                     offset={20}
                                     transitionProps={{ duration: 200 }}
-                                    label={skillsDescriptions[typedAttribute]}
+                                    label={attributeDescriptions[typedAttribute]}
                                     position={globals.isPhoneScreen ? "bottom" : "top"}
                                     events={{ hover: true, focus: false, touch: false }}
                                 >
                                     <NumberInput
-                                        key={`${category}-${skill}`}
-                                        label={`${upcase(skill)}`}
+                                        key={`${category}-${attribute}`}
+                                        label={`${upcase(attribute)}`}
                                         min={
-                                            0
+                                            1
                                         }
-                                        max={!check[3] ? 3 : !check[2] ? 2 : !check[1] ? 1 : 0}
-                                        value={skillInfo.creationPoints}
-                                        onChange={(val: number) => {
-                                            changeCreationPoints(typedAttribute, val);
-                                        }}
-
+                                        max={!check[4] ? 4 : !check[3] ? 3 : !check[2] ? 2 : 1}
+                                        value={attributeInfo.creationPoints}
+                                        onChange={(val: number) =>
+                                            changeCreationPoints(
+                                                typedAttribute,
+                                                val
+                                            )
+                                        }
                                     />
                                 </Tooltip>
                             </div>
@@ -103,11 +100,13 @@ const SkillGrid = ({ kindred, setKindred, check }: SkillsPickerProps) => {
     })
 
     return (
+        
         <Grid grow m={0}>
-            {skillInputs}
+            {attributeInputs}
         </Grid>
+
     )
 
 }
 
-export default SkillGrid
+export default AttributeGrid

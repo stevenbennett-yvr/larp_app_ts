@@ -1,25 +1,49 @@
-import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { generations } from "../../../data/GoodIntentions/types/V5Generation"
-import { ClanName, Clans } from "../../../data/GoodIntentions/types/V5Clans"
-import { Center, Grid, Avatar, Stack, Text, Title, Group, Alert, Button, Card, Table, Divider } from "@mantine/core"
-import { globals } from "../../../assets/globals"
+import React, { useState } from "react";
+
+// Mantine components
+import {
+  Center,
+  Grid,
+  Avatar,
+  Stack,
+  Text,
+  Title,
+  Group,
+  Alert,
+  Button,
+  Card,
+  Table,
+  Divider,
+} from "@mantine/core";
+
+// FontAwesome icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons";
-import Dots from "../../../utils/dots"
-import { v5AttributeLevel, V5AttributesKey } from "../../../data/GoodIntentions/types/V5Attributes"
-import { v5SkillLevel, V5SkillsKey } from "../../../data/GoodIntentions/types/V5Skills"
-import { v5DisciplineLevel, allDisciplines, DisciplineKey } from "../../../data/GoodIntentions/types/V5Disciplines"
-import { allPowers } from "../../../data/GoodIntentions/types/V5Powers"
-import { upcase } from "../../../utils/case"
-import { v5HumanityLevel } from "../../../data/GoodIntentions/types/V5Humanity"
-import { Rituals } from "../../../data/GoodIntentions/types/V5Rituals"
-import { Ceremonies } from "../../../data/GoodIntentions/types/V5Ceremonies"
-import { V5BackgroundRef, backgroundData, v5BackgroundLevel, v5AdvantageLevel } from "../../../data/GoodIntentions/types/V5Backgrounds"
-import { v5GetMeritByName, v5MeritLevel } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws"
+
+// Data and types
+import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
+import { generations } from "../../../data/GoodIntentions/types/V5Generation";
+import { ClanName, Clans } from "../../../data/GoodIntentions/types/V5Clans";
+import { v5AttributeLevel, V5AttributesKey } from "../../../data/GoodIntentions/types/V5Attributes";
+import { v5SkillLevel, V5SkillsKey } from "../../../data/GoodIntentions/types/V5Skills";
+import { v5DisciplineLevel, allDisciplines, DisciplineKey } from "../../../data/GoodIntentions/types/V5Disciplines";
+import { allPowers } from "../../../data/GoodIntentions/types/V5Powers";
+import { upcase } from "../../../utils/case";
+import { v5HumanityLevel } from "../../../data/GoodIntentions/types/V5Humanity";
+import { Rituals } from "../../../data/GoodIntentions/types/V5Rituals";
+import { Ceremonies } from "../../../data/GoodIntentions/types/V5Ceremonies";
+import { V5BackgroundRef, backgroundData, v5BackgroundLevel, v5AdvantageLevel } from "../../../data/GoodIntentions/types/V5Backgrounds";
+import { v5GetMeritByName, v5MeritLevel } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
+
+// Utility functions and components
+import Dots from "../../../utils/dots";
+import ConfirmModal from './ConfirmModal';
+import { globals } from "../../../assets/globals";
 
 type PrintSheetProps = {
     kindred: Kindred,
     backStep: () => void,
+    handleSubmit: () => void,
 }
 
 const flawIcon = () => {
@@ -29,7 +53,7 @@ const meritIcon = () => {
     return <FontAwesomeIcon icon={faCircleUp} style={{ color: "rgb(47, 158, 68)", }} />
 }
 
-const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
+const V5PrintSheet = ({ kindred, backStep, handleSubmit }: PrintSheetProps) => {
 
     const topSection = () => {
         const name = kindred.name
@@ -119,7 +143,7 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
             <Stack>
                 <Divider my="sm" label="Skills" labelPosition="center" />
                 <Grid columns={12}>
-                    <Grid.Col span={4} key={'mental-skills'}>
+                    <Grid.Col span={4} key={'physical-skills'}>
                         <Title order={4} align='center'>physical</Title>
                         {["athletics", "brawl", "crafts", "drive", "firearms", "melee", "larceny", "stealth", "survival"].map((skill) => {
                             let skillName = skill as V5SkillsKey;
@@ -130,7 +154,7 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
                             );
                         })}
                     </Grid.Col>
-                    <Grid.Col span={4} key={'mental-skills'}>
+                    <Grid.Col span={4} key={'social-skills'}>
                         <Title order={4} align='center'>Social</Title>
                         {["animal ken",
                             "etiquette",
@@ -249,7 +273,7 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
                                 const ritualInfo = Rituals.find((r) => r.name === ritual.name)
                                 if (!ritualInfo) { return null }
                                 return (
-                                    <tr>
+                                    <tr key={ritual.name}>
                                         <td>
                                             <Group>{ritualInfo.name} {ritualInfo.level}</Group>
                                         </td>
@@ -279,7 +303,7 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
                                 const ritualInfo = Ceremonies.find((r) => r.name === ceremony.name)
                                 if (!ritualInfo) { return null }
                                 return (
-                                    <tr>
+                                    <tr key={ceremony.name}>
                                         <Group>{ritualInfo.name} {ritualInfo.level}</Group>
                                     </tr>
                                 )
@@ -323,7 +347,7 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
             const backgroundInfo = backgroundData.find((b) => b.name === background.name)
             if (!backgroundInfo) { return null }
             return (
-                <Grid.Col span={4}>
+                <Grid.Col span={4} key={background.name}>
 
                     <Card>
                         <Table>
@@ -336,11 +360,11 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
                             </thead>
                             <tbody>
                                 {background.advantages.map((advantage) => {
-                                    if (!backgroundInfo.advantages) { return null }
+                                    if (!backgroundInfo.advantages || v5AdvantageLevel(advantage).level < 1) { return null }
                                     const advantageInfo = backgroundInfo.advantages.find((a) => a.name === advantage.name)
                                     const icon = advantageInfo?.type === "disadvantage" ? flawIcon() : meritIcon()
                                     return (
-                                        <tr>
+                                        <tr key={advantage.name}>
                                             <td>
                                                 <Text align="center">{icon} &nbsp;{advantage.name} {v5AdvantageLevel(advantage).level}</Text>
                                             </td>
@@ -386,7 +410,7 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
                     <tbody>
                         {sortedFlaws.map((flaw) => {
                             return (
-                                <tr>
+                                <tr key={flaw.name}>
                                     <td>
                                         <Text>{flaw.name} {v5MeritLevel(flaw).level}</Text>
                                     </td>
@@ -412,7 +436,7 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
                     <tbody>
                         {sortedMerits.map((flaw) => {
                             return (
-                                <tr>
+                                <tr key={flaw.name}>
                                     <td>
                                         <Text>{flaw.name} {v5MeritLevel(flaw).level}</Text>
                                     </td>
@@ -423,6 +447,8 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
                 </Card>
             )
         }
+
+
 
         return (
             <div>
@@ -438,6 +464,8 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
             </div>
         )
     }
+
+    const [showRetire, setShowRetire] = useState<boolean>(false);
 
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
@@ -457,6 +485,9 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
                 :<></>}
 
             </Stack>
+
+            <ConfirmModal kindred={kindred} showRetire={showRetire} setShowRetire={setShowRetire} handleSubmit={handleSubmit} />
+
             <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen ? "15%" : "30%" }}>
                 <Group>
                     <Button.Group>
@@ -466,6 +497,14 @@ const V5PrintSheet = ({ kindred, backStep }: PrintSheetProps) => {
                             onClick={backStep}
                         >
                             Back
+                        </Button>
+                        <Button
+                            style={{ margin: "5px" }}
+                            color="gray"
+                            onClick={() => 
+                                setShowRetire(true)
+                        }>
+                            Submit
                         </Button>
                     </Button.Group>
                 </Group>

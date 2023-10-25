@@ -37,7 +37,6 @@ const GenerationPicker = ({ kindred, setKindred, nextStep, backStep }: Generatio
         let genInt = parseInt(generation ?? "0")
         let creationPoints = genInt < 14 ? 1 : 0;
         let experiencePoints = genInt < 10 ? 20 : 0;
-        console.log(creationPoints)
         setKindred({
             ...kindred,
             generation: genInt,

@@ -24,7 +24,7 @@ export const LoresheetGrid = ({ kindred, setOpenLoresheetTitle, venueData }: Lor
             <Grid.Col key={loresheet.name}>
                 <Card
                     mb={20}
-                    h={350}
+                    h={globals.isPhoneScreen?550:350}
                     style={{ backgroundColor: "rgba(26, 27, 30, 0.90)", borderColor: "black" }}
                     withBorder
                 >

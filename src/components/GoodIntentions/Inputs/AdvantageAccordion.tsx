@@ -1,10 +1,10 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { ActionIcon, Checkbox, CheckboxProps, NumberInput, Accordion, Text, Group, Table, Center } from "@mantine/core"
+import { ActionIcon, NumberInput, Accordion, Text, Group, Table, Center, Input } from "@mantine/core"
 import Tally from "../../../utils/talley"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons"
 import { V5BackgroundRef, v5AdvantageLevel, handleAdvantageChange, emptyAdvantage, V5AdvantageRef, v5HandleXpAdvantageChange, v5BackgroundLevel, backgroundData, V5Background, V5Advantage } from "../../../data/GoodIntentions/types/V5Backgrounds"
-import { Droplet, CirclePlus, CircleMinus } from 'tabler-icons-react';
+import { CirclePlus, CircleMinus } from 'tabler-icons-react';
 import { handleBenefitAdvantageChange, Benefit } from "../../../data/GoodIntentions/types/V5Loresheets"
 
 
@@ -26,9 +26,6 @@ const flawIcon = () => {
 const meritIcon = () => {
     return <FontAwesomeIcon icon={faCircleUp} style={{ color: "rgb(47, 158, 68)", }} />
 }
-
-const CheckboxIcon: CheckboxProps['icon'] = ({ indeterminate, ...others }) =>
-    indeterminate ? <Droplet {...others} /> : <Droplet {...others} />;
 
 const getRating = (array: number[]) => {
     let first = array[0]
@@ -75,22 +72,23 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
         const canGhoul = !isCatenating && advantage.name === "Retainer" && (kindred.clan === "Thin-Blood")
         const starPowerBool = bRef.name === "Fame" && advantage.name === "Star Power" && v5BackgroundLevel(bRef).level < 3
         const havenBoolean = bRef.name === "Haven" && v5BackgroundLevel(bRef).level <= v5AdvantageLevel(advantageRef).level
-
+        const {totalXpNeeded} = v5BackgroundLevel(bRef)
 
         switch (type) {
             case 'creationPoints':
                 return (
                     <NumberInput
+                        label="Creation Points"
                         disabled={starPowerBool || canGhoul || disabled}
                         value={v5AdvantageLevel(advantageRef).level}
                         style={{ width: "100px" }}
-                        min={advantageRef.havenBool ? 1 : advantageRef.freebiePoints}
+                        min={advantageRef.havenPoints ? advantageRef.havenPoints + advantageRef.freebiePoints : advantageRef.freebiePoints}
                         step={advantageStep(advantageRef, backgroundInfo)}
                         max={bRef.name === "Haven" && advantage.type === "advantage" ?
                             havenSizeMax : v5AdvantageLevel(advantageRef).level === advantage.cost[advantage.cost.length - 1] ?
                                 advantageRef.creationPoints : advantage.cost[advantage.cost.length - 1]}
                         onChange={(val: number) => {
-                            let trueVal = val - advantageRef.freebiePoints - (advantageRef.havenBool ? 1 : 0)
+                            let trueVal = val - advantageRef.freebiePoints - (advantageRef.havenPoints ? advantageRef.havenPoints : 0)
                             handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "creationPoints", trueVal)
                         }}
                     />
@@ -98,6 +96,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
             case 'freebiePoints':
                 return (
                     <NumberInput
+                        label="Freebie Points"
                         disabled={disabled}
                         value={advantageRef.freebiePoints}
                         min={0}
@@ -119,22 +118,31 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
             case 'experiencePoints':
                 return (
                     <Group>
-                        <ActionIcon variant="filled" radius="xl" color="dark" onClick={() => v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, advantageRef.experiencePoints - 1)}>
-                            <CircleMinus strokeWidth={1.5} color="gray" />
-                        </ActionIcon>
-                        <NumberInput
-                            disabled={starPowerBool || canGhoul || disabled}
-                            value={advantageRef.experiencePoints}
-                            style={{ width: "100px" }}
-                            min={0}
-                            max={(advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level) || havenBoolean ? advantageRef.experiencePoints : undefined}
-                            onChange={(val: number) => {
-                                v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, val)
-                            }}
-                        />
-                        <ActionIcon variant="filled" radius="xl" color="dark" disabled={havenBoolean || starPowerBool || disabled || (advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level)} onClick={() => v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, advantageRef.experiencePoints + 1)}>
-                            <CirclePlus strokeWidth={1.5} color="gray" />
-                        </ActionIcon>
+                        <Input.Wrapper
+                            label={``}
+                        >
+                            <Text size="12px" color="gray.6">Xp for Next: {totalXpNeeded - bRef.experiencePoints}</Text>
+                            <Text size="12px" color="gray.6">Total XP Needed {totalXpNeeded}</Text>
+
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <ActionIcon variant="filled" radius="xl" color="dark" onClick={() => v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, advantageRef.experiencePoints - 1)}>
+                                    <CircleMinus strokeWidth={1.5} color="gray" />
+                                </ActionIcon>
+                                <NumberInput
+                                    disabled={starPowerBool || canGhoul || disabled}
+                                    value={advantageRef.experiencePoints}
+                                    style={{ width: "100px" }}
+                                    min={0}
+                                    max={(advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level) || havenBoolean ? advantageRef.experiencePoints : undefined}
+                                    onChange={(val: number) => {
+                                        v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, val)
+                                    }}
+                                />
+                                <ActionIcon variant="filled" radius="xl" color="dark" disabled={havenBoolean || starPowerBool || disabled || (advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level)} onClick={() => v5HandleXpAdvantageChange(kindred, setKindred, bRef, advantageRef, advantageRef.experiencePoints + 1)}>
+                                    <CirclePlus strokeWidth={1.5} color="gray" />
+                                </ActionIcon>
+                            </div>
+                        </Input.Wrapper>
                     </Group>
                 )
         }
@@ -142,7 +150,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
 
     const renderAdvantage = (advantage: V5Advantage) => {
         const advantageRef = bRef.advantages.find((a) => a.name === advantage.name) || { ...emptyAdvantage, name: advantage.name }
-        const havenFreebies = bRef.name === "Haven" ? bRef.advantages.filter(advantage => advantage.havenBool).length : 0;
+        let havenFreebies = bRef.name === "Haven" ? bRef.advantages.reduce((total, a) => total + (a?.havenPoints || 0), 0) : 0;
         const freebieBool = havenFreebies >= v5BackgroundLevel(bRef).level - 1;
         const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
         const isDisadvantage = advantage.type === "disadvantage";
@@ -151,7 +159,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
         }
         return (
             <>
-                <tr>
+                <tr key={`${advantage.name}`}>
                     <td>
                         <Text align="center">{icon} &nbsp;{advantage.name} {v5AdvantageLevel(advantageRef).level}</Text>
                         <Center>
@@ -160,20 +168,17 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
                         <Center>
                             <Group>
                                 {renderInput(advantage, advantageRef, type)}
-                                {bRef.name === "Haven" && advantage.type === "advantage" ?
-                                    <Checkbox
-                                        label="Haven Freebie"
-                                        disabled={((getAdvantagePoints(advantageRef) > 0) || freebieBool) && (!advantageRef.havenBool)}
-                                        color="red"
-                                        icon={CheckboxIcon}
-                                        checked={advantageRef.havenBool}
-                                        onClick={() => {
-                                            if (advantageRef.havenBool) {
-                                                handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "havenBool", false)
-                                            }
-                                            else {
-                                                handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "havenBool", true)
-                                            }
+                                {bRef.name === "Haven" && advantage.type === "advantage" && v5BackgroundLevel(bRef).level > 1 ?
+                                    <NumberInput
+                                        label="Haven Freebies"
+                                        disabled={(freebieBool && advantageRef.havenPoints === 0)}
+                                        value={advantageRef.havenPoints}
+                                        style={{ width: "100px" }}
+                                        min={0}
+                                        max={(v5AdvantageLevel(advantageRef).level >= havenSizeMax || v5AdvantageLevel(advantageRef).level >= advantage.cost[advantage.cost.length - 1]) || freebieBool ?
+                                            advantageRef.havenPoints : undefined}
+                                        onChange={(val: number) => {
+                                            handleAdvantageChange(kindred, setKindred, bRef, advantageRef, "havenPoints", val)
                                         }}
                                     />
                                     :
@@ -182,7 +187,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
                         </Center>
                     </td>
                 </tr>
-                <tr>
+                <tr key={`${advantage.name}-description`}>
                     <td dangerouslySetInnerHTML={{ __html: `${advantage.description}` }}></td>
                 </tr>
             </>

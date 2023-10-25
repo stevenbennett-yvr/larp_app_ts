@@ -42,19 +42,19 @@ const ClanPicker = ({ kindred, setKindred, nextStep, backStep, venueData }: Clan
                 {clan && (
                     <ClanModal kindred={kindred} setKindred={setKindred} clan={clan} modalOpen={modalOpen} handleCloseModal={handleCloseModal} nextStep={nextStep} />
                 )}
-            <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen ? "15%" : "30%" }}>
-                <Group>
-                    <Button.Group>
-                        <Button
-                            style={{ margin: "5px" }}
-                            color="gray"
-                            onClick={backStep}
-                        >
-                            Back
-                        </Button>
-                    </Button.Group>
-                </Group>
-            </Alert>
+                <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen ? "15%" : "30%" }}>
+                    <Group>
+                        <Button.Group>
+                            <Button
+                                style={{ margin: "5px" }}
+                                color="gray"
+                                onClick={backStep}
+                            >
+                                Back
+                            </Button>
+                        </Button.Group>
+                    </Group>
+                </Alert>
             </Stack>
         </Center >
     )

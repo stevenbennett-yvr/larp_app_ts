@@ -77,7 +77,7 @@ export default function GoodIntentionsDashboard() {
                         </Button>
                     </Center>
                     <Center>
-                        <a href="https://bynightstudios.com/products/laws-of-the-night-v5-pdf-pre-order.html" target="_blank" rel="noopener noreferrer">
+                        <a href="https://bynightstudios.com/laws-of-the-night-books" target="_blank" rel="noopener noreferrer">
                             <img width={200} src={SoftCoverV5} alt="Laws of the Night v5" />
                         </a>
                     </Center>

@@ -1,4 +1,4 @@
-import { Text, Center, Stack, Button, Group, Alert } from "@mantine/core"
+import { Text, Center, Stack, Button, Group, Alert, ScrollArea } from "@mantine/core"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { V5SkillsKey, getV5SkillCPArray, v5SkillLevel } from "../../../data/GoodIntentions/types/V5Skills"
 import { globals } from "../../../assets/globals"
@@ -70,7 +70,7 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
     const threeStyle = !check[3] ? { fontSize: globals.smallFontSize } : { color: "grey" }
     const twoStyle = !check[2] ? { fontSize: globals.smallFontSize } : { color: "grey" }
     const oneStyle = !check[1] ? { fontSize: globals.smallFontSize } : { color: "grey" }
-
+    const height = globals.viewportHeightPx
     return (
         <Center style={{ paddingTop: isPhoneScreen ? '60px' : '60px', paddingBottom: isPhoneScreen ? '60px' : '60px' }}>
             <Stack mt={""} align="center" spacing="md">
@@ -88,7 +88,9 @@ const SkillsPicker = ({ kindred, setKindred, nextStep, backStep }: SkillsPickerP
                     </Text>
                 </Group>
 
-                <SkillGrid kindred={kindred} setKindred={setKindred} check={check} />
+                <ScrollArea h={height - 315} w={"100%"} p={20}>
+                    <SkillGrid kindred={kindred} setKindred={setKindred} check={check} />
+                </ScrollArea>
 
                 <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                     <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>

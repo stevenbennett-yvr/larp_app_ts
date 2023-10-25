@@ -13,6 +13,8 @@ import { ceremonyRefSchema } from './V5Ceremonies';
 import { loresheetRefSchema } from './V5Loresheets'
 import { formulaRefSchema } from './V5Formulae';
 import { sectNameSchema } from './V5Sect';
+import { coterieSchema } from './Coterie';
+
 
 export const v5BackgroundSchema = z.object({
     history: z.string(),
@@ -46,7 +48,7 @@ export const kindredSchema = z.object({
     id: z.optional(z.string()),
     email: z.string(),
     uid: z.string(),
-    domain: z.string(),
+    vssId: z.string(),
     name: z.string(),
     concept: z.string(),
 
@@ -77,6 +79,8 @@ export const kindredSchema = z.object({
     meritsFlaws: v5MeritFlawRefSchema.array(),
     loresheet: loresheetRefSchema,
     startDate: z.string().datetime(),
+    changeLogs:z.object({}),
+    coterie: coterieSchema,
 })
 
 export type Kindred = z.infer<typeof kindredSchema>
@@ -87,7 +91,7 @@ export const getEmptyKindred = (): Kindred => {
         concept: "",
         email: "",
         uid: "",
-        domain: "",
+        vssId: "",
         touchstones: [],
 
         backstory: {
@@ -178,6 +182,11 @@ export const getEmptyKindred = (): Kindred => {
         meritsFlaws: [],
         loresheet: {name:"",benefits:[]},
         startDate: new Date().toISOString(),
+        changeLogs: {},
+        coterie: {
+            id: "",
+            territoryContributions: []
+        }
     }
 }
 

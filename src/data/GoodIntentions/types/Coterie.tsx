@@ -16,6 +16,11 @@ export const v5TerritoryBenefitSchema = z.object({
     experiencePoints: z.number(),
 })
 
+export const coterieSchema = z.object({
+    id: z.string(),
+    territoryContributions: v5TerritoryBenefitSchema.array(),
+})
+
 export const v5CoterieSchema = z.object({
     id: z.string(),
     name: z.string(),

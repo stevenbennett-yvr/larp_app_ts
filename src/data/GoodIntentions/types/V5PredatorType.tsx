@@ -193,7 +193,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         summary: "Hunt prey on desolate roads",
         backgrounds: [
             { ...emptyBackground, id: "hitcher-haven", name: "Haven", freebiePoints: 1, advantages: [{ ...emptyAdvantage, name: "Garage", freebiePoints: 1 }] },
-            { ...emptyBackground, id: "hitcher-resources", name: "Resources", freebiePoints: 1, advantages: [{ ...emptyAdvantage, name: "Goods and Services", freebiePoints: 1 }] }
+            { ...emptyBackground, id: "hitcher-resources", name: "Resources", freebiePoints: 1, advantages: [{ ...emptyAdvantage, name: "Liquidity", freebiePoints: 1 }] }
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'hitcher-PreyExclusion', name: "Prey Exclusion", freebiePoints: 1, note: "Of our choice." },

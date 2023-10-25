@@ -1,6 +1,6 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 import { v5BackgroundLevel, V5BackgroundRef, backgroundData, kindredBackgrounds } from "../../../data/GoodIntentions/types/V5Backgrounds"
-import { Text, Grid, Card, Center, Stack, Divider } from "@mantine/core";
+import { Text, Grid, Card, Center, Stack } from "@mantine/core";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUserGroup, faCat, faAddressBook, faFaceGrinStars, faHouseChimney, faCow, faMasksTheater, faCoins } from "@fortawesome/free-solid-svg-icons"
@@ -78,7 +78,6 @@ const BackgroundGrid = ({ kindred, setModalBackground, setModalOpen }: Backgroun
         <Stack mt={"xl"} align="center" spacing="xl">
 
             <Text mt={"xl"} ta="center" fz="xl" fw={700} c="red">Owned Backgrounds</Text>
-            <Divider w={400} color="#e03131" />
             <Grid grow m={0}>
                 {
                     ownedBackgrounds.map((bRef) => createBackgroundPick(bRef))

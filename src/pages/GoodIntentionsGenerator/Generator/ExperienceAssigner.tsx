@@ -63,7 +63,7 @@ const V5ExperienceAssigner = ({ kindred, setKindred, nextStep, backStep, venueDa
 
     const height = globals.viewportHeightPx
     return (
-        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px' }}>
+        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: "20px" }}>
             <ScrollArea h={height - 140} pb={20}>
                 <V5AttributeXpInputs kindred={kindred} setKindred={setKindred} />
                 <Divider my="sm" />

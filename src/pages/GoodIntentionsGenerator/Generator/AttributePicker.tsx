@@ -1,10 +1,8 @@
-import { Button, Text, Alert, Center, Grid, Tooltip, NumberInput, Stack, Group, Divider } from "@mantine/core"
-import { V5AttributesKey, attributeDescriptions, getV5AttributeCPArray, AttributeCategory } from "../../../data/GoodIntentions/types/V5Attributes"
+import { ScrollArea, Button, Text, Alert, Center, Stack, Group } from "@mantine/core"
+import { getV5AttributeCPArray } from "../../../data/GoodIntentions/types/V5Attributes"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { globals } from "../../../assets/globals"
-import { upcase } from "../../../utils/case"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBrain, faComment, faHandFist } from "@fortawesome/free-solid-svg-icons"
+import AttributeGrid from "../../../components/GoodIntentions/Generator/AttributeGrid"
 
 type AttributePickerProps = {
     kindred: Kindred,
@@ -48,94 +46,13 @@ const AttributePicker = ({ kindred, setKindred, nextStep, backStep }: AttributeP
         return { totalResult, individualResults };
     };
 
-    function changeCreationPoints(
-        attribute: V5AttributesKey,
-        creationPoints: number,
-    ): void {
-
-        const updatedAttributes = {
-            ...kindred.attributes,
-            [attribute]: {
-                ...kindred.attributes[attribute],
-                creationPoints
-            }
-        }
-
-        const updatedCharacter = {
-            ...kindred,
-            attributes: updatedAttributes
-        }
-
-        setKindred(updatedCharacter)
-    }
     const check = checkAttributeArray(pointsArray).individualResults
-
-    const categoryIcons = {
-        mental: faBrain,
-        physical: faHandFist,
-        social: faComment,
-    }
-
-    const attributeCategories = ['physical', 'social', 'mental'] as AttributeCategory[]
-    const attributeInputs = attributeCategories.map(category => {
-        return (
-            <Grid.Col
-                span={globals.isPhoneScreen ? "content" : 4}
-                key={`${category} Attributes`}
-            >
-                <Text c={"red"} fw={500} fz="lg" color="dimmed" ta="center">
-                    <FontAwesomeIcon icon={categoryIcons[category]} /> {' '}
-                    {upcase(category)}
-                </Text>
-                <Divider my="sm" color={"red"} />
-                {Object.entries(kindred.attributes).map(([attribute, attributeInfo]) => {
-                    const typedAttribute = attribute as V5AttributesKey
-                    if (attributeInfo.category === category) {
-                        return (
-                            <div
-                                key={`${attribute} input`}
-                            >
-                                <Tooltip
-                                    multiline
-                                    width={220}
-                                    withArrow
-                                    offset={20}
-                                    transitionProps={{ duration: 200 }}
-                                    label={attributeDescriptions[typedAttribute]}
-                                    position={globals.isPhoneScreen ? "bottom" : "top"}
-                                    events={{ hover: true, focus: false, touch: false }}
-                                >
-                                    <NumberInput
-                                        key={`${category}-${attribute}`}
-                                        label={`${upcase(attribute)}`}
-                                        min={
-                                            1
-                                        }
-                                        max={!check[4] ? 4 : !check[3] ? 3 : !check[2] ? 2 : 1}
-                                        value={attributeInfo.creationPoints}
-                                        onChange={(val: number) =>
-                                            changeCreationPoints(
-                                                typedAttribute,
-                                                val
-                                            )
-                                        }
-                                    />
-                                </Tooltip>
-                            </div>
-                        )
-                    }
-                    else {
-                        return null
-                    };
-                })}
-            </Grid.Col>
-        )
-    })
 
     const fourStyle = !check[4] ? { fontSize: globals.smallFontSize } : { color: "grey" }
     const threeStyle = !check[3] ? { fontSize: globals.smallFontSize } : { color: "grey" }
     const twoStyle = !check[2] ? { fontSize: globals.smallFontSize } : { color: "grey" }
     const oneStyle = !check[1] ? { fontSize: globals.smallFontSize } : { color: "grey" }
+    const height = globals.viewportHeightPx
 
     return (
         <Center style={{ paddingTop: isPhoneScreen ? '60px' : '60px', paddingBottom: isPhoneScreen ? '60px' : '60px' }}>
@@ -156,11 +73,9 @@ const AttributePicker = ({ kindred, setKindred, nextStep, backStep }: AttributeP
                         one Attribute at 1
                     </Text>
                 </Group>
-
-                <Grid gutter="lg" justify="center">
-                    {attributeInputs}
-                </Grid>
-
+                <ScrollArea h={height - 315} w={"100%"} p={20}>
+                    <AttributeGrid kindred={kindred} setKindred={setKindred} check={check} />
+                </ScrollArea>
                 <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
                     <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>
                         <Button

@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { ScrollArea, Grid, Stack } from "@mantine/core"
-import { globals } from "../../../assets/globals"
+import { Grid, Stack } from "@mantine/core"
 import { loresheetFilter, Loresheet } from "../../../data/GoodIntentions/types/V5Loresheets"
 import LoresheetGrid from "./LoresheetGrid"
 import LoresheetCard from "./LoresheetCard"
@@ -22,13 +21,9 @@ const LoresheetInputs = ({ kindred, setKindred, type, venueData }: LoresheetInpu
     const [openLoresheetTitle, setOpenLoresheetTitle] = useState(kindred.loresheet.name)
     const openLoresheet = loresheets.find((sheet: Loresheet) => sheet.name === openLoresheetTitle)
 
-    const height = globals.viewportHeightPx
-    const width = globals.viewportWidthPx
-
     return (
         <Stack mt={"xl"} align="center" spacing="xl">
 
-            <ScrollArea h={height - 280} w={width - 700} p={20}>
                 <Grid w={"100%"}>
                     {openLoresheet ?
                         <LoresheetCard
@@ -43,7 +38,6 @@ const LoresheetInputs = ({ kindred, setKindred, type, venueData }: LoresheetInpu
                         <LoresheetGrid kindred={kindred} setOpenLoresheetTitle={setOpenLoresheetTitle} venueData={venueData} />
                     }
                 </Grid>
-            </ScrollArea>
         </Stack>
     )
 }

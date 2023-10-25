@@ -214,7 +214,7 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }:MeritsGridProps) =>
             }    
     
         return (
-            <Accordion.Item value={`${category} accordion`}>
+            <Accordion.Item value={`${category} accordion`} key={category}>
                 <Accordion.Control style={{ color: "white", backgroundColor: bgc }}>
                     {category.toUpperCase()}
                 </Accordion.Control>

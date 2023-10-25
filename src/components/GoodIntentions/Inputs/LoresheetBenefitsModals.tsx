@@ -143,7 +143,7 @@ export const BackgroundSelectModal = ({
             onClose={backgroundCloseModal}
             size={600}
         >
-            <ScrollArea h={height - 330} w={"100%"} p={20}>
+            <ScrollArea h={height - 250} w={"100%"} p={20}>
                 <Stack>
                     <Group position="apart">
                         <Text maw={"80%"} fz={"xl"}>

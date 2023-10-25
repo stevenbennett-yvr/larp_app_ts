@@ -17,6 +17,7 @@ interface UserContextProps {
   characterList: { id: string }[];
   getUser: () => Promise<User | null>;
   updateUser: (id: string, updatedUser: Partial<User>) => Promise<void>;
+  fetchUserData: (setUserData:Function) => void;
   name: string;
   domain: string;
   email: string;
@@ -78,6 +79,17 @@ export function UserProvider({ children }: { children: React.ReactNode}): JSX.El
     }
   }, [currentUser]);
 
+  const fetchUserData = useCallback(async (setUserData:Function) => {
+    const fetchedUserData = await getUser();
+    console.log("fetch userData")
+    if (fetchedUserData) {
+      setUserData(fetchedUserData);
+      localStorage.setItem('userData', JSON.stringify(fetchedUserData));
+    } else {
+      console.log("User data not found");
+    }
+  }, [getUser]);
+
   const updateUser = useCallback(
     async (id: string, updatedUser: Partial<User>) => {
       const userDoc = doc(db, "users", id);
@@ -113,13 +125,14 @@ export function UserProvider({ children }: { children: React.ReactNode}): JSX.El
       characterList,
       getUser,
       updateUser,
+      fetchUserData,
       name: userData?.name || "",
       domain: userData?.domain || "",
       email: userData?.email || "",
       mc: userData?.mc || 0,
       uid: userData?.uid || ""
     };
-  }, [characterList, getUser, updateUser, userData]);
+  }, [characterList, getUser, updateUser, userData, fetchUserData]);
 
   return (
     <UserContext.Provider value={value}>

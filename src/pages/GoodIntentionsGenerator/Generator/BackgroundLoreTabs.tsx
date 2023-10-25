@@ -1,5 +1,5 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { Center, Tabs, Stack, Alert, Group, Button, Text } from "@mantine/core"
+import { Center, Tabs, Stack, Alert, Button, Text, ScrollArea } from "@mantine/core"
 import { globals } from "../../../assets/globals"
 import BackgroundFull from "../../../components/GoodIntentions/Inputs/BackgroundFull"
 import LoresheetInputs from "../../../components/GoodIntentions/Inputs/LoresheetPicker"
@@ -15,9 +15,9 @@ type BackgroundLoreTabsProps = {
     venueData: GoodIntentionsVenueStyleSheet
 }
 
-const BackgroundLoreTabs = ({kindred, setKindred, nextStep, backStep, venueData}:BackgroundLoreTabsProps) => {
+const BackgroundLoreTabs = ({ kindred, setKindred, nextStep, backStep, venueData }: BackgroundLoreTabsProps) => {
 
-    
+
     const getFlawPoints = (kindred: Kindred): number => {
         let totalFlawPoints = 0;
 
@@ -74,54 +74,61 @@ const BackgroundLoreTabs = ({kindred, setKindred, nextStep, backStep, venueData}
 
         return 7 + getFlawPoints(kindred) - (totalBackgroundPoints + totalLoresheetPoints)
     }
+    const height = globals.viewportHeightPx
+    const isPhoneScreen = globals.isPhoneScreen
+    const isSmallScreen = globals.isSmallScreen
 
-    return(
+    return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
-        <Tabs defaultValue="background" orientation={globals.isPhoneScreen?"vertical":"horizontal"}>
-          <Stack spacing="0">
-          <Text fz={globals.largeFontSize} ta={"center"}>
-                Remaining Points: {getRemainingPoints(kindred)}
-            </Text>
-          <Center>
-            <Tabs.List style={{ paddingBottom: "10px"}}>
-              <Tabs.Tab value="background">Backgrounds</Tabs.Tab>
-              <Tabs.Tab value="loresheet">Loresheets</Tabs.Tab>
-            </Tabs.List>
-          </Center>
-  
-          <Tabs.Panel value="background" pt="xs">
-            <BackgroundFull kindred={kindred} setKindred={setKindred} type="creationPoints" />
-          </Tabs.Panel>
-  
-          <Tabs.Panel value="loresheet" pt="xs">
-            <LoresheetInputs kindred={kindred} setKindred={setKindred} venueData={venueData} type="creationPoints" />
-          </Tabs.Panel>
+            <Stack mt={""} align="center" spacing="md">
+                <Tabs h={height - 205} defaultValue="background" w={"100%"} orientation={globals.isPhoneScreen ? "vertical" : "horizontal"}>
+                    <Stack spacing="0">
+                        <Text fz={globals.largeFontSize} ta={"center"}>
+                            Remaining Points: {getRemainingPoints(kindred)}
+                        </Text>
+                        <Center>
+                            <Tabs.List ta="center" style={{ paddingBottom: "10px" }}>
+                                <Tabs.Tab value="background">Backgrounds</Tabs.Tab>
+                                <Tabs.Tab value="loresheet">Loresheets</Tabs.Tab>
+                            </Tabs.List>
+                        </Center>
+                        <ScrollArea h={height - 305} w={"100%"} p={20}>
 
-          </Stack>
-        </Tabs>
-        
-        <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen ? "15%" : "30%" }}>
-                    <Group>
-                        <Button.Group>
-                            <Button
-                                style={{ margin: "5px" }}
-                                color="gray"
-                                onClick={backStep}
-                            >
-                                Back
-                            </Button>
-                            <Button
-                                style={{ margin: "5px" }}
-                                color="gray"
-                                onClick={nextStep}
-                                disabled={getRemainingPoints(kindred) !== 0 || getTotalBackgroundPoints(kindred) > 7}
-                            >
-                                Next
-                            </Button>
+                            <Tabs.Panel value="background" pt="xs">
+                                <BackgroundFull kindred={kindred} setKindred={setKindred} type="creationPoints" />
+                            </Tabs.Panel>
+
+                            <Tabs.Panel value="loresheet" pt="xs">
+                                <LoresheetInputs kindred={kindred} setKindred={setKindred} venueData={venueData} type="creationPoints" />
+                            </Tabs.Panel>
+                        </ScrollArea>
+
+
+                        <Button.Group style={{ position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
+                            <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>
+                                <Button
+                                    style={{ margin: "5px" }}
+                                    color="gray"
+                                    onClick={backStep}
+                                >
+                                    Back
+                                </Button>
+                                <Button
+                                    style={{ margin: "5px" }}
+                                    color="gray"
+                                    onClick={nextStep}
+                                    disabled={getRemainingPoints(kindred) !== 0 || getTotalBackgroundPoints(kindred) > 7}
+
+                                >
+                                    Next
+                                </Button>
+                            </Alert>
                         </Button.Group>
-                    </Group>
-                </Alert>
-      </Center>
+
+                    </Stack>
+                </Tabs>
+            </Stack>
+        </Center>
     )
 
 }

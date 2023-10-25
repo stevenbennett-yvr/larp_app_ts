@@ -48,7 +48,7 @@ export const v5AdvantageRefSchema = z.object({
     creationPoints: z.number(),
     freebiePoints: z.number(),
     experiencePoints: z.number(),
-    havenBool: z.boolean().optional()
+    havenPoints: z.number(),
 })
 
 export type V5AdvantageRef = z.infer<typeof v5AdvantageRefSchema>
@@ -58,6 +58,7 @@ export const emptyAdvantage: V5AdvantageRef = {
     creationPoints: 0,
     freebiePoints: 0,
     experiencePoints: 0,
+    havenPoints: 0
 }
 
 export const v5BackgroundRefSchema = z.object({
@@ -201,16 +202,18 @@ export const v5BackgroundLevel = (v5BackgroundRef: V5BackgroundRef) => {
 export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
     let totalXpNeeded = 0;
     let pastXpNeeded = [0];
-    let { experiencePoints, creationPoints, freebiePoints, havenBool } = AdvantageRef;
+    let { experiencePoints, creationPoints, freebiePoints, havenPoints } = AdvantageRef;
+
+    if (!havenPoints) { havenPoints = 0}
 
     if (experiencePoints === 0) {
-        let level = creationPoints + freebiePoints + (havenBool? 1:0);
+        let level = creationPoints + freebiePoints + havenPoints;
         let xpNeeded = 3;
         totalXpNeeded = xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
         return { level, totalXpNeeded, pastXpNeeded };
     } else {
-        let level = creationPoints + freebiePoints + (havenBool? 1:0);
+        let level = creationPoints + freebiePoints + havenPoints;
         let xpNeeded = 3;
         totalXpNeeded += xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
@@ -227,7 +230,7 @@ export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
     }
 }
 
-type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "havenBool";
+type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "havenPoints";
 
 export const handleBackgroundChange = (
     kindred: Kindred,
@@ -298,7 +301,7 @@ export const handleAdvantageChange = (
     bRef: V5BackgroundRef,
     aRef: V5AdvantageRef,
     type: VariableKeys,
-    newPoints: number | string | boolean,
+    newPoints: number | string,
 ) => {
     const existingAdvantage = bRef.advantages.find((a) => a.name === aRef.name);
     if (!existingAdvantage) {

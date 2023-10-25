@@ -139,7 +139,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                                                 const advantageRef = background.advantages.find((a) => a.name === advantage.name) || { ...emptyAdvantage, name: advantage.name }
                                                                 if (!advantageRef) { return null }
                                                                 return (
-                                                                    <tr>
+                                                                    <tr key={advantage.name}>
                                                                         <td>
                                                                             <Text align="center">{icon} &nbsp;{advantage.name}</Text>
                                                                             <Center>
@@ -271,7 +271,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
 
                                                 if (!advantageInfo) return (null)
                                                 return (
-                                                    <Text>
+                                                    <Text key={advantage.name}>
                                                         {icon} &nbsp;
                                                         <b>{advantage.name} {v5AdvantageLevel(advantage).level}</b>
                                                         <div dangerouslySetInnerHTML={{ __html: advantageInfo.description }} />
@@ -294,7 +294,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                         spentPoints += option.freebiePoints;
                     });
                     return (
-                        <Stack>
+                        <Stack key={options.name}>
                             <Group position="apart">
                                 <Text maw={"80%"} fz={"xl"}>
                                     {`Pick ${totalPoints} from: `}
@@ -311,7 +311,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                     return null;
                                 } else {
                                     return (
-                                        <div>
+                                        <div key={option.name}>
                                             <Group align="center">
                                                 <Tooltip
                                                     disabled={backgroundInfo.summary === ""}
@@ -440,7 +440,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                         if (!meritFlawInfo) { return null }
                                         else {
                                             return (
-                                                <div>
+                                                <div key={option.name}>
                                                     <Group position="apart">
                                                         <Tooltip
                                                             disabled={meritFlawInfo.description === ""}

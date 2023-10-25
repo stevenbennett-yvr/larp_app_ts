@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { MageProvider } from './contexts/MageContext';
 import { CabalProvider } from './contexts/CabalContext';
+import { CharacterProvider } from './contexts/CharacterContext';
 
 import PrivateRoute from './PrivateRoute';
 
@@ -42,7 +43,9 @@ function App() {
             <UserProvider>
               <MageProvider>
                 <CabalProvider>
+                  <CharacterProvider>
                 <AuthenticatedApp></AuthenticatedApp>
+                  </CharacterProvider>
                 </CabalProvider>
               </MageProvider>
             </UserProvider>

@@ -78,15 +78,6 @@ export const disciplineExperience = (kindred: Kindred): number => {
     return disciplineXp;
 };
 
-export const powerExperience = (kindred: Kindred): number => {
-    let powerXp = 0;
-    Object.entries(kindred.powers).map(([, power]) => {
-        powerXp += power.experiencePoints;
-        return null; // Explicit return statement (can return any value, even null)
-    });
-    return powerXp;
-};
-
 export const ritualExperience = (kindred: Kindred): number => {
     let ritualXp = 0;
     Object.entries(kindred.rituals).map(([, ritual]) => {
@@ -155,7 +146,6 @@ export const spentExperience = (kindred:Kindred) => {
     const attributeXp = attributeExperience(kindred);
     const skillXp = skillExperience(kindred);
     const disciplineXp = disciplineExperience(kindred);
-    const powerXp = powerExperience(kindred)
     const ritualXp = ritualExperience(kindred)
     const ceremonyXp = ceremonyExperience(kindred)
     const backgroundXp = backgroundExperience(kindred)
@@ -165,7 +155,7 @@ export const spentExperience = (kindred:Kindred) => {
     const lsXp = loresheetExperience(kindred)
     const formulaXp = formulaExperience(kindred)
 
-    const spentExperience = (attributeXp + skillXp + disciplineXp + powerXp + ritualXp + ceremonyXp + backgroundXp + meritXp + bpXp + hXp + lsXp + formulaXp);
+    const spentExperience = (attributeXp + skillXp + disciplineXp + ritualXp + ceremonyXp + backgroundXp + meritXp + bpXp + hXp + lsXp + formulaXp);
     return spentExperience;
 };
 

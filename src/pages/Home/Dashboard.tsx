@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useLocalStorage } from '@mantine/hooks';
 import { useUser } from '../../contexts/UserContext';
 import { Alert, Card, Center, Text, Group, Stack, Grid, Title } from '@mantine/core';
 import { globals } from "../../assets/globals"
 import DomainSelector from './components/DomainSelector';
 import ChroncileSelector from './components/ChronicleSelector';
 import { DomainCard } from './components/DomainDisplay';
+import { getEmptyUser } from '../../data/CaM/types/User';
 
 /* 
   TODO: 
@@ -16,31 +18,18 @@ import { DomainCard } from './components/DomainDisplay';
 
 export default function Dashboard() {
   //const navigate = useNavigate();
-  const { getUser } = useUser();
-  const [userData, setUserData] = useState(() => {
-    const savedUserData = localStorage.getItem('userData');
-    return savedUserData ? JSON.parse(savedUserData) : '';
-  });
+  const { fetchUserData } = useUser();
+  const [userData, setUserData] = useLocalStorage({key:'userData', defaultValue: getEmptyUser() });
   const [showDomainSelector, setShowDomainSelector] = useState(false);
 
-
   useEffect(() => {
-    if (!userData) { // Check if userData is not set
-      const fetchUserData = async () => {
-        const fetchedUserData = await getUser();
-        console.log("fetch userData")
-        if (fetchedUserData) {
-          setUserData(fetchedUserData);
-          setShowDomainSelector(!userData.domain);
-          localStorage.setItem('userData', JSON.stringify(fetchedUserData));
-        } else {
-          console.log("User data not found");
-        }
-      };
-
-      fetchUserData();
+    if (userData.uid==="") {
+      fetchUserData(setUserData);
     }
-  }, []);
+    if (userData.domain==="") {
+      setShowDomainSelector(true)
+    }
+  }, [fetchUserData, userData, setUserData]);
 
   return (
     <Center h={"100%"}>
@@ -51,7 +40,6 @@ export default function Dashboard() {
               <Card shadow="sm" padding="lg" radius="md" withBorder>
                 <Text fz={globals.largeFontSize} mb={"lg"}>Profile</Text>
                 <Text fz={globals.smallerFontSize}>Email: {userData.email}</Text>
-                <Text fz={globals.smallerFontSize}>Cam Number: {userData.camNumber}</Text>
                 <Text fz={globals.smallerFontSize}>MC: {userData.mc}</Text>
                 <Text fz={globals.smallerFontSize}>Domain: {userData.domain}</Text>
               </Card>

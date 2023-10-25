@@ -1,7 +1,10 @@
 import { Kindred, getEmptyKindred } from "../../data/GoodIntentions/types/Kindred"
 import { GoodIntentionsVSSs } from "../../data/CaM/types/VSS";
 import { useLocalStorage } from "@mantine/hooks"
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { useCharacterDb } from "../../contexts/CharacterContext";
+import changeLog from "../../utils/GoodIntentions/LoggingTool";
 
 import SectPicker from "./Generator/SectPicker"
 import ClanPicker from "./Generator/ClanPicker"
@@ -22,8 +25,13 @@ import { Center } from "@mantine/core"
 
 
 const GenerateKindred = () => {
+    const { onSubmitCharacter } = useCharacterDb()
+
     const { venueId } = useParams();
     const venueData = GoodIntentionsVSSs.find((venue) => venue.venueStyleSheet.id === venueId);
+    const navigate = useNavigate();
+
+    const { currentUser } = useAuth()
 
     const [kindred, setKindred] = useLocalStorage<Kindred>({ key: `kindred:${venueId}`, defaultValue: getEmptyKindred() });
     const [selectedStep, setSelectedStep] = useLocalStorage({ key: `goodIntentionsSelectedStep:${venueId}`, defaultValue: 0 });
@@ -33,6 +41,31 @@ const GenerateKindred = () => {
         return <Center h={"100%"}><div>Invalid Venue ID</div></Center>;
     }
 
+    async function handleSubmit() {
+        try {
+            if (!currentUser || !venueId) {
+                console.error("User data or uid is not available.");
+                return;
+            };
+
+            const updatedKindred = {
+                ...kindred,
+                uid: currentUser.uid,
+                email: currentUser.email,
+                vssId: venueId,
+                changeLogs: {
+                    ...kindred.changeLogs,
+                    [new Date().toISOString()]: changeLog(getEmptyKindred(), kindred)
+                }
+            };
+            await onSubmitCharacter(updatedKindred)
+
+            localStorage.clear();
+            navigate(`/good-intentions/${venueId}`)
+        } catch {
+            console.log("Failed to create character");
+        }
+    }
 
     const getStepComponent = () => {
         switch (selectedStep) {
@@ -86,7 +119,7 @@ const GenerateKindred = () => {
                 )
             case 11:
                 return (
-                    <V5PrintSheet kindred={kindred} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                    <V5PrintSheet kindred={kindred} backStep={() => { setSelectedStep(selectedStep - 1); }} handleSubmit={handleSubmit} />
                 )
             default:
                 return null;

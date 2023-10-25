@@ -26,6 +26,7 @@ const LoresheetCard = ({ loresheet, setOpenLoresheetTitle, kindred, setKindred, 
         setBackgroundModalOpen(false);
     };
 
+    
     return (
         <div style={{ padding: "20px" }}>
             <Text ta={"center"} fz={globals.largeFontSize}>
