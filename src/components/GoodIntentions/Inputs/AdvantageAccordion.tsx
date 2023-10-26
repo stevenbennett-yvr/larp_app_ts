@@ -8,7 +8,7 @@ import { CirclePlus, CircleMinus } from 'tabler-icons-react';
 import { handleBenefitAdvantageChange, Benefit } from "../../../data/GoodIntentions/types/V5Loresheets"
 
 
-export type TypeCategory = 'creationPoints' | 'experiencePoints' | 'freebiePoints';
+export type TypeCategory = 'creationPoints' | 'experiencePoints' | 'freebiePoints' | 'loresheetFreebiePoints';
 
 type AdvantageAccordionProps = {
     kindred: Kindred,
@@ -93,6 +93,28 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
                         }}
                     />
                 );
+            case 'loresheetFreebiePoints':
+                return (
+                    <NumberInput
+                    label="Loresheet Freebie Points"
+                    disabled={disabled}
+                    value={advantageRef.loresheetFreebiePoints}
+                    min={0}
+                    step={advantageStep(advantageRef, backgroundInfo)}
+                    max={
+                        backgroundInfo.name === "Haven" && advantage.type === "advantage"
+                            ? havenSizeMax
+                            : getAdvantagePoints(advantageRef) === advantage.cost[advantage.cost.length - 1]
+                                ? advantageRef.creationPoints
+                                : advantage.cost[advantage.cost.length - 1]
+                    }
+                    onChange={(val: number) => {
+                        if (!benefitData || !setBenefitData) { return null }
+                        handleBenefitAdvantageChange(bRef, advantageRef, benefitData, setBenefitData, val, "loresheetFreebiePoints")
+                    }
+                    }
+                />
+                )
             case 'freebiePoints':
                 return (
                     <NumberInput
@@ -110,7 +132,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
                         }
                         onChange={(val: number) => {
                             if (!benefitData || !setBenefitData) { return null }
-                            handleBenefitAdvantageChange(bRef, advantageRef, benefitData, setBenefitData, val)
+                            handleBenefitAdvantageChange(bRef, advantageRef, benefitData, setBenefitData, val, "freebiePoints")
                         }
                         }
                     />
@@ -154,7 +176,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
         const freebieBool = havenFreebies >= v5BackgroundLevel(bRef).level - 1;
         const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
         const isDisadvantage = advantage.type === "disadvantage";
-        if (isDisadvantage && type === "freebiePoints") {
+        if (isDisadvantage && (type === "freebiePoints" || "loresheetFreebiePoints")) {
             return null;
         }
         return (

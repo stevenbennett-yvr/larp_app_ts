@@ -1,10 +1,10 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { globals } from "../../../assets/globals"
-import { Title, Group, ScrollArea, Text, Button, Stack, Select, Modal, Tooltip, NumberInput} from "@mantine/core"
+import { Title, Group, ScrollArea, Text, Button, Stack, Select, Modal, Tooltip, NumberInput } from "@mantine/core"
 import { Benefit, Loresheet, updateSkills } from "../../../data/GoodIntentions/types/V5Loresheets"
 import { useState } from "react"
 import { V5SkillsKey } from "../../../data/GoodIntentions/types/V5Skills"
-import { V5BackgroundRef, backgroundData } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { V5BackgroundRef, backgroundData, v5BackgroundLevel, mergeBackgrounds } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import AdvantageAccordion from "./AdvantageAccordion"
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints';
@@ -36,7 +36,7 @@ export const SkillSelectModal = ({
 
     let skillSelectData: V5SkillsKey[] = []
     if (benefit.selectableSkills.length > 0) {
-        benefit.selectableSkills.forEach((s:any) => {
+        benefit.selectableSkills.forEach((s: any) => {
             skillSelectData = [...skillSelectData, s.skill]
         })
     }
@@ -98,7 +98,8 @@ type BackgroundSelectModalProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void,
     loresheet: Loresheet,
-    benefit: Benefit
+    benefitData: Benefit
+    setBenefitData: (benefitData: Benefit) => void,
     type: TypeCategory
 }
 
@@ -106,7 +107,8 @@ export const BackgroundSelectModal = ({
     backgroundModalOpened,
     backgroundCloseModal,
     loresheet,
-    benefit,
+    benefitData,
+    setBenefitData,
     kindred,
     setKindred,
     type,
@@ -115,25 +117,24 @@ export const BackgroundSelectModal = ({
     let Totalpass = true
     let advantagePass = true
 
-    const [benefitData, setBenefitData] = useState(benefit);
-
     const options = benefitData.selectableBackgrounds.options
     const totalPoints = benefitData.selectableBackgrounds.totalPoints
 
     let spentPoints = 0
     options.forEach((option: V5BackgroundRef) => {
-        if (option.freebiePoints === 0) {
+        let bRef = kindred.backgrounds.find(bg => bg.name === option.name)
+        if (option.loresheetFreebiePoints + (bRef ? v5BackgroundLevel(bRef).level : 0) === 0) {
             // Check if any associated advantages have greater than 0 freebiePoints
             const hasAdvantagesWithFreebiePoints = option.advantages.some(advantage => advantage.freebiePoints > 0);
-    
+
             if (hasAdvantagesWithFreebiePoints) {
                 advantagePass = false;
                 return; // No need to continue checking other options
             }
         }
-        spentPoints += option.freebiePoints;
+        spentPoints += option.loresheetFreebiePoints;
         option.advantages.forEach((advantage) => {
-            spentPoints += advantage.freebiePoints
+            spentPoints += advantage.loresheetFreebiePoints
         })
     })
     const height = globals.viewportHeightPx
@@ -154,6 +155,7 @@ export const BackgroundSelectModal = ({
                         </Text>
                     </Group>
                     {options.map((option: V5BackgroundRef) => {
+                        let bRef = kindred.backgrounds.find(bg => bg.name === option.name && (option.name === "Herd"))
                         if (totalPoints - spentPoints === 0) { Totalpass = true } else { Totalpass = false }
                         const backgroundInfo = backgroundData.find((entry) => entry.name === option.name)
                         if (!backgroundInfo) {
@@ -171,24 +173,26 @@ export const BackgroundSelectModal = ({
                                             <Text w={"140px"}>{option.name}</Text>
                                         </Tooltip>
                                         <NumberInput
-                                            value={option.freebiePoints}
-                                            min={0}
-                                            max={totalPoints - spentPoints === 0 ? option.freebiePoints : 3}
+                                            disabled={bRef && bRef.name === option.name ? v5BackgroundLevel(bRef).level === 3 : false}
+                                            value={option.loresheetFreebiePoints + (bRef && bRef.name === option.name ? v5BackgroundLevel(bRef).level : 0)}
+                                            min={(bRef && bRef.name === option.name ? v5BackgroundLevel(bRef).level : 0)}
                                             width={"50%"}
+                                            max={totalPoints - spentPoints === 0 ? 0 : 3}
                                             onChange={(val: number) => {
+                                                let trueVal = val - (bRef && bRef.name === option.name ? v5BackgroundLevel(bRef).level : 0)
                                                 setBenefitData({
                                                     ...benefitData,
                                                     selectableBackgrounds: {
                                                         ...benefitData.selectableBackgrounds,
                                                         options: benefitData.selectableBackgrounds.options.map((b: any) =>
-                                                            b.id === option.id ? { ...b, freebiePoints: val } : b
+                                                            b.id === option.id ? { ...b, loresheetFreebiePoints: trueVal } : b
                                                         )
                                                     }
                                                 })
                                             }}
                                             style={{ width: "100px" }}
                                         />
-                                        <AdvantageAccordion kindred={kindred} setKindred={setKindred} bRef={option} type="freebiePoints" benefitData={benefitData} setBenefitData={setBenefitData} disabled={option.freebiePoints<1} />
+                                        <AdvantageAccordion kindred={kindred} setKindred={setKindred} bRef={option} type="loresheetFreebiePoints" benefitData={benefitData} setBenefitData={setBenefitData} disabled={option.loresheetFreebiePoints + (bRef ? v5BackgroundLevel(bRef).level : 0) === 0} />
                                     </Group>
                                 </div>
                             )
@@ -198,20 +202,33 @@ export const BackgroundSelectModal = ({
                     <Button
                         disabled={!(Totalpass) || !(advantagePass)}
                         onClick={() => {
-                            const selectableBackgrounds = benefitData.selectableBackgrounds.options.filter((option: any) => option.freebiePoints > 0);
-                            const combinedBackgrounds = [
-                                ...kindred.backgrounds,
-                                ...selectableBackgrounds
-                            ]
+                            const loresheetBackgrounds = benefitData.selectableBackgrounds.options.filter((option: any) => option.loresheetFreebiePoints > 0);
+
+                            const matchingBackgrounds = kindred.backgrounds.filter((background: any) =>
+                              loresheetBackgrounds.some((loresheet) => loresheet.name === background.name && (loresheet.name==="Herd"))
+                            );
+
+                            const selectableBackgrounds = matchingBackgrounds.length > 0
+                            ? matchingBackgrounds.map((matchingBg) =>
+                                mergeBackgrounds(
+                                  `${matchingBg.name}_merged_id`,
+                                  matchingBg,
+                                  ...loresheetBackgrounds.filter((option) => option.name === matchingBg.name)
+                                )
+                              )
+                            : loresheetBackgrounds;
+                            console.log(selectableBackgrounds)
+                            const combinedBackgrounds = [...kindred.backgrounds, ...selectableBackgrounds];
+                            
                             setKindred({
                                 ...kindred,
                                 backgrounds: combinedBackgrounds,
-                                skills: updateSkills(kindred, benefit).updatedSkills,
+                                skills: updateSkills(kindred, benefitData).updatedSkills,
                                 loresheet: {
                                     ...kindred.loresheet,
                                     name: loresheet.name,
                                     benefits: [...kindred.loresheet.benefits, {
-                                        name: benefit.name, creationPoints: type==="creationPoints"?benefit.level:0, freebiePoints: 0, experiencePoints: type==="experiencePoints"? benefit.level * 3 : 0
+                                        name: benefitData.name, creationPoints: type === "creationPoints" ? benefitData.level : 0, freebiePoints: 0, experiencePoints: type === "experiencePoints" ? benefitData.level * 3 : 0
                                     }],
                                 },
                             })

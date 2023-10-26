@@ -32,7 +32,7 @@ import { upcase } from "../../../utils/case";
 import { v5HumanityLevel } from "../../../data/GoodIntentions/types/V5Humanity";
 import { Rituals } from "../../../data/GoodIntentions/types/V5Rituals";
 import { Ceremonies } from "../../../data/GoodIntentions/types/V5Ceremonies";
-import { V5BackgroundRef, backgroundData, v5BackgroundLevel, v5AdvantageLevel } from "../../../data/GoodIntentions/types/V5Backgrounds";
+import { V5BackgroundRef, backgroundData, v5BackgroundLevel, v5AdvantageLevel, kindredBackgrounds } from "../../../data/GoodIntentions/types/V5Backgrounds";
 import { v5GetMeritByName, v5MeritLevel } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
 
 // Utility functions and components
@@ -341,13 +341,13 @@ const V5PrintSheet = ({ kindred, backStep, handleSubmit }: PrintSheetProps) => {
     }
 
     const backgroundSection = () => {
-        const sortedBackgrounds = kindred.backgrounds.sort((a, b) => a.id.localeCompare(b.id))
+        const sortedBackgrounds = kindredBackgrounds(kindred)
 
         const backgroundCard = (background: V5BackgroundRef) => {
             const backgroundInfo = backgroundData.find((b) => b.name === background.name)
             if (!backgroundInfo) { return null }
             return (
-                <Grid.Col span={4} key={background.name}>
+                <Grid.Col span={4} key={background.id}>
 
                     <Card>
                         <Table>
@@ -436,7 +436,7 @@ const V5PrintSheet = ({ kindred, backStep, handleSubmit }: PrintSheetProps) => {
                     <tbody>
                         {sortedMerits.map((flaw) => {
                             return (
-                                <tr key={flaw.name}>
+                                <tr key={flaw.id}>
                                     <td>
                                         <Text>{flaw.name} {v5MeritLevel(flaw).level}</Text>
                                     </td>

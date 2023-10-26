@@ -8,7 +8,7 @@ export const predatorTypeNameSchema = z.union([
     z.literal("Alleycat"),
     z.literal("Bagger"),
     z.literal("Cleaver"),
-    z.literal("Consensualist"),
+    z.literal("Consentualist"),
     z.literal("Extortionist"),
     z.literal("Farmer"),
     z.literal("Ferryman"),
@@ -60,8 +60,8 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Alleycat",
         summary: "Ambush prey in alleys",
         backgrounds: [
-            { ...emptyBackground, id: "alleycat-contacts", name: "Contacts", freebiePoints: 2, advantages: [], sphere: ["underworld", "street"] },
-            { ...emptyBackground, id: "alleycat-resources", name: "Resources", freebiePoints: 1, advantages: [{ ...emptyAdvantage, name: "Cash Money", freebiePoints: 1 }] },
+            { ...emptyBackground, id: "alleycat-contacts", note:"Allycat Contacts", name: "Contacts", predatorTypeFreebiePoints: 2, advantages: [], sphere: ["underworld", "street"] },
+            { ...emptyBackground, id: "alleycat-resources", note:"Allycat Resournces", name: "Resources", predatorTypeFreebiePoints: 1, advantages: [{ ...emptyAdvantage, name: "Cash Money", freebiePoints: 1 }] },
         ],
         meritsAndFlaws: [],
         humanityChange: -1,
@@ -74,7 +74,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Bagger",
         summary: "Feed on blood bags",
         backgrounds: [
-            { ...emptyBackground, id: "bagger-contacts", name: "Contacts", sphere: ["underworld"], freebiePoints: 2, advantages: [] }
+            { ...emptyBackground, id: "bagger-contacts", note:"Bagger Contacts", name: "Contacts", sphere: ["underworld"], predatorTypeFreebiePoints: 2, advantages: [] }
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'bagger-IronGullet', name: "Iron Gullet", freebiePoints: 3, note: "able to feed on rancid blood" },
@@ -91,8 +91,8 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Cleaver",
         summary: "Feed on friends and family",
         backgrounds: [
-            { ...emptyBackground, id: "cleaver-herd", name: "Herd", freebiePoints: 2, advantages: [] },
-            { ...emptyBackground, id: "cleaver-mask", name: "Mask", freebiePoints: 2, advantages: [] },
+            { ...emptyBackground, id: "cleaver-herd", note:"Cleaver Herd", name: "Herd", predatorTypeFreebiePoints: 2, advantages: [] },
+            { ...emptyBackground, id: "cleaver-mask", note:"Cleaver Mask", name: "Mask", predatorTypeFreebiePoints: 2, advantages: [] },
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'bagger-DarkSecret', name: "Dark Secret", freebiePoints: 1, note: "You are a cleaver" },
@@ -104,16 +104,16 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         selectableSpheres: [],
 
     },
-    Consensualist: {
-        name: "Consensualist",
+    Consentualist: {
+        name: "Consentualist",
         summary: "Take blood only from the willing",
         backgrounds: [
-            { ...emptyBackground, id: "consensualist-herd", name: "Herd", freebiePoints: 3, advantages: [] }
+            { ...emptyBackground, id: "consentualist-herd", note:"consentualist Herd", name: "Herd", freebiePoints: 3, advantages: [] }
         ],
         advantagePoints: 1,
         meritsAndFlaws: [
-            { ...emptyMeritFlaw, id: 'consensualist-DarkSecret', name: "Dark Secret", freebiePoints: 1, note: "Masquerade Breacher" },
-            { ...emptyMeritFlaw, id: 'consensualist-PreyExclusion', name: "Prey Exclusion", freebiePoints: 1, note: "Can't feed on the non-consenting" },
+            { ...emptyMeritFlaw, id: 'consentualist-DarkSecret', name: "Dark Secret", freebiePoints: 1, note: "Masquerade Breacher" },
+            { ...emptyMeritFlaw, id: 'consentualist-PreyExclusion', name: "Prey Exclusion", freebiePoints: 1, note: "Can't feed on the non-consenting" },
         ],
         humanityChange: 1,
         huntingPool: { attribute: "manipulation", skill: "persuasion" },
@@ -126,7 +126,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Extortionist",
         summary: "Strong-arm prey into giving you their blood",
         backgrounds: [
-            { ...emptyBackground, id: "extortionist-resources", name: "Resources", freebiePoints: 1, advantages: [] },
+            { ...emptyBackground, id: "extortionist-resources", note: "Extortionist Resources", name: "Resources", predatorTypeFreebiePoints: 1, advantages: [] },
         ],
         advantagePoints: 1,
         meritsAndFlaws: [
@@ -135,8 +135,8 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         humanityChange: 0,
         huntingPool: { attribute: "manipulation", skill: "intimidation" },
         selectableBackground: { options: [
-            { ...emptyBackground, id: "extortionist-contacts", name: "Contacts", freebiePoints: 0, sphere: [""], advantages: [] },
-            { ...emptyBackground, id: "extortionist-allies", name: "Allies", freebiePoints: 0, sphere: [""], advantages: [] }, 
+            { ...emptyBackground, id: "extortionist-contacts", note:"Extortoinist Contacts", name: "Contacts", predatorTypeFreebiePoints: 0, sphere: [""], advantages: [] },
+            { ...emptyBackground, id: "extortionist-allies", note:"Extortoinist Contacts", name: "Allies", predatorTypeFreebiePoints: 0, sphere: [""], advantages: [] }, 
         ], totalPoints: 3},
         selectableMeritFlaw: { options: [], totalPoints: 0},
         selectableSpheres: [],
@@ -146,7 +146,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Farmer",
         summary: "Feed on animals",
         backgrounds: [
-            { ...emptyBackground, id: "farmer-haven", name: "Haven", freebiePoints: 2, advantages: [{ ...emptyAdvantage, name: "Zoo", freebiePoints: 2 }] },
+            { ...emptyBackground, id: "farmer-haven", note:"Farmer Haven", name: "Haven", predatorTypeFreebiePoints: 2, advantages: [{ ...emptyAdvantage, name: "Zoo", freebiePoints: 2 }] },
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'farmer-Farmer', name: "Farmer", freebiePoints: 2, note: "feeding on non-animal blood costs you 2 willpower" },
@@ -162,7 +162,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Ferryman",
         summary: "Use your retainers to herd prey",
         backgrounds: [
-            { ...emptyBackground, id: "ferryman-allies", name: "Allies", freebiePoints: 2, advantages: [{ ...emptyAdvantage, name: "Retainer", freebiePoints: 2 }], sphere: [] }
+            { ...emptyBackground, id: "ferryman-allies", note:"Ferryman Retainer", name: "Allies", predatorTypeFreebiePoints: 2, advantages: [{ ...emptyAdvantage, name: "Retainer", freebiePoints: 2 }], sphere: [] }
         ],
         meritsAndFlaws: [],
         humanityChange: 0,
@@ -175,7 +175,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Graverobber",
         summary: "Feed on fresh corpses and mourning families",
         backgrounds: [
-            { ...emptyBackground, id: "graverobber-haven", name: "Haven", freebiePoints: 1, advantages: [{ ...emptyAdvantage, name: "Walk-In Freezer", freebiePoints: 1 }] }
+            { ...emptyBackground, id: "graverobber-haven", note:"Graverobber Haven", name: "Haven", predatorTypeFreebiePoints: 1, advantages: [{ ...emptyAdvantage, name: "Walk-In Freezer", freebiePoints: 1 }] }
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'graverobber-IronGullet', name: "Iron Gullet", freebiePoints: 3, note: "able to feed on rancid blood" },
@@ -192,8 +192,8 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Hitcher",
         summary: "Hunt prey on desolate roads",
         backgrounds: [
-            { ...emptyBackground, id: "hitcher-haven", name: "Haven", freebiePoints: 1, advantages: [{ ...emptyAdvantage, name: "Garage", freebiePoints: 1 }] },
-            { ...emptyBackground, id: "hitcher-resources", name: "Resources", freebiePoints: 1, advantages: [{ ...emptyAdvantage, name: "Liquidity", freebiePoints: 1 }] }
+            { ...emptyBackground, id: "hitcher-haven", note:"Hitcher Haven", name: "Haven", predatorTypeFreebiePoints: 1, advantages: [{ ...emptyAdvantage, name: "Garage", freebiePoints: 1 }] },
+            { ...emptyBackground, id: "hitcher-resources", note:"Hitcher Resources", name: "Resources", predatorTypeFreebiePoints: 1, advantages: [{ ...emptyAdvantage, name: "Liquidity", freebiePoints: 1 }] }
         ],
         meritsAndFlaws: [
             { ...emptyMeritFlaw, id: 'hitcher-PreyExclusion', name: "Prey Exclusion", freebiePoints: 1, note: "Of our choice." },
@@ -209,7 +209,7 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Osiris",
         summary: "Feed on your followers",
         backgrounds: [
-            { ...emptyBackground, id: "osiris-mask", name: "Mask", freebiePoints: 2, advantages: [] },
+            { ...emptyBackground, id: "osiris-mask", name: "Mask", predatorTypeFreebiePoints: 2, advantages: [] },
         ],
         meritsAndFlaws: [
         ],
@@ -247,9 +247,9 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Scene Queen",
         summary: "Feed in your scene / subculture",
         backgrounds: [
-            { ...emptyBackground, id: "sceneQueen-mask", name: "Mask", freebiePoints: 2, advantages: [] },
-            { ...emptyBackground, id: "sceneQueen-fame", name: "Fame", freebiePoints: 1, advantages: [], note:"Applies to Mask Background" },
-            { ...emptyBackground, id: "sceneQueen-herd", name: "Herd", freebiePoints: 2, advantages: [] },
+            { ...emptyBackground, id: "sceneQueen-mask", name: "Mask", predatorTypeFreebiePoints: 2, advantages: [] },
+            { ...emptyBackground, id: "sceneQueen-fame", name: "Fame", predatorTypeFreebiePoints: 1, advantages: [], note:"Applies to Mask Background" },
+            { ...emptyBackground, id: "sceneQueen-herd", name: "Herd", predatorTypeFreebiePoints: 2, advantages: [] },
         ],
         meritsAndFlaws: [],
         humanityChange: 0,

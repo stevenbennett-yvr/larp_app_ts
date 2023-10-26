@@ -34,7 +34,6 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
 
     const resourceBackgrounds = kindred.backgrounds.filter(entry => entry.name === "Resources");
 
-    // Assuming v5BackgroundLevel returns an object with a 'level' property
     const highestResourceLevel = resourceBackgrounds.reduce((highestLevel, background) => {
         const level = v5BackgroundLevel(background).level;
         return level > highestLevel ? level : highestLevel;
@@ -43,6 +42,7 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
     const starPowerAdvantage = bRef.advantages.find(advantage => advantage.name === "Star Power") || emptyAdvantage;
     const fameMin = (bRef.name === "Fame" && v5AdvantageLevel(starPowerAdvantage).level > 0) ? 3 : 1;
     const fameBool = (bRef.name === "Fame" && v5AdvantageLevel(starPowerAdvantage).level > 0);
+    const totalFreebies = bRef.freebiePoints + bRef.predatorTypeFreebiePoints + bRef.loresheetFreebiePoints
 
     const BackgroundInput = (backgroundRef: V5BackgroundRef) => {
         if (!backgroundRef) { return }
@@ -53,11 +53,11 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
                     <Center>
                         {type === "creationPoints" ?
                             <NumberInput
-                                value={Math.max(backgroundRef.freebiePoints, v5BackgroundLevel(backgroundRef).level)}
-                                min={Math.max(backgroundRef.freebiePoints, fameMin)}
+                                value={Math.max(totalFreebies, v5BackgroundLevel(backgroundRef).level)}
+                                min={Math.max(totalFreebies, fameMin)}
                                 max={backgroundRef.name === "Haven" ? havenMax : v5BackgroundLevel(backgroundRef).level === 3 ? backgroundRef.creationPoints : 3}
                                 onChange={(val: number) => {
-                                    let creationPoints = val - backgroundRef.freebiePoints
+                                    let creationPoints = val - (totalFreebies)
                                     if (creationPoints < 0) { creationPoints = 0 }
                                     handleBackgroundChange(kindred, setKindred, backgroundRef, "creationPoints", creationPoints)
                                 }}
@@ -108,7 +108,7 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
                 <Text fz={"30px"} ta={"center"}>{backgroundInfo.name}: {v5BackgroundLevel(BackgroundRef).level} {BackgroundRef.sphere}</Text>
 
                 {BackgroundInput(BackgroundRef)}
-                {BackgroundRef.freebiePoints === 0 ?
+                {totalFreebies === 0 ?
                     <Button
                         color="gray"
                         onClick={() => {

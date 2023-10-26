@@ -1,7 +1,7 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { globals } from "../../../assets/globals"
 import { Card, Text, Button, Stack } from "@mantine/core"
-import { Loresheet, buyBenefit, updateBackgrounds, updateSkills, updateMeritsFlaws } from "../../../data/GoodIntentions/types/V5Loresheets"
+import { Loresheet, buyBenefit, updateBackgrounds, updateSkills, updateMeritsFlaws, emptyBenefit } from "../../../data/GoodIntentions/types/V5Loresheets"
 import { useState } from "react"
 import { SkillSelectModal, BackgroundSelectModal } from "./LoresheetBenefitsModals"
 
@@ -26,6 +26,7 @@ const LoresheetCard = ({ loresheet, setOpenLoresheetTitle, kindred, setKindred, 
         setBackgroundModalOpen(false);
     };
 
+    const [chosenBenefit, setChosenBenefit] = useState<any>(emptyBenefit)
     
     return (
         <div style={{ padding: "20px" }}>
@@ -78,8 +79,10 @@ const LoresheetCard = ({ loresheet, setOpenLoresheetTitle, kindred, setKindred, 
                             <Button
                                 onClick={() => {
                                     if (benefit.selectableSkills.length > 0) {
+                                        setChosenBenefit(benefit)
                                         setModalOpen(true);
                                     } else if (benefit.selectableBackgrounds.options.length > 0) {
+                                        setChosenBenefit(benefit)
                                         setBackgroundModalOpen(true);
                                     } else {
                                         buyBenefit(kindred, loresheet, benefit, type, setKindred);
@@ -89,11 +92,11 @@ const LoresheetCard = ({ loresheet, setOpenLoresheetTitle, kindred, setKindred, 
                                 Buy (cost: {benefit.level})
                             </Button>
                         )}
-                        {benefit.selectableSkills.length > 0 ?
+                        {chosenBenefit.selectableSkills.length > 0 ?
                             <SkillSelectModal kindred={kindred} setKindred={setKindred} skillModalOpened={skillModalOpened} closeSkillModal={closeSkillModal} loresheet={loresheet} benefit={benefit} type={type} />
                             : <></>}
-                        {benefit.selectableBackgrounds.options.length > 0 ?
-                            <BackgroundSelectModal backgroundModalOpened={backgroundModalOpened} backgroundCloseModal={backgroundCloseModal} kindred={kindred} setKindred={setKindred} loresheet={loresheet} benefit={benefit} type={type} />
+                        {chosenBenefit.selectableBackgrounds.options.length > 0 ?
+                            <BackgroundSelectModal backgroundModalOpened={backgroundModalOpened} backgroundCloseModal={backgroundCloseModal} kindred={kindred} setKindred={setKindred} loresheet={loresheet} benefitData={chosenBenefit} setBenefitData={setChosenBenefit} type={type} />
                             : <></>}
                     </Card>
                 ))}

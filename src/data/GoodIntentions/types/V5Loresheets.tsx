@@ -197,21 +197,17 @@ export const loresheets: Loresheet[] = [
                 level: 2,
                 description: "Through your connections to the Circulatory System, you have developed a farm of valuable vessels with blood potent enough to convey benefits to Kindred drinkers. You gain a three-dot Herd with two dots in the Friendly Advantage.",
                 skillBonus: [],
-                selectableBackgrounds: { options: [], totalPoints: 0 },
-                backgrounds:  [
-                    {
-                        ...emptyBackground, id: "circulatorySystem-herd", name: "Herd", freebiePoints: 3, sphere: [], advantages: [
-                            { ...emptyAdvantage, name: "Friendly", freebiePoints: 3 }
-                        ]
-                    }
-                ],
+                selectableBackgrounds: { options: [
+                    {...emptyBackground, id: "circulatorySystem-herd", name: "Herd", freebiePoints: 0, sphere: [], advantages: []}
+                ], totalPoints: 5 },
+                backgrounds:  [],
                 meritsAndFlaws: [],
                 selectableSkills: []
             },
             {
                 name: "Blood Sommelier",
                 level: 3,
-                description: ": You know the Circulatory System’s secret methods for taste, analysis, and refinement, and you have parlayed your knowledge into significant gains and information from Circulatory System clients. You may select five dots of Contacts, Allies, or Resources Mortal Connections or Advantages. Once every three months, you may ask your Storyteller for an important secret about an NPC who is a client of the Circulatory System.",
+                description: "You know the Circulatory System’s secret methods for taste, analysis, and refinement, and you have parlayed your knowledge into significant gains and information from Circulatory System clients. You may select five dots of Contacts, Allies, or Resources Mortal Connections or Advantages. Once every three months, you may ask your Storyteller for an important secret about an NPC who is a client of the Circulatory System.",
                 skillBonus: [],
                 selectableBackgrounds: {
                     options: [
@@ -388,8 +384,8 @@ export const loresheets: Loresheet[] = [
                 selectableBackgrounds: { options: [], totalPoints: 0 },
                 backgrounds: [
                     {
-                        ...emptyBackground, id: "conventionOfThorns-haven", name: "Haven", freebiePoints: 3, sphere: [], advantages: [
-                            { ...emptyAdvantage, name: "Library", freebiePoints: 2 },
+                        ...emptyBackground, id: "conventionOfThorns-haven", name: "Haven", freebiePoints: 2, sphere: [], advantages: [
+                            { ...emptyAdvantage, name: "Library", freebiePoints: 3 },
                         ]
                     }
                 ],
@@ -1108,6 +1104,17 @@ export const loresheets: Loresheet[] = [
 
 */
 
+export const emptyBenefit = {
+    name: "",
+    level: 3,
+    description: "You have a mole on the inside whom you have manipulated into reporting back to you at key moments. Discuss with your Storyteller whether your control over this “friend” takes the form of supernatural coercion, blackmail, threats, or bribery. The mole alerts you if FIRSTLIGHT is coming after you, and, once every three months, they will commit an act of minor sabotage (destroying evidence, screwing up an operation, etc.) on your orders. This mole does not count as a Contact or Ally.",
+    skillBonus: [],
+    selectableBackgrounds: { options: [], totalPoints: 0 },
+    backgrounds: [],
+    meritsAndFlaws: [],
+    selectableSkills: []
+}
+
 export const loresheetFilter = (kindred: Kindred) => {
     let clan = kindred.clan;
     let sect = kindred.sect;
@@ -1203,9 +1210,10 @@ export const updateBackgrounds = (kindred:Kindred, benefit:Benefit) => {
     // Filter selectable backgrounds
     if (benefit.selectableBackgrounds.options.length > 0) {
         benefit.selectableBackgrounds.options.forEach((bg) => {
-            filteredBackgrounds = filteredBackgrounds.filter((background: any) => background.id !== bg.id);
+            filteredBackgrounds = filteredBackgrounds.filter((background: any) => (background.id !== bg.id) && !background.id.includes(`${background.name}_merged`));
         });
     }
+    
     
     return { updatedBackgrounds, filteredBackgrounds };
 }
@@ -1269,16 +1277,16 @@ export const buyBenefit = (
     });
   };
 
-export const handleBenefitAdvantageChange = (backgroundRef: V5BackgroundRef, advantageRef: V5AdvantageRef, benefitData: Benefit, setBenefitData: Function, val: number) => {
+export const handleBenefitAdvantageChange = (backgroundRef: V5BackgroundRef, advantageRef: V5AdvantageRef, benefitData: Benefit, setBenefitData: Function, val: number ,type:string) => {
     const existingAdvantage = backgroundRef.advantages.find((a) => a.name === advantageRef.name);
     if (!existingAdvantage) {
-      backgroundRef.advantages.push({ ...advantageRef, freebiePoints: val });
+      backgroundRef.advantages.push({ ...advantageRef, [type]: val });
     }
   
     const updatedOption = {
       ...backgroundRef,
       advantages: backgroundRef.advantages.map((advantage) =>
-        advantage.name === advantageRef.name ? { ...advantage, freebiePoints: val } : advantage
+        advantage.name === advantageRef.name ? { ...advantage, [type]: val } : advantage
       ),
     };
   

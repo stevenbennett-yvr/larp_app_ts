@@ -62,7 +62,7 @@ const PredatorGrid = ({ kindred, setPickedPredatorType, setModalOpen, setPredato
             <Grid m={0}>
                 <Grid.Col span={4}><h1>Sociable</h1></Grid.Col>
                 <Grid.Col offset={isPhoneScreen ? 1 : 0} span={isPhoneScreen ? 6 : 4}>
-                    <Stack>{(["Cleaver", "Consensualist", "Osiris", "Scene Queen", "Siren"] as PredatorTypeName[]).map((clan) => createButton(clan, "grape"))}</Stack>
+                    <Stack>{(["Cleaver", "Consentualist", "Osiris", "Scene Queen", "Siren"] as PredatorTypeName[]).map((clan) => createButton(clan, "grape"))}</Stack>
                 </Grid.Col>
             </Grid>
 

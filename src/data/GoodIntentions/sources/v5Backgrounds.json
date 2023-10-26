@@ -145,6 +145,15 @@
                 "name": "Paparazzi",
                 "description": "<ul><li>Overzealous fan clubs create persistent followers who track your every move.</li><li>They take photos for magazines, causing complications when staying under the radar.</li><li>Storyteller determines specific issues and complications arising from this Disadvantage.</li></ul>",
                 "cost": [
+                    1, 2
+                ],
+                "type": "disadvantage",
+                "source":"LOTN5 pg.151"
+            },
+            {
+                "name": "Paparazzi",
+                "description": "<ul><li>A wide group of people dislike you.</li><li>At level one, choose one Sphere of Influence that dislike you. You cannot buy Contacts or Allies in that Sphere.</li><li>At level 2, any action against you done by a contact or ally in that sphere is considered free and always available.</li></ul>",
+                "cost": [
                     2
                 ],
                 "type": "disadvantage",

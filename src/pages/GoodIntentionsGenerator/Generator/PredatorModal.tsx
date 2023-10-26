@@ -291,7 +291,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                     const totalPoints = predatorData.selectableBackground.totalPoints
                     let spentPoints = 0;
                     options.forEach((option: V5BackgroundRef) => {
-                        spentPoints += option.freebiePoints;
+                        spentPoints += option.predatorTypeFreebiePoints;
                     });
                     return (
                         <Stack key={options.name}>
@@ -322,9 +322,9 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                                     <Text w={"140px"}>{option.name}</Text>
                                                 </Tooltip>
                                                 <NumberInput
-                                                    value={option.freebiePoints}
+                                                    value={option.predatorTypeFreebiePoints}
                                                     min={0}
-                                                    max={totalPoints - spentPoints === 0 ? option.freebiePoints : 3}
+                                                    max={totalPoints - spentPoints === 0 ? option.predatorTypeFreebiePoints : 3}
                                                     width={"50%"}
                                                     onChange={(val: number) => {
                                                         setPredatorData({
@@ -333,7 +333,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                                                 ...predatorData.selectableBackground,
                                                                 options: predatorData.selectableBackground.options.map((b: any) =>
                                                                     b.id === option.id
-                                                                        ? { ...b, freebiePoints: val }
+                                                                        ? { ...b, predatorTypeFreebiePoints: val }
                                                                         : b
                                                                 ),
                                                             },
@@ -499,8 +499,8 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                 disabled={!(pass)}
                 onClick={() => {
                     // Filter out options with freebiePoints <= 0
-                    const selectableBackgrounds = predatorData.selectableBackground.options.filter((option: any) => option.freebiePoints > 0);
-                    const selectableMeritFlaw = predatorData.selectableMeritFlaw.options.filter((option: any) => option.freebiePoints > 0);
+                    const selectableBackgrounds = predatorData.selectableBackground.options.filter((option: any) => option.predatorTypeFreebiePoints > 0);
+                    const selectableMeritFlaw = predatorData.selectableMeritFlaw.options.filter((option: any) => option.predatorTypeFreebiePoints > 0);
 
                     // Combine predatorData.backgrounds and the filtered selectableBackgrounds
                     const combinedBackgrounds = [

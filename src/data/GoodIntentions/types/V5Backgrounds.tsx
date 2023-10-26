@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { number, z } from 'zod'
 
 import { Kindred } from './Kindred'
 import backgroundDataJson from '../sources/v5Backgrounds.json'
@@ -49,6 +49,7 @@ export const v5AdvantageRefSchema = z.object({
     freebiePoints: z.number(),
     experiencePoints: z.number(),
     havenPoints: z.number(),
+    loresheetFreebiePoints: z.number(),
 })
 
 export type V5AdvantageRef = z.infer<typeof v5AdvantageRefSchema>
@@ -58,13 +59,16 @@ export const emptyAdvantage: V5AdvantageRef = {
     creationPoints: 0,
     freebiePoints: 0,
     experiencePoints: 0,
-    havenPoints: 0
+    havenPoints: 0,
+    loresheetFreebiePoints: 0,
 }
 
 export const v5BackgroundRefSchema = z.object({
     id: z.string(),
     name: z.string(),
     creationPoints: z.number(),
+    predatorTypeFreebiePoints: z.number(),
+    loresheetFreebiePoints: number(),
     freebiePoints: z.number(),
     experiencePoints: z.number(),
     note: z.string(),
@@ -79,6 +83,8 @@ export const emptyBackground: V5BackgroundRef = {
     creationPoints: 0,
     freebiePoints: 0,
     experiencePoints: 0,
+    predatorTypeFreebiePoints: 0,
+    loresheetFreebiePoints: 0,
     note: "",
     advantages: [],
 }
@@ -90,10 +96,44 @@ export const v5BackgroundRefs: V5BackgroundRef[] = backgroundDataJson.map((b) =>
     creationPoints: 0,
     freebiePoints: 0,
     experiencePoints: 0,
+    predatorTypeFreebiePoints: 0,
+    loresheetFreebiePoints: 0,
     note: "",
     advantages: []
 }))
 ///
+
+
+export function mergeBackgrounds(id: string, ...objects: V5BackgroundRef[]): V5BackgroundRef {
+    // Ensure that there are at least two objects to merge
+    if (objects.length < 2) {
+        return emptyBackground;
+    }
+
+    const firstObjectName = objects[0].name;
+    if (!objects.every(obj => obj.name === firstObjectName)) {
+        return emptyBackground;
+    }
+    
+    const result: V5BackgroundRef = { ...emptyBackground, name:firstObjectName, id };
+
+    // Initialize with the first object
+    const [firstObject, ...restObjects] = objects;
+
+    // Merge numerical properties
+    result.creationPoints = Math.max(firstObject.creationPoints, ...restObjects.map(obj => obj.creationPoints));
+    result.freebiePoints = Math.max(firstObject.freebiePoints, ...restObjects.map(obj => obj.freebiePoints));
+    result.experiencePoints = Math.max(firstObject.experiencePoints, ...restObjects.map(obj => obj.experiencePoints));
+    result.predatorTypeFreebiePoints = Math.max(firstObject.predatorTypeFreebiePoints, ...restObjects.map(obj => obj.predatorTypeFreebiePoints));
+    result.loresheetFreebiePoints = Math.max(firstObject.loresheetFreebiePoints, ...restObjects.map(obj => obj.loresheetFreebiePoints));
+
+    // Combine advantages arrays
+    result.advantages = objects.reduce((mergedAdvantages, obj) => mergedAdvantages.concat(obj.advantages), firstObject.advantages);
+
+    return result;
+}
+
+
 
 export type requirementFunctions = (kindred: Kindred) => boolean
 
@@ -175,16 +215,16 @@ export const v5GetAdvantageByName = (name: string): V5Advantage => {
 export const v5BackgroundLevel = (v5BackgroundRef: V5BackgroundRef) => {
     let totalXpNeeded = 0;
     let pastXpNeeded = [0];
-    let { experiencePoints, creationPoints, freebiePoints } = v5BackgroundRef;
+    let { experiencePoints, creationPoints, freebiePoints, predatorTypeFreebiePoints, loresheetFreebiePoints } = v5BackgroundRef;
 
     if (experiencePoints === 0) {
-        let level = creationPoints + freebiePoints;
+        let level = creationPoints + freebiePoints + predatorTypeFreebiePoints + loresheetFreebiePoints;
         let xpNeeded = 3;
         totalXpNeeded = xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
         return { level, totalXpNeeded, pastXpNeeded };
     } else {
-        let level = creationPoints + freebiePoints;
+        let level = creationPoints + freebiePoints + predatorTypeFreebiePoints + loresheetFreebiePoints;
         let xpNeeded = 3;
         totalXpNeeded += xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
@@ -202,18 +242,18 @@ export const v5BackgroundLevel = (v5BackgroundRef: V5BackgroundRef) => {
 export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
     let totalXpNeeded = 0;
     let pastXpNeeded = [0];
-    let { experiencePoints, creationPoints, freebiePoints, havenPoints } = AdvantageRef;
+    let { experiencePoints, creationPoints, freebiePoints, havenPoints, loresheetFreebiePoints } = AdvantageRef;
 
     if (!havenPoints) { havenPoints = 0}
 
     if (experiencePoints === 0) {
-        let level = creationPoints + freebiePoints + havenPoints;
+        let level = creationPoints + freebiePoints + havenPoints + loresheetFreebiePoints;
         let xpNeeded = 3;
         totalXpNeeded = xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
         return { level, totalXpNeeded, pastXpNeeded };
     } else {
-        let level = creationPoints + freebiePoints + havenPoints;
+        let level = creationPoints + freebiePoints + havenPoints + loresheetFreebiePoints;
         let xpNeeded = 3;
         totalXpNeeded += xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
@@ -340,27 +380,6 @@ export const v5HandleXpAdvantageChange = (
 }
 
 
-/* 
-
-// This doesn't work, found a workaround.
-
-export const v5FindMaxAdvantage = (
-    advantage: V5AdvantageRef,
-    advantageInfo: V5Advantage,
-    background: V5BackgroundRef
-) => {
-    const { experiencePoints } = background;
-    const { level } = v5AdvantageLevel(advantage);
-    let maxCost = advantageInfo.cost[advantageInfo.cost.length - 1]
-
-    let max = undefined;
-    if (level === maxCost) {
-        max = experiencePoints;
-    }
-    console.log(level)
-    return max;
-} */
-
 export const filterSelectData = (
     kindred: Kindred,
     backgroundData: V5Background[]
@@ -415,7 +434,7 @@ export const kindredBackgrounds = (kindred: Kindred) => {
         const name = bg.name;
         const level = v5BackgroundLevel(bg).level;
     
-        if (!(name === "Herd" || name === "Resources")) {
+        if (!(name === "Herd")) {
           allBackgrounds.push(bg);
         } else {
           const existingEntry = uniqueBackgrounds.get(name);
@@ -426,7 +445,7 @@ export const kindredBackgrounds = (kindred: Kindred) => {
       });
     
     uniqueBackgrounds.forEach((bg) => {
-      if (bg.name === "Herd" || bg.name === "Resources") {
+      if (bg.name === "Herd") {
         highestLevelHerdResources.push(bg);
       }
     });
