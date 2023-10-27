@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { clanNameSchema } from "./V5Clans";
 import { V5SkillsKey, v5skillsKeySchema } from "./V5Skills";
-import { v5BackgroundRefSchema, emptyBackground, emptyAdvantage, V5BackgroundRef, V5AdvantageRef } from "./V5Backgrounds";
+import { v5BackgroundRefSchema, emptyBackground, emptyAdvantage, V5BackgroundRef, V5AdvantageRef, mergeBackgrounds } from "./V5Backgrounds";
 import { v5MeritFlawRefSchema, emptyMeritFlaw } from "./V5MeritsOrFlaws";
 import { Kindred } from "./Kindred";
 import { sectNameSchema } from "./V5Sect";
@@ -1202,8 +1202,17 @@ export const updateBackgrounds = (kindred:Kindred, benefit:Benefit) => {
     // Add specified backgrounds
     if (benefit.backgrounds.length > 0) {
         benefit.backgrounds.forEach((bg) => {
-            updatedBackgrounds.push(bg);
-            filteredBackgrounds = filteredBackgrounds.filter((background: any) => background.id !== bg.id);
+            let background = bg
+            let ResourcesRef = kindred.backgrounds.find((b) => b.name === "Resources")
+            let HerdRef = kindred.backgrounds.find((b) => b.name === "Herd")
+            if (bg.name==="Resources" && ResourcesRef) {
+                background = mergeBackgrounds(`${background.name}_merged`, ResourcesRef, bg)
+            }
+            if (bg.name==="Herd" && HerdRef) {
+                background = mergeBackgrounds(`${background.name}_merged`, HerdRef, bg)
+            }
+            updatedBackgrounds.push(background);
+            filteredBackgrounds = filteredBackgrounds.filter((background: any) => background.id !== bg.id  && !background.id.includes(`${background.name}_merged`));
         });
     }
     

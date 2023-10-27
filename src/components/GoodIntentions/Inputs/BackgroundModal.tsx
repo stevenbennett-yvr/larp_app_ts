@@ -144,7 +144,7 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
                         </tbody>
                     </Table>
                     : <></>}
-                <AdvantageAccordion kindred={kindred} setKindred={setKindred} bRef={BackgroundRef} type={type} />
+                <AdvantageAccordion kindred={kindred} setKindred={setKindred} bRef={BackgroundRef} oRef={null} type={type} />
             </Stack>
         </Modal>
 

@@ -147,7 +147,7 @@ const SideSheet = ({ kindred }: SideSheetProps) => {
                                     <List>
                                         {kindredBackgrounds(kindred).map((background) => {
                                             return (
-                                                <List.Item key={background.name}>
+                                                <List.Item key={background.id}>
                                                     <Text style={textStyle}>{background.name}: <Tally n={v5BackgroundLevel(background).level} /></Text>
                                                     <List>
                                                         {background.advantages.map((advantage) => {

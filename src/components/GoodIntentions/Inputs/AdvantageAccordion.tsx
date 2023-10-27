@@ -14,6 +14,7 @@ type AdvantageAccordionProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void,
     bRef: V5BackgroundRef | null,
+    oRef: V5BackgroundRef | null,
     type: TypeCategory
     benefitData?: Benefit
     setBenefitData?: (benefitData: Benefit) => void
@@ -38,7 +39,7 @@ const getRating = (array: number[]) => {
     }
 }
 
-const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setBenefitData, disabled }: AdvantageAccordionProps) => {
+const AdvantageAccordion = ({ kindred, setKindred, bRef, oRef, type, benefitData, setBenefitData, disabled }: AdvantageAccordionProps) => {
     if (!bRef) { return null }
 
     const backgroundInfo = backgroundData.find((entry) => entry.name === bRef.name)
@@ -73,6 +74,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
         const starPowerBool = bRef.name === "Fame" && advantage.name === "Star Power" && v5BackgroundLevel(bRef).level < 3
         const havenBoolean = bRef.name === "Haven" && v5BackgroundLevel(bRef).level <= v5AdvantageLevel(advantageRef).level
         const {totalXpNeeded} = v5BackgroundLevel(bRef)
+        let existingAdvantage = oRef?.advantages.find(a => a.name === advantage.name)
 
         switch (type) {
             case 'creationPoints':
@@ -82,7 +84,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
                         disabled={starPowerBool || canGhoul || disabled}
                         value={v5AdvantageLevel(advantageRef).level}
                         style={{ width: "100px" }}
-                        min={advantageRef.havenPoints ? advantageRef.havenPoints + advantageRef.freebiePoints : advantageRef.freebiePoints}
+                        min={advantageRef.havenPoints ? advantageRef.havenPoints + advantageRef.freebiePoints + advantageRef.loresheetFreebiePoints : advantageRef.freebiePoints + advantageRef.loresheetFreebiePoints}
                         step={advantageStep(advantageRef, backgroundInfo)}
                         max={bRef.name === "Haven" && advantage.type === "advantage" ?
                             havenSizeMax : v5AdvantageLevel(advantageRef).level === advantage.cost[advantage.cost.length - 1] ?
@@ -98,8 +100,8 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
                     <NumberInput
                     label="Loresheet Freebie Points"
                     disabled={disabled}
-                    value={advantageRef.loresheetFreebiePoints}
-                    min={0}
+                    value={advantageRef.loresheetFreebiePoints + (existingAdvantage? v5AdvantageLevel(existingAdvantage).level : 0)}
+                    min={existingAdvantage && existingAdvantage.name === advantageRef.name? v5AdvantageLevel(existingAdvantage).level : 0}
                     step={advantageStep(advantageRef, backgroundInfo)}
                     max={
                         backgroundInfo.name === "Haven" && advantage.type === "advantage"
@@ -109,8 +111,9 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, type, benefitData, setB
                                 : advantage.cost[advantage.cost.length - 1]
                     }
                     onChange={(val: number) => {
+                        let trueVal = val - (existingAdvantage? v5AdvantageLevel(existingAdvantage).level:0)
                         if (!benefitData || !setBenefitData) { return null }
-                        handleBenefitAdvantageChange(bRef, advantageRef, benefitData, setBenefitData, val, "loresheetFreebiePoints")
+                        handleBenefitAdvantageChange(bRef, advantageRef, benefitData, setBenefitData, trueVal, "loresheetFreebiePoints")
                     }
                     }
                 />

@@ -4,7 +4,7 @@ import { Title, Group, ScrollArea, Text, Button, Stack, Select, Modal, Tooltip, 
 import { Benefit, Loresheet, updateSkills } from "../../../data/GoodIntentions/types/V5Loresheets"
 import { useState } from "react"
 import { V5SkillsKey } from "../../../data/GoodIntentions/types/V5Skills"
-import { V5BackgroundRef, backgroundData, v5BackgroundLevel, mergeBackgrounds } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { V5BackgroundRef, backgroundData, v5BackgroundLevel, mergeBackgrounds, SphereSelectData } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import AdvantageAccordion from "./AdvantageAccordion"
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints';
@@ -155,7 +155,7 @@ export const BackgroundSelectModal = ({
                         </Text>
                     </Group>
                     {options.map((option: V5BackgroundRef) => {
-                        let bRef = kindred.backgrounds.find(bg => bg.name === option.name && (option.name === "Herd"))
+                        let bRef = kindred.backgrounds.find(bg => bg.name === option.name && (option.name === "Herd" || option.name === "Resources"))
                         if (totalPoints - spentPoints === 0) { Totalpass = true } else { Totalpass = false }
                         const backgroundInfo = backgroundData.find((entry) => entry.name === option.name)
                         if (!backgroundInfo) {
@@ -170,7 +170,7 @@ export const BackgroundSelectModal = ({
                                             transitionProps={{ transition: "slide-up", duration: 200 }}
                                             events={{ hover: true, focus: true, touch: true }}
                                         >
-                                            <Text w={"140px"}>{option.name}</Text>
+                                            <Text w={"80px"}>{option.name}</Text>
                                         </Tooltip>
                                         <NumberInput
                                             disabled={bRef && bRef.name === option.name ? v5BackgroundLevel(bRef).level === 3 : false}
@@ -190,9 +190,29 @@ export const BackgroundSelectModal = ({
                                                     }
                                                 })
                                             }}
-                                            style={{ width: "100px" }}
+                                            style={{ width: "80px" }}
                                         />
-                                        <AdvantageAccordion kindred={kindred} setKindred={setKindred} bRef={option} type="loresheetFreebiePoints" benefitData={benefitData} setBenefitData={setBenefitData} disabled={option.loresheetFreebiePoints + (bRef ? v5BackgroundLevel(bRef).level : 0) === 0} />
+                                        <AdvantageAccordion kindred={kindred} setKindred={setKindred} bRef={option} oRef={bRef?bRef:null} type="loresheetFreebiePoints" benefitData={benefitData} setBenefitData={setBenefitData} disabled={option.loresheetFreebiePoints + (bRef ? v5BackgroundLevel(bRef).level : 0) === 0} />
+                                        {option.name==="Allies"||option.name==="Contacts"?
+                                        <Select
+                                            label="Pick Sphere for Background"
+                                            placeholder="Pick sphere"
+                                            data={SphereSelectData}
+                                            defaultValue=""
+                                            style={{width:"150px"}}
+                                            onChange={(val) => {
+                                                setBenefitData({
+                                                    ...benefitData,
+                                                    selectableBackgrounds: {
+                                                        ...benefitData.selectableBackgrounds,
+                                                        options: benefitData.selectableBackgrounds.options.map((b: any) =>
+                                                            b.id === option.id ? { ...b, sphere: val } : b
+                                                        )
+                                                    }
+                                                })
+                                            }}
+                                        />
+                                        :<></>}
                                     </Group>
                                 </div>
                             )
@@ -202,24 +222,24 @@ export const BackgroundSelectModal = ({
                     <Button
                         disabled={!(Totalpass) || !(advantagePass)}
                         onClick={() => {
-                            const loresheetBackgrounds = benefitData.selectableBackgrounds.options.filter((option: any) => option.loresheetFreebiePoints > 0);
+                            const loresheetBackgrounds = benefitData.selectableBackgrounds.options.filter((option: any) => option.loresheetFreebiePoints > 0 || option.advantages.length > 0);
 
                             const matchingBackgrounds = kindred.backgrounds.filter((background: any) =>
-                              loresheetBackgrounds.some((loresheet) => loresheet.name === background.name && (loresheet.name==="Herd"))
+                                loresheetBackgrounds.some((loresheet) => loresheet.name === background.name && (loresheet.name === "Herd" || loresheet.name === "Resources"))
                             );
-
+                            console.log(loresheetBackgrounds)
                             const selectableBackgrounds = matchingBackgrounds.length > 0
-                            ? matchingBackgrounds.map((matchingBg) =>
-                                mergeBackgrounds(
-                                  `${matchingBg.name}_merged_id`,
-                                  matchingBg,
-                                  ...loresheetBackgrounds.filter((option) => option.name === matchingBg.name)
+                                ? matchingBackgrounds.map((matchingBg) =>
+                                    mergeBackgrounds(
+                                        `${matchingBg.name}_merged_id`,
+                                        matchingBg,
+                                        ...loresheetBackgrounds.filter((option) => option.name === matchingBg.name)
+                                    )
                                 )
-                              )
-                            : loresheetBackgrounds;
-                            console.log(selectableBackgrounds)
-                            const combinedBackgrounds = [...kindred.backgrounds, ...selectableBackgrounds];
-                            
+                                : loresheetBackgrounds;
+                                
+                                const combinedBackgrounds = [...kindred.backgrounds, ...selectableBackgrounds];
+
                             setKindred({
                                 ...kindred,
                                 backgrounds: combinedBackgrounds,

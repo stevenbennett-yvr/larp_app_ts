@@ -103,9 +103,37 @@ export const v5BackgroundRefs: V5BackgroundRef[] = backgroundDataJson.map((b) =>
 }))
 ///
 
+function combineAdvantages(...arrays: V5AdvantageRef[][]): Array<V5AdvantageRef> {
+    // Create an empty object to store the combined advantageRefs.
+    const combinedAdvantages: { [key: string]: V5AdvantageRef } = {};
+
+    // Loop through each array of advantageRefs.
+    for (const array of arrays) {
+        for (const advantage of array) {
+            // Check if an advantage with the same name already exists in the combinedAdvantages object.
+            if (combinedAdvantages[advantage.name]) {
+                // If it exists, add the values of the current advantage to the existing one.
+                combinedAdvantages[advantage.name].creationPoints += advantage.creationPoints;
+                combinedAdvantages[advantage.name].freebiePoints += advantage.freebiePoints;
+                combinedAdvantages[advantage.name].experiencePoints += advantage.experiencePoints;
+                combinedAdvantages[advantage.name].havenPoints += advantage.havenPoints;
+                combinedAdvantages[advantage.name].loresheetFreebiePoints += advantage.loresheetFreebiePoints;
+            } else {
+                // If it doesn't exist, create a new entry for the advantage.
+                combinedAdvantages[advantage.name] = { ...advantage };
+            }
+        }
+    }
+
+    // Convert the combinedAdvantages object back to an array.
+    const combinedArray = Object.values(combinedAdvantages);
+
+    return combinedArray;
+}
 
 export function mergeBackgrounds(id: string, ...objects: V5BackgroundRef[]): V5BackgroundRef {
     // Ensure that there are at least two objects to merge
+    console.log(objects)
     if (objects.length < 2) {
         return emptyBackground;
     }
@@ -114,8 +142,8 @@ export function mergeBackgrounds(id: string, ...objects: V5BackgroundRef[]): V5B
     if (!objects.every(obj => obj.name === firstObjectName)) {
         return emptyBackground;
     }
-    
-    const result: V5BackgroundRef = { ...emptyBackground, name:firstObjectName, id };
+
+    const result: V5BackgroundRef = { ...emptyBackground, name: firstObjectName, id };
 
     // Initialize with the first object
     const [firstObject, ...restObjects] = objects;
@@ -128,7 +156,7 @@ export function mergeBackgrounds(id: string, ...objects: V5BackgroundRef[]): V5B
     result.loresheetFreebiePoints = Math.max(firstObject.loresheetFreebiePoints, ...restObjects.map(obj => obj.loresheetFreebiePoints));
 
     // Combine advantages arrays
-    result.advantages = objects.reduce((mergedAdvantages, obj) => mergedAdvantages.concat(obj.advantages), firstObject.advantages);
+    result.advantages = combineAdvantages(firstObject.advantages, ...restObjects.map(obj => obj.advantages));
 
     return result;
 }
@@ -222,6 +250,7 @@ export const v5BackgroundLevel = (v5BackgroundRef: V5BackgroundRef) => {
         let xpNeeded = 3;
         totalXpNeeded = xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
+        level = Math.min(level, 3)
         return { level, totalXpNeeded, pastXpNeeded };
     } else {
         let level = creationPoints + freebiePoints + predatorTypeFreebiePoints + loresheetFreebiePoints;
@@ -235,29 +264,45 @@ export const v5BackgroundLevel = (v5BackgroundRef: V5BackgroundRef) => {
             totalXpNeeded += xpNeeded;
             pastXpNeeded.push(totalXpNeeded);
         }
+        level = Math.min(level, 3)
         return { level, totalXpNeeded, pastXpNeeded };
     }
 }
+
+function findAdvantageByName(name: string): any {
+    for (const entry of backgroundData) {
+      if (entry.advantages) {
+        for (const advantage of entry.advantages) {
+          if (advantage.name === name) {
+            return advantage;
+          }
+        }
+      }
+    }
+    return null; // Return null if the advantage with the given name is not found
+  }
 
 export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
     let totalXpNeeded = 0;
     let pastXpNeeded = [0];
     let { experiencePoints, creationPoints, freebiePoints, havenPoints, loresheetFreebiePoints } = AdvantageRef;
+    let advantageInfo = findAdvantageByName(AdvantageRef.name)
+    let advantageMax = advantageInfo.cost[advantageInfo.cost.length-1]
 
-    if (!havenPoints) { havenPoints = 0}
+    if (!havenPoints) { havenPoints = 0 }
 
     if (experiencePoints === 0) {
         let level = creationPoints + freebiePoints + havenPoints + loresheetFreebiePoints;
         let xpNeeded = 3;
         totalXpNeeded = xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
+        level = Math.min(level, advantageMax)
         return { level, totalXpNeeded, pastXpNeeded };
     } else {
         let level = creationPoints + freebiePoints + havenPoints + loresheetFreebiePoints;
         let xpNeeded = 3;
         totalXpNeeded += xpNeeded;
         pastXpNeeded.push(totalXpNeeded);
-
         while (experiencePoints >= xpNeeded) {
             level++;
             experiencePoints -= xpNeeded;
@@ -265,7 +310,7 @@ export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
             totalXpNeeded += xpNeeded;
             pastXpNeeded.push(totalXpNeeded);
         }
-
+        level = Math.min(level, advantageMax)
         return { level, totalXpNeeded, pastXpNeeded };
     }
 }
@@ -277,7 +322,7 @@ export const handleBackgroundChange = (
     setKindred: Function,
     background: V5BackgroundRef,
     type: VariableKeys,
-    newPoints: number | string ,
+    newPoints: number | string,
 ) => {
     const existingBackground = kindred.backgrounds.find((b) => b.id === background.id);
     if (existingBackground) {
@@ -398,7 +443,7 @@ export const filterSelectData = (
         const isException = backgroundsToExclude.includes(backgroundName);
 
         // Check if the backgroundName is "Herd" and the user has "Obvious Predator"
-        if ( backgroundName === "Herd" && hasObviousPredator ) { return null }
+        if (backgroundName === "Herd" && hasObviousPredator) { return null }
 
         // Keep the background if it's not in userBackgrounds, is an exception, or is "Herd" with "Obvious Predator"
         return isNotInUserBackgrounds || isException;
@@ -422,33 +467,34 @@ export const advantageStep = (advantage: V5AdvantageRef, background: V5Backgroun
 export const kindredBackgrounds = (kindred: Kindred) => {
     const uniqueBackgrounds = new Map();
 
-    const allBackgrounds:V5BackgroundRef[] = [];
-    const highestLevelHerdResources:V5BackgroundRef[] = [];
-    
+    const allBackgrounds: V5BackgroundRef[] = [];
+    const highestLevelHerdResources: V5BackgroundRef[] = [];
+
     kindred.backgrounds
-      .filter((bg, index, array) => {
-        // Keep the first occurrence of each background based on 'id'
-        return array.findIndex((b) => b.id === bg.id) === index;
-      })
-      .forEach((bg) => {
-        const name = bg.name;
-        const level = v5BackgroundLevel(bg).level;
-    
-        if (!(name === "Herd")) {
-          allBackgrounds.push(bg);
-        } else {
-          const existingEntry = uniqueBackgrounds.get(name);
-          if (!existingEntry || level > v5BackgroundLevel(existingEntry).level) {
-            uniqueBackgrounds.set(name, bg);
-          }
-        }
-      });
-    
+        .filter((bg, index, array) => {
+            // Keep the first occurrence of each background based on 'id'
+            return array.findIndex((b) => b.id === bg.id) === index;
+        })
+        .forEach((bg) => {
+            const name = bg.name;
+            const level = v5BackgroundLevel(bg).level;
+            const advantageLength = bg.advantages.length
+
+            if (!(name === "Herd" ||name === "Resources")) {
+                allBackgrounds.push(bg);
+            } else {
+                const existingEntry = uniqueBackgrounds.get(name);
+                if (!existingEntry || level > v5BackgroundLevel(existingEntry).level || advantageLength > existingEntry.advantages.length) {
+                    uniqueBackgrounds.set(name, bg);
+                }
+            }
+        });
+
     uniqueBackgrounds.forEach((bg) => {
-      if (bg.name === "Herd") {
-        highestLevelHerdResources.push(bg);
-      }
+        if (bg.name === "Herd"||bg.name === "Resources") {
+            highestLevelHerdResources.push(bg);
+        }
     });
-    
+
     return [...highestLevelHerdResources, ...allBackgrounds].sort((a, b) => a.name.localeCompare(b.name));
 }
