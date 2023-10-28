@@ -1,16 +1,25 @@
-import { Center, Stack, Card, Button, Avatar, Text, List } from "@mantine/core"
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-
+import { Center, Stack, Card, Button, Avatar, Text, List } from "@mantine/core";
+import { DiscordLogo } from "../../assets/images/CaM";
+import SoftCoverV5 from '../../assets/images/GoodIntentions/core/Soft_Cover_3d__88604.png';
 import { GoodIntentionsVSSs } from "../../data/CaM/types/VSS";
-
-import { DiscordLogo } from "../../assets/images/CaM"
-import SoftCoverV5 from '../../assets/images/GoodIntentions/core/Soft_Cover_3d__88604.png'
+import { useAuth } from "../../contexts/AuthContext";
+import { useCharacterDb } from "../../contexts/CharacterContext";
 import { upcase } from "../../utils/case";
+import CharacterCard from "./Component/KindredCard";
 
 export default function GoodIntentionsDashboard() {
     const { venueId } = useParams();
+    const { currentUser } = useAuth();
+    const { userLocalKindred, getCharacterByUIDAndVSS } = useCharacterDb();
+
     const navigate = useNavigate();
     const venueData = GoodIntentionsVSSs.find((venue) => venue.venueStyleSheet.id === venueId);
+
+    useEffect(() => {
+        getCharacterByUIDAndVSS(currentUser?.uid ?? '', venueData?.venueStyleSheet.id ?? '');
+    }, [])
 
     if (!venueData) {
         console.log("invalid venue id")
@@ -70,11 +79,14 @@ export default function GoodIntentionsDashboard() {
                         </Stack>
                     </Center>
                     <Center>
+                        {userLocalKindred.length > 0?
+                        <CharacterCard kindredList={userLocalKindred} />:
                         <Button
                             onClick={() => navigate(`/create-kindred/${venueId}`)}
                         >
                             Create Kindred for Venue
                         </Button>
+                        }
                     </Center>
                     <Center>
                         <a href="https://bynightstudios.com/laws-of-the-night-books" target="_blank" rel="noopener noreferrer">

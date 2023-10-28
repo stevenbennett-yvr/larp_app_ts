@@ -103,6 +103,42 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
     },
     {
         venueStyleSheet: {
+            id: "GI-000",
+            name: "Twisted Realities",
+            chronicle: "Good Intentions",
+            domainCode: "CND-000",
+            staff: ["vst.masq.000@canadaatmidnight.com"],
+            theme: "Mystery, Deception, and Illusion",
+            mood: "Eerie and Uncanny",
+            setting: "Metropolitan city, with a hidden supernatural underground. The nightclub serves as a neutral ground for different supernatural factions.",
+            focus: "...",
+            timeline: "...",
+            notes: "Vampires of all generations are allowed. Characters can have affiliations with other supernatural beings, but maintaining the Masquerade is a top priority.",
+            scheduleDay: "saturday",
+            scheduleWeek: "fourth",
+            documents: [],
+        },
+        goodIntentionsVariables: {
+            vssId: "GI-000",
+            boundaries: "New York Van Java",
+            sect: "Anarch",
+            tenants: {
+                global:"Freedom Above All",
+                sect:"Solidarity Against the Camarilla",
+                venue:"Defiance in Unity"
+            },
+            bannedClans:["Tzimisce","Banu Haqim","Lasombra"],
+            bannedSects:["Camarilla"],
+            bannedPredatorTypes:["Sandman"],
+            bannedMerits:[],
+            bannedPowers:[],
+            bannedCeremonies:[],
+            bannedRituals:[],
+            bannedLoresheets:[],
+        }
+    },
+    {
+        venueStyleSheet: {
             id: "GI-015",
             name: "Belli Nebula",
             chronicle: "Good Intentions",

@@ -66,6 +66,8 @@ export const emptyAdvantage: V5AdvantageRef = {
 export const v5BackgroundRefSchema = z.object({
     id: z.string(),
     name: z.string(),
+    backgroundName: z.string(),
+    backgroundDescription: z.string(),
     creationPoints: z.number(),
     predatorTypeFreebiePoints: z.number(),
     loresheetFreebiePoints: number(),
@@ -80,6 +82,8 @@ export type V5BackgroundRef = z.infer<typeof v5BackgroundRefSchema>
 export const emptyBackground: V5BackgroundRef = {
     id: "",
     name: "",
+    backgroundName: "",
+    backgroundDescription: "",
     creationPoints: 0,
     freebiePoints: 0,
     experiencePoints: 0,
@@ -93,6 +97,8 @@ export const emptyBackground: V5BackgroundRef = {
 export const v5BackgroundRefs: V5BackgroundRef[] = backgroundDataJson.map((b) => ({
     id: `background_${b.name}`,
     name: b.name,
+    backgroundName: "",
+    backgroundDescription: "",
     creationPoints: 0,
     freebiePoints: 0,
     experiencePoints: 0,
@@ -315,7 +321,7 @@ export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
     }
 }
 
-type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "havenPoints";
+type VariableKeys = "backgroundName" | "backgroundDescription" | "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "havenPoints";
 
 export const handleBackgroundChange = (
     kindred: Kindred,

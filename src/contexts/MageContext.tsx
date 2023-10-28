@@ -47,7 +47,7 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
         const user = await getUser();
         setUserData(user);
       };
-  
+
       fetchUserData();
     }
   }, [currentUser, getUser]);
@@ -56,7 +56,7 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
 
   const userCollectionRef = useMemo(() => {
     if (!currentUser || !userData) return null;
-      return query(collectionRef, where("uid", "==", currentUser.uid));
+    return query(collectionRef, where("uid", "==", currentUser.uid));
   }, [collectionRef, currentUser, userData]);
 
   const fetchUserAwakened = useCallback(async () => {
@@ -64,7 +64,7 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
       // Handle the case when charactersCollectionRef is null (not available yet)
       return;
     }
-  
+
     try {
       const snapshot = await getDocs(userCollectionRef);
       const filteredData = snapshot.docs.map((doc) => ({
@@ -93,7 +93,7 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
       // Handle the case when charactersCollectionRef is null (not available yet)
       return;
     }
-  
+
     try {
       const snapshot = await getDocs(domainAwakenedCollectionRef);
       const filteredData = snapshot.docs.map((doc) => ({
@@ -134,9 +134,9 @@ export function MageProvider({ children }: { children: React.ReactNode }) {
 
   const getAwakenedById = useCallback(async (id: string) => {
     if (!currentUser || !userData) return null;
-  
+
     const awakenedDocRef = doc(collectionRef, id);
-  
+
     try {
       const docSnapshot = await getDoc(awakenedDocRef);
       if (docSnapshot.exists()) {

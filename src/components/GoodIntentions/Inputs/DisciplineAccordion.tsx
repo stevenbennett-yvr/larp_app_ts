@@ -138,7 +138,7 @@ const DisciplineAccordion = ({ kindred, setKindred }: DisciplineAccordionProps) 
                     </Accordion.Panel>
                 </Accordion.Item>
                 :<></>}
-                {kindred.clan==="Caitiff"?<></>:
+                {kindred.clan==="Caitiff"||otherDisciplines.length<=0?<></>:
                 <Accordion.Item value={"Out-of-Clan Disciplines"}>
                     <Accordion.Control
                         style={{ backgroundColor: "#25262B" }}

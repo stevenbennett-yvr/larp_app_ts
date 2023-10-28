@@ -227,19 +227,23 @@ export const BackgroundSelectModal = ({
                             const matchingBackgrounds = kindred.backgrounds.filter((background: any) =>
                                 loresheetBackgrounds.some((loresheet) => loresheet.name === background.name && (loresheet.name === "Herd" || loresheet.name === "Resources"))
                             );
-                            console.log(loresheetBackgrounds)
-                            const selectableBackgrounds = matchingBackgrounds.length > 0
-                                ? matchingBackgrounds.map((matchingBg) =>
+                            
+                            let selectableBackgrounds:any[] = [];
+                            
+                            if (matchingBackgrounds.length > 0) {
+                                selectableBackgrounds = matchingBackgrounds.map((matchingBg) =>
                                     mergeBackgrounds(
                                         `${matchingBg.name}_merged_id`,
                                         matchingBg,
                                         ...loresheetBackgrounds.filter((option) => option.name === matchingBg.name)
                                     )
-                                )
-                                : loresheetBackgrounds;
-                                
-                                const combinedBackgrounds = [...kindred.backgrounds, ...selectableBackgrounds];
+                                );
+                            }
+                            
+                            let final = selectableBackgrounds.concat(loresheetBackgrounds)
 
+                            const combinedBackgrounds = [...kindred.backgrounds, ...final];
+                            
                             setKindred({
                                 ...kindred,
                                 backgrounds: combinedBackgrounds,

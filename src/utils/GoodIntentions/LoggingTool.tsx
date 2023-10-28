@@ -93,32 +93,44 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
                     oldValue: initialItem.creationPoints,
                     newValue: currentItem.creationPoints,
                 });
-            } else if (initialItem.experiencePoints !== currentItem.experiencePoints) {
+            } if (initialItem.experiencePoints !== currentItem.experiencePoints) {
                 changes.push({
                     field: initialItem.name,
                     type: "Experience Points",
                     oldValue: initialItem.experiencePoints,
                     newValue: currentItem.experiencePoints,
                 });
-            } else if (initialItem.freebiePoints !== currentItem.freebiePoints) {
+            } if (initialItem.freebiePoints !== currentItem.freebiePoints) {
                 changes.push({
                     field: initialItem.name,
                     type: "Freebie Points",
                     oldValue: initialItem.freebiePoints,
                     newValue: currentItem.freebiePoints,
                 });
-            } else if (initialItem.havenPoints !== currentItem.havenPoints) {
+            } if (initialItem.havenPoints !== currentItem.havenPoints) {
                 changes.push({
                     field: initialItem.name,
                     type: "Haven Points",
                     oldValue: initialItem.havenPoints,
                     newValue: currentItem.havenPoints,
                 });
-            } else {
+            } if (initialItem.predatorTypeFreebiePoints !== currentItem.predatorTypeFreebiePoints) {
                 changes.push({
                     field: initialItem.name,
-                    type: "Removed",
+                    type: "Predator Type Freebie Points",
+                    oldValue: initialItem.predatorTypeFreebiePoints,
+                    newValue: currentItem.predatorTypeFreebiePoints,
                 });
+            } if (initialItem.loresheetFreebiePoints !== currentItem.loresheetFreebiePoints) {
+                changes.push({
+                    field: initialItem.name,
+                    type: "Lore Sheet Freebie Points",
+                    oldValue: initialItem.loresheetFreebiePoints,
+                    newValue: currentItem.loresheetFreebiePoints,
+                });
+            }
+            if (initialItem.advantages !== currentItem.advantages) {
+                compareArraysOfObjects(initialItem.advantages, currentItem.advantages)
             }
         });
 
@@ -135,7 +147,7 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
                         newValue: currentItem.creationPoints
                     });
                 }
-                else if (currentItem.freebiePoints > 0) {
+                 if (currentItem.freebiePoints > 0) {
                     changes.push({
                         field: currentItem.name,
                         type: "Freebie Points",
@@ -143,25 +155,38 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
                         newValue: currentItem.freebiePoints
                     });
                 }
-                else if (currentItem.experiencePoints > 0) {
+                 if (currentItem.experiencePoints > 0) {
                     changes.push({
                         field: currentItem.name,
                         type: "Experience Points",
                         oldValue: 0,
                         newValue: currentItem.experiencePoints
                     });
-                } else if (currentItem.havenPoint > 0) {
+                }  if (currentItem.havenPoint > 0) {
                     changes.push({
                         field: currentItem.name,
                         type: "Haven Points",
                         oldValue: 0,
                         newValue: currentItem.havenPoints
                     });
-                } else {
+                } if (currentItem.loresheetFreebiePoints > 0) {
                     changes.push({
                         field: currentItem.name,
-                        type: "Added",
+                        type: "Lore Sheet Freebie Points",
+                        oldValue: 0,
+                        newValue: currentItem.loresheetFreebiePoints
                     });
+                    
+                } if (currentItem.predatorTypeFreebiePoints > 0) {
+                    changes.push({
+                        field: currentItem.name,
+                        type: "Predator Type Freebie Points",
+                        oldValue: 0,
+                        newValue: currentItem.predatorTypeFreebiePoints
+                    });
+                }
+                if (currentItem.advantages) {
+                    compareArraysOfObjects([], currentItem.advantages)
                 }
             }
         });

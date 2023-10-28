@@ -22,6 +22,7 @@ import GenerateKindred from './pages/GoodIntentionsGenerator/GoodIntentionsGener
 
 import { globals } from './assets/globals';
 import { UserProvider } from './contexts/UserContext';
+import KindredPage from './pages/GoodIntentionsEditor/KindredPage';
 
 
 function App() {
@@ -77,6 +78,7 @@ function AuthenticatedApp() {
           <Route path="/good-intentions/:venueId" element={<PrivateRoute><GoodIntentionsDashboard/></PrivateRoute>}/>
           <Route path='/awakened-full-edit/:characterId' element={<PrivateRoute><AwakenedSTEditor></AwakenedSTEditor></PrivateRoute>}/>
           <Route path='/create-kindred/:venueId' element={<PrivateRoute><GenerateKindred/></PrivateRoute>}/>
+          <Route path='/kindred-sheet/:characterId' element={<PrivateRoute><KindredPage/></PrivateRoute>}/>
         </Routes>
       </Container>
     </AppShell>

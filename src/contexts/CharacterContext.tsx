@@ -1,52 +1,118 @@
 import React, { useContext, useCallback, useMemo } from "react";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDoc, getDocs, query, where, doc, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { Kindred } from "../data/GoodIntentions/types/Kindred";
 import PropTypes from "prop-types";
+import { useState } from "react";
 
 type characterContextValue = {
   onSubmitCharacter: (newCharacter: (Kindred)) => void;
+  getCharacterByUIDAndVSS: (uid:string, vssId:string) => void;
+  userLocalKindred: any[];
+  getKindredById: (id:string, setKindred: (kindred:Kindred) => void) => void;
+  updateKindred: (id:string, updatedKindred:Kindred) => void;
 }
 
 const CharacterContext = React.createContext<characterContextValue | null>(null);
 
 export function useCharacterDb() {
-    const context = useContext(CharacterContext)
-    if (!context) {
-        throw new Error("useCharacterDb must be used within an CharacterProvider");
-      }
-    return context;
+  const context = useContext(CharacterContext)
+  if (!context) {
+    throw new Error("useCharacterDb must be used within an CharacterProvider");
+  }
+  return context;
 }
 
 export function CharacterProvider({ children }: { children: React.ReactNode }): JSX.Element {
-    const collectionRef = collection(db, "goodIntentions")
+  const collectionRef = collection(db, "goodIntentions");
 
-    const onSubmitCharacter = useCallback(
-        async (newCharacter: (Kindred)) => {
-            try {
-                await addDoc(collectionRef, newCharacter)
-            } catch (err) {
-                console.log(err);
-                return
-            }
-        }, [collectionRef]
-    )
+  // Submit character
+  const onSubmitCharacter = useCallback(
+    async (newCharacter: Kindred) => {
+      try {
+        await addDoc(collectionRef, newCharacter);
+      } catch (err) {
+        console.log(err);
+        return;
+      }
+    },
+    [collectionRef]
+  );
 
-    const value = useMemo(() => {
-      return {
-        onSubmitCharacter
-      };
-    }, [onSubmitCharacter]);
+  // Get character based on id and vss
+  const [userLocalKindred, setUserLocalKindred] = useState<any[]>([]); // Initialize with an empty array
 
-    return (
-      <CharacterContext.Provider value={value}>
-        {children}
-      </CharacterContext.Provider>
-    );
-  }
+  const getCharacterByUIDAndVSS = useCallback(
+    async (uid: string, vssId: string) => {
+      const q = query(collectionRef, where("uid", "==", uid), where("vssId", "==", vssId));
+
+      try {
+        const snapshot = await getDocs(q);
+        const fulldata = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setUserLocalKindred(fulldata);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [collectionRef]
+  );
+
+  const getKindredById = useCallback(async (id:string, setKindred:Function) => {
+    const kindredDocRef = doc(collectionRef, id);
+
+    try {
+      const docSnapshot = await getDoc(kindredDocRef);
+      if (docSnapshot.exists()) {
+        let kindredData = docSnapshot.data() as Kindred;
+        kindredData = {
+          ...kindredData,
+          id: docSnapshot.id,
+        };
+        setKindred(kindredData)
+      } else {
+        return null; // Character with the given ID not found
+      }
+    } catch (err) {
+      console.error(err);
+      return null; // Error occurred while fetching the character
+    }
+  }, [collectionRef])
+
+  const updateKindred = useCallback(
+    async (id:string, updatedKindred: Partial<Kindred>) => {
+      const characterDocRef = doc(db, "tatteredVeil", id);
+      try {
+        await updateDoc(characterDocRef, updatedKindred);
+      } catch (err) {
+        console.error(err);
+        return;
+      }
+    },
+    []
+  )
+
+  const value: characterContextValue = useMemo(() => {
+    return {
+      onSubmitCharacter,
+      getCharacterByUIDAndVSS,
+      userLocalKindred,
+      getKindredById,
+      updateKindred,
+    };
+  }, [onSubmitCharacter, getCharacterByUIDAndVSS, userLocalKindred, getKindredById, updateKindred]);
+
+  return (
+    <CharacterContext.Provider value={value}>
+      {children}
+    </CharacterContext.Provider>
+  );
+}
 
 
-  
-  CharacterProvider.propTypes = {
-    children: PropTypes.node,
-  };
+
+CharacterProvider.propTypes = {
+  children: PropTypes.node,
+};

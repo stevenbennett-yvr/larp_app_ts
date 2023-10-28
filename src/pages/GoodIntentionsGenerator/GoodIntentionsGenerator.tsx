@@ -22,10 +22,11 @@ import SideSheet from "./Generator/sidebars/SideSheet"
 import AsideBar from "./Generator/sidebars/GeneratorAside"
 
 import { Center } from "@mantine/core"
+import { useEffect } from "react";
 
 
 const GenerateKindred = () => {
-    const { onSubmitCharacter } = useCharacterDb()
+    const { onSubmitCharacter, userLocalKindred, getCharacterByUIDAndVSS } = useCharacterDb()
 
     const { venueId } = useParams();
     const venueData = GoodIntentionsVSSs.find((venue) => venue.venueStyleSheet.id === venueId);
@@ -36,9 +37,21 @@ const GenerateKindred = () => {
     const [kindred, setKindred] = useLocalStorage<Kindred>({ key: `kindred:${venueId}`, defaultValue: getEmptyKindred() });
     const [selectedStep, setSelectedStep] = useLocalStorage({ key: `goodIntentionsSelectedStep:${venueId}`, defaultValue: 0 });
 
+    useEffect(() => {
+        getCharacterByUIDAndVSS(currentUser?.uid ?? '', venueData?.venueStyleSheet.id ?? '');
+    }, [])
+
+
+    if (userLocalKindred.length > 0) {
+        return <Center h={"100%"}><div>Character exists for this user in this VSS</div></Center>;
+    }
+
     if (!venueData) {
-        console.log("Invalid venue id");
         return <Center h={"100%"}><div>Invalid Venue ID</div></Center>;
+    }
+
+    if (!currentUser) {
+        console.log("Invalid User")
     }
 
     async function handleSubmit() {
@@ -83,25 +96,25 @@ const GenerateKindred = () => {
                 )
             case 3:
                 return (
-                    <SkillsPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + (kindred.clan==="Ghoul"? 3:1)); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                    <SkillsPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + (kindred.clan === "Ghoul" ? 3 : 1)); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             case 4:
                 return (
                     <GenerationPicker kindred={kindred} setKindred={setKindred} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
-            case 5: 
+            case 5:
                 return (
                     <PredatorTypePicker kindred={kindred} setKindred={setKindred} venueData={venueData} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             case 6:
                 // Backgrounds and Loresheets
                 return (
-                    <BackgroundLoreTabs kindred={kindred} setKindred={setKindred} venueData={venueData} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - (kindred.clan==="Ghoul"? 3:1)); }} />
+                    <BackgroundLoreTabs kindred={kindred} setKindred={setKindred} venueData={venueData} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - (kindred.clan === "Ghoul" ? 3 : 1)); }} />
                 )
-            case 7: 
+            case 7:
                 // Merits and Flaws
                 return (
-                    <MeritPicker kindred={kindred} setKindred={setKindred} venueData={venueData} nextStep={() => { setSelectedStep(selectedStep + (kindred.clan==="Thin-Blood"||kindred.clan==="Ghoul"? 2:1)); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
+                    <MeritPicker kindred={kindred} setKindred={setKindred} venueData={venueData} nextStep={() => { setSelectedStep(selectedStep + (kindred.clan === "Thin-Blood" || kindred.clan === "Ghoul" ? 2 : 1)); }} backStep={() => { setSelectedStep(selectedStep - 1); }} />
                 )
             case 8:
                 return (
@@ -110,7 +123,7 @@ const GenerateKindred = () => {
             case 9:
                 // Spending Init XP
                 return (
-                    <V5ExperienceAssigner kindred={kindred} setKindred={setKindred} venueData={venueData} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - (kindred.clan==="Thin-Blood"||kindred.clan==="Ghoul"? 2:1)); }} />
+                    <V5ExperienceAssigner kindred={kindred} setKindred={setKindred} venueData={venueData} nextStep={() => { setSelectedStep(selectedStep + 1); }} backStep={() => { setSelectedStep(selectedStep - (kindred.clan === "Thin-Blood" || kindred.clan === "Ghoul" ? 2 : 1)); }} />
                 )
             case 10:
                 // Backstory shit
@@ -119,7 +132,7 @@ const GenerateKindred = () => {
                 )
             case 11:
                 return (
-                    <V5PrintSheet kindred={kindred} backStep={() => { setSelectedStep(selectedStep - 1); }} handleSubmit={handleSubmit} />
+                    <V5PrintSheet kindred={kindred} backStep={() => { setSelectedStep(selectedStep - 1); }} handleSubmit={handleSubmit} vssId={venueId} />
                 )
             default:
                 return null;
@@ -129,7 +142,7 @@ const GenerateKindred = () => {
 
     return (
         <Center h={"100%"}>
-            <SideSheet kindred={kindred}/>
+            <SideSheet kindred={kindred} />
             <AsideBar selectedStep={selectedStep} kindred={kindred} />
             {getStepComponent()}
         </Center>

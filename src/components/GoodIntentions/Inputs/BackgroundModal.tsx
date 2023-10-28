@@ -1,5 +1,5 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { ActionIcon, Modal, NumberInput, Text, Button, Table, Center, Stack, TextInput } from "@mantine/core"
+import { Textarea, ActionIcon, Modal, NumberInput, Text, Button, Table, Center, Stack, TextInput } from "@mantine/core"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons"
 import { v5AdvantageLevel, emptyAdvantage, handleBackgroundRemove, V5BackgroundRef, v5BackgroundLevel, handleBackgroundChange, backgroundData, v5HandleXpBackgroundChange, V5AdvantageRef } from "../../../data/GoodIntentions/types/V5Backgrounds"
@@ -50,9 +50,29 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
         return (
             <Center key={backgroundRef.id}>
                 <Stack>
+                    <TextInput
+                        style={{ width: "300px" }}
+                        value={backgroundRef.backgroundName}
+                        label={`${backgroundRef.name} Name`}
+                        onChange={(event) =>
+                            handleBackgroundChange(kindred, setKindred, backgroundRef, "backgroundName", event.target.value)
+                        }
+                    />
+                    <Center>
+                    <Textarea
+                        style={{ width: "300px" }}
+                        value={backgroundRef.backgroundDescription}
+                        onChange={(event) => 
+                            handleBackgroundChange(kindred, setKindred, backgroundRef, "backgroundDescription", event.target.value)
+                        }
+                        label={`${backgroundRef.name} Description`}
+                        minRows={3}
+                    />
+                    </Center>
                     <Center>
                         {type === "creationPoints" ?
                             <NumberInput
+                                label={`${backgroundRef.name} Level`}
                                 value={Math.max(totalFreebies, v5BackgroundLevel(backgroundRef).level)}
                                 min={Math.max(totalFreebies, fameMin)}
                                 max={backgroundRef.name === "Haven" ? havenMax : v5BackgroundLevel(backgroundRef).level === 3 ? backgroundRef.creationPoints : 3}
@@ -84,15 +104,7 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
                             </>
                         }
                     </Center>
-                    <TextInput
-                        radius="xs"
-                        label="Notes"
-                        value={backgroundRef.note}
-                        description="Provide additional details you think necessary"
-                        onChange={(event) => {
-                            handleBackgroundChange(kindred, setKindred, backgroundRef, "note", event.target.value)
-                        }}
-                    />
+
                 </Stack>
             </Center>
         )
@@ -124,12 +136,12 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
                         <thead>
                             <tr>
                                 <td>
-                                Owned Advantages
+                                    Owned Advantages
                                 </td>
                             </tr>
                         </thead>
                         <tbody>
-                            {BackgroundRef.advantages.map((aRef:V5AdvantageRef) => {
+                            {BackgroundRef.advantages.map((aRef: V5AdvantageRef) => {
                                 const advantage = backgroundInfo.advantages?.find((a) => a.name === aRef.name)
                                 if (!advantage || v5AdvantageLevel(aRef).level === 0) { return null }
                                 const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
