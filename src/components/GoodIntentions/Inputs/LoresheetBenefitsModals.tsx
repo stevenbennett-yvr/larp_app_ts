@@ -14,8 +14,8 @@ type SkillSelectModalProps = {
     setKindred: (kindred: Kindred) => void,
     skillModalOpened: boolean,
     closeSkillModal: () => void,
-    loresheet: any,
-    benefit: any,
+    loresheet: Loresheet,
+    benefit: Benefit,
     type: TypeCategory
 }
 
@@ -40,6 +40,8 @@ export const SkillSelectModal = ({
             skillSelectData = [...skillSelectData, s.skill]
         })
     }
+
+    console.log(skillSelectData)
 
     const handleConfirm = () => {
         setKindred({

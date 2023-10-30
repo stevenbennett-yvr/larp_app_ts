@@ -42,7 +42,7 @@ const GenerateKindred = () => {
     }, [])
 
 
-    if (userLocalKindred.length > 0) {
+    if (userLocalKindred.length > 0 && venueId !== "CND-000") {
         return <Center h={"100%"}><div>Character exists for this user in this VSS</div></Center>;
     }
 

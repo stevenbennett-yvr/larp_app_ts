@@ -93,7 +93,7 @@ const LoresheetCard = ({ loresheet, setOpenLoresheetTitle, kindred, setKindred, 
                             </Button>
                         )}
                         {chosenBenefit.selectableSkills.length > 0 ?
-                            <SkillSelectModal kindred={kindred} setKindred={setKindred} skillModalOpened={skillModalOpened} closeSkillModal={closeSkillModal} loresheet={loresheet} benefit={benefit} type={type} />
+                            <SkillSelectModal kindred={kindred} setKindred={setKindred} skillModalOpened={skillModalOpened} closeSkillModal={closeSkillModal} loresheet={loresheet} benefit={chosenBenefit} type={type} />
                             : <></>}
                         {chosenBenefit.selectableBackgrounds.options.length > 0 ?
                             <BackgroundSelectModal backgroundModalOpened={backgroundModalOpened} backgroundCloseModal={backgroundCloseModal} kindred={kindred} setKindred={setKindred} loresheet={loresheet} benefitData={chosenBenefit} setBenefitData={setChosenBenefit} type={type} />
