@@ -1,19 +1,59 @@
+import React, { useCallback, useContext, useMemo } from "react";
 import { app } from "./firebase";
 import { getDatabase, ref, set, onValue } from "firebase/database";
+import PropTypes from 'prop-types'
 
 // RTDB Ref
 
 const db = getDatabase(app)
 
-export function writeCoterieData(coterieId:string, coterie:object) {
-    const reference = ref(db, "coteries/" + coterieId)
-    set(reference, coterie)
+type CoterieContextValue = {
+    writeCoterieData: (coterieId:string, coterie: object) => void;
+    getCoterieData: (coterieId: string, setCoterie: Function) => void;
 }
 
-export function getCoterieData(coterieId:string, setCoterie:Function) {
-    const reference = ref(db, "coteries/" + coterieId)
-    onValue(reference, (snapshot) => {
-        const data = snapshot.val();
-        setCoterie(data)
-    })
+const CoterieContext = React.createContext<CoterieContextValue | null>(null)
+
+export function useCoterieDb() {
+    const context = useContext(CoterieContext);
+    if (!context) {
+        throw new Error("useDb must be used within a DbProvider");
+    }
+    return context;
+}
+
+export function CoterieProvider({ children }: { children: React.ReactNode }) {
+
+
+    const writeCoterieData = useCallback(
+        async (coterieId: string, coterie: object) => {
+        const reference = ref(db, "coteries/" + coterieId)
+        set(reference, coterie)
+    }, []);
+    
+    const getCoterieData = useCallback(
+        async (coterieId: string, setCoterie: Function) => {
+        const reference = ref(db, "coteries/" + coterieId)
+        onValue(reference, (snapshot) => {
+            const data = snapshot.val();
+            setCoterie(data)
+        })
+    }, []);
+
+    const value: CoterieContextValue = useMemo(() => {
+        return {
+            writeCoterieData,
+            getCoterieData
+        };
+    }, [writeCoterieData, getCoterieData])
+
+    return (
+        <CoterieContext.Provider value={value}>
+            {children}
+        </CoterieContext.Provider>
+    )
+}
+
+CoterieProvider.propTypes = {
+    children: PropTypes.node,
 }

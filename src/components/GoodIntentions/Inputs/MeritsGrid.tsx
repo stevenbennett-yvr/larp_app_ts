@@ -111,7 +111,9 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }: MeritsGridProps) =
             meritRef.experiencePoints === 0
             : (meritInfo.cost.length === 1) || (meritRef.freebiePoints === 0 && meritRef.creationPoints === 0 && meritRef.experiencePoints === 3) || (v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo.cost.length - 1] && meritRef.experiencePoints === 0))
 
-
+        if (meritInfo.category === "thin-blood") {
+            return null
+        }
         return (
             <div key={merit.name}>
                 <Group spacing="xs">

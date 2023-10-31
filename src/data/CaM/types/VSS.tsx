@@ -121,7 +121,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
         goodIntentionsVariables: {
             vssId: "GI-000",
             boundaries: "New York Van Java",
-            sect: "Anarch",
+            sect: "",
             tenants: {
                 global:"Freedom Above All",
                 sect:"Solidarity Against the Camarilla",

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Center, Stack, Card, Button, Avatar, Text, List } from "@mantine/core";
+import { Center, Stack, Button, Avatar, Text, List } from "@mantine/core";
 import { DiscordLogo } from "../../assets/images/CaM";
 import SoftCoverV5 from '../../assets/images/GoodIntentions/core/Soft_Cover_3d__88604.png';
 import { GoodIntentionsVSSs } from "../../data/CaM/types/VSS";
@@ -8,6 +8,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useCharacterDb } from "../../contexts/CharacterContext";
 import { upcase } from "../../utils/case";
 import CharacterCard from "./Component/KindredCard";
+import { globals } from "../../assets/globals";
 
 export default function GoodIntentionsDashboard() {
     const { venueId } = useParams();
@@ -40,8 +41,7 @@ export default function GoodIntentionsDashboard() {
     } = venueData;
 
     return (
-        <Center h={"100%"}>
-            <Card>
+        <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '100px' }}>
                 <Stack>
                     <Center>
                         <Text variant="h2">{name}</Text>
@@ -119,7 +119,6 @@ export default function GoodIntentionsDashboard() {
                         <Avatar radius="xs" size="sm" src={DiscordLogo} /> Discord
                     </Button>
                 </Stack>
-            </Card>
         </Center>
     )
 }

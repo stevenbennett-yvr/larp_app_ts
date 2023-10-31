@@ -28,23 +28,6 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep, venueData }: Mer
   const meritFlawData = v5MeritFlawFilter(kindred);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const getTotalPoints = (kindred: Kindred) => {
-    let totalFlawPoints = 0;
-    let totalMeritPoints = 0;
-    Object.values(kindred.meritsFlaws).forEach((mf) => {
-      const meritFlawInfo = meritFlawData.find((entry) => entry.name === mf.name);
-      if (meritFlawInfo) {
-        if (meritFlawInfo.type === "flaw") {
-          totalFlawPoints += mf.creationPoints;
-        }
-        if (meritFlawInfo.type === "merit") {
-          totalMeritPoints += mf.creationPoints;
-        }
-      }
-    });
-    return { totalFlawPoints, totalMeritPoints };
-  };
-
   const getThinBloodPoints = (kindred: Kindred) => {
     let totalFlawPoints = 0;
     let totalMeritPoints = 0;
@@ -61,6 +44,24 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep, venueData }: Mer
     });
     return { totalFlawPoints, totalMeritPoints };
   };
+
+  const getTotalPoints = (kindred: Kindred) => {
+    let totalFlawPoints = 0;
+    let totalMeritPoints = 0;
+    Object.values(kindred.meritsFlaws).forEach((mf) => {
+      const meritFlawInfo = meritFlawData.find((entry) => entry.name === mf.name);
+      if (meritFlawInfo) {
+        if (meritFlawInfo.type === "flaw" && meritFlawInfo.category !== "thin-blood") {
+          totalFlawPoints += mf.creationPoints;
+        }
+        if (meritFlawInfo.type === "merit" && meritFlawInfo.category !== "thin-blood") {
+          totalMeritPoints += mf.creationPoints;
+        }
+      }
+    });
+    return { totalFlawPoints, totalMeritPoints };
+  };
+
 
   const handleCloseModal = () => {
     setKindred({
@@ -92,9 +93,15 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep, venueData }: Mer
                 <ScrollArea h={height - 140} pb={20}>
                     <Text align="center" mt={"xl"} ta="center" fz="xl" fw={700}>Merits & Flaws</Text>
                     {kindred.clan === "Thin-Blood" ?
+                    <Stack>
                         <Text style={thinBloodStyle}>
                             Thin-blood characters must choose between 1 to 3 Thin-Blood Merits and an equal number of Thin-Blood Flaws.
-                        </Text> :
+                        </Text>
+                        <Group position="apart">
+                          <Text><b>Thin-Blood Merits picked:</b> {getThinBloodPoints(kindred).totalMeritPoints}</Text>
+                          <Text><b>Thin-Blood Flaws picked:</b> {getThinBloodPoints(kindred).totalFlawPoints}</Text>
+                        </Group>
+                      </Stack> :
                         <></>}
                     <Center>
                         <MeritsGrid kindred={kindred} setKindred={setKindred} type="creationPoints" venueData={venueData} />
@@ -147,7 +154,7 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep, venueData }: Mer
                                         setModalOpen(true);
                                     }
                                 }}
-                                disabled={getTotalPoints(kindred).totalMeritPoints > 10 || getTotalPoints(kindred).totalMeritPoints !== getTotalPoints(kindred).totalFlawPoints || (kindred.clan === "Thin-Blood" && getThinBloodPoints(kindred).totalMeritPoints === 0 && getThinBloodPoints(kindred).totalFlawPoints === 0)}
+                                disabled={getTotalPoints(kindred).totalMeritPoints > 10 || getTotalPoints(kindred).totalMeritPoints !== getTotalPoints(kindred).totalFlawPoints || getThinBloodPoints(kindred).totalFlawPoints !== getThinBloodPoints(kindred).totalMeritPoints || (kindred.clan === "Thin-Blood" && getThinBloodPoints(kindred).totalMeritPoints === 0 && getThinBloodPoints(kindred).totalFlawPoints === 0)}
                             >
                                 Next
                             </Button>
