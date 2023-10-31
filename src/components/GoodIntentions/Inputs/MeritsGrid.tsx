@@ -11,7 +11,7 @@ import Tally from "../../../utils/talley";
 import { upcase } from "../../../utils/case";
 import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS";
 
-export type TypeCategory = 'creationPoints' | 'experiencePoints' ;
+export type TypeCategory = 'creationPoints' | 'experiencePoints';
 
 type MeritsGridProps = {
     kindred: Kindred,
@@ -57,7 +57,7 @@ const v5GetMeritByName = (name: string) => {
     }
 }
 
-const MeritsGrid = ({ kindred, setKindred, type, venueData }:MeritsGridProps) => {
+const MeritsGrid = ({ kindred, setKindred, type, venueData }: MeritsGridProps) => {
     const theme = useMantineTheme()
 
     const meritFlawData = v5MeritFlawFilter(kindred)
@@ -94,6 +94,23 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }:MeritsGridProps) =>
         const meritInfo = meritFlawData.find(entry => entry.name === merit.name)
         const meritRef = kindred.meritsFlaws.find((mf) => mf.name === merit.name) || v5MeritFlawRefs.find((mf) => mf.name === merit.name)
         if (!meritRef || !meritInfo) { return }
+        const isFlaw: boolean = meritInfo.type === "flaw"
+        const disabled = (isFlaw ?
+            false
+            : (v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo.cost.length - 1] && meritRef.experiencePoints === 0))
+        const min = (isFlaw ?
+            0
+            : meritRef.freebiePoints === 0 && meritRef.creationPoints === 0 ? meritInfo.cost[0] * 3 : 0)
+        const max = (isFlaw ?
+            0 === v5MeritLevel(meritRef).level ? meritRef.experiencePoints : undefined
+            : meritInfo.cost[meritInfo.cost.length - 1] === v5MeritLevel(meritRef).level ? meritRef.experiencePoints : 0)
+        const disablePlus = (isFlaw ?
+            0 === v5MeritLevel(meritRef).level
+            : (v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo.cost.length - 1]))
+        const disableMinus = (isFlaw ?
+            meritRef.experiencePoints === 0
+            : (meritInfo.cost.length === 1) || (meritRef.freebiePoints === 0 && meritRef.creationPoints === 0 && meritRef.experiencePoints === 3) || (v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo.cost.length - 1] && meritRef.experiencePoints === 0))
+
 
         return (
             <div key={merit.name}>
@@ -102,7 +119,7 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }:MeritsGridProps) =>
                         variant="filled"
                         radius="xl"
                         color="dark"
-                        disabled={(meritInfo.cost.length === 1) || (meritRef.freebiePoints === 0 && meritRef.creationPoints === 0 && meritRef.experiencePoints === 3) || (v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo.cost.length - 1] && meritRef.experiencePoints === 0)}
+                        disabled={disableMinus}
                         onClick={() => v5HandleXpMeritChange(kindred, setKindred, meritRef, meritRef.experiencePoints - 1)}
                     >
                         <CircleMinus strokeWidth={1.5} color="gray" />
@@ -110,10 +127,10 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }:MeritsGridProps) =>
                     <NumberInput
                         style={{ width: "60px" }}
                         value={meritRef.experiencePoints}
-                        min={meritRef.freebiePoints === 0 && meritRef.creationPoints === 0 ? meritInfo.cost[0] * 3 : 0}
-                        max={meritInfo.cost[meritInfo.cost.length - 1] === v5MeritLevel(meritRef).level ? meritRef.experiencePoints : 0}
+                        min={min}
+                        max={max}
                         step={getStep(meritRef)}
-                        disabled={(v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo.cost.length - 1] && meritRef.experiencePoints === 0)}
+                        disabled={disabled}
                         onChange={(val: number) => {
                             v5HandleXpMeritChange(kindred, setKindred, meritRef, val)
                         }}
@@ -122,7 +139,7 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }:MeritsGridProps) =>
                         variant="filled"
                         radius="xl"
                         color="dark"
-                        disabled={(v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo.cost.length - 1])}
+                        disabled={disablePlus}
                         onClick={() => {
                             v5HandleXpMeritChange(kindred, setKindred, meritRef, meritRef.experiencePoints + 1);
                         }}
@@ -144,7 +161,7 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }:MeritsGridProps) =>
         )
     }
 
-    
+
     const MeritCreatoinPointInput = (merit: V5MeritFlaw) => {
 
         const meritInfo = meritFlawData.find(entry => entry.name === merit.name)
@@ -178,41 +195,41 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }:MeritsGridProps) =>
         ) {
             return null;
         }
-    
+
         const { bannedMerits } = venueData.goodIntentionsVariables
         const sortedMerits = kindred.meritsFlaws
             .filter((merit) => (v5GetMeritByName(merit.name)?.category.toLowerCase() === category.toLowerCase()))
             .sort((a, b) => a.id.localeCompare(b.id));
-    
-            let bgc = ""
 
-            switch (upcase(category)) {
-                case "Bonding":
-                    bgc = theme.fn.rgba(theme.colors.red[9], 0.90); // Blue color
-                    break;
-                case "Connection":
-                    bgc = theme.fn.rgba(theme.colors.red[8], 0.90); // Red color
-                    break;
-                case "Feeding":
-                    bgc = theme.fn.rgba(theme.colors.red[7], 0.90); // Purple color
-                    break;
-                case "Mystical":
-                    bgc = theme.fn.rgba(theme.colors.red[6], 0.90); // Green color
-                    break;
-                case "Physical":
-                    bgc = theme.fn.rgba(theme.colors.red[5], 0.90); // Yellow color
-                    break;
-                case "Psychological":
-                    bgc = theme.fn.rgba(theme.colors.red[4], 0.90); // Orange color
-                    break;
-                case "Thin-Blood":
-                    bgc = theme.fn.rgba(theme.colors.red[3], 0.90); // Gray color
-                    break;
-                case "Ghoul":
-                    bgc = theme.fn.rgba(theme.colors.red[3], 0.90); // Gray color
-                    break;
-            }    
-    
+        let bgc = ""
+
+        switch (upcase(category)) {
+            case "Bonding":
+                bgc = theme.fn.rgba(theme.colors.red[9], 0.90); // Blue color
+                break;
+            case "Connection":
+                bgc = theme.fn.rgba(theme.colors.red[8], 0.90); // Red color
+                break;
+            case "Feeding":
+                bgc = theme.fn.rgba(theme.colors.red[7], 0.90); // Purple color
+                break;
+            case "Mystical":
+                bgc = theme.fn.rgba(theme.colors.red[6], 0.90); // Green color
+                break;
+            case "Physical":
+                bgc = theme.fn.rgba(theme.colors.red[5], 0.90); // Yellow color
+                break;
+            case "Psychological":
+                bgc = theme.fn.rgba(theme.colors.red[4], 0.90); // Orange color
+                break;
+            case "Thin-Blood":
+                bgc = theme.fn.rgba(theme.colors.red[3], 0.90); // Gray color
+                break;
+            case "Ghoul":
+                bgc = theme.fn.rgba(theme.colors.red[3], 0.90); // Gray color
+                break;
+        }
+
         return (
             <Accordion.Item value={`${category} accordion`} key={category}>
                 <Accordion.Control style={{ color: "white", backgroundColor: bgc }}>
@@ -243,7 +260,7 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }:MeritsGridProps) =>
                                                             {icon} &nbsp; {meritInfo.name} <b>Level: {v5MeritLevel(meritFlaw).level}</b>
                                                         </Text>
                                                         <Group>Rating: {getRating(meritInfo.cost)}</Group>
-                                                        {meritInfo.type === "merit" && MeritXpInput(meritFlaw)}
+                                                        {MeritXpInput(meritFlaw)}
                                                     </Stack>
                                                 </td>
                                                 <td dangerouslySetInnerHTML={{ __html: `${meritInfo.description}` }} />
@@ -284,7 +301,7 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }:MeritsGridProps) =>
             </Accordion.Item>
         );
     };
-    
+
 
     const meritTypesSet = new Set(Object.values(kindred.meritsFlaws).map((merit) => v5GetMeritByName(merit.name).category))
     const meritTypes = Array.from(meritTypesSet)

@@ -50,6 +50,7 @@ export const v5AdvantageRefSchema = z.object({
     experiencePoints: z.number(),
     havenPoints: z.number(),
     loresheetFreebiePoints: z.number(),
+    predatorTypeFreebiePoints: z.number(),
 })
 
 export type V5AdvantageRef = z.infer<typeof v5AdvantageRefSchema>
@@ -61,6 +62,7 @@ export const emptyAdvantage: V5AdvantageRef = {
     experiencePoints: 0,
     havenPoints: 0,
     loresheetFreebiePoints: 0,
+    predatorTypeFreebiePoints: 0,
 }
 
 export const v5BackgroundRefSchema = z.object({
@@ -124,6 +126,7 @@ function combineAdvantages(...arrays: V5AdvantageRef[][]): Array<V5AdvantageRef>
                 combinedAdvantages[advantage.name].experiencePoints += advantage.experiencePoints;
                 combinedAdvantages[advantage.name].havenPoints += advantage.havenPoints;
                 combinedAdvantages[advantage.name].loresheetFreebiePoints += advantage.loresheetFreebiePoints;
+                combinedAdvantages[advantage.name].predatorTypeFreebiePoints += advantage.predatorTypeFreebiePoints;
             } else {
                 // If it doesn't exist, create a new entry for the advantage.
                 combinedAdvantages[advantage.name] = { ...advantage };
@@ -275,7 +278,7 @@ export const v5BackgroundLevel = (v5BackgroundRef: V5BackgroundRef) => {
     }
 }
 
-function findAdvantageByName(name: string): any {
+function findAdvantageByName(name: string): V5Advantage {
     for (const entry of backgroundData) {
       if (entry.advantages) {
         for (const advantage of entry.advantages) {
@@ -285,43 +288,70 @@ function findAdvantageByName(name: string): any {
         }
       }
     }
-    return null; // Return null if the advantage with the given name is not found
+    return {name:"", description:"", cost:[], type:""}; // Return null if the advantage with the given name is not found
   }
 
 export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
     let totalXpNeeded = 0;
     let pastXpNeeded = [0];
-    let { experiencePoints, creationPoints, freebiePoints, havenPoints, loresheetFreebiePoints } = AdvantageRef;
+    let { experiencePoints, creationPoints, freebiePoints, havenPoints, loresheetFreebiePoints, predatorTypeFreebiePoints } = AdvantageRef;
     let advantageInfo = findAdvantageByName(AdvantageRef.name)
     let advantageMax = advantageInfo.cost[advantageInfo.cost.length-1]
 
     if (!havenPoints) { havenPoints = 0 }
-
-    if (experiencePoints === 0) {
-        let level = creationPoints + freebiePoints + havenPoints + loresheetFreebiePoints;
-        let xpNeeded = 3;
-        totalXpNeeded = xpNeeded;
-        pastXpNeeded.push(totalXpNeeded);
-        level = Math.min(level, advantageMax)
-        return { level, totalXpNeeded, pastXpNeeded };
-    } else {
-        let level = creationPoints + freebiePoints + havenPoints + loresheetFreebiePoints;
-        let xpNeeded = 3;
-        totalXpNeeded += xpNeeded;
-        pastXpNeeded.push(totalXpNeeded);
-        while (experiencePoints >= xpNeeded) {
-            level++;
-            experiencePoints -= xpNeeded;
-            xpNeeded = 3;
+    if (advantageInfo.type==="disadvantage") {
+        if (experiencePoints === 0) {
+            let level = creationPoints + freebiePoints + havenPoints + loresheetFreebiePoints + predatorTypeFreebiePoints;
+            let xpNeeded = 3;
+            totalXpNeeded = xpNeeded;
+            pastXpNeeded.push(totalXpNeeded);
+            level = Math.min(level, advantageMax)
+            return { level, totalXpNeeded, pastXpNeeded };
+        } else {
+            let level = creationPoints + freebiePoints + havenPoints + loresheetFreebiePoints + predatorTypeFreebiePoints;
+            let xpNeeded = 3;
             totalXpNeeded += xpNeeded;
             pastXpNeeded.push(totalXpNeeded);
+            while (experiencePoints >= xpNeeded) {
+                level--;
+                experiencePoints -= xpNeeded;
+                xpNeeded = 3;
+                totalXpNeeded += xpNeeded;
+                pastXpNeeded.push(totalXpNeeded);
+            }
+            level = Math.min(level, advantageMax)
+            return { level, totalXpNeeded, pastXpNeeded };
         }
-        level = Math.min(level, advantageMax)
-        return { level, totalXpNeeded, pastXpNeeded };
     }
+    else {
+        if (experiencePoints === 0) {
+            let level = creationPoints + freebiePoints + havenPoints + loresheetFreebiePoints + predatorTypeFreebiePoints;
+            let xpNeeded = 3;
+            totalXpNeeded = xpNeeded;
+            pastXpNeeded.push(totalXpNeeded);
+            level = Math.min(level, advantageMax)
+            return { level, totalXpNeeded, pastXpNeeded };
+        } else {
+            let level = creationPoints + freebiePoints + havenPoints + loresheetFreebiePoints + predatorTypeFreebiePoints;
+            let xpNeeded = 3;
+            totalXpNeeded += xpNeeded;
+            pastXpNeeded.push(totalXpNeeded);
+            while (experiencePoints >= xpNeeded) {
+                level++;
+                experiencePoints -= xpNeeded;
+                xpNeeded = 3;
+                totalXpNeeded += xpNeeded;
+                pastXpNeeded.push(totalXpNeeded);
+            }
+            level = Math.min(level, advantageMax)
+            return { level, totalXpNeeded, pastXpNeeded };
+        }
+    }
+
+
 }
 
-type VariableKeys = "backgroundName" | "backgroundDescription" | "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "havenPoints";
+type VariableKeys = "backgroundName" | "backgroundDescription" | "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "havenPoints" | "predatorTypeFreebiePoints";
 
 export const handleBackgroundChange = (
     kindred: Kindred,

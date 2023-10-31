@@ -117,96 +117,115 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                         {PredatorTypes[pickedPredatorType].backgrounds.map((background) => {
                             let backgroundInfo = backgroundData.find(entry => entry.name === background.name)
                             if (!backgroundInfo) return (null)
+                            let advantagePoints = 0
+                            background.advantages.forEach((aRef) => advantagePoints += aRef.freebiePoints)
                             return (
                                 <div key={background.id}>
                                     <Text fz={globals.smallerFontSize} style={{ textAlign: "left" }}>
                                         <b>{background.name}</b> {v5BackgroundLevel(background).level}
                                         <div dangerouslySetInnerHTML={{ __html: backgroundInfo?.summary }} />
-
                                     </Text>
 
-                                    {PredatorTypes[pickedPredatorType].advantagePoints ?
-                                        <Accordion variant="contained">
-                                            <Accordion.Item value={backgroundInfo.name}>
-                                                <Accordion.Control>Advantages</Accordion.Control>
-                                                <Accordion.Panel>
-                                                    <Table>
-                                                        <tbody>
-                                                            {backgroundInfo.advantages?.map((advantage) => {
-                                                                if (!backgroundInfo) return (null)
-                                                                if (advantage?.type === "disadvantage") { return null }
-                                                                const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon()
-                                                                const advantageRef = background.advantages.find((a) => a.name === advantage.name) || { ...emptyAdvantage, name: advantage.name }
-                                                                if (!advantageRef) { return null }
-                                                                return (
-                                                                    <tr key={advantage.name}>
-                                                                        <td>
-                                                                            <Text align="center">{icon} &nbsp;{advantage.name}</Text>
-                                                                            <Center>
-                                                                                {getRating(advantage.cost)}
-                                                                            </Center>
-                                                                            <Center>
-                                                                                <NumberInput
-                                                                                    disabled={advantageRef.freebiePoints === 0 && background.advantages.length > 0}
-                                                                                    value={advantageRef.freebiePoints}
-                                                                                    min={0}
-                                                                                    step={advantageStep(advantageRef, backgroundInfo)}
-                                                                                    max={1}
-                                                                                    onChange={(val: number) => {
-                                                                                        const existingAdvantageIndex = background.advantages.findIndex((a) => a.name === advantageRef.name);
+                                    {PredatorTypes[pickedPredatorType].advantagePoints ? (() => {
+                                        console.log(PredatorTypes[pickedPredatorType]?.advantagePoints && ((PredatorTypes[pickedPredatorType]?.advantagePoints || 0) - advantagePoints) === 0)
+                                        if (pass && PredatorTypes[pickedPredatorType]?.advantagePoints && ((PredatorTypes[pickedPredatorType]?.advantagePoints || 0) - advantagePoints) === 0) {
+                                            pass = true;
+                                        } else {
+                                            pass = false;
+                                        }
+                                         return (
+                                            <>
+                                                <Group position="apart">
+                                                    <Text maw={"80%"} fz={"xl"}>
+                                                        {`Pick ${PredatorTypes[pickedPredatorType].advantagePoints} from: `}
+                                                    </Text>
+                                                    <Text>
+                                                        Remaining: <Title ta={"center"} c={"red"}>{`${(PredatorTypes[pickedPredatorType]?.advantagePoints || 0) - advantagePoints}`}</Title>
+                                                    </Text>
+                                                </Group>
+                                                <Accordion variant="contained">
+                                                    <Accordion.Item value={backgroundInfo.name}>
+                                                        <Accordion.Control>Advantages</Accordion.Control>
+                                                        <Accordion.Panel>
+                                                            <Table>
+                                                                <tbody>
+                                                                    {backgroundInfo.advantages?.map((advantage) => {
+                                                                        if (!backgroundInfo) return null;
+                                                                        if (advantage?.type === "disadvantage") return null;
+                                                                        const icon = advantage?.type === "disadvantage" ? flawIcon() : meritIcon();
+                                                                        const advantageRef = background.advantages.find((a) => a.name === advantage.name) || { ...emptyAdvantage, name: advantage.name };
+                                                                        if (!advantageRef) return null;
+                                                                        return (
+                                                                            <tr key={advantage.name}>
+                                                                                <td>
+                                                                                    <Text align="center">{icon} &nbsp;{advantage.name}</Text>
+                                                                                    <Center>
+                                                                                        {getRating(advantage.cost)}
+                                                                                    </Center>
+                                                                                    <Center>
+                                                                                        <NumberInput
+                                                                                            disabled={advantageRef.freebiePoints === 0 && background.advantages.length > 0}
+                                                                                            value={advantageRef.freebiePoints}
+                                                                                            min={0}
+                                                                                            step={advantageStep(advantageRef, backgroundInfo)}
+                                                                                            max={1}
+                                                                                            onChange={(val: number) => {
+                                                                                                const existingAdvantageIndex = background.advantages.findIndex((a) => a.name === advantageRef.name);
 
-                                                                                        if (val === 0) {
-                                                                                            // If the value is set to 0, remove the advantage from the list
-                                                                                            if (existingAdvantageIndex !== -1) {
-                                                                                                background.advantages.splice(existingAdvantageIndex, 1);
-                                                                                            }
-                                                                                        } else {
-                                                                                            // Otherwise, update the freebiePoints value
-                                                                                            if (existingAdvantageIndex !== -1) {
-                                                                                                background.advantages[existingAdvantageIndex].freebiePoints = val;
-                                                                                            } else {
-                                                                                                // If the advantage doesn't exist in the list, add it
-                                                                                                background.advantages.push({ ...advantageRef, freebiePoints: val });
-                                                                                            }
-                                                                                        }
-
-                                                                                        const updatedOption = {
-                                                                                            ...background,
-                                                                                            // No need to update advantages here, as we already did so above
-                                                                                        };
-
-                                                                                        // Create a copy of predatorData and update the backgrounds array
-                                                                                        const updatedBenefitData = {
-                                                                                            ...predatorData,
-                                                                                            backgrounds: predatorData.backgrounds.map((background: any) => {
-                                                                                                if (background.name === updatedOption.name) {
-                                                                                                    return updatedOption;
+                                                                                                if (val === 0) {
+                                                                                                    // If the value is set to 0, remove the advantage from the list
+                                                                                                    if (existingAdvantageIndex !== -1) {
+                                                                                                        background.advantages.splice(existingAdvantageIndex, 1);
+                                                                                                    }
                                                                                                 } else {
-                                                                                                    return background;
+                                                                                                    // Otherwise, update the freebiePoints value
+                                                                                                    if (existingAdvantageIndex !== -1) {
+                                                                                                        background.advantages[existingAdvantageIndex].freebiePoints = val;
+                                                                                                    } else {
+                                                                                                        // If the advantage doesn't exist in the list, add it
+                                                                                                        background.advantages.push({ ...advantageRef, freebiePoints: val });
+                                                                                                    }
                                                                                                 }
-                                                                                            }),
-                                                                                        };
 
-                                                                                        setPredatorData(updatedBenefitData);
-                                                                                    }}
-                                                                                />
-                                                                            </Center>
-                                                                        </td>
-                                                                    </tr>
-                                                                )
-                                                            })}
-                                                        </tbody>
-                                                    </Table>
-                                                </Accordion.Panel>
-                                            </Accordion.Item>
-                                        </Accordion>
+                                                                                                const updatedOption = {
+                                                                                                    ...background,
+                                                                                                    // No need to update advantages here, as we already did so above
+                                                                                                };
 
-                                        : <></>}
+                                                                                                // Create a copy of predatorData and update the backgrounds array
+                                                                                                const updatedBenefitData = {
+                                                                                                    ...predatorData,
+                                                                                                    backgrounds: predatorData.backgrounds.map((background: any) => {
+                                                                                                        if (background.name === updatedOption.name) {
+                                                                                                            return updatedOption;
+                                                                                                        } else {
+                                                                                                            return background;
+                                                                                                        }
+                                                                                                    }),
+                                                                                                };
+
+                                                                                                setPredatorData(updatedBenefitData);
+                                                                                            }}
+                                                                                        />
+                                                                                    </Center>
+                                                                                </td>
+                                                                            </tr>
+                                                                        );
+                                                                    })}
+                                                                </tbody>
+                                                            </Table>
+                                                        </Accordion.Panel>
+                                                    </Accordion.Item>
+                                                </Accordion>
+                                            </>
+                                        );
+                                    })() : null}
+
 
                                     {(() => {
                                         if (background.sphere && background.sphere.length > 1) {
                                             predatorData.backgrounds.forEach((b: any) => {
-                                                if (b.id === background.id && b.sphere.length > 1) {
+                                                if (pass && b.id === background.id && b.sphere.length > 1) {
                                                     pass = false;
                                                 }
                                             });
@@ -217,6 +236,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                                     placeholder="Pick sphere"
                                                     data={background.sphere}
                                                     defaultValue=""
+                                                    allowDeselect
                                                     onChange={(val) => {
                                                         setPredatorData({
                                                             ...predatorData,
@@ -236,7 +256,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                     {(() => {
                                         if (background.sphere && background.sphere.length === 0) {
                                             predatorData.backgrounds.forEach((b: any) => {
-                                                if (b.id === background.id && b.sphere.length === 0) {
+                                                if (pass && b.id === background.id && b.sphere.length === 0) {
                                                     pass = false;
                                                 }
                                             });
@@ -247,6 +267,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                                     placeholder="Pick sphere"
                                                     data={SphereSelectData}
                                                     defaultValue=""
+                                                    allowDeselect
                                                     onChange={(val) => {
                                                         setPredatorData({
                                                             ...predatorData,
@@ -305,7 +326,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                             </Group>
 
                             {options.map((option: V5BackgroundRef) => {
-                                if (totalPoints - spentPoints === 0) { pass = true } else { pass = false }
+                                if (pass && totalPoints - spentPoints === 0) { pass = true } else { pass = false }
                                 const backgroundInfo = backgroundData.find((entry) => entry.name === option.name);
                                 if (!backgroundInfo) {
                                     return null;
@@ -341,28 +362,37 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                                     }}
                                                     style={{ width: "100px" }}
                                                 />
-                                                {option.name === "Allies" || option.name === "Contacts" ?
-                                                    <Select
-                                                        label="Pick Sphere for Background"
-                                                        placeholder="Pick sphere"
-                                                        data={SphereSelectData}
-                                                        defaultValue=""
-                                                        onChange={(val) => {
-                                                            setPredatorData({
-                                                                ...predatorData,
-                                                                selectableBackground: {
-                                                                    ...predatorData.selectableBackground,
-                                                                    options: predatorData.selectableBackground.options.map((b: any) =>
-                                                                        b.id === option.id
-                                                                            ? { ...b, sphere: [val] }
-                                                                            : b
-                                                                    ),
-                                                                },
-                                                            });
-                                                        }}
-                                                    /> :
-                                                    <></>
-                                                }
+                                                {option.name === "Allies" || option.name === "Contacts" ? (
+                                                    (() => {
+                                                        if (pass && option.sphere && option.sphere[0] === null) { pass = false }
+                                                        return (
+                                                            <div>
+                                                                {/* You can use the 'variable' here */}
+                                                                <Select
+                                                                    label="Pick Sphere for Background"
+                                                                    placeholder="Pick sphere"
+                                                                    data={SphereSelectData}
+                                                                    defaultValue=""
+                                                                    allowDeselect
+                                                                    onChange={(val) => {
+                                                                        setPredatorData({
+                                                                            ...predatorData,
+                                                                            selectableBackground: {
+                                                                                ...predatorData.selectableBackground,
+                                                                                options: predatorData.selectableBackground.options.map((b: any) =>
+                                                                                    b.id === option.id
+                                                                                        ? { ...b, sphere: [val] }
+                                                                                        : b
+                                                                                ),
+                                                                            },
+                                                                        });
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        );
+                                                    })()
+                                                ) : null}
+
                                             </Group>
                                         </div>
                                     );
@@ -393,24 +423,34 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                         <b>{meritFlawInfo.name}</b> {v5MeritLevel(meritFlaw).level}
                                         <div dangerouslySetInnerHTML={{ __html: meritFlaw.note }} />
                                     </Text>
-                                    {meritFlaw.name === "Enemy" ?
-                                        <Select
-                                            label="Pick Sphere for Enemy"
-                                            placeholder="Pick sphere"
-                                            data={SphereSelectData}
-                                            defaultValue=""
-                                            onChange={(val) => {
-                                                setPredatorData({
-                                                    ...predatorData,
-                                                    meritsAndFlaws: predatorData.meritsAndFlaws.map((b: any) =>
-                                                        b.id === meritFlaw.id
-                                                            ? { ...b, sphere: [val as V5SphereKey] }
-                                                            : b
-                                                    ),
-                                                });
-                                            }}
-                                        />
-                                        : <></>}
+                                    {meritFlaw.name === "Enemy" ? (
+                                        (() => {
+                                            let enemy = predatorData.meritsAndFlaws.find((mf:any) => mf.name === "Enemy")
+                                            if (pass && enemy.sphere && enemy.sphere[0] !== null) { pass = true } else { pass = false }
+                                            return (
+                                                <div>
+                                                    <Select
+                                                        label="Pick Sphere for Enemy"
+                                                        placeholder="Pick sphere"
+                                                        data={SphereSelectData}
+                                                        defaultValue=""
+                                                        allowDeselect
+                                                        onChange={(val) => {
+                                                            setPredatorData({
+                                                                ...predatorData,
+                                                                meritsAndFlaws: predatorData.meritsAndFlaws.map((b: any) =>
+                                                                    b.id === meritFlaw.id
+                                                                        ? { ...b, sphere: [val as V5SphereKey] }
+                                                                        : b
+                                                                ),
+                                                            });
+                                                        }}
+                                                    />
+                                                </div>
+                                            );
+                                        })()
+                                    ) : null}
+
                                 </Group>
                             )
                         })}
@@ -436,7 +476,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                 <Stack>
                                     {options.map((option: V5MeritFlawRef) => {
                                         const meritFlawInfo = meritFlawData.find((entry) => entry.name === option.name);
-                                        if (totalPoints - spentPoints === 0) { pass = true } else { pass = false }
+                                        if (pass && totalPoints - spentPoints === 0 && pass) { pass = true } else { pass = false }
                                         if (!meritFlawInfo) { return null }
                                         else {
                                             return (

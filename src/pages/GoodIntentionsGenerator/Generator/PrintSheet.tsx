@@ -2,13 +2,12 @@ import { useState } from "react";
 
 // Mantine components
 import {
-  Center,
-  Group,
-  Alert,
-  Button,
+    Center,
+    Group,
+    Alert,
+    Button,
+    ScrollArea,
 } from "@mantine/core";
-
-// FontAwesome icons
 
 // Data and types
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
@@ -22,16 +21,19 @@ type PrintSheetProps = {
     kindred: Kindred,
     backStep: () => void,
     handleSubmit: () => void,
-    vssId: string|undefined,
+    vssId: string | undefined,
 }
 
 const V5PrintSheet = ({ kindred, backStep, handleSubmit, vssId }: PrintSheetProps) => {
 
     const [showRetire, setShowRetire] = useState<boolean>(false);
-
+    const height = globals.viewportHeightPx
+    const width = globals.viewportWidthPx
     return (
-        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
-            <PrintSheetCore kindred={kindred} vssId={vssId} />
+        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: "20px" }}>
+            <ScrollArea h={height - 140} w={width} pb={20}>
+                <PrintSheetCore kindred={kindred} vssId={vssId} />
+            </ScrollArea>
 
             <ConfirmModal kindred={kindred} showRetire={showRetire} setShowRetire={setShowRetire} handleSubmit={handleSubmit} />
 
@@ -48,9 +50,9 @@ const V5PrintSheet = ({ kindred, backStep, handleSubmit, vssId }: PrintSheetProp
                         <Button
                             style={{ margin: "5px" }}
                             color="gray"
-                            onClick={() => 
+                            onClick={() =>
                                 setShowRetire(true)
-                        }>
+                            }>
                             Submit
                         </Button>
                     </Button.Group>

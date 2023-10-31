@@ -79,14 +79,35 @@ export default function GoodIntentionsDashboard() {
                         </Stack>
                     </Center>
                     <Center>
-                        {userLocalKindred.length > 0?
-                        <CharacterCard kindredList={userLocalKindred} />:
-                        <Button
-                            onClick={() => navigate(`/create-kindred/${venueId}`)}
-                        >
-                            Create Kindred for Venue
-                        </Button>
-                        }
+                        {venueId === "GI-000" ?
+                            <>
+                                {userLocalKindred.length > 0 ?
+                                    <Stack>
+                                        <Button
+                                            onClick={() => navigate(`/create-kindred/${venueId}`)}
+                                        >
+                                            Create Kindred for Venue
+                                        </Button>
+                                        <CharacterCard kindredList={userLocalKindred} />
+                                    </Stack>
+                                    :
+                                    <Button
+                                        onClick={() => navigate(`/create-kindred/${venueId}`)}
+                                    >
+                                        Create Kindred for Venue
+                                    </Button>
+                                }
+                            </>
+                            : <>
+                                {userLocalKindred.length > 0 ?
+                                    <CharacterCard kindredList={userLocalKindred} /> :
+                                    <Button
+                                        onClick={() => navigate(`/create-kindred/${venueId}`)}
+                                    >
+                                        Create Kindred for Venue
+                                    </Button>
+                                }
+                            </>}
                     </Center>
                     <Center>
                         <a href="https://bynightstudios.com/laws-of-the-night-books" target="_blank" rel="noopener noreferrer">

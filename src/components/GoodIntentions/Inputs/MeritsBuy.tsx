@@ -52,6 +52,7 @@ const MeritBuy = ({ kindred, setKindred, venueData }: MeritBuyProps) => {
     const filteredData = meritFlawData.filter((merit) => {
         return (
             !bannedMerits.includes(merit.name) &&
+            merit.name !== "Unbondable" &&
             merit.type !== "flaw" &&
             (merit.category !== "thin-blood" && merit.category !== "ghoul") &&
             !kindred.meritsFlaws.some((existingMerit) => existingMerit.name === merit.name)

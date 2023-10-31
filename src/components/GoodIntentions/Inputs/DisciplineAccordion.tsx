@@ -15,12 +15,11 @@ type DisciplineAccordionProps = {
 const DisciplineAccordion = ({ kindred, setKindred }: DisciplineAccordionProps) => {
 
     let mostDisciplines = allDisciplines.filter((disciplineName) => {
-        if (kindred.clan==="Thin-Blood")
-        { return disciplineName !== "thin-blood alchemy" && kindred.disciplines[disciplineName].creationPoints !== 0 }
+        if (kindred.clan === "Thin-Blood") { return disciplineName !== "thin-blood alchemy" && kindred.disciplines[disciplineName].creationPoints !== 0 }
         return disciplineName !== "thin-blood alchemy";
     })
     const thinBloodAlchemy = kindred.meritsFlaws.some((mf) => mf.name === "Thin-Blood Alchemist")
-    const disciplinesForClan = kindred.clan==="Thin-Blood" && thinBloodAlchemy ? ["thin-blood alchemy"]: kindred.clan === "Caitiff" ? mostDisciplines : Clans[kindred.clan].disciplines;
+    const disciplinesForClan = kindred.clan === "Thin-Blood" && thinBloodAlchemy ? ["thin-blood alchemy"] : kindred.clan === "Caitiff" ? mostDisciplines : Clans[kindred.clan].disciplines;
     const otherDisciplines = mostDisciplines.filter((disciplineName) => {
         return !disciplinesForClan.includes(disciplineName);
     });
@@ -37,10 +36,10 @@ const DisciplineAccordion = ({ kindred, setKindred }: DisciplineAccordionProps) 
         let highestFormulaLevel = 0;  // Initialize the highest level to 0
 
         kindred.formulae.forEach((formula) => {
-          const formulaRecord = Formulae.find((record) => record.name === formula.name);
-          if (formulaRecord && formulaRecord.level > highestFormulaLevel) {
-            highestFormulaLevel = formulaRecord.level;
-          }
+            const formulaRecord = Formulae.find((record) => record.name === formula.name);
+            if (formulaRecord && formulaRecord.level > highestFormulaLevel) {
+                highestFormulaLevel = formulaRecord.level;
+            }
         });
 
         return (
@@ -109,64 +108,64 @@ const DisciplineAccordion = ({ kindred, setKindred }: DisciplineAccordionProps) 
         <>
             <Text mt={"xl"} ta="center" fz="xl" fw={700}>Disciplines</Text>
             <Center>
-            <Accordion>
-                {disciplinesForClan.length>0?
-                <Accordion.Item value={"In-Clan Disciplines"}>
-                    <Accordion.Control
-                        style={{ backgroundColor: "#25262B" }}
-                    ><Text>{kindred.clan === "Caitiff"? 'Caitiff Disciplines':'In-Clan Disciplines'}</Text></Accordion.Control>
-                    <Accordion.Panel>
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <td>Discipline</td>
-                                    <td></td>
-                                    <td>
-                                        <Group position="apart">
-                                            <Text underline>Xp For Next</Text>
-                                            <Text underline>Total XP Needed</Text>
-                                        </Group>
-                                    </td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    disciplinesForClan.map((d) => disciplineKeySchema.parse(d)).map((discipline) => disciplineXpInputs(discipline))
-                                }
-                            </tbody>
-                        </Table>
-                    </Accordion.Panel>
-                </Accordion.Item>
-                :<></>}
-                {kindred.clan==="Caitiff"||otherDisciplines.length<=0?<></>:
-                <Accordion.Item value={"Out-of-Clan Disciplines"}>
-                    <Accordion.Control
-                        style={{ backgroundColor: "#25262B" }}
-                    ><Text>Out-of-Clan Disciplines</Text></Accordion.Control>
-                    <Accordion.Panel>
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <td>Discipline</td>
-                                    <td></td>
-                                    <td>
-                                        <Group position="apart">
-                                            <Text underline>Xp For Next</Text>
-                                            <Text underline>Total XP Needed</Text>
-                                        </Group>
-                                    </td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    otherDisciplines.map((d) => disciplineKeySchema.parse(d)).map((discipline) => disciplineXpInputs(discipline))
-                                }
-                            </tbody>
-                        </Table>
-                    </Accordion.Panel>
-                </Accordion.Item>
-                }
-            </Accordion>
+                <Accordion>
+                    {disciplinesForClan.length > 0 ?
+                        <Accordion.Item value={"In-Clan Disciplines"}>
+                            <Accordion.Control
+                                style={{ backgroundColor: "#25262B" }}
+                            ><Text>{kindred.clan === "Caitiff" ? 'Caitiff Disciplines' : 'In-Clan Disciplines'}</Text></Accordion.Control>
+                            <Accordion.Panel>
+                                <Table>
+                                    <thead>
+                                        <tr>
+                                            <td>Discipline</td>
+                                            <td></td>
+                                            <td>
+                                                <Group position="apart">
+                                                    <Text underline>Xp For Next</Text>
+                                                    <Text underline>Total XP Needed</Text>
+                                                </Group>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            disciplinesForClan.map((d) => disciplineKeySchema.parse(d)).map((discipline) => disciplineXpInputs(discipline))
+                                        }
+                                    </tbody>
+                                </Table>
+                            </Accordion.Panel>
+                        </Accordion.Item>
+                        : <></>}
+                    {kindred.clan === "Caitiff" || otherDisciplines.length <= 0 ? <></> :
+                        <Accordion.Item value={"Out-of-Clan Disciplines"}>
+                            <Accordion.Control
+                                style={{ backgroundColor: "#25262B" }}
+                            ><Text>Out-of-Clan Disciplines</Text></Accordion.Control>
+                            <Accordion.Panel>
+                                <Table>
+                                    <thead>
+                                        <tr>
+                                            <td>Discipline</td>
+                                            <td></td>
+                                            <td>
+                                                <Group position="apart">
+                                                    <Text underline>Xp For Next</Text>
+                                                    <Text underline>Total XP Needed</Text>
+                                                </Group>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            otherDisciplines.map((d) => disciplineKeySchema.parse(d)).map((discipline) => disciplineXpInputs(discipline))
+                                        }
+                                    </tbody>
+                                </Table>
+                            </Accordion.Panel>
+                        </Accordion.Item>
+                    }
+                </Accordion>
             </Center>
         </>
     )

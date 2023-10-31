@@ -192,7 +192,7 @@ const SideSheet = ({ kindred }: SideSheetProps) => {
                                     <List>
                                         {kindred.meritsFlaws.map((mf) => {
                                             let meritData = meritFlawData.find(data => mf.name === data.name)
-                                            if (!meritData || meritData.type === "flaw") { return null }
+                                            if (!meritData || meritData.type === "flaw" || v5MeritLevel(mf).level === 0) { return null }
                                             return (
                                                 <List.Item key={mf.name}>
                                                     <Text style={textStyle}>{mf.name.slice(0, 7)}: <Tally n={v5MeritLevel(mf).level} /></Text>
@@ -205,7 +205,7 @@ const SideSheet = ({ kindred }: SideSheetProps) => {
                                     <List>
                                         {kindred.meritsFlaws.map((mf) => {
                                             let meritData = meritFlawData.find(data => mf.name === data.name)
-                                            if (!meritData || meritData.type === "merit") { return null }
+                                            if (!meritData || meritData.type === "merit" || v5MeritLevel(mf).level === 0) { return null }
                                             return (
                                                 <List.Item key={mf.name}>
                                                     <Text style={textStyle}>{mf.name.slice(0, 7)}: <Tally n={v5MeritLevel(mf).level} /></Text>

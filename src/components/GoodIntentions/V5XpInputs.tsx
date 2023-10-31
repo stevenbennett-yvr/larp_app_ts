@@ -1,6 +1,5 @@
-import { Stack, Group, Button, Divider, Center, Space, ScrollArea, Tabs } from '@mantine/core'
+import { Stack, Group, Button, Divider, Center, Space, Tabs } from '@mantine/core'
 import { useState } from 'react'
-import { globals } from '../../assets/globals'
 
 import { v5DisciplineLevel } from '../../data/GoodIntentions/types/V5Disciplines'
 import { Kindred } from '../../data/GoodIntentions/types/Kindred'
@@ -54,78 +53,74 @@ const V5XpInputs = ({ kindred, setKindred, venueData }: V5ExperienceAssignerProp
         setFormulaModalOpen(false)
     };
 
-    const height = globals.viewportHeightPx
     return (
-        <Center>
-            <ScrollArea h={height - 220} pb={20}>
+        <Stack>
+            <V5AttributeXpInputs kindred={kindred} setKindred={setKindred} />
+            <Divider my="sm" />
+            <V5SkillXpInputs kindred={kindred} setKindred={setKindred} />
+            <Divider my="sm" />
+            <DisciplineAccordion kindred={kindred} setKindred={setKindred} />
+            <PowerAccordion kindred={kindred} setKindred={setKindred} venueData={venueData} type='experiencePoints' />
+            <V5RitualsXpInputs kindred={kindred} setKindred={setKindred} venueData={venueData} modalOpened={ritualModalOpen} closeModal={closeRitualsModal} />
+            <V5CeremoniesXpInputs kindred={kindred} setKindred={setKindred} venueData={venueData} modalOpened={ceremonyModalOpen} closeModal={closeCeremoniesModal} />
+            <V5FormulaeXpInputs kindred={kindred} setKindred={setKindred} modalOpened={formulaModalOpen} closeModal={closeFormulaModal} />
+
+            <Space h="md" />
+            <Center>
+                <Group>
+                    {v5DisciplineLevel(kindred, 'blood sorcery').level > 0 ?
+                        <Button color={"gray"} onClick={openRitualsModal}>Get Rituals</Button>
+                        :
+                        <></>
+                    }
+                    {v5DisciplineLevel(kindred, 'oblivion').level > 0 ?
+                        <Button color={"gray"} onClick={openCeremoniesModal}>Get Ceremonies</Button>
+                        :
+                        <></>
+                    }
+                    {v5DisciplineLevel(kindred, 'thin-blood alchemy').level > 0 ?
+                        <Button color={"gray"} onClick={openFormulaModal}>Get Formulae</Button>
+                        :
+                        <></>
+                    }
+                </Group>
+            </Center>
+            <Divider my="sm" />
+
+            <Tabs defaultValue="backgrounds">
+                <Tabs.List grow>
+                    <Tabs.Tab value="backgrounds">
+                        Backgrounds
+                    </Tabs.Tab>
+                    <Tabs.Tab value="loresheet" >
+                        Loresheets
+                    </Tabs.Tab>
+                </Tabs.List>
+
+                <Tabs.Panel value="backgrounds">
+                    <BackgroundFull kindred={kindred} setKindred={setKindred} type='experiencePoints' />
+                </Tabs.Panel>
+
+                <Tabs.Panel value="loresheet">
+                    <LoresheetInputs kindred={kindred} setKindred={setKindred} venueData={venueData} type='experiencePoints' />
+                </Tabs.Panel>
+
+            </Tabs>
+
+            <Divider my="sm" />
+
+            <Center>
                 <Stack>
-                <V5AttributeXpInputs kindred={kindred} setKindred={setKindred} />
-                <Divider my="sm" />
-                <V5SkillXpInputs kindred={kindred} setKindred={setKindred} />
-                <Divider my="sm" />
-                <DisciplineAccordion kindred={kindred} setKindred={setKindred} />
-                <PowerAccordion kindred={kindred} setKindred={setKindred} venueData={venueData} type='experiencePoints' />
-                <V5RitualsXpInputs kindred={kindred} setKindred={setKindred} venueData={venueData} modalOpened={ritualModalOpen} closeModal={closeRitualsModal} />
-                <V5CeremoniesXpInputs kindred={kindred} setKindred={setKindred} venueData={venueData} modalOpened={ceremonyModalOpen} closeModal={closeCeremoniesModal} />
-                <V5FormulaeXpInputs kindred={kindred} setKindred={setKindred} modalOpened={formulaModalOpen} closeModal={closeFormulaModal} />
-
-                <Space h="md" />
-                <Center>
-                    <Group>
-                        {v5DisciplineLevel(kindred, 'blood sorcery').level > 0 ?
-                            <Button color={"gray"} onClick={openRitualsModal}>Get Rituals</Button>
-                            :
-                            <></>
-                        }
-                        {v5DisciplineLevel(kindred, 'oblivion').level > 0 ?
-                            <Button color={"gray"} onClick={openCeremoniesModal}>Get Ceremonies</Button>
-                            :
-                            <></>
-                        }
-                        {v5DisciplineLevel(kindred, 'thin-blood alchemy').level > 0 ?
-                            <Button color={"gray"} onClick={openFormulaModal}>Get Formulae</Button>
-                            :
-                            <></>
-                        }
-                    </Group>
-                </Center>
-                <Divider my="sm" />
-
-                <Tabs defaultValue="backgrounds">
-                    <Tabs.List grow>
-                        <Tabs.Tab value="backgrounds">
-                            Backgrounds
-                        </Tabs.Tab>
-                        <Tabs.Tab value="loresheet" >
-                            Loresheets
-                        </Tabs.Tab>
-                    </Tabs.List>
-
-                    <Tabs.Panel value="backgrounds">
-                        <BackgroundFull kindred={kindred} setKindred={setKindred} type='experiencePoints' />
-                    </Tabs.Panel>
-
-                    <Tabs.Panel value="loresheet">
-                        <LoresheetInputs kindred={kindred} setKindred={setKindred} venueData={venueData} type='experiencePoints' />
-                    </Tabs.Panel>
-
-                </Tabs>
-
-                <Divider my="sm" />
-
-                <Center>
-                    <Stack>
                     <MeritBuy kindred={kindred} setKindred={setKindred} venueData={venueData} />
                     <MeritsGrid kindred={kindred} setKindred={setKindred} venueData={venueData} type="experiencePoints" />
-                    </Stack>
-                </Center>
-                <Divider my="sm" />
-
-                <V5BloodPotenceXpInput kindred={kindred} setKindred={setKindred} />
-                <Divider my="sm" />
                 </Stack>
-            </ScrollArea>
-        </Center>
+            </Center>
+            <Divider my="sm" />
+
+            <V5BloodPotenceXpInput kindred={kindred} setKindred={setKindred} />
+            <Divider my="sm" />
+        </Stack>
+
     )
 }
 
