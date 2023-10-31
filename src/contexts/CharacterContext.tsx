@@ -83,7 +83,7 @@ export function CharacterProvider({ children }: { children: React.ReactNode }): 
 
   const updateKindred = useCallback(
     async (id:string, updatedKindred: Partial<Kindred>) => {
-      const characterDocRef = doc(db, "tatteredVeil", id);
+      const characterDocRef = doc(db, "goodIntentions", id);
       try {
         await updateDoc(characterDocRef, updatedKindred);
       } catch (err) {

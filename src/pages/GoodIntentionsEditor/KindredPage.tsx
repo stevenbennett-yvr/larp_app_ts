@@ -13,10 +13,13 @@ import BackstoryTab from "../../components/GoodIntentions/V5BackstoryTab";
 import changeLog from "../../utils/GoodIntentions/LoggingTool";
 import { remainingExperience } from "../../data/GoodIntentions/types/V5Experience";
 import ExperienceAside from "./ExperienceAside";
+import RetireModal from "../../components/GoodIntentions/Editor/RetireModal";
+import { useState } from "react";
 
 const KindredPage = () => {
   const { characterId } = useParams();
   const { getKindredById, updateKindred } = useCharacterDb();
+  const [showRetire, setShowRetire] = useState<boolean>(false);
 
   const { currentUser } = useAuth();
 
@@ -92,6 +95,7 @@ const KindredPage = () => {
 
         </Stack>
       </Tabs>
+      <RetireModal kindred={kindred} showRetire={showRetire} setShowRetire={setShowRetire} />
       <ExperienceAside kindred={kindred} />
       <Button.Group style={{ position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen ? "15%" : "30%" }}>
         <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>
@@ -101,6 +105,13 @@ const KindredPage = () => {
             disabled={remainingExperience(kindred) < 0}
             onClick={() => handleUpdate()}>
             Update
+          </Button>
+          <Button
+            style={{ margin: "5px" }}
+            color="gray"
+            onClick={() => setShowRetire(true)}
+          >
+            Retire
           </Button>
         </Alert>
       </Button.Group>
