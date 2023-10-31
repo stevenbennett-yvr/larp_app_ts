@@ -127,9 +127,9 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
                 sect:"Solidarity Against the Camarilla",
                 venue:"Defiance in Unity"
             },
-            bannedClans:["Tzimisce","Banu Haqim","Lasombra"],
-            bannedSects:["Camarilla"],
-            bannedPredatorTypes:["Sandman"],
+            bannedClans:[],
+            bannedSects:[],
+            bannedPredatorTypes:[],
             bannedMerits:[],
             bannedPowers:[],
             bannedCeremonies:[],

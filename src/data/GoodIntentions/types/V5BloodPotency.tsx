@@ -92,7 +92,7 @@ export const bloodPotencies: Record<number, BloodPotency> ={
         defnese: 0,
         rouseBonus: 0,
         baneSeverity: 0,
-        feedingPenalty: "",
+        feedingPenalty: "None",
         list: "<ul><li>Damage is taken as a mortal unless you have Thin-Blood Merit: Vampiric Resilience.</li><li>Rouse your Blood to heal one point of Normal Damage with Thin-Blood Merit: Vampiric Resilience.</li><li>No clan means no Bane Severity.</li><li>No Blood Bonds or ghouls without Thin-Blood Merit: Catenating Blood.</li><li>No Embracing vampires without Thin-Blood Merit: Catenating Blood.</li><li>Susceptible to Hunger Frenzy like true vampires.</li><li>Fear and Rage Frenzy from supernatural effects, or Thin-Blood Flaw: Bestial Temper.</li><li>One point of Normal Damage per turn in direct sunlight.</li></ul>",
     },
     1: {
@@ -101,7 +101,7 @@ export const bloodPotencies: Record<number, BloodPotency> ={
         defnese: 0,
         rouseBonus: 1,
         baneSeverity: 1,
-        feedingPenalty: "",
+        feedingPenalty: "None",
         list: "",
     },
     2: {

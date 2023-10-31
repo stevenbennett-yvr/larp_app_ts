@@ -4,6 +4,7 @@ import { Clans, ClanName } from "../../../data/GoodIntentions/types/V5Clans"
 import { Grid, Divider, Title, Center, Stack, List, Avatar, Text } from "@mantine/core"
 import { globals } from "../../../assets/globals"
 import { upcase } from "../../../utils/case"
+import { bloodPotencies, v5BloodPotencyLevel } from "../../../data/GoodIntentions/types/V5BloodPotency"
 
 type PrintSheetProps = {
     kindred: Kindred,
@@ -66,6 +67,7 @@ const MiddleSection = ({ kindred, venueData }: PrintSheetProps) => {
                         <Stack>
                             <Title order={4} align="center">Clan Bane</Title>
                             <Text fz="sm" align="center">{clanBane}</Text>
+                            <Text align="center"><b>Bane Severity</b>: {bloodPotencies[v5BloodPotencyLevel(kindred).level].baneSeverity}</Text>
                         </Stack>
                     </Grid.Col>
                 </Grid>
