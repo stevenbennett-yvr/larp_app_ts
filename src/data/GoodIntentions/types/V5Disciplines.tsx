@@ -5,6 +5,9 @@ import { Kindred } from "./Kindred";
 import { Clans } from "./V5Clans";
 import { v5xp } from "../V5Experience";
 import { getNumberBelow } from "../../../utils/getNumberBelow";
+import { Rituals } from "./V5Rituals";
+import { Ceremonies } from "./V5Ceremonies";
+import { Formulae } from "./V5Formulae";
 
 export const disciplineNameSchema = z.union([
     z.literal("animalism"),
@@ -174,7 +177,7 @@ export const v5DisciplineLevel = (kindred:Kindred, discipline:DisciplineKey) => 
 
 type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
 export const v5HandleDisciplineChange = (
-    character: any,
+    kindred: Kindred,
     setCharacter: Function,
     discipline: DisciplineKey,
     variableKey: VariableKeys,
@@ -182,16 +185,45 @@ export const v5HandleDisciplineChange = (
 ) => {
 
     const updatedDisciplines = {
-        ...character.disciplines,
+        ...kindred.disciplines,
         [discipline]: {
-            ...character.disciplines[discipline],
+            ...kindred.disciplines[discipline],
             [variableKey]: value
         }
     }
 
-    const updatedCharacter = {
-        ...character,
-        disciplines: updatedDisciplines
+    let updatedCharacter = {
+        ...kindred,
+        disciplines: updatedDisciplines,
+    }
+
+    let updatedRituals = updatedCharacter.rituals.filter((r) => {
+        let ritualInfo = Rituals.find((rd) => rd.name === r.name);
+        if (!ritualInfo) {
+            return false; // Filter out rituals with missing info
+        }
+        return ritualInfo.level < v5DisciplineLevel(kindred, "blood sorcery").level;
+    });
+    let updatedCeremonies = updatedCharacter.ceremonies.filter((c) => {
+        let ceremonyInfo = Ceremonies.find((cd) => cd.name === c.name);
+        if (!ceremonyInfo) {
+            return false; // Filter out rituals with missing info
+        }
+        return ceremonyInfo.level < v5DisciplineLevel(kindred, "oblivion").level;
+    });
+    let updatedFormulae = updatedCharacter.formulae.filter((c) => {
+        let formulaInfo = Formulae.find((fd) => fd.name === c.name);
+        if (!formulaInfo) {
+            return false; // Filter out rituals with missing info
+        }
+        return formulaInfo.level < v5DisciplineLevel(kindred, "thin-blood alchemy").level;
+    });
+
+    updatedCharacter = {
+        ...updatedCharacter,
+        rituals: updatedRituals,
+        ceremonies: updatedCeremonies,
+        formulae: updatedFormulae,
     }
 
     setCharacter(updatedCharacter)

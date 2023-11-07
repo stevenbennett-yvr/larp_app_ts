@@ -19,15 +19,16 @@ import BackstoryTab from "../../components/GoodIntentions/V5BackstoryTab";
 import RetireModal from "../../components/GoodIntentions/Editor/RetireModal";
 import CoterieSheet from "../../components/GoodIntentions/Coterie/coterieSheet";
 
-import changeLog from "../../utils/GoodIntentions/LoggingTool";
 import { globals } from "../../assets/globals";
 import { Coterie, getEmptyCoterie } from "../../data/GoodIntentions/types/Coterie";
+import UpdateModal from "./UpdateModal";
 
 
 const KindredPage = () => {
   const { characterId } = useParams();
   const { getKindredById, updateKindred } = useCharacterDb();
   const [showRetire, setShowRetire] = useState<boolean>(false);
+  const [showUpdate, setShowUpdate] = useState<boolean>(false);
   const { writeCoterieData, getCoterieData } = useCoterieDb()
   const { currentUser } = useAuth();
 
@@ -52,22 +53,6 @@ const KindredPage = () => {
   })
 
   const venueData = GoodIntentionsVSSs.find(vss => vss.venueStyleSheet.id === kindred.vssId)
-
-  const handleUpdate = () => {
-    if (kindred.id && kindred !== initialKindred) {
-      const updatedKindred = {
-        ...kindred,
-        changeLogs: {
-          ...kindred.changeLogs,
-          [new Date().toISOString()]: changeLog(initialKindred, kindred)
-        }
-      }
-
-      updateKindred(kindred.id, updatedKindred)
-      setKindred(updatedKindred)
-      setInitialKindred(updatedKindred)
-    }
-  }
 
   async function handleCreateCoterie(kindred: Kindred, coterie: Coterie) {
     try {
@@ -128,20 +113,21 @@ const KindredPage = () => {
         </Stack>
       </Tabs>
       <RetireModal kindred={kindred} showRetire={showRetire} setShowRetire={setShowRetire} />
+      <UpdateModal showUpdate={showUpdate} setShowUpdate={setShowUpdate} kindred={kindred} setKindred={setKindred} initialKindred={initialKindred} setInitialKindred={setInitialKindred} />
       <ExperienceAside kindred={kindred} />
       <Button.Group className="no-print" style={{ position: "fixed", bottom: "0px", left: globals.isPhoneScreen ? "0px" : globals.isSmallScreen ? "15%" : "30%" }}>
         <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px" }}>
           <Button
             style={{ margin: "5px" }}
             color="gray"
-            disabled={remainingExperience(kindred) < 0}
-            onClick={() => handleUpdate()}>
+            disabled={remainingExperience(kindred) < 0 || kindred === initialKindred}
+            onClick={() => setShowUpdate(true)}>
             Update
           </Button>
           <Button
             style={{ margin: "5px" }}
             color="gray"
-            onClick={() => setShowRetire(true)}
+            onClick={() => {setShowRetire(true);}}
           >
             Retire
           </Button>
