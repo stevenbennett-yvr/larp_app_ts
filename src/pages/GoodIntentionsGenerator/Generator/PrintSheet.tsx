@@ -11,7 +11,7 @@ import {
 
 // Data and types
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
-import PrintSheetCore from "../../../components/GoodIntentions/PrintSheet/PrintSheetCore";
+import PrintSheetCore from "../../../components/GoodIntentions/PrintSheet/PrintSheet";
 
 // Utility functions and components
 import ConfirmModal from './ConfirmModal';

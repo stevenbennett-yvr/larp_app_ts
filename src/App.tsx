@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { MageProvider } from './contexts/MageContext';
 import { CabalProvider } from './contexts/CabalContext';
 import { CharacterProvider } from './contexts/CharacterContext';
+import { CoterieProvider } from './contexts/CoterieContext';
 
 import PrivateRoute from './PrivateRoute';
 
@@ -45,7 +46,9 @@ function App() {
               <MageProvider>
                 <CabalProvider>
                   <CharacterProvider>
+                    <CoterieProvider>
                 <AuthenticatedApp></AuthenticatedApp>
+                    </CoterieProvider>
                   </CharacterProvider>
                 </CabalProvider>
               </MageProvider>
@@ -63,7 +66,7 @@ function AuthenticatedApp() {
   return (
     <AppShell
       padding="0"
-      header={showHeader?<Header height={75} p="xs"><Topbar /></Header>:<></>}
+      header={showHeader?<Header className='no-print' height={75} p="xs"><Topbar /></Header>:<></>}
       styles={(theme) => ({
         main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
       })}

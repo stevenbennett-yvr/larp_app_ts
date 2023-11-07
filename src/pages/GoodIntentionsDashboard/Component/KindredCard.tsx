@@ -14,15 +14,16 @@ const CharacterCard = ({ kindredList }: KindredCardProps) => {
     const navigate = useNavigate();
 
     return (
-        <div>
+        <Stack>
             {kindredList.map((character) => {
                 if (character.uid === '0') { return null }
                 return (
                     <Alert color="gray" style={{ maxWidth: '400px' }} key={character.uid}>
+                        <Text weight={700} align="left">{character.name}</Text>
+
                         <Group>
                             <Center>
                                 <Stack>
-                                    <Text weight={700} align="center">{character.name}</Text>
                                     <Avatar
                                         src={character.backstory.profilePic}
                                         size="70px"
@@ -40,6 +41,7 @@ const CharacterCard = ({ kindredList }: KindredCardProps) => {
                                         src={Sects[character.sect].symbol}
                                         style={{
                                             opacity: 0.6, // Adjust the opacity here (0.5 = 50% transparent)
+                                            filter: "invert(80%)"
                                         }}
                                     />
                                     <Image
@@ -49,6 +51,7 @@ const CharacterCard = ({ kindredList }: KindredCardProps) => {
                                         src={Clans[character.clan].symbol}
                                         style={{
                                             opacity: 0.6, // Adjust the opacity here (0.5 = 50% transparent)
+                                            filter: "invert(80%)"
                                         }}
                                     />
                                 </Group>
@@ -65,7 +68,7 @@ const CharacterCard = ({ kindredList }: KindredCardProps) => {
                     </Alert>
                 )
             })}
-        </div>
+        </Stack>
     )
 }
 

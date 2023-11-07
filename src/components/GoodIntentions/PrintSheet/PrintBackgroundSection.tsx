@@ -1,4 +1,4 @@
-import { Grid, Card, Table, Text, Stack, List, Divider, Center } from "@mantine/core"
+import { Card, Table, Text, Stack, List, Divider, Center, SimpleGrid } from "@mantine/core"
 
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { kindredBackgrounds, V5BackgroundRef, backgroundData, v5BackgroundLevel, v5AdvantageLevel } from "../../../data/GoodIntentions/types/V5Backgrounds"
@@ -18,15 +18,14 @@ const meritIcon = () => {
     return <FontAwesomeIcon icon={faCircleUp} style={{ color: "rgb(47, 158, 68)", }} />
 }
 
-const BackgroundSection = ({kindred}:PrintSheetProps) => {
+const BackgroundSection = ({ kindred }: PrintSheetProps) => {
     const sortedBackgrounds = kindredBackgrounds(kindred)
 
     const backgroundCard = (background: V5BackgroundRef) => {
         const backgroundInfo = backgroundData.find((b) => b.name === background.name)
         if (!backgroundInfo) { return null }
         return (
-            <Grid.Col span={3} key={background.id}>
-                <Center>
+            <Center>
                 <Card w={200}>
                     <Table>
                         <thead>
@@ -44,7 +43,7 @@ const BackgroundSection = ({kindred}:PrintSheetProps) => {
                                 return (
                                     <tr key={advantage.name}>
                                         <td>
-                                            <Text align="center">{icon} &nbsp;{advantage.name} {v5AdvantageLevel(advantage).level}</Text>
+                                            <Text>{icon} &nbsp;{advantage.name} {v5AdvantageLevel(advantage).level}</Text>
                                         </td>
                                     </tr>
                                 )
@@ -52,8 +51,7 @@ const BackgroundSection = ({kindred}:PrintSheetProps) => {
                         </tbody>
                     </Table>
                 </Card>
-                </Center>
-            </Grid.Col>
+            </Center>
         )
     }
 
@@ -61,22 +59,22 @@ const BackgroundSection = ({kindred}:PrintSheetProps) => {
         return (
             <Center>
                 <Card w={200}>
-                {
-                    kindred.loresheet.benefits.length > 0 ?
-                        <Stack>
-                            <Text><b>Loresheet:</b> {kindred.loresheet.name}</Text>
-                            <List>
-                                {kindred.loresheet.benefits.map((benefit) => {
-                                    return (
-                                        <List.Item key={benefit.name}>
-                                            <Text>{benefit.name}</Text>
-                                        </List.Item>
-                                    )
-                                })}
-                            </List>
-                        </Stack>
-                        : <></>
-                }
+                    {
+                        kindred.loresheet.benefits.length > 0 ?
+                            <Stack>
+                                <Text><b>Loresheet:</b> {kindred.loresheet.name}</Text>
+                                <List>
+                                    {kindred.loresheet.benefits.map((benefit) => {
+                                        return (
+                                            <List.Item key={benefit.name}>
+                                                <Text>{benefit.name}</Text>
+                                            </List.Item>
+                                        )
+                                    })}
+                                </List>
+                            </Stack>
+                            : <></>
+                    }
                 </Card>
             </Center>
         )
@@ -85,19 +83,11 @@ const BackgroundSection = ({kindred}:PrintSheetProps) => {
     return (
         <Center>
             <Stack>
-            <Divider my="sm" label="Backgrounds" labelPosition="center" />
-            <Grid columns={globals.isPhoneScreen ? 3 : 9}>
-                <Grid.Col w={300} span={3}>
-                    {
-                        loresheetCard()
-                    }
-                </Grid.Col>
-
-                    {
-                        sortedBackgrounds.map((b) => backgroundCard(b))
-                    }
-
-            </Grid>
+                <Divider my="sm" label="Backgrounds" labelPosition="center" />
+                <SimpleGrid cols={globals.isPhoneScreen ? 1 : 3}>
+                        { loresheetCard() }
+                        { sortedBackgrounds.map((b) => backgroundCard(b) )}
+                </SimpleGrid>
             </Stack>
         </Center>
 

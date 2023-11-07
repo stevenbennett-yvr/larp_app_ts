@@ -1,7 +1,7 @@
 
 // Mantine components
 import {
-    Center, Stack, Divider
+    Center, Stack
 } from "@mantine/core";
 
 // Data and types
@@ -34,10 +34,7 @@ const PrintSheetCore = ({ kindred, vssId }: PrintSheetProps) => {
 
                 <TopSection kindred={kindred} venueData={venueData} />
 
-                <Divider my="sm" label="Attributes" labelPosition="center" />
-
                 <AttributeSection kindred={kindred} />
-                <Divider my="sm" label="Skills" labelPosition="center" />
 
                 <SkillSection kindred={kindred} />
 

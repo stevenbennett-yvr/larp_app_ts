@@ -55,7 +55,7 @@ export const allPowers:Power[] = [
     //Auspex
     //1
     { name: "Heightened Senses", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Enhance vampiric senses.", dicePool: "", level: 1, discipline: "auspex" },
-    { name: "Sense the Unseen", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Sense supernatural activity.", dicePool: "Wits + Auspex", level: 1, discipline: "auspex" },
+    { name: "Sense the Unseen", description: "", rouseChecks: 1, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Sense supernatural activity.", dicePool: "Wits + Awareness", level: 1, discipline: "auspex" },
     //2
     { name: "Panacea", description: "", rouseChecks: 1, amalgamPrerequisites: [{ discipline: "fortitude", level: 1 }], powerPrerequisite:[], summary: "Heals Willpower and calms nerves.", dicePool: "Composure + Medicine", level: 2, discipline: "auspex" },
     { name: "Premonition", description: "", rouseChecks: 0, amalgamPrerequisites: [], powerPrerequisite:[], summary: "Visions of the future", dicePool: "", level: 2, discipline: "auspex" },

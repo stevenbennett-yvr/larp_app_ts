@@ -85,7 +85,7 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
                             />
                             :
                             <>
-                                <ActionIcon variant="filled" radius="xl" color="dark" disabled={fameBool || (backgroundRef.freebiePoints === 0 && backgroundRef.creationPoints === 0 && backgroundRef.experiencePoints === 3)} onClick={() => v5HandleXpBackgroundChange(kindred, setKindred, backgroundRef, backgroundRef.experiencePoints - 1)}>
+                                <ActionIcon variant="filled" radius="xl" color="dark" disabled={fameBool || (v5BackgroundLevel(backgroundRef).level === 1 && backgroundRef.experiencePoints === 3)} onClick={() => v5HandleXpBackgroundChange(kindred, setKindred, backgroundRef, backgroundRef.experiencePoints - 1)}>
                                     <CircleMinus strokeWidth={1.5} color="gray" />
                                 </ActionIcon>
                                 <NumberInput

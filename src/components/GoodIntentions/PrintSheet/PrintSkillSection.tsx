@@ -1,5 +1,5 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { Center, Stack, Grid, Title, Group, Text } from "@mantine/core"
+import { Center, Stack, Grid, Title, Group, Text, Divider } from "@mantine/core"
 import { globals } from "../../../assets/globals"
 import Dots from "../../../utils/dots"
 import { V5SkillsKey, v5SkillLevel } from "../../../data/GoodIntentions/types/V5Skills"
@@ -15,6 +15,8 @@ const SkillSection = ({ kindred }: PrintSheetProps) => {
     return (
         <Center>
             <Stack>
+            <Divider my="sm" label="Skills" labelPosition="center" />
+
                 <Grid grow columns={globals.isPhoneScreen ? 4 : 12}>
                     <Grid.Col span={4} key={'physical-skills'}>
                         <Title order={4} align='center'>Physical</Title>

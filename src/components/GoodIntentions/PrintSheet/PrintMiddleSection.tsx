@@ -66,7 +66,9 @@ const MiddleSection = ({ kindred, venueData }: PrintSheetProps) => {
                     <Grid.Col span={3}>
                         <Stack>
                             <Title order={4} align="center">Clan Bane</Title>
-                            <Text fz="sm" align="center">{clanBane}</Text>
+                            <Center>
+                            <Text align="center" size="xs" w={200}>{clanBane}</Text>
+                            </Center>
                             <Text align="center"><b>Bane Severity</b>: {bloodPotencies[v5BloodPotencyLevel(kindred).level].baneSeverity}</Text>
                         </Stack>
                     </Grid.Col>

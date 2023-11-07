@@ -1,5 +1,5 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { Center, Stack, Grid, Title, Group, Text } from "@mantine/core"
+import { Center, Stack, Grid, Title, Group, Text, Divider } from "@mantine/core"
 import { globals } from "../../../assets/globals"
 import Dots from "../../../utils/dots"
 import { v5AttributeLevel, V5AttributesKey } from "../../../data/GoodIntentions/types/V5Attributes"
@@ -15,6 +15,7 @@ const AttributeSection = ({kindred}:PrintSheetProps) => {
     return (
         <Center>
         <Stack>
+        <Divider my="sm" label="Attributes" labelPosition="center" />
 
             <Grid grow columns={globals.isPhoneScreen ? 4 : 12}>
                 <Grid.Col span={4}>

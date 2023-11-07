@@ -125,17 +125,17 @@ const DisciplineSection = ({ kindred }: PrintSheetProps) => {
     const hungerEffect = () => {
         switch (hunger) {
             case 0:
-                return <Text align="center" size="sm">Immune to all types of Frenzy unless triggered by a supernatural power</Text>;
+                return <Text align="center" size="xs" w={200}>Immune to all types of Frenzy unless triggered by a supernatural power</Text>;
             case 1:
-                return <Text align="center" size="sm">Can only Slake to zero (o) by draining a mortal completely of all blood</Text>;
+                return <Text align="center" size="xs" w={200}>Can only Slake to zero (o) by draining a mortal completely of all blood</Text>;
             case 2:
-                return <Text align="center" size="sm"></Text>;
+                return <Text align="center" size="xs" w={200}></Text>;
             case 3:
-                return <Text align="center" size="sm">Bestial Failures</Text>;
+                return <Text align="center" size="xs" w={200}>Bestial Failures</Text>;
             case 4:
-                return <Text align="center" size="sm">Messy criticals</Text>;
+                return <Text align="center" size="xs" w={200}>Messy criticals</Text>;
             case 5:
-                return <Text align="center" size="sm"><p>Can no longer voluntarily Rouse the Blood</p><p>Effects that cause an involuntary Rouse check instead force you to immediately test for Hunger Frenzy</p><p>Effects that cause your Hunger to increase automatically force you into a Hunger Frenzy</p></Text>;
+                return <Text align="center" size="xs" w={200}><p>Can no longer voluntarily Rouse the Blood</p><p>Effects that cause an involuntary Rouse check instead force you to immediately test for Hunger Frenzy</p><p>Effects that cause your Hunger to increase automatically force you into a Hunger Frenzy</p></Text>;
 
 
             default:
@@ -155,8 +155,8 @@ const DisciplineSection = ({ kindred }: PrintSheetProps) => {
         const disciplineLevel = v5DisciplineLevel(kindred, discipline).level
 
         return (
-            <Center>
-                <Card w={200}>
+            <Center key={discipline}>
+                <Card w={200} key={discipline}>
                     <Table fz="sm">
                         <thead>
                             <tr>
@@ -168,11 +168,11 @@ const DisciplineSection = ({ kindred }: PrintSheetProps) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {kindred.powers.map((power, index) => {
+                            {kindred.powers.map((power) => {
                                 let powerInfo = allPowers.find((p) => p.name === power.name);
                                 if (powerInfo?.discipline === discipline) {
                                     return (
-                                        <tr key={index}>
+                                        <tr key={power.name}>
                                             <td>{powerInfo.level} {powerInfo.name}</td>
                                         </tr>
                                     );
@@ -188,8 +188,6 @@ const DisciplineSection = ({ kindred }: PrintSheetProps) => {
     }
 
     const disciplineColumn = (disciplines: DisciplineKey[]) => {
-        //const disciplineInfo = disciplines[discipline]
-
         return (
             <Grid.Col span={3} w={300}>
                 <Stack>
@@ -214,7 +212,7 @@ const DisciplineSection = ({ kindred }: PrintSheetProps) => {
                                 {renderCheckboxes(health, false, setWounds)}
                             </Center>
                             {(health) - wounds <= (3 + lowPainLevel) && !toughness ?
-                                <Text align="center">Wound Penalties- Lose your simple action every round</Text>
+                                <Text align="center" size="xs" w={200}>Wound Penalties- Lose your simple action every round</Text>
                                 : <></>}
                         </Stack>
                     </Center>
@@ -222,17 +220,19 @@ const DisciplineSection = ({ kindred }: PrintSheetProps) => {
                     <Center>
                         {renderCheckboxes(willpower, true, setWp)}
                     </Center>
-                    {Math.abs(wp) === willpower ? <Text align="center">Impaired: All of your test pools are reduced by 2</Text> : <></>}
+                    {Math.abs(wp) === willpower ? <Center><Text align="center" size="xs" w={200}>Impaired: All of your test pools are reduced by 2</Text></Center> : <></>}
                     <Title order={5} align="center">Humanity/Stains</Title>
                     <Center>
                         {renderHumanityCheckboxes(humanity, setStains)}
                     </Center>
-                    {humanity + stains === 10 ? <Text align="center">Impaired: All of your test pools are reduced by 2</Text> : <></>}
+                    {humanity + stains === 10 ? <Center><Text align="center" size="xs" w={200}>Impaired: All of your test pools are reduced by 2</Text></Center> : <></>}
                     <Title order={5} align="center">Hunger</Title>
                     <Center>
                         {renderCheckboxes(5, false, setHunger)}
                     </Center>
-                    {hungerEffect()}
+                    <Center className="no-print">
+                        {hungerEffect()}
+                    </Center>
                     <Title order={5} align="center">Blood Potency</Title>
                     <Center>
                         <Dots n={bloodPotency} />
@@ -368,7 +368,8 @@ const DisciplineSection = ({ kindred }: PrintSheetProps) => {
                     :
                     <>
                         <Divider my="sm" label="Rituals/Ceremonies" labelPosition="center" />
-                        <Group>
+                        <Group position="center">
+                            
                             {kindred.rituals.length > 0 ?
                                 <>{ritualCard()}</>
                                 : <></>}

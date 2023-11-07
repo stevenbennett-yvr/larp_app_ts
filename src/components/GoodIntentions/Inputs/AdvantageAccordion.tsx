@@ -68,7 +68,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, oRef, type, benefitData
     }
 
     const renderInput = (advantage: V5Advantage, advantageRef: V5AdvantageRef, type: TypeCategory) => {
-        console.log(type)
+
         const isCatenating = kindred.meritsFlaws.some((mf) => mf.name === "Catenating blood")
         const canGhoul = !isCatenating && advantage.name === "Retainer" && (kindred.clan === "Thin-Blood")
         const starPowerBool = bRef.name === "Fame" && advantage.name === "Star Power" && v5BackgroundLevel(bRef).level < 3

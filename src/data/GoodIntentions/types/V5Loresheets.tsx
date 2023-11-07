@@ -1230,7 +1230,6 @@ export const updateBackgrounds = (kindred:Kindred, benefit:Benefit) => {
 export const updateMeritsFlaws = (kindred:Kindred, benefit:Benefit) => {
     const updatedMerits = JSON.parse(JSON.stringify(kindred.meritsFlaws));
     let filteredMerits = JSON.parse(JSON.stringify(kindred.meritsFlaws));
-    
     // Add merits and flaws
     if (benefit.meritsAndFlaws.length > 0) {
         benefit.meritsAndFlaws.forEach((m) => {
@@ -1238,7 +1237,7 @@ export const updateMeritsFlaws = (kindred:Kindred, benefit:Benefit) => {
             filteredMerits = filteredMerits.filter((merit: any) => merit.id !== m.id);
         });
     }
-    
+    console.log(updatedMerits)
     return { updatedMerits, filteredMerits };
 }
 
@@ -1248,7 +1247,7 @@ export const buyBenefit = (
     loresheet: Loresheet,
     benefit: Benefit,
     type: TypeCategory,
-    setKindred: Function
+    setKindred: (kindred: Kindred) => void
   ) => {
     // Initialize variables for creation and experience points
     let creationPoints = 0;
@@ -1282,7 +1281,7 @@ export const buyBenefit = (
       },
       skills:updateSkills(kindred, benefit).updatedSkills, // Update skills with the new benefit
       backgrounds:updateBackgrounds(kindred, benefit).updatedBackgrounds, // Update backgrounds with the new benefit
-      updateBackgrounds:updateMeritsFlaws(kindred, benefit).updatedMerits, // Update merits/flaws with the new benefit
+      meritsFlaws:updateMeritsFlaws(kindred, benefit).updatedMerits, // Update merits/flaws with the new benefit
     });
   };
 

@@ -1,4 +1,4 @@
-import { Grid, Text, Tooltip, NumberInput, Divider } from "@mantine/core"
+import { Grid, Text, Tooltip, NumberInput, Divider, Center } from "@mantine/core"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { globals } from "../../../assets/globals"
 import { upcase } from "../../../utils/case"
@@ -59,7 +59,7 @@ const AttributeGrid = ({ kindred, setKindred, check }: AttributesPickerProps) =>
                     const typedAttribute = attribute as V5AttributesKey
                     if (attributeInfo.category === category) {
                         return (
-                            <div
+                            <Center
                                 key={`${attribute} input`}
                             >
                                 <Tooltip
@@ -86,9 +86,10 @@ const AttributeGrid = ({ kindred, setKindred, check }: AttributesPickerProps) =>
                                                 val
                                             )
                                         }
+                                        w={150}
                                     />
                                 </Tooltip>
-                            </div>
+                            </Center>
                         )
                     }
                     else {

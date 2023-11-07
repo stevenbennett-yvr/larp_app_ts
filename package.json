@@ -42,6 +42,7 @@
     "@types/node": "^16.18.46",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
+    "@types/uuid": "^9.0.6",
     "axios": "^1.5.0",
     "dayjs": "^1.11.9",
     "debounce": "^1.2.1",
@@ -63,6 +64,7 @@
     "tabler-icons-react": "^1.56.0",
     "tiptap": "^1.32.2",
     "typescript": "^4.9.5",
+    "uuid": "^9.0.1",
     "web-vitals": "^2.1.4",
     "zod": "^3.22.2"
   },

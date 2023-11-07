@@ -355,7 +355,7 @@ type VariableKeys = "backgroundName" | "backgroundDescription" | "creationPoints
 
 export const handleBackgroundChange = (
     kindred: Kindred,
-    setKindred: Function,
+    setKindred: (kindred: Kindred) => void,
     background: V5BackgroundRef,
     type: VariableKeys,
     newPoints: number | string,
@@ -376,14 +376,14 @@ export const handleBackgroundChange = (
 
 export const v5HandleXpBackgroundChange = (
     character: any,
-    setCharacter: Function,
+    setKindred: (kindred: Kindred) => void,
     background: V5BackgroundRef,
     value: number) => {
     const { totalXpNeeded, pastXpNeeded } = v5BackgroundLevel(background)
 
     let xp = value > background.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
 
-    handleBackgroundChange(character, setCharacter, background, "experiencePoints", xp)
+    handleBackgroundChange(character, setKindred, background, "experiencePoints", xp)
     return xp
 }
 

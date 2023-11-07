@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { sphereOfInfluenceSchema, v5BackgroundRefSchema } from "./V5Backgrounds";
+import { sphereOfInfluenceSchema } from "./V5Backgrounds";
 import { v5MeritFlawRefSchema } from "./V5MeritsOrFlaws";
 
 export const v5BenefitNameSchema = z.union([
@@ -21,15 +21,37 @@ export const coterieSchema = z.object({
     territoryContributions: v5TerritoryBenefitSchema.array(),
 })
 
+export const domainSchema = z.object({
+    location: z.string(),
+    description: z.string()
+})
+
 export const v5CoterieSchema = z.object({
     id: z.string(),
+    vssId: z.string(),
     name: z.string(),
+    concept: z.string(),
+    goals: z.string(),
     members: z.string().array(),
-    territory: v5TerritoryBenefitSchema.array(),
-    backgrounds: v5BackgroundRefSchema.array(),
     meritsFlaws: v5MeritFlawRefSchema.array(),
+    domain: domainSchema,
 })
 
 export type Coterie = z.infer<typeof v5CoterieSchema>
 
+export const getEmptyCoterie = (): Coterie => {
+    return {
+        id: "",
+        vssId: "",
+        name: "",
+        concept: "",
+        goals: "",
+        members: [],
+        meritsFlaws: [],
+        domain: {
+            location: "",
+            description: "",
+        }
+    }
+}
 

@@ -292,7 +292,7 @@ const AsideBar = ({ selectedStep, kindred }: AsideBarProps) => {
     return (
         <>
             {showAsideBar ?
-                <Aside p="md" hiddenBreakpoint="sm" width={{ xs: 300 }} style={{ zIndex: 0 }}>
+                <Aside className='no-print' p="md" hiddenBreakpoint="sm" width={{ xs: 300 }} style={{ zIndex: 0 }}>
                     <ScrollArea h={height - 60} type="never">
                         <Center h={"100%"}>
                             {height <= scrollerHeight ? <ScrollArea h={height - 100}>{showInstrunctions()}</ScrollArea> : <>{showInstrunctions()}</>}

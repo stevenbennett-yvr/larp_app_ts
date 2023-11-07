@@ -290,7 +290,7 @@ const SideSheet = ({ kindred }: SideSheetProps) => {
     return (
         <>
             {showAsideBar ?
-                <Navbar width={{ base: 300 }} height={"100%"} p="xs">
+                <Navbar className='no-print' width={{ base: 300 }} height={"100%"} p="xs">
                     {characterDisplay()}
                 </Navbar>
                 : <></>}

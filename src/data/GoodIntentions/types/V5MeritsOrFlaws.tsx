@@ -155,7 +155,7 @@ export const v5MeritLevel = (v5MeritFlawRef: V5MeritFlawRef) => {
 type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints" | "note" | "userNote";
 export const handleMeritFlawChange = (
     kindred: Kindred,
-    setKindred: Function,
+    setKindred: (kindred: Kindred) => void,
     meritFlaw: V5MeritFlawRef,
     type: VariableKeys,
     newPoints: number | string,
@@ -181,14 +181,14 @@ export const handleMeritFlawChange = (
 
 export const v5HandleXpMeritChange = (
     character: any,
-    setCharacter: Function,
+    setKindred: (kindred: Kindred) => void,
     meritFlaw: V5MeritFlawRef,
     value: number) => {
     const { totalXpNeeded, pastXpNeeded } = v5MeritLevel(meritFlaw)
 
     let xp = value > meritFlaw.experiencePoints ? totalXpNeeded : getNumberBelow(pastXpNeeded, value)
 
-    handleMeritFlawChange(character, setCharacter, meritFlaw, "experiencePoints", xp)
+    handleMeritFlawChange(character, setKindred, meritFlaw, "experiencePoints", xp)
     return xp
 }
 

@@ -1,11 +1,17 @@
-import { Kindred, getEmptyKindred } from "../../data/GoodIntentions/types/Kindred"
-import { GoodIntentionsVSSs } from "../../data/CaM/types/VSS";
+import { useEffect } from "react";
+import { Center } from "@mantine/core"
 import { useLocalStorage } from "@mantine/hooks"
 import { useParams, useNavigate } from "react-router-dom";
+
+//Contexts
 import { useAuth } from "../../contexts/AuthContext";
 import { useCharacterDb } from "../../contexts/CharacterContext";
-import changeLog from "../../utils/GoodIntentions/LoggingTool";
 
+// Data
+import { Kindred, getEmptyKindred } from "../../data/GoodIntentions/types/Kindred"
+import { GoodIntentionsVSSs } from "../../data/CaM/types/VSS";
+
+//Components
 import SectPicker from "./Generator/SectPicker"
 import ClanPicker from "./Generator/ClanPicker"
 import AttributePicker from "./Generator/AttributePicker"
@@ -21,9 +27,7 @@ import BackgroundLoreTabs from './Generator/BackgroundLoreTabs'
 import SideSheet from "./Generator/sidebars/SideSheet"
 import AsideBar from "./Generator/sidebars/GeneratorAside"
 
-import { Center } from "@mantine/core"
-import { useEffect } from "react";
-
+import changeLog from "../../utils/GoodIntentions/LoggingTool";
 
 const GenerateKindred = () => {
     const { onSubmitCharacter, userLocalKindred, getCharacterByUIDAndVSS } = useCharacterDb()

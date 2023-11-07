@@ -358,6 +358,14 @@
         "source": "LOTN5 pg.185"
     },
     {
+        "name": "Deep Sleeper",
+        "category": "physical",
+        "type": "flaw",
+        "cost": [2],
+        "description": "You can't use Willpower to stay awake at sunrise unless it's dangerous to fall asleep. When you spend Willpower to Awaken, you must use an additional point, even in dangerous situations, or you won't be able to Awaken.",
+        "source": "LOTN5 pg.185"
+    },
+    {
         "name": "Low Pain Threshold",
         "category": "physical",
         "type": "flaw",

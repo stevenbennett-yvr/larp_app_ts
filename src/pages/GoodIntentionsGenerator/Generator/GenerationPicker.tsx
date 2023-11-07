@@ -95,6 +95,7 @@ const GenerationPicker = ({ kindred, setKindred, nextStep, backStep }: Generatio
                     label="When were you turned?"
                     placeholder="Pick one"
                     data={selectData}
+                    w={300}
                 />
 
                 {showAlert && (

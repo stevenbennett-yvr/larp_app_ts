@@ -1,4 +1,4 @@
-import { Grid, Text, Tooltip, NumberInput, Divider } from "@mantine/core"
+import { Grid, Text, Tooltip, NumberInput, Divider, Center } from "@mantine/core"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { V5SkillsKey, skillsDescriptions } from "../../../data/GoodIntentions/types/V5Skills"
 import { globals } from "../../../assets/globals"
@@ -64,7 +64,7 @@ const SkillGrid = ({ kindred, setKindred, check }: SkillsPickerProps) => {
                     const typedAttribute = skill as V5SkillsKey
                     if (skillInfo.category === category) {
                         return (
-                            <div
+                            <Center
                                 key={`${skill} input`}
                             >
                                 <Tooltip
@@ -88,10 +88,10 @@ const SkillGrid = ({ kindred, setKindred, check }: SkillsPickerProps) => {
                                         onChange={(val: number) => {
                                             changeCreationPoints(typedAttribute, val);
                                         }}
-
+                                        w={150}
                                     />
                                 </Tooltip>
-                            </div>
+                            </Center>
                         )
                     }
                     else {

@@ -1,6 +1,15 @@
+import { useState, useEffect } from "react";
 import { Center } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
+
+//Data
 import { Awakened, getEmptyAwakened } from "../../data/TatteredVeil/types/Awakened";
-import { logChanges } from './Generator/utils/Logging'
+//Contexts
+import { useMageDb } from "../../contexts/MageContext";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { useUser } from "../../contexts/UserContext";
+//Components
 import Basics from "./Generator/Basics";
 import AttributeAssigner from "./Generator/AttributeAssigner";
 import SkillAssigner from "./Generator/SkillAssigner"
@@ -13,12 +22,8 @@ import FinalTouches from "./Generator/FinalTouches"
 import PrintSheet from './Generator/PrintSheet'
 import NavBar from "./Generator/utils/Stepper";
 import SideSheet from "./Generator/utils/SideSheet";
-import { useLocalStorage } from "@mantine/hooks";
-import { useMageDb } from "../../contexts/MageContext";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import { useUser } from "../../contexts/UserContext";
-import { useState, useEffect } from "react";
+//Utilities
+import { logChanges } from './Generator/utils/Logging'
 
 const GenerateAwakened = () => {
   const navigate = useNavigate();
