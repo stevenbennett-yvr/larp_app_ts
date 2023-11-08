@@ -83,6 +83,7 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
 
         initialArray.forEach((initialItem: any) => {
             let currentItem = currentArray.find((item: any) => item.name === initialItem.name);
+            if (!currentItem || !initialItem) { return null }
             if (initialItem.creationPoints !== currentItem.creationPoints) {
                 changes.push({
                     category:category,

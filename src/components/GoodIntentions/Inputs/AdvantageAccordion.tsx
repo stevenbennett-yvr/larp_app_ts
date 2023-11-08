@@ -1,12 +1,12 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { ActionIcon, NumberInput, Accordion, Text, Group, Table, Center, Input } from "@mantine/core"
+import { ActionIcon, NumberInput, Accordion, Text, Group, Table, Center, Input, MultiSelect } from "@mantine/core"
 import Tally from "../../../utils/talley"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons"
-import { V5BackgroundRef, v5AdvantageLevel, handleAdvantageChange, emptyAdvantage, V5AdvantageRef, v5HandleXpAdvantageChange, v5BackgroundLevel, backgroundData, V5Background, V5Advantage } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { V5BackgroundRef, v5AdvantageLevel, handleAdvantageChange, emptyAdvantage, V5AdvantageRef, v5HandleXpAdvantageChange, v5BackgroundLevel, backgroundData, V5Background, V5Advantage, handleBackgroundChange } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { CirclePlus, CircleMinus } from 'tabler-icons-react';
 import { handleBenefitAdvantageChange, Benefit } from "../../../data/GoodIntentions/types/V5Loresheets"
-
+import { SphereSelectData, V5SphereKey } from "../../../data/GoodIntentions/types/V5Spheres"
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints' | 'freebiePoints' | 'loresheetFreebiePoints' | 'predatorTypeFreebiePoints';
 
@@ -169,7 +169,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, oRef, type, benefitData
                 const disabledPlus: boolean = isDisadvantage ? 0 === v5AdvantageLevel(advantageRef).level
                     : havenBoolean || starPowerBool || disabled || (advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level)
                 const max = isDisadvantage ? 0 === v5AdvantageLevel(advantageRef).level ? advantageRef.experiencePoints : undefined
-                : (advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level) || havenBoolean ? advantageRef.experiencePoints : undefined
+                    : (advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level) || havenBoolean ? advantageRef.experiencePoints : undefined
                 return (
                     <Group>
                         <Input.Wrapper
@@ -234,6 +234,20 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, oRef, type, benefitData
                                     />
                                     :
                                     <></>}
+                                {advantage.name === "Diversity" && v5AdvantageLevel(advantageRef).level > 0 && bRef.sphere ?
+                                    <MultiSelect
+                                        label="Background Spheres"
+                                        placeholder="Pick sphere"
+                                        data={SphereSelectData.filter((s) => bRef.sphere && bRef.sphere[0] !== s)}
+                                        value={bRef.sphere.slice(1)}
+                                        maxSelectedValues={v5AdvantageLevel(advantageRef).level}
+                                        onChange={(val:V5SphereKey[]) => {
+                                            if (!val || !bRef.sphere) { return null}
+                                            const modifiedVal = [bRef.sphere[0], ...val];
+                                            handleBackgroundChange(kindred, setKindred, bRef, "sphere", modifiedVal)
+                                        }}
+                                    />
+                                    : <></>}
                             </Group>
                         </Center>
                     </td>

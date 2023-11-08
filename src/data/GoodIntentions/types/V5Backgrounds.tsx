@@ -3,45 +3,8 @@ import { number, z } from 'zod'
 import { Kindred } from './Kindred'
 import backgroundDataJson from '../sources/v5Backgrounds.json'
 import { getNumberBelow } from '../../../utils/getNumberBelow'
-
-export const sphereOfInfluenceSchema = z.union([
-    z.literal("church"),
-    z.literal("finance"),
-    z.literal("health"),
-    z.literal("high society"),
-    z.literal("industry"),
-    z.literal("legal"),
-    z.literal("media"),
-    z.literal("occult"),
-    z.literal("police"),
-    z.literal("politics"),
-    z.literal("service industry"),
-    z.literal("street"),
-    z.literal("transportation"),
-    z.literal("underworld"),
-    z.literal("university"),
-    z.literal("")
-])
-export type V5SphereKey = z.infer<typeof sphereOfInfluenceSchema>
-
-export const SphereSelectData = [
-    "church",
-    "finance",
-    "health",
-    "high society",
-    "industry",
-    "legal",
-    "media",
-    "occult",
-    "police",
-    "politics",
-    "service industry",
-    "street",
-    "transportation",
-    "underworld",
-    "university",
-];
-
+import { V5SphereKey, sphereOfInfluenceSchema } from './V5Spheres'
+import { faUserGroup, faCat, faAddressBook, faFaceGrinStars, faHouseChimney, faCow, faMasksTheater, faCoins } from "@fortawesome/free-solid-svg-icons"
 
 export const v5AdvantageRefSchema = z.object({
     name: z.string(),
@@ -198,15 +161,45 @@ export const v5BackgroundSchema = z.object({
     summary: z.string(),
     source: z.string(),
     advantages: z.array(v5AdvantageSchema).optional(),
-    icon: z.string(),
+    icon: z.any(),
 });
 
 export type V5Background = z.infer<typeof v5BackgroundSchema>;
 
+const getIcon = (name: string) => {
+    if (name === "Allies") {
+        return faUserGroup
+    }
+    if (name === "Familiar") {
+        return faCat
+    }
+    if (name === "Contacts") {
+        return faAddressBook
+    }
+    if (name === "Fame") {
+        return faFaceGrinStars
+    }
+    if (name === "Haven") {
+        return faHouseChimney
+    }
+    if (name === "Herd") {
+        return faCow
+    }
+    if (name === "Mask") {
+        return faMasksTheater
+    }
+    if (name === "Resources") {
+        return faCoins
+    } else {
+        return ""
+    }
+}
+
 /// build out backgrounds from json here...
 export const backgroundData: V5Background[] = backgroundDataJson.map((background) => ({
     ...background,
-    id: `background_${background.name}`
+    id: `background_${background.name}`,
+    icon: getIcon(background.name),
 }))
 ///
 
@@ -358,7 +351,7 @@ export const handleBackgroundChange = (
     setKindred: Function,
     background: V5BackgroundRef,
     type: VariableKeys,
-    newPoints: number | string,
+    newPoints: number | string | V5SphereKey[],
 ) => {
     const existingBackground = kindred.backgrounds.find((b) => b.id === background.id);
     if (existingBackground) {

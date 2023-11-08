@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { sphereOfInfluenceSchema } from "./V5Backgrounds";
 import { v5MeritFlawRefSchema } from "./V5MeritsOrFlaws";
+import { sphereOfInfluenceSchema } from "./V5Spheres";
 
 export const v5BenefitNameSchema = z.union([
     z.literal("comfort"),

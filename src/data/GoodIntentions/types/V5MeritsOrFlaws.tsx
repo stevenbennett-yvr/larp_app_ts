@@ -1,7 +1,8 @@
 import { z } from 'zod'
 import meritFlawDataJson from '../sources/v5MeritsAndFlaws.json'
 import { Kindred } from './Kindred'
-import { sphereOfInfluenceSchema, v5BackgroundLevel } from './V5Backgrounds'
+import { v5BackgroundLevel } from './V5Backgrounds'
+import { sphereOfInfluenceSchema } from './V5Spheres'
 import { getNumberBelow } from '../../../utils/getNumberBelow'
 import { v5BloodPotencyLevel } from './V5BloodPotency'
 

@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { Kindred } from './Kindred';
+import { v5DisciplineLevel } from './V5Disciplines';
 
 export const ceremonySchema = z.object({
     name: z.string(),
@@ -214,3 +216,14 @@ export const ceremonyRefs: CeremonyRef[] = Ceremonies.map((ceremony) => ({
     freebiePoints: 0,
     experiencePoints: 0,
 }))
+
+export const cleanCeremonies = (character:Kindred) => {
+    let updatedCeremonies = character.ceremonies.filter((c) => {
+        let ceremonyInfo = Ceremonies.find((cd) => cd.name === c.name);
+        if (!ceremonyInfo) {
+            return false; // Filter out rituals with missing info
+        }
+        return ceremonyInfo.level < v5DisciplineLevel(character, "oblivion").level;
+    });
+    return updatedCeremonies
+}

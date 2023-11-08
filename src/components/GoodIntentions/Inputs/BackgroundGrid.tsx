@@ -1,52 +1,24 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
+import { Spheres } from "../../../data/GoodIntentions/types/V5Spheres";
 import { v5BackgroundLevel, V5BackgroundRef, backgroundData, kindredBackgrounds } from "../../../data/GoodIntentions/types/V5Backgrounds"
-import { Text, Grid, Card, Center, Stack } from "@mantine/core";
+import { Text, Grid, Card, Center, Stack, SimpleGrid, Tooltip } from "@mantine/core";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUserGroup, faCat, faAddressBook, faFaceGrinStars, faHouseChimney, faCow, faMasksTheater, faCoins } from "@fortawesome/free-solid-svg-icons"
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints';
 
 type BackgroundGridProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void
-    setModalBackground: (modalBackground:V5BackgroundRef|null) => void
+    setModalBackground: (modalBackground: V5BackgroundRef | null) => void
     setModalOpen: (modalOpen: boolean) => void
 }
 
 const BackgroundGrid = ({ kindred, setModalBackground, setModalOpen }: BackgroundGridProps) => {
 
-    const getIcon = (name: string) => {
-        if (name === "Allies") {
-            return faUserGroup
-        }
-        if (name === "Familiar") {
-            return faCat
-        }
-        if (name === "Contacts") {
-            return faAddressBook
-        }
-        if (name === "Fame") {
-            return faFaceGrinStars
-        }
-        if (name === "Haven") {
-            return faHouseChimney
-        }
-        if (name === "Herd") {
-            return faCow
-        }
-        if (name === "Mask") {
-            return faMasksTheater
-        }
-        if (name === "Resources") {
-            return faCoins
-        }
-    }
-
     const createBackgroundPick = (bRef: V5BackgroundRef) => {
         const backgroundInfo = backgroundData.find((entry) => entry.name === bRef.name)
-        const icon = getIcon(bRef.name)
-        if (!backgroundInfo || !icon) { return null }
+        if (!backgroundInfo) { return null }
         return (
             <Grid.Col key={bRef.id} span={4}>
                 <Card className="hoverCard" shadow="sm" padding="lg" radius="md" h={200} style={{ cursor: "pointer" }}
@@ -55,12 +27,25 @@ const BackgroundGrid = ({ kindred, setModalBackground, setModalOpen }: Backgroun
                         setModalOpen(true);
                     }}
                 >
-                    <Center pt={10}>
-                        <FontAwesomeIcon size="4x" icon={icon} style={{ color: "#e03131" }} />
+                    <Center>
+                        <SimpleGrid cols={bRef.sphere && bRef.sphere.length > 0 ?3:1}>
+                            {bRef.sphere && bRef.sphere.length > 0 ?
+                                <Stack justify="flex-start" align="flex-start" spacing={3}>
+                                    <Text size="xs">Spheres:</Text>
+                                    {bRef.sphere.map((s) => (
+                                        <Tooltip label={s} color="gray" withArrow>
+                                            <FontAwesomeIcon icon={Spheres[s].symbol} style={{ color: "#e03131" }} />
+                                        </Tooltip>
+                                    ))}
+                                </Stack>
+                                : <></>}
+                            <FontAwesomeIcon size="4x" icon={backgroundInfo.icon} style={{ color: "#e03131" }} />
+                            <></>
+                        </SimpleGrid>
                     </Center>
 
                     <Center>
-                        <Text mt={"xl"} ta="center" fz="xl" fw={700}>{bRef.name} Level {v5BackgroundLevel(bRef).level} {bRef.sphere}</Text>
+                        <Text mt={"xl"} ta="center" fz="xl" fw={700}>{bRef.name} Level {v5BackgroundLevel(bRef).level}</Text>
 
                     </Center>
 

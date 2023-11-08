@@ -1,9 +1,10 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 //import { useState } from "react"
-import { V5SphereKey, SphereSelectData, backgroundData, filterSelectData, handleBackgroundChange, v5BackgroundRefs } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { backgroundData, filterSelectData, handleBackgroundChange, v5BackgroundRefs } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { Stack, Text, Center, Button, Group, Table, Select } from "@mantine/core"
 import { useState, forwardRef } from 'react'
 import { v5xp } from "../../../data/GoodIntentions/V5Experience"
+import { V5SphereKey, SphereSelectData } from "../../../data/GoodIntentions/types/V5Spheres"
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints' ;
 

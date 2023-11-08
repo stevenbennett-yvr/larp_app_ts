@@ -4,8 +4,9 @@ import { Title, Group, ScrollArea, Text, Button, Stack, Select, Modal, Tooltip, 
 import { Benefit, Loresheet, updateSkills } from "../../../data/GoodIntentions/types/V5Loresheets"
 import { useState } from "react"
 import { V5SkillsKey } from "../../../data/GoodIntentions/types/V5Skills"
-import { V5BackgroundRef, backgroundData, v5BackgroundLevel, mergeBackgrounds, SphereSelectData } from "../../../data/GoodIntentions/types/V5Backgrounds"
+import { V5BackgroundRef, backgroundData, v5BackgroundLevel, mergeBackgrounds } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import AdvantageAccordion from "./AdvantageAccordion"
+import { SphereSelectData } from "../../../data/GoodIntentions/types/V5Spheres"
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints';
 

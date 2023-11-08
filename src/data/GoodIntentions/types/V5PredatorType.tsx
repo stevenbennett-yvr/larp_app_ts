@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { v5BackgroundRefSchema, emptyBackground, emptyAdvantage, sphereOfInfluenceSchema } from "./V5Backgrounds";
+import { v5BackgroundRefSchema, emptyBackground, emptyAdvantage } from "./V5Backgrounds";
+import { sphereOfInfluenceSchema } from "./V5Spheres";
 import { v5attributesKeySchema } from "./V5Attributes";
 import { v5skillsKeySchema } from "./V5Skills";
 import { v5MeritFlawRefSchema, emptyMeritFlaw } from "./V5MeritsOrFlaws";

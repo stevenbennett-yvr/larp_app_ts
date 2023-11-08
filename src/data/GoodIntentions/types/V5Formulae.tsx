@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { allPowers } from './V5Powers';
+import { Kindred } from './Kindred';
+import { v5DisciplineLevel } from './V5Disciplines';
 
 export const formulaSchema = z.object({
     name: z.string(),
@@ -115,3 +117,14 @@ export const formulaRefs: FormulaRef[] = Formulae.map((formula) => ({
     freebiePoints: 0,
     experiencePoints: 0,
 }))
+
+export const cleanFormulae = (character:Kindred) => {
+    let updatedFormulae = character.formulae.filter((c) => {
+        let formulaInfo = Formulae.find((fd) => fd.name === c.name);
+        if (!formulaInfo) {
+            return false; // Filter out rituals with missing info
+        }
+        return formulaInfo.level < v5DisciplineLevel(character, "thin-blood alchemy").level;
+    });
+    return updatedFormulae
+}

@@ -5,9 +5,8 @@ import { Kindred } from "./Kindred";
 import { Clans } from "./V5Clans";
 import { v5xp } from "../V5Experience";
 import { getNumberBelow } from "../../../utils/getNumberBelow";
-import { Rituals } from "./V5Rituals";
-import { Ceremonies } from "./V5Ceremonies";
-import { Formulae } from "./V5Formulae";
+import { cleanRituals } from "./V5Rituals";
+import { cleanCeremonies } from "./V5Ceremonies";
 
 export const disciplineNameSchema = z.union([
     z.literal("animalism"),
@@ -178,7 +177,7 @@ export const v5DisciplineLevel = (kindred:Kindred, discipline:DisciplineKey) => 
 type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
 export const v5HandleDisciplineChange = (
     kindred: Kindred,
-    setCharacter: Function,
+    setCharacter: (kindred:Kindred) => void,
     discipline: DisciplineKey,
     variableKey: VariableKeys,
     value: number,
@@ -197,33 +196,10 @@ export const v5HandleDisciplineChange = (
         disciplines: updatedDisciplines,
     }
 
-    let updatedRituals = updatedCharacter.rituals.filter((r) => {
-        let ritualInfo = Rituals.find((rd) => rd.name === r.name);
-        if (!ritualInfo) {
-            return false; // Filter out rituals with missing info
-        }
-        return ritualInfo.level < v5DisciplineLevel(kindred, "blood sorcery").level;
-    });
-    let updatedCeremonies = updatedCharacter.ceremonies.filter((c) => {
-        let ceremonyInfo = Ceremonies.find((cd) => cd.name === c.name);
-        if (!ceremonyInfo) {
-            return false; // Filter out rituals with missing info
-        }
-        return ceremonyInfo.level < v5DisciplineLevel(kindred, "oblivion").level;
-    });
-    let updatedFormulae = updatedCharacter.formulae.filter((c) => {
-        let formulaInfo = Formulae.find((fd) => fd.name === c.name);
-        if (!formulaInfo) {
-            return false; // Filter out rituals with missing info
-        }
-        return formulaInfo.level < v5DisciplineLevel(kindred, "thin-blood alchemy").level;
-    });
-
     updatedCharacter = {
         ...updatedCharacter,
-        rituals: updatedRituals,
-        ceremonies: updatedCeremonies,
-        formulae: updatedFormulae,
+        rituals: cleanRituals(updatedCharacter),
+        ceremonies: cleanCeremonies(updatedCharacter),
     }
 
     setCharacter(updatedCharacter)
@@ -231,8 +207,8 @@ export const v5HandleDisciplineChange = (
 
 
 export const v5HandleXpDisciplineChange = (
-    character: any,
-    setCharacter: Function,
+    character: Kindred,
+    setCharacter: (kindred:Kindred) => void,
     discipline: DisciplineKey,
     value: number) => {
     const { totalXpNeeded, pastXpNeeded } = v5DisciplineLevel(character, discipline)

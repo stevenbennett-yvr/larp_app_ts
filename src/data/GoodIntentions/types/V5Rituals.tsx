@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { v5DisciplineLevel } from './V5Disciplines';
+import { Kindred } from './Kindred';
 
 export const ritualSchema = z.object({
     name: z.string(),
@@ -268,3 +270,14 @@ export const ritualRefs: RitualRef[] = Rituals.map((ritual) => ({
     freebiePoints: 0,
     experiencePoints: 0,
 }))
+
+export const cleanRituals = (kindred:Kindred) => {
+    let updatedRituals = kindred.rituals.filter((r:RitualRef) => {
+        let ritualInfo = Rituals.find((rd) => rd.name === r.name);
+        if (!ritualInfo) {
+            return false; // Filter out rituals with missing info
+        }
+        return ritualInfo.level < v5DisciplineLevel(kindred, "blood sorcery").level;
+    });
+    return updatedRituals
+}

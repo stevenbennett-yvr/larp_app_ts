@@ -28,13 +28,12 @@ import {
 import {
     v5BackgroundLevel,
     v5AdvantageLevel,
-    V5SphereKey,
     V5BackgroundRef,
     emptyAdvantage,
     advantageStep,
 } from "../../../data/GoodIntentions/types/V5Backgrounds";
 import { V5MeritFlawRef, v5MeritLevel } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
-import { SphereSelectData } from "../../../data/GoodIntentions/types/V5Backgrounds";
+import { SphereSelectData, V5SphereKey } from "../../../data/GoodIntentions/types/V5Spheres";
 
 // Data and Globals
 import { backgroundData } from "../../../data/GoodIntentions/types/V5Backgrounds";

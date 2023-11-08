@@ -1,10 +1,12 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { Textarea, ActionIcon, Modal, NumberInput, Text, Button, Table, Center, Stack, TextInput } from "@mantine/core"
+import { Tooltip, Textarea, ActionIcon, Modal, NumberInput, Text, Button, Table, Center, Stack, TextInput, Group } from "@mantine/core"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons"
 import { v5AdvantageLevel, emptyAdvantage, handleBackgroundRemove, V5BackgroundRef, v5BackgroundLevel, handleBackgroundChange, backgroundData, v5HandleXpBackgroundChange, V5AdvantageRef } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { CirclePlus, CircleMinus } from 'tabler-icons-react';
 import AdvantageAccordion from "./AdvantageAccordion"
+import { Spheres } from "../../../data/GoodIntentions/types/V5Spheres"
+import { upcase } from "../../../utils/case"
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints';
 
@@ -59,15 +61,15 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
                         }
                     />
                     <Center>
-                    <Textarea
-                        style={{ width: "300px" }}
-                        value={backgroundRef.backgroundDescription}
-                        onChange={(event) => 
-                            handleBackgroundChange(kindred, setKindred, backgroundRef, "backgroundDescription", event.target.value)
-                        }
-                        label={`${backgroundRef.name} Description`}
-                        minRows={3}
-                    />
+                        <Textarea
+                            style={{ width: "300px" }}
+                            value={backgroundRef.backgroundDescription}
+                            onChange={(event) =>
+                                handleBackgroundChange(kindred, setKindred, backgroundRef, "backgroundDescription", event.target.value)
+                            }
+                            label={`${backgroundRef.name} Description`}
+                            minRows={3}
+                        />
                     </Center>
                     <Center>
                         {type === "creationPoints" ?
@@ -117,8 +119,21 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
             size={600}
         >
             <Stack>
-                <Text fz={"30px"} ta={"center"}>{backgroundInfo.name}: {v5BackgroundLevel(BackgroundRef).level} {BackgroundRef.sphere}</Text>
+                <Text fz={"30px"} ta={"center"}>{backgroundInfo.name}: {v5BackgroundLevel(BackgroundRef).level}</Text>
+                {
+                    BackgroundRef.sphere && BackgroundRef.sphere.length > 0 ?
+                        <Center>
+                        <Group>
+                            {BackgroundRef.sphere.map((s) => (
 
+                                <Tooltip label={Spheres[s].summary} color="gray" withArrow>
+                                    <Group><Text>{upcase(s)} </Text><FontAwesomeIcon icon={Spheres[s].symbol} style={{ color: "#e03131" }} /></Group>
+                                </Tooltip>
+                            ))}
+                        </Group>
+                        </Center>
+                        : <></>
+                }
                 {BackgroundInput(BackgroundRef)}
                 {totalFreebies === 0 ?
                     <Button
