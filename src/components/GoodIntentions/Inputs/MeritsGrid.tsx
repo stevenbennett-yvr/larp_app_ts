@@ -6,9 +6,8 @@ import { CirclePlus, CircleMinus } from 'tabler-icons-react';
 import React from "react";
 
 import { globals } from "../../../assets/globals";
-import { v5HandleMeritRemove, meritFlawData, V5MeritFlawRef, V5MeritFlaw, v5MeritFlawRefs, v5MeritLevel, v5MeritFlawFilter, v5HandleXpMeritChange, handleMeritFlawChange } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
+import { MeritFlawCategory, v5HandleMeritRemove, meritFlawData, V5MeritFlawRef, V5MeritFlaw, v5MeritFlawRefs, v5MeritLevel, v5MeritFlawFilter, v5HandleXpMeritChange, handleMeritFlawChange, getMeritIcon } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
 import Tally from "../../../utils/talley";
-import { upcase } from "../../../utils/case";
 import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS";
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints';
@@ -192,8 +191,8 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }: MeritsGridProps) =
 
     const createMeritAccordian = (category: string) => {
         if (
-            (kindred.clan !== "Thin-Blood" && category === "Thin-Blood") ||
-            (kindred.clan !== "Ghoul" && category === "Ghoul")
+            (kindred.clan !== "Thin-Blood" && category === "thin-Blood") ||
+            (kindred.clan !== "Ghoul" && category === "ghoul")
         ) {
             return null;
         }
@@ -205,29 +204,29 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }: MeritsGridProps) =
 
         let bgc = ""
 
-        switch (upcase(category)) {
-            case "Bonding":
+        switch (category) {
+            case "bonding":
                 bgc = theme.fn.rgba(theme.colors.red[9], 0.90); // Blue color
                 break;
-            case "Connection":
+            case "connection":
                 bgc = theme.fn.rgba(theme.colors.red[8], 0.90); // Red color
                 break;
-            case "Feeding":
+            case "feeding":
                 bgc = theme.fn.rgba(theme.colors.red[7], 0.90); // Purple color
                 break;
-            case "Mystical":
+            case "mythical":
                 bgc = theme.fn.rgba(theme.colors.red[6], 0.90); // Green color
                 break;
-            case "Physical":
+            case "physical":
                 bgc = theme.fn.rgba(theme.colors.red[5], 0.90); // Yellow color
                 break;
-            case "Psychological":
+            case "psychological":
                 bgc = theme.fn.rgba(theme.colors.red[4], 0.90); // Orange color
                 break;
-            case "Thin-Blood":
+            case "thin-Blood":
                 bgc = theme.fn.rgba(theme.colors.red[3], 0.90); // Gray color
                 break;
-            case "Ghoul":
+            case "ghoul":
                 bgc = theme.fn.rgba(theme.colors.red[3], 0.90); // Gray color
                 break;
         }
@@ -235,7 +234,7 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }: MeritsGridProps) =
         return (
             <Accordion.Item value={`${category} accordion`} key={category}>
                 <Accordion.Control style={{ color: "white", backgroundColor: bgc }}>
-                    {category.toUpperCase()}
+                <FontAwesomeIcon icon={getMeritIcon(category as MeritFlawCategory)} /> {category.toUpperCase()}
                 </Accordion.Control>
                 <Accordion.Panel>
                     <Table>
@@ -309,7 +308,7 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }: MeritsGridProps) =
     const meritTypes = Array.from(meritTypesSet)
     meritTypes.sort((a, b) => a.localeCompare(b));
 
-    let categoryArray = ["Thin-Blood", "Ghoul", "Bonding", "Connection", "Feeding", "Mystical", "Physical", "Psychological"]
+    let categoryArray = ["thin-Blood", "ghoul", "bonding", "connection", "feeding", "mythical", "physical", "psychological"]
 
 
     return (

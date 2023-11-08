@@ -247,7 +247,7 @@
     },
     {
         "name": "Loremaster",
-        "category": "mystical",
+        "category": "mythical",
         "type": "merit",
         "cost": [2],
         "description": "You gain a +2 bonus to all Lore checks.",
@@ -255,7 +255,7 @@
     },
     {
         "name": "Medium",
-        "category": "mystical",
+        "category": "mythical",
         "type": "merit",
         "cost": [2],
         "description": "You are a channel to the Shadowlands, and you possess the natural affinity to sense and hear ghosts within 15 steps of you. Ghosts are naturally aware of your ability to sense them.",
@@ -263,7 +263,7 @@
     },
     {
         "name": "Bound to the Earth",
-        "category": "mystical",
+        "category": "mythical",
         "type": "flaw",
         "cost": [1],
         "description": "If a vampire with this Flaw does not rest in the proximity of two handfuls of natural soil, they do not regain Willpower upon Awakening.",
@@ -271,7 +271,7 @@
     },
     {
         "name": "Eerie Presence",
-        "category": "mystical",
+        "category": "mythical",
         "type": "flaw",
         "cost": [1],
         "description": "Your presence exudes an unsettling aura that induces nervousness and unease in those around you.",
@@ -279,7 +279,7 @@
     },
     {
         "name": "Folkloric Bane",
-        "category": "mystical",
+        "category": "mythical",
         "type": "flaw",
         "cost": [3],
         "description": "You possess a specific vulnerability known as a Bane, which inflicts Aggravated Damage upon contact or when struck with a substance or weapon made of that Bane, in addition to your existing vulnerabilities to sunlight and fire.",
@@ -287,7 +287,7 @@
     },
     {
         "name": "Folkloric Block",
-        "category": "mystical",
+        "category": "mythical",
         "type": "flaw",
         "cost": [2],
         "description": "You have an intense aversion to a specific object or phenomenon, often from folklore, such as holy symbols or running water. You must stay at least five steps away from your chosen 'Folkloric Block,' and if you ever get within that distance, you become frightened until you move away.",
@@ -295,7 +295,7 @@
     },
     {
         "name": "Haunted",
-        "category": "mystical",
+        "category": "mythical",
         "type": "flaw",
         "cost": [1,2,3],
         "description": "This Flaw works identically to the Enemy Background. In this case, your enemy is a ghost.",
@@ -303,7 +303,7 @@
     },
     {
         "name": "Stake Bait",
-        "category": "mystical",
+        "category": "mythical",
         "type": "flaw",
         "cost": [5],
         "description": "You meet Final Death when you are successfully staked.",
@@ -311,7 +311,7 @@
     },
     {
         "name": "Stigmata",
-        "category": "mystical",
+        "category": "mythical",
         "type": "flaw",
         "cost": [1],
         "description": "Whenever you reach Hunger 4, you begin to bleed from open wounds on your hands, feet, and forehead.",
@@ -319,7 +319,7 @@
     },
     {
         "name": "Trouble Magnet",
-        "category": "mystical",
+        "category": "mythical",
         "type": "flaw",
         "cost": [1],
         "description": "Whenever the Storyteller needs to randomly determine which character suffers a negative result, you are affected.",
@@ -602,7 +602,7 @@
         "category": "ghoul",
         "type": "flaw",
         "cost": [1],
-        "description": "Your regnant's Blood has mystically sharpened your teeth, and they regrow their sharpness overnight, which is unsettling to most humans and could raise suspicion, potentially leading to questioning by the Second Inquisition.",
+        "description": "Your regnant's Blood has mythically sharpened your teeth, and they regrow their sharpness overnight, which is unsettling to most humans and could raise suspicion, potentially leading to questioning by the Second Inquisition.",
         "source": "LOTN5 pg.183"
     }
 ]

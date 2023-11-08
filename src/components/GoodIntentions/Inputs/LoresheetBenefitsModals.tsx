@@ -209,7 +209,7 @@ export const BackgroundSelectModal = ({
                                                     selectableBackgrounds: {
                                                         ...benefitData.selectableBackgrounds,
                                                         options: benefitData.selectableBackgrounds.options.map((b: any) =>
-                                                            b.id === option.id ? { ...b, sphere: val } : b
+                                                            b.id === option.id ? { ...b, sphere: [val] } : b
                                                         )
                                                     }
                                                 })

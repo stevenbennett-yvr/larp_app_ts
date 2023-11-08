@@ -5,6 +5,7 @@ import { v5BackgroundLevel } from './V5Backgrounds'
 import { sphereOfInfluenceSchema } from './V5Spheres'
 import { getNumberBelow } from '../../../utils/getNumberBelow'
 import { v5BloodPotencyLevel } from './V5BloodPotency'
+import { faCircleHalfStroke, faCircleNodes, faLightbulb, faLink, faPersonRunning, faPoo, faTeeth, faUserLock, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons'
 
 export const meritFlawTypeSchema = z.union([
     z.literal('merit'),
@@ -18,7 +19,7 @@ export const meritFlawCategorySchema = z.union([
     z.literal("connection"),
     z.literal("feeding"),
     z.literal("ghoul"),
-    z.literal("mystical"),
+    z.literal("mythical"),
     z.literal("physical"),
     z.literal("psychological"),
     z.literal("thin-blood"),
@@ -60,6 +61,36 @@ export const v5MeritFlawSchema = z.object({
 })
 
 export type V5MeritFlaw = z.infer<typeof v5MeritFlawSchema>
+
+export const getMeritIcon = (name: MeritFlawCategory) => {
+    if (name === "bonding") {
+        return faLink
+    }
+    if (name === "connection") {
+        return faCircleNodes
+    }
+    if (name === "feeding") {
+        return faTeeth
+    }
+    if (name === "ghoul") {
+        return faUserLock
+    }
+    if (name === "mythical") {
+        return faWandMagicSparkles
+    }
+    if (name === "physical") {
+        return faPersonRunning
+    }
+    if (name === "psychological") {
+        return faLightbulb
+    }
+    if (name === "thin-blood") {
+        return faCircleHalfStroke
+    } 
+    else {
+        return faPoo
+    }
+}
 
 export const meritFlawData: V5MeritFlaw[] = meritFlawDataJson.map((mf) => ({
     id: `meritFlaw_${mf.name}`,

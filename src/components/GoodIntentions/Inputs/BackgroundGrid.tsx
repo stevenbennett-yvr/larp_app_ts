@@ -28,11 +28,11 @@ const BackgroundGrid = ({ kindred, setModalBackground, setModalOpen }: Backgroun
                     }}
                 >
                     <Center>
-                        <SimpleGrid cols={bRef.sphere && bRef.sphere.length > 0 ?3:1}>
+                        <SimpleGrid cols={bRef.sphere && bRef.sphere.length > 0 ? 3 : 1}>
                             {bRef.sphere && bRef.sphere.length > 0 ?
                                 <Stack justify="flex-start" align="flex-start" spacing={3}>
                                     <Text size="xs">Spheres:</Text>
-                                    {bRef.sphere.map((s) => (
+                                    {bRef.sphere.length>0 && bRef.sphere.map((s) => (
                                         <Tooltip label={s} color="gray" withArrow>
                                             <FontAwesomeIcon icon={Spheres[s].symbol} style={{ color: "#e03131" }} />
                                         </Tooltip>
