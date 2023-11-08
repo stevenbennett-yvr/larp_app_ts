@@ -17,7 +17,7 @@ type BackgroundBuyProps = {
 
 const BackgroundBuy = ({ kindred, setKindred, type }: BackgroundBuyProps) => {
     const [selectedBackground, setSelectedBackground] = useState<string | null>("");
-    const [selectedSphere, setSelectedSphere] = useState<V5SphereKey | null>("");
+    const [selectedSphere, setSelectedSphere] = useState<V5SphereKey>("");
 
     const getFlawPoints = (kindred: Kindred): number => {
         let totalFlawPoints = 0;
@@ -120,7 +120,6 @@ const BackgroundBuy = ({ kindred, setKindred, type }: BackgroundBuyProps) => {
                                                 let sphere = val as V5SphereKey
                                                 setSelectedSphere(sphere);
                                             }}
-                                            placeholder={`${selectedSphere}`}
                                         />
                                         : <></>}
                                     <Button

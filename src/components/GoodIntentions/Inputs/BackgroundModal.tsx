@@ -174,9 +174,7 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
                 <AdvantageAccordion kindred={kindred} setKindred={setKindred} bRef={BackgroundRef} oRef={null} type={type} />
             </Stack>
         </Modal>
-
     )
-
 }
 
 export default BackgroundModal
