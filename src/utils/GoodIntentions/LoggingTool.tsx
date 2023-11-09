@@ -80,7 +80,7 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
     }
 
     function compareArraysOfObjectsByName(initialArray: any, currentArray: any, category: string) {
-
+        if (initialArray === currentArray) { return null }
         initialArray.forEach((initialItem: any) => {
             let currentItem = currentArray.find((item: any) => item.name === initialItem.name);
             if (!currentItem || !initialItem) { return null }
@@ -199,9 +199,10 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
     }
 
     function compareArraysOfObjects(initialArray: any, currentArray: any, category: string) {
-
+        if (initialArray === currentArray) {return null}
         initialArray.forEach((initialItem: any) => {
             let currentItem = currentArray.find((item: any) => item.id === initialItem.id);
+            if (!currentItem || !initialItem) { return null }
             if (initialItem.creationPoints !== currentItem.creationPoints) {
                 changes.push({
                     category:category,

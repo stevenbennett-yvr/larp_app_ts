@@ -39,7 +39,7 @@ export const calculateEarnedXp = (kindred: Kindred) => {
     const creationDate = new Date(getCreationDate(kindred));
     const currentDate = new Date();
     const monthsSinceStart = (currentDate.getFullYear() - creationDate.getFullYear()) * 12 + (currentDate.getMonth() - creationDate.getMonth());
-    const earnedXp = monthsSinceStart * 7;
+    const earnedXp = monthsSinceStart * 4;
     return earnedXp < 0 ? 0 : Math.min(earnedXp, calculateXpCap());
 }
 
