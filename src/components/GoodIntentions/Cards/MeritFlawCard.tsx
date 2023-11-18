@@ -9,6 +9,8 @@ type PrintSheetProps = {
 }
 
 const MeritFlawCard = ({ coterieMerits }: PrintSheetProps) => {
+    if (!coterieMerits) { return null }
+
     const sortedFlaws = Object.values(coterieMerits).filter((merit) => v5GetMeritByName(merit.name)?.type.toLocaleLowerCase() === "flaw".toLowerCase()).sort((a, b) => a.id.localeCompare(b.id))
     const sortedMerits = Object.values(coterieMerits).filter((merit) => v5GetMeritByName(merit.name)?.type.toLocaleLowerCase() === "merit".toLowerCase()).sort((a, b) => a.id.localeCompare(b.id))
 

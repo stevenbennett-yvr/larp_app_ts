@@ -325,6 +325,7 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
     compareArraysOfObjects(initialKindred.ceremonies, kindred.ceremonies, "Ceremonies");
     compareArraysOfObjects(initialKindred.formulae, kindred.formulae, "Formulae");
     compareArraysOfObjects(initialKindred.backgrounds, kindred.backgrounds, "Backgrounds");
+    compareArraysOfObjects(initialKindred.coterie.territoryContributions, kindred.coterie.territoryContributions, "Territory");
     compareArraysOfObjectsByName(initialKindred.loresheet.benefits, kindred.loresheet.benefits, `${kindred.loresheet.name} Benefit`)
     compareArraysOfObjects(initialKindred.meritsFlaws, kindred.meritsFlaws, "Merits and Flaws");
 
