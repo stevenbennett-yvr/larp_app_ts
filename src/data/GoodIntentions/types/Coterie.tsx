@@ -1,24 +1,10 @@
 import { z } from "zod";
-import { v5MeritFlawRefSchema } from "./V5MeritsOrFlaws";
-import { sphereOfInfluenceSchema } from "./V5Spheres";
+import { v5MeritFlawRefSchema, meritFlawData } from "./V5MeritsOrFlaws";
+import { v5BenefitRefSchema } from "./V5Benefits";
 
-export const v5BenefitNameSchema = z.union([
-    z.literal("comfort"),
-    z.literal("connections"),
-    z.literal("deterrents"),
-    z.literal("")
-])
-
-export const v5TerritoryBenefitSchema = z.object({
-    name: v5BenefitNameSchema,
-    sphere: sphereOfInfluenceSchema.optional(),
-    freebiePoints: z.number(),
-    experiencePoints: z.number(),
-})
-
-export const coterieSchema = z.object({
+export const coterieRefSchema = z.object({
     id: z.string(),
-    territoryContributions: v5TerritoryBenefitSchema.array(),
+    territoryContributions: v5BenefitRefSchema.array(),
 })
 
 export const domainSchema = z.object({
@@ -32,7 +18,7 @@ export const v5CoterieSchema = z.object({
     name: z.string(),
     concept: z.string(),
     goals: z.string(),
-    members: z.string().array(),
+    ownerId: z.string(),
     meritsFlaws: v5MeritFlawRefSchema.array(),
     domain: domainSchema,
 })
@@ -46,7 +32,7 @@ export const getEmptyCoterie = (): Coterie => {
         name: "",
         concept: "",
         goals: "",
-        members: [],
+        ownerId: "",
         meritsFlaws: [],
         domain: {
             location: "",
@@ -55,3 +41,20 @@ export const getEmptyCoterie = (): Coterie => {
     }
 }
 
+export const getTotalCoterieMeritPoints = (coterie:Coterie) => {
+    let totalFlawPoints = 0;
+    let totalMeritPoints = 0;
+    const coterieMerits = (!coterie.meritsFlaws ? [] : coterie.meritsFlaws)
+    Object.values(Object.values(coterieMerits)).forEach((mf) => {
+      const meritFlawInfo = meritFlawData.find((entry) => entry.name === mf.name);
+      if (meritFlawInfo) {
+        if (meritFlawInfo.type === "flaw" && meritFlawInfo.category !== "thin-blood") {
+          totalFlawPoints += mf.creationPoints;
+        }
+        if (meritFlawInfo.type === "merit" && meritFlawInfo.category !== "thin-blood") {
+          totalMeritPoints += mf.creationPoints;
+        }
+      }
+    });
+    return { totalFlawPoints, totalMeritPoints };
+}

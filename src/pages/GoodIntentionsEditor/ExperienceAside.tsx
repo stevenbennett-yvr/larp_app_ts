@@ -1,5 +1,5 @@
 import { Aside, Center, ScrollArea, Stack, Table } from "@mantine/core"
-import { bloodPotencyExperience, humanityExperience, ritualExperience, ceremonyExperience, formulaExperience, spentExperience, attributeExperience, skillExperience, backgroundExperience, calculateFloorXp, calculateXpCap, remainingExperience, meritExperience, disciplineExperience } from "../../data/GoodIntentions/types/V5Experience"
+import { bloodPotencyExperience, humanityExperience, ritualExperience, ceremonyExperience, formulaExperience, spentExperience, attributeExperience, skillExperience, backgroundExperience, calculateFloorXp, calculateXpCap, remainingExperience, meritExperience, disciplineExperience, territoryExperience } from "../../data/GoodIntentions/types/V5Experience"
 import { useState, useEffect } from "react"
 import { globals } from "../../assets/globals"
 import { Kindred } from "../../data/GoodIntentions/types/Kindred"
@@ -54,6 +54,16 @@ const ExperienceAside = ({ kindred }: AsideBarProps) => {
                                         <td>
                                             {spentExperience(kindred) !== 0 ?
                                                 ((backgroundExperience(kindred) / spentExperience(kindred)) * 100).toFixed(2) + "%" :
+                                                "0.00%"
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Territory Contributions</td>
+                                        <td>{territoryExperience(kindred)}</td>
+                                        <td>
+                                            {spentExperience(kindred) !== 0 ?
+                                                ((territoryExperience(kindred) / spentExperience(kindred)) * 100).toFixed(2) + "%" :
                                                 "0.00%"
                                             }
                                         </td>

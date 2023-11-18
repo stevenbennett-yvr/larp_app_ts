@@ -4,8 +4,7 @@ import { v5BackgroundLevel, V5BackgroundRef, backgroundData, kindredBackgrounds 
 import { Text, Grid, Card, Center, Stack, SimpleGrid, Tooltip } from "@mantine/core";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-
-export type TypeCategory = 'creationPoints' | 'experiencePoints';
+import { upcase } from "../../../utils/case";
 
 type BackgroundGridProps = {
     kindred: Kindred,
@@ -40,12 +39,11 @@ const BackgroundGrid = ({ kindred, setModalBackground, setModalOpen }: Backgroun
                                 </Stack>
                                 : <></>}
                             <FontAwesomeIcon size="4x" icon={backgroundInfo.icon} style={{ color: "#e03131" }} />
-                            <></>
                         </SimpleGrid>
                     </Center>
 
                     <Center>
-                        <Text mt={"xl"} ta="center" fz="xl" fw={700}>{bRef.name} Level {v5BackgroundLevel(bRef).level}</Text>
+                        <Text mt={"xl"} ta="center" fz="xl" fw={700}>{upcase(bRef.name)} Level {v5BackgroundLevel(bRef).level}</Text>
 
                     </Center>
 

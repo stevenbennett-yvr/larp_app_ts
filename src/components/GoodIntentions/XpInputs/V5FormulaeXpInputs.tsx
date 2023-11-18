@@ -4,7 +4,7 @@ import { globals } from "../../../assets/globals"
 import { Grid, Card, Group, Text, Badge, Button, Space, ScrollArea, Stack, Center, Modal, Image } from "@mantine/core"
 import { upcase } from "../../../utils/case"
 import { disciplines, v5DisciplineLevel } from "../../../data/GoodIntentions/types/V5Disciplines"
-import { v5xp } from "../../../data/GoodIntentions/V5Experience"
+import { v5xp } from "../../../data/GoodIntentions/types/V5Costs"
 
 type FormulaeModalProps = {
     kindred: Kindred,

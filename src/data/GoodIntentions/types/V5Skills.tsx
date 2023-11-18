@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { Kindred } from "./Kindred";
 import { getNumberBelow } from "../../../utils/getNumberBelow";
-import { v5xp } from "../V5Experience";
+import { v5xp } from "./V5Costs";
 
 export const v5skillCategoriesSchema = z.union([
     z.literal('mental'),

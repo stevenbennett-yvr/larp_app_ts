@@ -11,6 +11,10 @@ type characterContextValue = {
   userLocalKindred: any[];
   getKindredById: (id:string, setKindred: (kindred:Kindred) => void) => void;
   updateKindred: (id:string, updatedKindred:Kindred) => void;
+  getLocalCoterielessKindred: (vssid:string) => void;
+  getCoterieMembers: (coterieId:string) => void;
+  localCoterielessKindred: any[];
+  coterieMembers: any[];
 }
 
 const CharacterContext = React.createContext<characterContextValue | null>(null);
@@ -44,7 +48,7 @@ export function CharacterProvider({ children }: { children: React.ReactNode }): 
 
   const getCharacterByUIDAndVSS = useCallback(
     async (uid: string, vssId: string) => {
-      const q = query(collectionRef, where("uid", "==", uid), where("vssId", "==", vssId));
+      const q = query(collectionRef, where("uid", "==", uid), where("vssId", "==", vssId), where("status", "==", "active"));
 
       try {
         const snapshot = await getDocs(q);
@@ -58,6 +62,47 @@ export function CharacterProvider({ children }: { children: React.ReactNode }): 
       }
     },
     [collectionRef]
+  );
+
+  const [localCoterielessKindred, setLocalCoterielessKindred] = useState<any[]>([]); // Initialize with an empty array
+
+  const getLocalCoterielessKindred = useCallback(
+    async (vssid:string) => {
+      const q = query(collectionRef, where("vssId", "==", vssid), where("coterie.id", "==", ""), where("status", "==", "active"));
+
+      try {
+        const snapshot = await getDocs(q);
+        const fulldata = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setLocalCoterielessKindred(fulldata);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    []
+  );
+
+  const [coterieMembers, setCoterieMembers] = useState<any[]>([])
+
+  const getCoterieMembers = useCallback(
+    async (coterieId:string) => {
+      if (coterieId==="" || !coterieId) { return }
+      const q = query(collectionRef, where("coterie.id", "==", coterieId));
+
+      try {
+        const snapshot = await getDocs(q);
+        const fulldata = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setCoterieMembers(fulldata);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    []
   );
 
   const getKindredById = useCallback(async (id:string, setKindred:Function) => {
@@ -101,8 +146,12 @@ export function CharacterProvider({ children }: { children: React.ReactNode }): 
       userLocalKindred,
       getKindredById,
       updateKindred,
+      getCoterieMembers,
+      getLocalCoterielessKindred,
+      localCoterielessKindred,
+      coterieMembers,
     };
-  }, [onSubmitCharacter, getCharacterByUIDAndVSS, userLocalKindred, getKindredById, updateKindred]);
+  }, [onSubmitCharacter, getCharacterByUIDAndVSS, userLocalKindred, getKindredById, updateKindred, getLocalCoterielessKindred, localCoterielessKindred, getCoterieMembers, coterieMembers]);
 
   return (
     <CharacterContext.Provider value={value}>

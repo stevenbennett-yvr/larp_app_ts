@@ -142,6 +142,14 @@ export const loresheetExperience  = (kindred:Kindred): number => {
     return lsXp
 }
 
+export const territoryExperience  = (kindred:Kindred): number => {
+    let lsXp = 0
+    kindred.coterie.territoryContributions.forEach((b) => {
+        lsXp += b.experiencePoints
+    })
+    return lsXp
+}
+
 export const spentExperience = (kindred:Kindred) => {
     const attributeXp = attributeExperience(kindred);
     const skillXp = skillExperience(kindred);
@@ -154,8 +162,9 @@ export const spentExperience = (kindred:Kindred) => {
     const hXp = humanityExperience(kindred)
     const lsXp = loresheetExperience(kindred)
     const formulaXp = formulaExperience(kindred)
+    const benefitXp = territoryExperience(kindred)
 
-    const spentExperience = (attributeXp + skillXp + disciplineXp + ritualXp + ceremonyXp + backgroundXp + meritXp + bpXp + hXp + lsXp + formulaXp);
+    const spentExperience = (attributeXp + skillXp + disciplineXp + ritualXp + ceremonyXp + backgroundXp + meritXp + bpXp + hXp + lsXp + formulaXp + benefitXp);
     return spentExperience;
 };
 

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Kindred } from "./Kindred";
-import { v5xp } from "../V5Experience";
+import { v5xp } from "./V5Costs";
 import { getNumberBelow } from "../../../utils/getNumberBelow";
 
 const generationSchema = z.object({

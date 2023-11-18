@@ -13,8 +13,7 @@ import { ceremonyRefSchema } from './V5Ceremonies';
 import { loresheetRefSchema } from './V5Loresheets'
 import { formulaRefSchema } from './V5Formulae';
 import { sectNameSchema } from './V5Sect';
-import { coterieSchema } from './Coterie';
-
+import { coterieRefSchema } from './Coterie';
 
 export const v5BackgroundSchema = z.object({
     history: z.string(),
@@ -43,6 +42,13 @@ export const touchstoneSchema = z.object({
 })
 
 export type Touchstone = z.infer<typeof touchstoneSchema>
+
+export const statusSchema = z.union([
+    z.literal('active'),
+    z.literal('retired'),
+])
+
+export type V5KindredStatus = z.infer<typeof statusSchema>
 
 export const kindredSchema = z.object({
     id: z.optional(z.string()),
@@ -80,7 +86,8 @@ export const kindredSchema = z.object({
     loresheet: loresheetRefSchema,
     startDate: z.string().datetime(),
     changeLogs:z.object({}),
-    coterie: coterieSchema,
+    coterie: coterieRefSchema,
+    status: statusSchema,
 })
 
 export type Kindred = z.infer<typeof kindredSchema>
@@ -186,7 +193,8 @@ export const getEmptyKindred = (): Kindred => {
         coterie: {
             id: "",
             territoryContributions: []
-        }
+        },
+        status: "active"
     }
 }
 

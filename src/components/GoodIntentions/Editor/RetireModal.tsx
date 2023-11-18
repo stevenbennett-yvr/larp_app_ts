@@ -1,4 +1,4 @@
-import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
+import { Kindred, V5KindredStatus } from "../../../data/GoodIntentions/types/Kindred"
 import { Modal, TextInput, Button } from "@mantine/core"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -23,8 +23,8 @@ const RetireModal = ({kindred, showRetire, setShowRetire}:retireModalProps) => {
         } else {
             if (kindred.id) {
                 const updatedAwakened = { 
-                    ...kindred, 
-                    uid:`${kindred.uid}-retired`
+                    ...kindred,
+                    status: "retired" as V5KindredStatus
                 }
                 updateKindred(kindred.id, updatedAwakened)
                 navigate("/")

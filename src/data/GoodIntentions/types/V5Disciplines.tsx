@@ -3,7 +3,7 @@ import { z } from "zod";
 import * as logos from "../../../assets/images/GoodIntentions";
 import { Kindred } from "./Kindred";
 import { Clans } from "./V5Clans";
-import { v5xp } from "../V5Experience";
+import { v5xp } from "./V5Costs";
 import { getNumberBelow } from "../../../utils/getNumberBelow";
 import { cleanRituals } from "./V5Rituals";
 import { cleanCeremonies } from "./V5Ceremonies";
@@ -144,21 +144,22 @@ export const v5DisciplineLevel = (kindred:Kindred, discipline:DisciplineKey) => 
     const disciplinesForClan = Clans[clan].disciplines;
     let inClan = disciplinesForClan.includes(discipline)
     let isCaitiff = clan === "Caitiff"
-    let isAlchemist = discipline === "thin-blood alchemy"
+    let isAlchemy = discipline === "thin-blood alchemy"
+    let isAlchemist = kindred.meritsFlaws.some((m) => m.name === "Thin-Blood Alchemist")
 
-    const xpCost = inClan || isAlchemist? v5xp.inClanDisciplines : isCaitiff? v5xp.caitiffDiscipline : v5xp.outOfClanDiscipline
+    const xpCost = inClan || isAlchemy? v5xp.inClanDisciplines : isCaitiff? v5xp.caitiffDiscipline : v5xp.outOfClanDiscipline
 
     let xp = experiencePoints
     let totalXpNeeded = 0
     let pastXpNeeded = [0]
     if (xp === 0) {
-      let level = creationPoints + freebiePoints;
+      let level = creationPoints + freebiePoints + (isAlchemy&&isAlchemist?1:0);
       let totalXpNeeded = (level + 1) * xpCost;
       pastXpNeeded.push(totalXpNeeded)
       return {level, totalXpNeeded, pastXpNeeded};
     } 
     else {
-      let level = creationPoints + freebiePoints;
+      let level = creationPoints + freebiePoints + (isAlchemy&&isAlchemist?1:0);
       let xpNeeded = (level + 1) * xpCost;
       totalXpNeeded += xpNeeded
       pastXpNeeded.push(totalXpNeeded)

@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useLocalStorage } from "@mantine/hooks";
 import { Center, Tabs, Stack, Button, Alert } from "@mantine/core";
-import { v4 as uuidv4 } from 'uuid';
 // Context
 import { useCharacterDb } from "../../contexts/CharacterContext";
 import { useAuth } from "../../contexts/AuthContext";
-import { useCoterieDb } from "../../contexts/CoterieContext";
 // Data
 import { Kindred, getEmptyKindred } from "../../data/GoodIntentions/types/Kindred";
 import { GoodIntentionsVSSs } from "../../data/CaM/types/VSS";
@@ -20,16 +18,15 @@ import RetireModal from "../../components/GoodIntentions/Editor/RetireModal";
 import CoterieSheet from "../../components/GoodIntentions/Coterie/coterieSheet";
 
 import { globals } from "../../assets/globals";
-import { Coterie, getEmptyCoterie } from "../../data/GoodIntentions/types/Coterie";
+import { getEmptyCoterie } from "../../data/GoodIntentions/types/Coterie";
 import UpdateModal from "./UpdateModal";
 
 
 const KindredPage = () => {
   const { characterId } = useParams();
-  const { getKindredById, updateKindred } = useCharacterDb();
+  const { getKindredById } = useCharacterDb();
   const [showRetire, setShowRetire] = useState<boolean>(false);
   const [showUpdate, setShowUpdate] = useState<boolean>(false);
-  const { writeCoterieData, getCoterieData } = useCoterieDb()
   const { currentUser } = useAuth();
 
   const [coterie, setCoterie] = useState(getEmptyCoterie())
@@ -49,25 +46,9 @@ const KindredPage = () => {
     if (initialKindred.uid === "") {
       setInitialKindred(kindred)
     }
-    getCoterieData(kindred.coterie.id, kindred.vssId, setCoterie)
   })
 
   const venueData = GoodIntentionsVSSs.find(vss => vss.venueStyleSheet.id === kindred.vssId)
-
-  async function handleCreateCoterie(kindred: Kindred, coterie: Coterie) {
-    try {
-      if (kindred.id) {
-        const idString = uuidv4();
-        const updatedKindred = { ...kindred, coterie: { ...kindred.coterie, id: idString } }
-        updateKindred(kindred.id, updatedKindred)
-        setKindred(updatedKindred)
-        setInitialKindred(updatedKindred)
-        writeCoterieData(idString, coterie)
-      }
-    } catch {
-      console.log("Failed to create coterie")
-    }
-  }
 
 
   if ((currentUser && kindred.uid !== currentUser.uid) || !currentUser || !venueData) {
@@ -76,10 +57,11 @@ const KindredPage = () => {
 
   return (
     <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
-      <Tabs defaultValue="print sheet" orientation={globals.isPhoneScreen ? "vertical" : "horizontal"}>
+      <Tabs variant="outline" defaultValue="print sheet" orientation={globals.isPhoneScreen ? "vertical" : "horizontal"}>
         <Stack spacing="0">
           <Center>
             <Tabs.List className="no-print">
+              <Tabs.Tab value="coterie">Coterie</Tabs.Tab>
               <Tabs.Tab value="experience">XP Tab</Tabs.Tab>
               <Tabs.Tab value="background">Background</Tabs.Tab>
               <Tabs.Tab value="print sheet">Print Sheet</Tabs.Tab>
@@ -88,7 +70,7 @@ const KindredPage = () => {
 
           <Tabs.Panel value="coterie" pt="xs">
             {kindred ?
-              <CoterieSheet kindred={kindred} coterie={coterie} handleCreateCoterie={handleCreateCoterie} />
+              <CoterieSheet kindred={kindred} setKindred={setKindred} initialKindred={initialKindred} setInitialKindred={setInitialKindred} coterie={coterie} setCoterie={setCoterie} />
               : null}
           </Tabs.Panel>
 

@@ -41,6 +41,7 @@ export const v5BackgroundRefSchema = z.object({
     note: z.string(),
     advantages: z.array(v5AdvantageRefSchema),
     sphere: z.array(sphereOfInfluenceSchema).optional(),
+    share: z.boolean(),
 })
 export type V5BackgroundRef = z.infer<typeof v5BackgroundRefSchema>
 
@@ -56,6 +57,7 @@ export const emptyBackground: V5BackgroundRef = {
     loresheetFreebiePoints: 0,
     note: "",
     advantages: [],
+    share: false,
 }
 
 /// build out refs from json here....
@@ -70,7 +72,8 @@ export const v5BackgroundRefs: V5BackgroundRef[] = backgroundDataJson.map((b) =>
     predatorTypeFreebiePoints: 0,
     loresheetFreebiePoints: 0,
     note: "",
-    advantages: []
+    advantages: [],
+    share: false,
 }))
 ///
 
@@ -344,14 +347,14 @@ export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
 
 }
 
-type VariableKeys = "backgroundName" | "backgroundDescription" | "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "havenPoints" | "predatorTypeFreebiePoints";
+type VariableKeys = "backgroundName" | "backgroundDescription" | "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "havenPoints" | "predatorTypeFreebiePoints" | "share";
 
 export const handleBackgroundChange = (
     kindred: Kindred,
     setKindred: Function,
     background: V5BackgroundRef,
     type: VariableKeys,
-    newPoints: number | string | V5SphereKey[],
+    newPoints: number | string | V5SphereKey[] | boolean,
 ) => {
     const existingBackground = kindred.backgrounds.find((b) => b.id === background.id);
     if (existingBackground) {
@@ -527,3 +530,37 @@ export const kindredBackgrounds = (kindred: Kindred) => {
 
     return [...highestLevelHerdResources, ...allBackgrounds].sort((a, b) => a.name.localeCompare(b.name));
 }
+
+
+export const coterieBackgrounds = (coterieKindred: Kindred[]) => {
+    const uniqueBackgrounds = new Map<string, V5BackgroundRef>();
+    const allBackgrounds: V5BackgroundRef[] = [];
+
+    coterieKindred.forEach((kindred:Kindred) => {
+        kindred.backgrounds
+            .filter((bg, index, array) => {
+                // Keep the first occurrence of each background based on 'id'
+                return array.findIndex((b) => b.id === bg.id) === index;
+            })
+            .forEach((bg) => {
+                const name = bg.name;
+                const level = v5BackgroundLevel(bg).level;
+                const advantageLength = bg.advantages.length;
+                if (!bg.share) {
+                    return
+                }
+                if (!(name === "Herd" || name === "Resources")) {
+                    allBackgrounds.push(bg);
+                } else {
+                    const existingEntry = uniqueBackgrounds.get(name);
+                    if (!existingEntry || level > v5BackgroundLevel(existingEntry).level || advantageLength > existingEntry.advantages.length) {
+                        uniqueBackgrounds.set(name, bg);
+                    }
+                }
+            });
+    });
+
+    const highestLevelHerdResources: V5BackgroundRef[] = Array.from(uniqueBackgrounds.values());
+
+    return [...highestLevelHerdResources, ...allBackgrounds].sort((a, b) => a.name.localeCompare(b.name));
+};

@@ -14,7 +14,7 @@ type retireUpdateModal = {
 }
 
 const UpdateModal = ({showUpdate, setShowUpdate, kindred, setKindred, initialKindred, setInitialKindred}:retireUpdateModal) => {
-    const { updateKindred } = useCharacterDb();
+    const { updateKindred, getCoterieMembers } = useCharacterDb();
 
 
     const handleUpdate = () => {
@@ -31,6 +31,7 @@ const UpdateModal = ({showUpdate, setShowUpdate, kindred, setKindred, initialKin
           setKindred(updatedKindred)
           setInitialKindred(updatedKindred)
           setShowUpdate(false)
+          getCoterieMembers(updatedKindred.coterie.id)
         }
       }
 

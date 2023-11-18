@@ -88,7 +88,7 @@ export default function GoodIntentionsDashboard() {
                                         >
                                             Create Kindred for Venue
                                         </Button>
-                                        <CharacterCard kindredList={userLocalKindred} />
+                                        <CharacterCard kindredList={userLocalKindred} writable={true} />
                                     </Stack>
                                     :
                                     <Button
@@ -100,7 +100,7 @@ export default function GoodIntentionsDashboard() {
                             </>
                             : <>
                                 {userLocalKindred.length > 0 ?
-                                    <CharacterCard kindredList={userLocalKindred} /> :
+                                    <CharacterCard kindredList={userLocalKindred} writable={true} /> :
                                     <Button
                                         onClick={() => navigate(`/create-kindred/${venueId}`)}
                                     >

@@ -3,7 +3,7 @@ import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 import { backgroundData, filterSelectData, handleBackgroundChange, v5BackgroundRefs } from "../../../data/GoodIntentions/types/V5Backgrounds"
 import { Stack, Text, Center, Button, Group, Table, Select } from "@mantine/core"
 import { useState, forwardRef } from 'react'
-import { v5xp } from "../../../data/GoodIntentions/V5Experience"
+import { v5xp } from "../../../data/GoodIntentions/types/V5Costs"
 import { V5SphereKey, SphereSelectData } from "../../../data/GoodIntentions/types/V5Spheres"
 
 export type TypeCategory = 'creationPoints' | 'experiencePoints' ;
@@ -150,7 +150,6 @@ const BackgroundBuy = ({ kindred, setKindred, type }: BackgroundBuyProps) => {
                     value={selectedBackground}
                     onChange={(val) => setSelectedBackground(val)}
                     itemComponent={SelectItem}
-                    searchable
                     allowDeselect
                     placeholder="Select Background to Buy"
                     style={{ width: '70%' }}

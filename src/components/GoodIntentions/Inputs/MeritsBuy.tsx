@@ -4,7 +4,7 @@ import React, { forwardRef, useState } from "react";
 
 import { meritFlawData, v5MeritFlawRefs, v5MeritFlawFilter, V5MeritFlaw, handleMeritFlawChange } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws";
 import Tally from "../../../utils/talley";
-import { v5xp } from "../../../data/GoodIntentions/V5Experience";
+import { v5xp } from "../../../data/GoodIntentions/types/V5Costs";
 import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS";
 
 type MeritBuyProps = {

@@ -1,5 +1,5 @@
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
-import { Tooltip, Textarea, ActionIcon, Modal, NumberInput, Text, Button, Table, Center, Stack, TextInput, Group } from "@mantine/core"
+import { Tooltip, Textarea, ActionIcon, Modal, NumberInput, Text, Button, Table, Center, Stack, TextInput, Group, Checkbox } from "@mantine/core"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleDown, faCircleUp } from "@fortawesome/free-solid-svg-icons"
 import { v5AdvantageLevel, emptyAdvantage, handleBackgroundRemove, V5BackgroundRef, v5BackgroundLevel, handleBackgroundChange, backgroundData, v5HandleXpBackgroundChange, V5AdvantageRef } from "../../../data/GoodIntentions/types/V5Backgrounds"
@@ -52,6 +52,17 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
         return (
             <Center key={backgroundRef.id}>
                 <Stack>
+                    <Center>
+                        {kindred.coterie.id !== "" ?
+                            <Checkbox
+                                label="Share background with Coterie"
+                                checked={backgroundRef.share}
+                                onChange={(event) => 
+                                    handleBackgroundChange(kindred, setKindred, backgroundRef, "share", event.currentTarget.checked)
+                                }
+                            />
+                            : <></>}
+                    </Center>
                     <TextInput
                         style={{ width: "300px" }}
                         value={backgroundRef.backgroundName}
@@ -123,14 +134,14 @@ const BackgroundModal = ({ kindred, setKindred, bRef, modalOpened, closeModal, t
                 {
                     BackgroundRef.sphere && BackgroundRef.sphere.length > 0 ?
                         <Center>
-                        <Group>
-                            {BackgroundRef.sphere.map((s) => (
+                            <Group>
+                                {BackgroundRef.sphere.map((s) => (
 
-                                <Tooltip label={Spheres[s].summary} color="gray" withArrow>
-                                    <Group><Text>{upcase(s)} </Text><FontAwesomeIcon icon={Spheres[s].symbol} style={{ color: "#e03131" }} /></Group>
-                                </Tooltip>
-                            ))}
-                        </Group>
+                                    <Tooltip label={Spheres[s].summary} color="gray" withArrow>
+                                        <Group><Text>{upcase(s)} </Text><FontAwesomeIcon icon={Spheres[s].symbol} style={{ color: "#e03131" }} /></Group>
+                                    </Tooltip>
+                                ))}
+                            </Group>
                         </Center>
                         : <></>
                 }
