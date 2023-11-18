@@ -229,7 +229,7 @@ const CoterieSheet = ({ kindred, setKindred, initialKindred, setInitialKindred, 
                                                 <Text>
                                                     <FontAwesomeIcon icon={faList} /> Goals
                                                 </Text>
-                                                {coterie.goals ?
+                                                {coterie.id !== "" ?
                                                     <TipTapRTE html={coterie.goals} setHTML={(val) =>
                                                         setCoterie({ ...coterie, goals: val })
                                                     } />
@@ -339,7 +339,7 @@ const CoterieSheet = ({ kindred, setKindred, initialKindred, setInitialKindred, 
                                         <Text>
                                             <FontAwesomeIcon icon={faHouse} /> Domain Description
                                         </Text>
-                                        {coterie.domain.location ?
+                                        {coterie.id !== "" ?
                                             <TipTapRTE html={coterie.domain.description} setHTML={(val) =>
                                                 setCoterie({ ...coterie, domain: { ...coterie.domain, description: val } })
                                             } />
