@@ -8,7 +8,7 @@ import { Coterie, getEmptyCoterie, getTotalCoterieMeritPoints } from "../../../d
 import { useCoterieDb } from "../../../contexts/CoterieContext";
 import { v4 as uuidv4 } from 'uuid';
 import { useCharacterDb } from "../../../contexts/CharacterContext";
-import CharacterCard from "../../../pages/GoodIntentionsDashboard/Component/KindredCard";
+import CharacterCard from "../Cards/KindredCard";
 import MeritsModal from "./MeritModal";
 import MeritFlawCard from "../Cards/MeritFlawCard";
 import BenefitTable from "./BenefitTable";
@@ -255,7 +255,7 @@ const CoterieSheet = ({ kindred, setKindred, initialKindred, setInitialKindred, 
                                     <Stack>
                                         <Text mt={"xl"} ta="center" fz="xl" fw={700}>Members</Text>
                                         <Center>
-                                            <CharacterCard kindredList={coterieMembers} writable={false} userKindred={kindred} ownerId={coterie.ownerId} setShowKick={setShowKick} setKindred={setKickKindred} />
+                                            <CharacterCard kindredList={coterieMembers} writable={false} userKindred={kindred} ownerId={coterie.ownerId} setShowKick={setShowKick} setKindred={setKickKindred} cols={1} />
                                         </Center>
                                         <Center>
                                             <MultiSelect

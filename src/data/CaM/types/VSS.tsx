@@ -4,23 +4,6 @@ import { sectNameSchema } from "../../GoodIntentions/types/V5Sect";
 import { clanNameSchema } from "../../GoodIntentions/types/V5Clans";
 import { predatorTypeNameSchema } from "../../GoodIntentions/types/V5PredatorType";
 
-export const daySchema = z.union([
-    z.literal('monday'),
-    z.literal('tuesday'),
-    z.literal('wednesday'),
-    z.literal('thursday'),
-    z.literal('friday'),
-    z.literal('saturday'),
-    z.literal('sunday'),
-])
-
-export const weekSchema = z.union([
-    z.literal('first'),
-    z.literal('second'),
-    z.literal('third'),
-    z.literal('fourth'),
-])
-
 export const venueStyleSheetSchema = z.object({
     id: z.string(),
     name: z.string(),
@@ -33,8 +16,8 @@ export const venueStyleSheetSchema = z.object({
     focus: z.string(),
     timeline: z.string(),
     notes: z.string(),
-    scheduleDay: daySchema,
-    scheduleWeek: weekSchema,
+    scheduleDay: z.number(),
+    scheduleWeek: z.number(),
     documents: z.string().array(),
 })
 
@@ -78,8 +61,8 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             focus: "...",
             timeline: "...",
             notes: "Salubri, Hecata and PC ghouls are not available for play. It is encouraged that players generate characters Embraced within the last 2-3 years. If they were Embraced within 20 years, one must consider how multiple apocalyptic events have affected them.  “Older” Kindred are generally no later than the 1970s. It is exceptionally strange for an Anarch to be pushing 80 years — especially after the Long Night. Concepts that seek to be Embraced older than the 1970s will expect more Storyteller input.",
-            scheduleDay: "saturday",
-            scheduleWeek: "first",
+            scheduleDay: 6,
+            scheduleWeek: 1,
             documents: [],
         },
         goodIntentionsVariables: {
@@ -114,8 +97,8 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             focus: "...",
             timeline: "...",
             notes: "Vampires of all generations are allowed. Characters can have affiliations with other supernatural beings, but maintaining the Masquerade is a top priority.",
-            scheduleDay: "saturday",
-            scheduleWeek: "fourth",
+            scheduleDay: 6,
+            scheduleWeek: 4,
             documents: [],
         },
         goodIntentionsVariables: {
@@ -150,8 +133,8 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             focus: "...",
             timeline: "...",
             notes: `<ul> <li> Proxy requests: Please send a request to play in Montreal to <a href="mailto:vst.masq.015@canadaatmidnight.com">vst.masq.015@canadaatmidnight.com</a> at least 24 hours before game time. Please include in your request your domain’s VSS, Character sheet, XP log, and CC your local storyteller in the email. </li> <li> Our games are primarily held in person, and communication can be done directly with the storyteller via Facebook <a href="https://www.facebook.com/quinn.kurenda/">https://www.facebook.com/quinn.kurenda/</a> or via the above email. </li> <li> Wherein the ST is happy to discuss anything via Facebook, Any official requests (Proxy requests, backgrounds, downtimes, etc) must be via the above email. </li> <li> Note on Camarilla Technology Ban: You may use your digital video, and communication devices but never record or transmit Masquerade Breaching content. If you wish to use such technology, there is a chance of being traced, tracked, or found. In order to avoid this possibility, you must possess a dot of Technology skill, or have had your technology set up by someone with Technology skill. (e.g “Hey man, nice cell, let me install that VPN for you”). The authorities may intermittently attempt to look into your messages, if they succeed the punishment will be extreme, make sure you are covered. </li> </ul>`,
-            scheduleDay: "saturday",
-            scheduleWeek: "fourth",
+            scheduleDay: 6,
+            scheduleWeek: 4,
             documents: [],
         },
         goodIntentionsVariables: {
@@ -186,8 +169,8 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             focus: "...",
             timeline: "...",
             notes: `<ul> <li> Discord server: <a href="https://discord.com/invite/3CEwVt68">https://discord.com/invite/3CEwVt68</a> </li> <li> Proxy rules: Please email <a href="mailto:vst.masq.024@canadaatmidnight.com">vst.masq.024@canadaatmidnight.com</a> with your own VST in CC. Include reason for visit/proxy and a copy of your character sheet. Please give at least 48 hours notice so we can review the sheet and approve the visit. </li> </ul>`,
-            scheduleDay: "saturday",
-            scheduleWeek: "first",
+            scheduleDay: 6,
+            scheduleWeek: 1,
             documents: [],
         },
         goodIntentionsVariables: {
@@ -222,8 +205,8 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             focus: "...",
             timeline: "...",
             notes: ``,
-            scheduleDay: "saturday",
-            scheduleWeek: "third",
+            scheduleDay: 6,
+            scheduleWeek: 3,
             documents: [],
         },
         goodIntentionsVariables: {
@@ -263,8 +246,8 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             
             This is a venue built around relationships and high drama. No other supernaturals will be encountered in this area and while combat will happen, we do not intend to have mass combats between players anytime soon. In fact, visitors should note that they will be beholden to the above rule while their character is in this domain. If you come in to killbox, your character(s) will leave in a box. Local players will understand if they leave this domain for any reason, they are no longer under any special rules in play in this VSS.
             `,
-            scheduleDay: "saturday",
-            scheduleWeek: "third",
+            scheduleDay: 6,
+            scheduleWeek: 3,
             documents: [],
         },
         goodIntentionsVariables: {
@@ -324,8 +307,8 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             This is a Camarilla Domain. Visiting Anarchs will be permitted only at the express permission of the sitting Prince. Autarkis will be addressed on a case by case basis. Unless otherwise specified, statuses of the members of the Anarch Movement will be considered as equivalent infamy while in this Domain.
             New players coming into the game will be given the option to create a Ghoul instead of a full-fledged character. Should this option be chosen, the new player will be assigned to a more experienced player who will assist with game mechanics and any questions that may come up. After three (3) game sessions or ninety (90) days, whichever is longer, the new player will have the choice to be Embraced by their “mentor” player and continue with the current character, or respec their character into a whole new character with all currently earned XP. 
             `,
-            scheduleDay: "saturday",
-            scheduleWeek: "second",
+            scheduleDay: 6,
+            scheduleWeek: 2,
             documents: [],
         },
         goodIntentionsVariables: {
@@ -372,8 +355,8 @@ export const TatteredVeilVSSs: TatteredVeilStyleSheet[] = [
             focus: "Social and material intrigue.",
             timeline: "...",
             notes: `This VSS will lean heavily into covert and evocative depictions of the supernatural. Styles of play that support this tone through the use of covert magic and other subtle play will be rewarded.`,
-            scheduleDay: "saturday",
-            scheduleWeek: "fourth",
+            scheduleDay: 6,
+            scheduleWeek: 4,
             documents: ["https://docs.google.com/document/d/16xm-3sEOckOFiPGRpXHOljvaHRFBvChy_RGbXmln8gE"],
         }
     }
