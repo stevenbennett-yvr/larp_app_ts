@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useLocalStorage } from "@mantine/hooks";
 import { Center, Tabs, Stack, Button, Alert } from "@mantine/core";
+import _ from 'lodash';
+
 // Context
 import { useCharacterDb } from "../../contexts/CharacterContext";
 import { useAuth } from "../../contexts/AuthContext";
@@ -55,6 +57,10 @@ const KindredPage = () => {
     return null
   }
 
+  if (JSON.stringify(initialKindred.touchstones) !== JSON.stringify(kindred.touchstones)) {
+    console.log(JSON.stringify(initialKindred.touchstones), JSON.stringify(kindred.touchstones))
+  }
+
   return (
     <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
       <Tabs variant="outline" defaultValue="print sheet" orientation={globals.isPhoneScreen ? "vertical" : "horizontal"}>
@@ -102,14 +108,14 @@ const KindredPage = () => {
           <Button
             style={{ margin: "5px" }}
             color="gray"
-            disabled={remainingExperience(kindred) < 0 || kindred === initialKindred}
+            disabled={remainingExperience(kindred) < 0 || _.isEqual(initialKindred,kindred)}
             onClick={() => setShowUpdate(true)}>
             Update
           </Button>
           <Button
             style={{ margin: "5px" }}
             color="gray"
-            onClick={() => {setShowRetire(true);}}
+            onClick={() => { setShowRetire(true); }}
           >
             Retire
           </Button>

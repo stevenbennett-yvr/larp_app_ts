@@ -19,7 +19,7 @@ function calculateNextGameDate(dayOfWeek: number, occurrence: number) {
         nextGameDate.setDate(1 + dayDifferenceAfterMonthChange + (occurrence - 1) * 7);
     }
 
-    return nextGameDate.toLocaleDateString();
+    return nextGameDate;
 }
 
 export default calculateNextGameDate;

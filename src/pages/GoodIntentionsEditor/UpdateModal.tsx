@@ -2,6 +2,7 @@ import { Modal, Button, Table, Stack, Text, List } from "@mantine/core"
 import { Kindred } from "../../data/GoodIntentions/types/Kindred";
 import changeLog from "../../utils/GoodIntentions/LoggingTool";
 import { useCharacterDb } from "../../contexts/CharacterContext";
+import _ from 'lodash';
 
 type retireUpdateModal = {
     showUpdate: boolean,
@@ -60,7 +61,7 @@ const UpdateModal = ({showUpdate, setShowUpdate, kindred, setKindred, initialKin
                     <List>
                 {initialKindred.name !== kindred.name? <List.Item><Text size="sm" w={200}>Name Changed</Text></List.Item>:null}
                 {initialKindred.concept !== kindred.concept? <List.Item><Text size="sm" w={200}>Concept Changed</Text></List.Item>:null}
-                {initialKindred.touchstones !== kindred.touchstones? <List.Item><Text size="sm" w={200}>Touchstones Changed</Text></List.Item>:null}
+                {!_.isEqual(initialKindred.touchstones, kindred.touchstones)? <List.Item><Text size="sm" w={200}>Touchstones Changed</Text></List.Item>:null}
                 {initialKindred.backstory.history !== kindred.backstory.history? <List.Item><Text size="sm" w={200}>Character History Changed</Text></List.Item>:null}
                 {initialKindred.backstory.goals !== kindred.backstory.goals? <List.Item><Text size="sm" w={200}>Character Goals Changed</Text></List.Item>:null}
                 {initialKindred.backstory.description !== kindred.backstory.description? <List.Item><Text size="sm" w={200}>Character Description Changed</Text></List.Item>:null}

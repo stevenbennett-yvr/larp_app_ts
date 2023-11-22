@@ -86,7 +86,7 @@ export const getMeritIcon = (name: MeritFlawCategory) => {
     }
     if (name === "thin-blood") {
         return faCircleHalfStroke
-    } 
+    }
     else {
         return faPoo
     }

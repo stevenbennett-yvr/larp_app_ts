@@ -48,8 +48,6 @@ const CoterieSheet = ({ kindred, setKindred, initialKindred, setInitialKindred, 
         setCoterie(getEmptyCoterie())
     )
 
-    console.log(coterie)
-
     useEffect(() => {
         if (kindred.coterie.id !== "") {
             getLocalCoterielessKindred(kindred.vssId);
