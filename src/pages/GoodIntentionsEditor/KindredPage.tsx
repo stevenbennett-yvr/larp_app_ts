@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useLocalStorage } from "@mantine/hooks";
-import { Center, Tabs, Stack, Button, Alert } from "@mantine/core";
+import { Center, Tabs, Stack, Button, Alert, Text, useMantineTheme } from "@mantine/core";
 import _ from 'lodash';
 
 // Context
@@ -22,9 +22,11 @@ import CoterieSheet from "../../components/GoodIntentions/Coterie/coterieSheet";
 import { globals } from "../../assets/globals";
 import { getEmptyCoterie } from "../../data/GoodIntentions/types/Coterie";
 import UpdateModal from "./UpdateModal";
-
+import LogPage from "./LogPage";
 
 const KindredPage = () => {
+  const theme = useMantineTheme()
+
   const { characterId } = useParams();
   const { getKindredById } = useCharacterDb();
   const [showRetire, setShowRetire] = useState<boolean>(false);
@@ -67,10 +69,11 @@ const KindredPage = () => {
         <Stack spacing="0">
           <Center>
             <Tabs.List className="no-print">
-              <Tabs.Tab value="coterie">Coterie</Tabs.Tab>
-              <Tabs.Tab value="experience">XP Tab</Tabs.Tab>
-              <Tabs.Tab value="background">Background</Tabs.Tab>
-              <Tabs.Tab value="print sheet">Print Sheet</Tabs.Tab>
+              <Tabs.Tab value="coterie"><Text color={theme.colors.red[8]}>Coterie</Text></Tabs.Tab>
+              <Tabs.Tab value="experience"><Text color={theme.colors.grape[8]}>XP Tab</Text></Tabs.Tab>
+              <Tabs.Tab value="logs">Logs</Tabs.Tab>
+              <Tabs.Tab value="background"><Text color={theme.colors.blue[8]}>Background</Text></Tabs.Tab>
+              <Tabs.Tab value="print sheet"><Text color={theme.colors.green[9]}>Print Sheet</Text></Tabs.Tab>
             </Tabs.List>
           </Center>
 
@@ -90,6 +93,12 @@ const KindredPage = () => {
             {kindred ?
               <BackstoryTab kindred={kindred} setKindred={setKindred} />
               : null}
+          </Tabs.Panel>
+
+          <Tabs.Panel value="logs" pt="xs">
+            {kindred ?
+              <LogPage kindred={kindred} />
+            : null}
           </Tabs.Panel>
 
           <Tabs.Panel value="print sheet" pt="xs">

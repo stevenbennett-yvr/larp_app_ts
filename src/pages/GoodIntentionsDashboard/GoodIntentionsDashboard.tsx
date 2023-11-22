@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Center, Stack, Button, Avatar, Text, List, Group, Alert, Title, Input, Tooltip, SimpleGrid } from "@mantine/core";
+import { Center, Stack, Button, Avatar, Text, List, Alert, Title, Input, Tooltip, SimpleGrid } from "@mantine/core";
 import { DiscordLogo } from "../../assets/images/CaM";
 import SoftCoverV5 from '../../assets/images/GoodIntentions/core/Soft_Cover_3d__88604.png';
 import { GoodIntentionsVSSs } from "../../data/CaM/types/VSS";
@@ -59,7 +59,7 @@ export default function GoodIntentionsDashboard() {
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '100px' }}>
             <Stack>
-                <Group grow>
+                <SimpleGrid cols={2}>
                     <Alert variant="light" color="gray">
                         <Stack>
                             <Title size="h4" align="center">{name}</Title>
@@ -118,122 +118,122 @@ export default function GoodIntentionsDashboard() {
                                 </Input.Wrapper>
                             </Center>
                             <SimpleGrid cols={2}>
-                            {bannedClans.length > 0 ?
-                                <Center>
-                                    <Stack>
-                                        <Text variant="h4"><b>Banned Clans</b></Text>
-                                        <List>
-                                            {bannedClans.map((clan, index) => (
-                                                <List.Item key={index}>
-                                                    {clan}
-                                                </List.Item>
-                                            ))}
-                                        </List>
-                                    </Stack>
-                                </Center>
-                                : null}
-                            {bannedSects.length > 0 ?
-                                <Center>
-                                    <Stack>
-                                        <Text variant="h4"><b>Banned Sects</b></Text>
-                                        <List>
-                                            {bannedSects.map((clan, index) => (
-                                                <List.Item key={index}>
-                                                    {clan}
-                                                </List.Item>
-                                            ))}
-                                        </List>
-                                    </Stack>
-                                </Center>
-                                : null}
-                            {bannedPredatorTypes.length > 0 ?
-                                <Center>
-                                    <Stack>
-                                        <Text variant="h4"><b>Banned Predator Types</b></Text>
-                                        <List>
-                                            {bannedPredatorTypes.map((clan, index) => (
-                                                <List.Item key={index}>
-                                                    {clan}
-                                                </List.Item>
-                                            ))}
-                                        </List>
-                                    </Stack>
-                                </Center>
-                                : null}
-                            {bannedMerits.length > 0 ?
-                                <Center>
-                                    <Stack>
-                                        <Text variant="h4"><b>Banned Merits</b></Text>
-                                        <List>
-                                            {bannedMerits.map((clan, index) => (
-                                                <List.Item key={index}>
-                                                    {clan}
-                                                </List.Item>
-                                            ))}
-                                        </List>
-                                    </Stack>
-                                </Center>
-                                : null}
-                            {bannedPowers.length > 0 ?
-                                <Center>
-                                    <Stack>
-                                        <Text variant="h4"><b>Banned Powers</b></Text>
-                                        <List>
-                                            {bannedPowers.map((clan, index) => (
-                                                <List.Item key={index}>
-                                                    {clan}
-                                                </List.Item>
-                                            ))}
-                                        </List>
-                                    </Stack>
-                                </Center>
-                                : null}
-                            {bannedCeremonies.length > 0 ?
-                                <Center>
-                                    <Stack>
-                                        <Text variant="h4"><b>Banned Ceremonies</b></Text>
-                                        <List>
-                                            {bannedCeremonies.map((clan, index) => (
-                                                <List.Item key={index}>
-                                                    {clan}
-                                                </List.Item>
-                                            ))}
-                                        </List>
-                                    </Stack>
-                                </Center>
-                                : null}
-                            {bannedRituals.length > 0 ?
-                                <Center>
-                                    <Stack>
-                                        <Text variant="h4"><b>Banned Rituals</b></Text>
-                                        <List>
-                                            {bannedRituals.map((clan, index) => (
-                                                <List.Item key={index}>
-                                                    {clan}
-                                                </List.Item>
-                                            ))}
-                                        </List>
-                                    </Stack>
-                                </Center>
-                                : null}
-                            {bannedLoresheets.length > 0 ?
-                                <Center>
-                                    <Stack>
-                                        <Text variant="h4"><b>Banned Loresheets</b></Text>
-                                        <List>
-                                            {bannedLoresheets.map((clan, index) => (
-                                                <List.Item key={index}>
-                                                    {clan}
-                                                </List.Item>
-                                            ))}
-                                        </List>
-                                    </Stack>
-                                </Center>
-                                : null}
-                                </SimpleGrid>
+                                {bannedClans.length > 0 ?
+                                    <Center>
+                                        <Stack>
+                                            <Text variant="h4"><b>Banned Clans</b></Text>
+                                            <List>
+                                                {bannedClans.map((clan, index) => (
+                                                    <List.Item key={index}>
+                                                        {clan}
+                                                    </List.Item>
+                                                ))}
+                                            </List>
+                                        </Stack>
+                                    </Center>
+                                    : null}
+                                {bannedSects.length > 0 ?
+                                    <Center>
+                                        <Stack>
+                                            <Text variant="h4"><b>Banned Sects</b></Text>
+                                            <List>
+                                                {bannedSects.map((clan, index) => (
+                                                    <List.Item key={index}>
+                                                        {clan}
+                                                    </List.Item>
+                                                ))}
+                                            </List>
+                                        </Stack>
+                                    </Center>
+                                    : null}
+                                {bannedPredatorTypes.length > 0 ?
+                                    <Center>
+                                        <Stack>
+                                            <Text variant="h4"><b>Banned Predator Types</b></Text>
+                                            <List>
+                                                {bannedPredatorTypes.map((clan, index) => (
+                                                    <List.Item key={index}>
+                                                        {clan}
+                                                    </List.Item>
+                                                ))}
+                                            </List>
+                                        </Stack>
+                                    </Center>
+                                    : null}
+                                {bannedMerits.length > 0 ?
+                                    <Center>
+                                        <Stack>
+                                            <Text variant="h4"><b>Banned Merits</b></Text>
+                                            <List>
+                                                {bannedMerits.map((clan, index) => (
+                                                    <List.Item key={index}>
+                                                        {clan}
+                                                    </List.Item>
+                                                ))}
+                                            </List>
+                                        </Stack>
+                                    </Center>
+                                    : null}
+                                {bannedPowers.length > 0 ?
+                                    <Center>
+                                        <Stack>
+                                            <Text variant="h4"><b>Banned Powers</b></Text>
+                                            <List>
+                                                {bannedPowers.map((clan, index) => (
+                                                    <List.Item key={index}>
+                                                        {clan}
+                                                    </List.Item>
+                                                ))}
+                                            </List>
+                                        </Stack>
+                                    </Center>
+                                    : null}
+                                {bannedCeremonies.length > 0 ?
+                                    <Center>
+                                        <Stack>
+                                            <Text variant="h4"><b>Banned Ceremonies</b></Text>
+                                            <List>
+                                                {bannedCeremonies.map((clan, index) => (
+                                                    <List.Item key={index}>
+                                                        {clan}
+                                                    </List.Item>
+                                                ))}
+                                            </List>
+                                        </Stack>
+                                    </Center>
+                                    : null}
+                                {bannedRituals.length > 0 ?
+                                    <Center>
+                                        <Stack>
+                                            <Text variant="h4"><b>Banned Rituals</b></Text>
+                                            <List>
+                                                {bannedRituals.map((clan, index) => (
+                                                    <List.Item key={index}>
+                                                        {clan}
+                                                    </List.Item>
+                                                ))}
+                                            </List>
+                                        </Stack>
+                                    </Center>
+                                    : null}
+                                {bannedLoresheets.length > 0 ?
+                                    <Center>
+                                        <Stack>
+                                            <Text variant="h4"><b>Banned Loresheets</b></Text>
+                                            <List>
+                                                {bannedLoresheets.map((clan, index) => (
+                                                    <List.Item key={index}>
+                                                        {clan}
+                                                    </List.Item>
+                                                ))}
+                                            </List>
+                                        </Stack>
+                                    </Center>
+                                    : null}
+                            </SimpleGrid>
                         </Stack>
                     </Alert>
-                </Group>
+                </SimpleGrid>
 
                 <Center>
                     {venueId === "GI-000" ?
@@ -247,6 +247,7 @@ export default function GoodIntentionsDashboard() {
                                             Create Kindred for Venue
                                         </Button>
                                     </Center>
+                                    <Text mt={"xl"} ta="center" fz="xl" fw={700}>Characters</Text>
                                     <CharacterCard kindredList={userLocalKindred} writable={true} cols={globals.isPhoneScreen ? 1 : 3} />
                                 </Stack>
                                 :
@@ -259,7 +260,11 @@ export default function GoodIntentionsDashboard() {
                         </>
                         : <>
                             {userLocalKindred.length > 0 ?
-                                <CharacterCard kindredList={userLocalKindred} writable={true} cols={globals.isPhoneScreen ? 1 : 3} /> :
+                                <div>
+                                    <Text mt={"xl"} ta="center" fz="xl" fw={700}>Your Character</Text>
+                                    <CharacterCard kindredList={userLocalKindred} writable={true} cols={globals.isPhoneScreen ? 1 : 3} />
+                                </div>
+                                :
                                 <Button
                                     onClick={() => navigate(`/create-kindred/${venueId}`)}
                                 >
