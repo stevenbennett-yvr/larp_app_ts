@@ -59,10 +59,6 @@ const KindredPage = () => {
     return null
   }
 
-  if (JSON.stringify(initialKindred.touchstones) !== JSON.stringify(kindred.touchstones)) {
-    console.log(JSON.stringify(initialKindred.touchstones), JSON.stringify(kindred.touchstones))
-  }
-
   return (
     <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px', paddingBottom: globals.isPhoneScreen ? '60px' : '60px' }}>
       <Tabs variant="outline" defaultValue="print sheet" orientation={globals.isPhoneScreen ? "vertical" : "horizontal"}>

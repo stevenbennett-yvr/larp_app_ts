@@ -2,14 +2,15 @@ import { Kindred } from "../../data/GoodIntentions/types/Kindred";
 import { V5AttributesKey } from "../../data/GoodIntentions/types/V5Attributes";
 import { DisciplineKey } from "../../data/GoodIntentions/types/V5Disciplines";
 import { V5SkillsKey } from "../../data/GoodIntentions/types/V5Skills";
+import _ from 'lodash';
 
 const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
-    const changes: Array<{ category:string; field: string; type: string; oldValue?: number; newValue?: number }> = [];
+    const changes: Array<{ category: string; field: string; type: string; oldValue?: number; newValue?: number }> = [];
 
-    function compareItem(initialItem: any, currentItem: any, category:string, key: string) {
+    function compareItem(initialItem: any, currentItem: any, category: string, key: string) {
         if (initialItem.creationPoints !== currentItem.creationPoints) {
             changes.push({
-                category:category,
+                category: category,
                 field: key,
                 type: "Creation Points",
                 oldValue: initialItem.creationPoints,
@@ -18,7 +19,7 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
         }
         if (initialItem.experiencePoints !== currentItem.experiencePoints) {
             changes.push({
-                category:category,
+                category: category,
                 field: key,
                 type: "Experience Points",
                 oldValue: initialItem.experiencePoints,
@@ -27,7 +28,7 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
         }
         if (initialItem.freebiePoints !== currentItem.freebiePoints) {
             changes.push({
-                category:category,
+                category: category,
                 field: key,
                 type: "Freebie Points",
                 oldValue: initialItem.freebiePoints,
@@ -80,97 +81,141 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
     }
 
     function compareArraysOfObjectsByName(initialArray: any, currentArray: any, category: string) {
-        if (initialArray === currentArray) { return null }
+        if (_.isEqual(initialArray, currentArray)) { return null }
         initialArray.forEach((initialItem: any) => {
             let currentItem = currentArray.find((item: any) => item.name === initialItem.name);
-            if (!currentItem || !initialItem) { return null }
-            if (initialItem.creationPoints !== currentItem.creationPoints) {
-                changes.push({
-                    category:category,
-                    field: initialItem.name,
-                    type: "Creation Points",
-                    oldValue: initialItem.creationPoints,
-                    newValue: currentItem.creationPoints,
-                });
-            } if (initialItem.experiencePoints !== currentItem.experiencePoints) {
-                changes.push({
-                    category:category,
-                    field: initialItem.name,
-                    type: "Experience Points",
-                    oldValue: initialItem.experiencePoints,
-                    newValue: currentItem.experiencePoints,
-                });
-            } if (initialItem.freebiePoints !== currentItem.freebiePoints) {
-                changes.push({
-                    category:category,
-                    field: initialItem.name,
-                    type: "Freebie Points",
-                    oldValue: initialItem.freebiePoints,
-                    newValue: currentItem.freebiePoints,
-                });
-            } if (initialItem.havenPoints !== currentItem.havenPoints) {
-                changes.push({
-                    category:category,
-                    field: initialItem.name,
-                    type: "Haven Points",
-                    oldValue: initialItem.havenPoints,
-                    newValue: currentItem.havenPoints,
-                });
-            } if (initialItem.predatorTypeFreebiePoints !== currentItem.predatorTypeFreebiePoints) {
-                changes.push({
-                    category:category,
-                    field: initialItem.name,
-                    type: "Predator Type Freebie Points",
-                    oldValue: initialItem.predatorTypeFreebiePoints,
-                    newValue: currentItem.predatorTypeFreebiePoints,
-                });
-            } if (initialItem.loresheetFreebiePoints !== currentItem.loresheetFreebiePoints) {
-                changes.push({
-                    category:category,
-                    field: initialItem.name,
-                    type: "Lore Sheet Freebie Points",
-                    oldValue: initialItem.loresheetFreebiePoints,
-                    newValue: currentItem.loresheetFreebiePoints,
-                });
+            if (!currentItem) {
+                if (initialItem.creationPoints > 0) {
+                    changes.push({
+                        category: category,
+                        field: initialItem.name,
+                        type: "Creation Points",
+                        oldValue: initialItem.creationPoints,
+                        newValue: 0
+                    });
+                }
+                if (initialItem.freebiePoints > 0) {
+                    changes.push({
+                        category: category,
+                        field: initialItem.name,
+                        type: "Freebie Points",
+                        oldValue: initialItem.freebiePoints,
+                        newValue: 0
+                    });
+                }
+                if (initialItem.experiencePoints > 0) {
+                    changes.push({
+                        category: category,
+                        field: initialItem.name,
+                        type: "Experience Points",
+                        oldValue: initialItem.experiencePoints,
+                        newValue: 0
+                    });
+                } if (initialItem.havenPoint > 0) {
+                    changes.push({
+                        category: category,
+                        field: initialItem.name,
+                        type: "Haven Points",
+                        oldValue: initialItem.havenPoints,
+                        newValue: 0
+                    });
+                } if (initialItem.loresheetFreebiePoints > 0) {
+                    changes.push({
+                        category: category,
+                        field: initialItem.name,
+                        type: "Lore Sheet Freebie Points",
+                        oldValue: initialItem.loresheetFreebiePoints,
+                        newValue: 0
+                    });
+                }
             }
-            if (initialItem.advantages !== currentItem.advantages) {
-                compareArraysOfObjectsByName(initialItem.advantages, currentItem.advantages, `advantages`)
+            else {
+                if (initialItem.creationPoints !== currentItem.creationPoints) {
+                    changes.push({
+                        category: category,
+                        field: initialItem.name,
+                        type: "Creation Points",
+                        oldValue: initialItem.creationPoints,
+                        newValue: currentItem.creationPoints,
+                    });
+                } if (initialItem.experiencePoints !== currentItem.experiencePoints) {
+                    changes.push({
+                        category: category,
+                        field: initialItem.name,
+                        type: "Experience Points",
+                        oldValue: initialItem.experiencePoints,
+                        newValue: currentItem.experiencePoints,
+                    });
+                } if (initialItem.freebiePoints !== currentItem.freebiePoints) {
+                    changes.push({
+                        category: category,
+                        field: initialItem.name,
+                        type: "Freebie Points",
+                        oldValue: initialItem.freebiePoints,
+                        newValue: currentItem.freebiePoints,
+                    });
+                } if (initialItem.havenPoints !== currentItem.havenPoints) {
+                    changes.push({
+                        category: category,
+                        field: initialItem.name,
+                        type: "Haven Points",
+                        oldValue: initialItem.havenPoints,
+                        newValue: currentItem.havenPoints,
+                    });
+                } if (initialItem.predatorTypeFreebiePoints !== currentItem.predatorTypeFreebiePoints) {
+                    changes.push({
+                        category: category,
+                        field: initialItem.name,
+                        type: "Predator Type Freebie Points",
+                        oldValue: initialItem.predatorTypeFreebiePoints,
+                        newValue: currentItem.predatorTypeFreebiePoints,
+                    });
+                } if (initialItem.loresheetFreebiePoints !== currentItem.loresheetFreebiePoints) {
+                    changes.push({
+                        category: category,
+                        field: initialItem.name,
+                        type: "Lore Sheet Freebie Points",
+                        oldValue: initialItem.loresheetFreebiePoints,
+                        newValue: currentItem.loresheetFreebiePoints,
+                    });
+                }
             }
         });
 
         currentArray.forEach((currentItem: any) => {
             const initialItem = initialArray.find((item: any) => item.name === currentItem.name);
+
+            // Item is newly added in the current array
             if (!initialItem) {
-                // Item is newly added in the current array
                 if (currentItem.creationPoints > 0) {
                     changes.push({
-                        category:category,
+                        category: category,
                         field: currentItem.name,
                         type: "Creation Points",
                         oldValue: 0,
                         newValue: currentItem.creationPoints
                     });
                 }
-                 if (currentItem.freebiePoints > 0) {
+                if (currentItem.freebiePoints > 0) {
                     changes.push({
-                        category:category,
+                        category: category,
                         field: currentItem.name,
                         type: "Freebie Points",
                         oldValue: 0,
                         newValue: currentItem.freebiePoints
                     });
                 }
-                 if (currentItem.experiencePoints > 0) {
+                if (currentItem.experiencePoints > 0) {
                     changes.push({
-                        category:category,
+                        category: category,
                         field: currentItem.name,
                         type: "Experience Points",
                         oldValue: 0,
                         newValue: currentItem.experiencePoints
                     });
-                }  if (currentItem.havenPoint > 0) {
+                } if (currentItem.havenPoint > 0) {
                     changes.push({
-                        category:category,
+                        category: category,
                         field: currentItem.name,
                         type: "Haven Points",
                         oldValue: 0,
@@ -178,20 +223,11 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
                     });
                 } if (currentItem.loresheetFreebiePoints > 0) {
                     changes.push({
-                        category:category,
+                        category: category,
                         field: currentItem.name,
                         type: "Lore Sheet Freebie Points",
                         oldValue: 0,
                         newValue: currentItem.loresheetFreebiePoints
-                    });
-                    
-                } if (currentItem.predatorTypeFreebiePoints > 0) {
-                    changes.push({
-                        category:category,
-                        field: currentItem.name,
-                        type: "Predator Type Freebie Points",
-                        oldValue: 0,
-                        newValue: currentItem.predatorTypeFreebiePoints
                     });
                 }
             }
@@ -199,13 +235,13 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
     }
 
     function compareArraysOfObjects(initialArray: any, currentArray: any, category: string) {
-        if (initialArray === currentArray) {return null}
+        if (_.isEqual(initialArray, currentArray)) { return null }
         initialArray.forEach((initialItem: any) => {
             let currentItem = currentArray.find((item: any) => item.id === initialItem.id);
             if (!currentItem || !initialItem) { return null }
             if (initialItem.creationPoints !== currentItem.creationPoints) {
                 changes.push({
-                    category:category,
+                    category: category,
                     field: initialItem.name,
                     type: "Creation Points",
                     oldValue: initialItem.creationPoints,
@@ -213,7 +249,7 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
                 });
             } if (initialItem.experiencePoints !== currentItem.experiencePoints) {
                 changes.push({
-                    category:category,
+                    category: category,
                     field: initialItem.name,
                     type: "Experience Points",
                     oldValue: initialItem.experiencePoints,
@@ -221,7 +257,7 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
                 });
             } if (initialItem.freebiePoints !== currentItem.freebiePoints) {
                 changes.push({
-                    category:category,
+                    category: category,
                     field: initialItem.name,
                     type: "Freebie Points",
                     oldValue: initialItem.freebiePoints,
@@ -229,7 +265,7 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
                 });
             } if (initialItem.havenPoints !== currentItem.havenPoints) {
                 changes.push({
-                    category:category,
+                    category: category,
                     field: initialItem.name,
                     type: "Haven Points",
                     oldValue: initialItem.havenPoints,
@@ -237,7 +273,7 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
                 });
             } if (initialItem.predatorTypeFreebiePoints !== currentItem.predatorTypeFreebiePoints) {
                 changes.push({
-                    category:category,
+                    category: category,
                     field: initialItem.name,
                     type: "Predator Type Freebie Points",
                     oldValue: initialItem.predatorTypeFreebiePoints,
@@ -245,7 +281,7 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
                 });
             } if (initialItem.loresheetFreebiePoints !== currentItem.loresheetFreebiePoints) {
                 changes.push({
-                    category:category,
+                    category: category,
                     field: initialItem.name,
                     type: "Lore Sheet Freebie Points",
                     oldValue: initialItem.loresheetFreebiePoints,
@@ -263,33 +299,33 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
                 // Item is newly added in the current array
                 if (currentItem.creationPoints > 0) {
                     changes.push({
-                        category:category,
+                        category: category,
                         field: currentItem.name,
                         type: "Creation Points",
                         oldValue: 0,
                         newValue: currentItem.creationPoints
                     });
                 }
-                 if (currentItem.freebiePoints > 0) {
+                if (currentItem.freebiePoints > 0) {
                     changes.push({
-                        category:category,
+                        category: category,
                         field: currentItem.name,
                         type: "Freebie Points",
                         oldValue: 0,
                         newValue: currentItem.freebiePoints
                     });
                 }
-                 if (currentItem.experiencePoints > 0) {
+                if (currentItem.experiencePoints > 0) {
                     changes.push({
-                        category:category,
+                        category: category,
                         field: currentItem.name,
                         type: "Experience Points",
                         oldValue: 0,
                         newValue: currentItem.experiencePoints
                     });
-                }  if (currentItem.havenPoint > 0) {
+                } if (currentItem.havenPoint > 0) {
                     changes.push({
-                        category:category,
+                        category: category,
                         field: currentItem.name,
                         type: "Haven Points",
                         oldValue: 0,
@@ -297,16 +333,16 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
                     });
                 } if (currentItem.loresheetFreebiePoints > 0) {
                     changes.push({
-                        category:category,
+                        category: category,
                         field: currentItem.name,
                         type: "Lore Sheet Freebie Points",
                         oldValue: 0,
                         newValue: currentItem.loresheetFreebiePoints
                     });
-                    
+
                 } if (currentItem.predatorTypeFreebiePoints > 0) {
                     changes.push({
-                        category:category,
+                        category: category,
                         field: currentItem.name,
                         type: "Predator Type Freebie Points",
                         oldValue: 0,
@@ -321,9 +357,9 @@ const changeLog = (initialKindred: Kindred, kindred: Kindred): any[] => {
     }
 
     compareArraysOfObjectsByName(initialKindred.powers, kindred.powers, "Powers")
-    compareArraysOfObjects(initialKindred.rituals, kindred.rituals, "Rituals");
-    compareArraysOfObjects(initialKindred.ceremonies, kindred.ceremonies, "Ceremonies");
-    compareArraysOfObjects(initialKindred.formulae, kindred.formulae, "Formulae");
+    compareArraysOfObjectsByName(initialKindred.rituals, kindred.rituals, "Rituals");
+    compareArraysOfObjectsByName(initialKindred.ceremonies, kindred.ceremonies, "Ceremonies");
+    compareArraysOfObjectsByName(initialKindred.formulae, kindred.formulae, "Formulae");
     compareArraysOfObjects(initialKindred.backgrounds, kindred.backgrounds, "Backgrounds");
     compareArraysOfObjects(initialKindred.coterie.territoryContributions, kindred.coterie.territoryContributions, "Territory");
     compareArraysOfObjectsByName(initialKindred.loresheet.benefits, kindred.loresheet.benefits, `${kindred.loresheet.name} Benefit`)

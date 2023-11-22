@@ -20,19 +20,22 @@ const LogPage = ({ kindred }: LogPageProps) => {
 
     logEntries.sort((a, b) => a.sortableDate - b.sortableDate);
 
+    const rows = logEntries.map(({ originalDate, log }, index) => {
+        const difference = log.newValue - log.oldValue;
+        const color = difference > 0 ? 'green' : difference < 0 ? 'red' : 'black';
 
-        console.log(logEntries)
-
-    const rows = logEntries.map(({ originalDate, log }, index) => (
-        <tr key={index}>
-          <td>{originalDate.toLocaleString()}</td>
-          <td>{log.category}</td>
-          <td>{log.item}</td>
-          <td>{log.newValue}</td>
-          <td>{log.oldValue}</td>
-          <td></td>
-        </tr>
-      ));
+        return (
+            <tr key={index}>
+                <td>{originalDate.toLocaleString()}</td>
+                <td>{log.category}</td>
+                <td>{log.field}</td>
+                <td>{log.type}</td>
+                <td style={{ color }}>
+                    {difference > 0 ? `+${difference}` : difference}
+                </td>
+            </tr>
+        )
+    });
 
     return (
         <Table>
@@ -41,8 +44,7 @@ const LogPage = ({ kindred }: LogPageProps) => {
                     <th>Date</th>
                     <th>Category</th>
                     <th>Item</th>
-                    <th>Old Value</th>
-                    <th>New Value</th>
+                    <th>Field</th>
                     <th>Change</th>
                 </tr>
             </thead>
