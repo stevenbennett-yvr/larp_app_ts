@@ -78,8 +78,8 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep, venueData }: Mer
 
   const thinBloodStyle =
     !(getThinBloodPoints(kindred).totalFlawPoints > 0 &&
-    getThinBloodPoints(kindred).totalMeritPoints > 0 &&
-    getThinBloodPoints(kindred).totalFlawPoints === getThinBloodPoints(kindred).totalMeritPoints)
+      getThinBloodPoints(kindred).totalMeritPoints > 0 &&
+      getThinBloodPoints(kindred).totalFlawPoints === getThinBloodPoints(kindred).totalMeritPoints)
       ? { fontSize: globals.smallFontSize }
       : { color: "grey" };
 
@@ -87,84 +87,95 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep, venueData }: Mer
   const isDiscipline = kindred.meritsFlaws.some((m) => m.name === "Discipline Affinity");
   const isCursed = kindred.meritsFlaws.some((m) => m.name === "Clan Curse");
 
-    return (
-        <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px' }}>
+  return (
+    <Center style={{ paddingTop: globals.isPhoneScreen ? '100px' : '100px' }}>
+      <Stack>
+        <ScrollArea h={height - 140} pb={20}>
+          <Text align="center" mt={"xl"} ta="center" fz="xl" fw={700}>Merits & Flaws</Text>
+          {kindred.clan === "Thin-Blood" ?
             <Stack>
-                <ScrollArea h={height - 140} pb={20}>
-                    <Text align="center" mt={"xl"} ta="center" fz="xl" fw={700}>Merits & Flaws</Text>
-                    {kindred.clan === "Thin-Blood" ?
-                    <Stack>
-                        <Text style={thinBloodStyle}>
-                            Thin-blood characters must choose between 1 to 3 Thin-Blood Merits and an equal number of Thin-Blood Flaws.
-                        </Text>
-                        <Group position="apart">
-                          <Text><b>Thin-Blood Merits picked:</b> {getThinBloodPoints(kindred).totalMeritPoints}</Text>
-                          <Text><b>Thin-Blood Flaws picked:</b> {getThinBloodPoints(kindred).totalFlawPoints}</Text>
-                        </Group>
-                      </Stack> :
-                        <></>}
-                    <Center>
-                        <MeritsGrid kindred={kindred} setKindred={setKindred} type="creationPoints" venueData={venueData} />
-                    </Center>
+              <Text style={thinBloodStyle}>
+                Thin-blood characters must choose between 1 to 3 Thin-Blood Merits and an equal number of Thin-Blood Flaws.
+              </Text>
+              <Group position="apart">
+                <Text><b>Thin-Blood Merits picked:</b> {getThinBloodPoints(kindred).totalMeritPoints}</Text>
+                <Text><b>Thin-Blood Flaws picked:</b> {getThinBloodPoints(kindred).totalFlawPoints}</Text>
+              </Group>
+            </Stack> :
+            <></>}
+          <Center>
+            <MeritsGrid kindred={kindred} setKindred={setKindred} type="creationPoints" venueData={venueData} />
+          </Center>
 
-                    <FormulaPicker kindred={kindred} setKindred={setKindred} nextStep={nextStep} modalOpened={modalOpen} closeModal={handleCloseModal} />
+          <FormulaPicker kindred={kindred} setKindred={setKindred} nextStep={nextStep} modalOpened={modalOpen} closeModal={handleCloseModal} />
 
 
-                </ScrollArea>
-                <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
-                    <Group>
-                        <Button.Group>
-                            <Button
-                                style={{ margin: "5px" }}
-                                color="gray"
-                                onClick={backStep}
-                            >
-                                Back
-                            </Button>
-                            <Button
-                                style={{ margin: "5px" }}
-                                color="gray"
-                                onClick={() => {
-                                    if (kindred.clan === "Thin-Blood" && !isDiscipline) {
-                                        const updatedDisciplines = { ...kindred.disciplines };
-                                        for (const disciplineKey in updatedDisciplines) {
-                                            let key = disciplineKey as DisciplineKey
-                                            if (key !== "thin-blood alchemy") {
-                                                updatedDisciplines[key] = {
-                                                    ...updatedDisciplines[key],
-                                                    creationPoints: 0,
-                                                    freebiePoints: 0,
-                                                };
-                                            }
-                                        }
-                                        setKindred({
-                                            ...kindred,
-                                            disciplines: updatedDisciplines,
-                                            powers: [],
-                                        });
-                                        nextStep();
-                                    } else if (kindred.clan === "Ghoul") {
-                                        // Handle the Ghoul case
-                                        //setGhoulModalOpen(true);
-                                    } else if (!(isAlchemist || isDiscipline || isCursed)) {
-                                        // Handle other conditions
-                                        nextStep();
-                                    } else {
-                                        // Handle the default case
-                                        setModalOpen(true);
-                                    }
-                                }}
-                                disabled={getTotalPoints(kindred).totalMeritPoints > 10 || getTotalPoints(kindred).totalMeritPoints !== getTotalPoints(kindred).totalFlawPoints || getThinBloodPoints(kindred).totalFlawPoints !== getThinBloodPoints(kindred).totalMeritPoints || (kindred.clan === "Thin-Blood" && getThinBloodPoints(kindred).totalMeritPoints === 0 && getThinBloodPoints(kindred).totalFlawPoints === 0)}
-                            >
-                                Next
-                            </Button>
-                            <Text fz={globals.smallerFontSize} style={{ margin: "10px" }}>Total Merits: {getTotalPoints(kindred).totalMeritPoints}, Total Flaws: {getTotalPoints(kindred).totalFlawPoints}</Text>
-                        </Button.Group>
-                    </Group>
-                </Alert>
-            </Stack>
-        </Center>
-    )
+        </ScrollArea>
+        <Alert color="dark" variant="filled" radius="xs" style={{ padding: "0px", position: "fixed", bottom: "0px", left: isPhoneScreen ? "0px" : isSmallScreen ? "15%" : "30%" }}>
+          <Group>
+            <Button.Group>
+              <Button
+                style={{ margin: "5px" }}
+                color="gray"
+                onClick={backStep}
+              >
+                Back
+              </Button>
+              <Button
+                style={{ margin: "5px" }}
+                color="gray"
+                onClick={() => {
+                  if (kindred.clan === "Thin-Blood" && !isDiscipline) {
+                    const updatedDisciplines = { ...kindred.disciplines };
+                    for (const disciplineKey in updatedDisciplines) {
+                      let key = disciplineKey as DisciplineKey
+                      if (key !== "thin-blood alchemy") {
+                        updatedDisciplines[key] = {
+                          ...updatedDisciplines[key],
+                          creationPoints: 0,
+                          freebiePoints: 0,
+                        };
+                      }
+                    }
+                    setKindred({
+                      ...kindred,
+                      disciplines: updatedDisciplines,
+                      powers: [],
+                    });
+                  } if (kindred.clan === "Thin-Blood" && !isAlchemist) {
+                    const updatedDisciplines = { ...kindred.disciplines };
+                    updatedDisciplines["thin-blood alchemy"] = {
+                      ...updatedDisciplines["thin-blood alchemy"],
+                      creationPoints: 0,
+                      freebiePoints: 0,
+                    };
+                    setKindred({
+                      ...kindred,
+                      disciplines: updatedDisciplines,
+                      formulae: [],
+                    });
+                  } if (kindred.clan === "Ghoul") {
+                    // Handle the Ghoul case
+                    //setGhoulModalOpen(true);
+                  } if (!(isAlchemist || isDiscipline || isCursed)) {
+                    // Handle other conditions
+                    nextStep();
+                  } else {
+                    // Handle the default case
+                    setModalOpen(true);
+                  }
+                }}
+                disabled={getTotalPoints(kindred).totalMeritPoints > 10 || getTotalPoints(kindred).totalMeritPoints !== getTotalPoints(kindred).totalFlawPoints || getThinBloodPoints(kindred).totalFlawPoints !== getThinBloodPoints(kindred).totalMeritPoints || (kindred.clan === "Thin-Blood" && getThinBloodPoints(kindred).totalMeritPoints === 0 && getThinBloodPoints(kindred).totalFlawPoints === 0)}
+              >
+                Next
+              </Button>
+              <Text fz={globals.smallerFontSize} style={{ margin: "10px" }}>Total Merits: {getTotalPoints(kindred).totalMeritPoints}, Total Flaws: {getTotalPoints(kindred).totalFlawPoints}</Text>
+            </Button.Group>
+          </Group>
+        </Alert>
+      </Stack>
+    </Center>
+  )
 
 }
 

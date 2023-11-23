@@ -145,7 +145,6 @@ export const v5DisciplineLevel = (kindred:Kindred, discipline:DisciplineKey) => 
     let inClan = disciplinesForClan.includes(discipline)
     let isCaitiff = clan === "Caitiff"
     let isAlchemy = discipline === "thin-blood alchemy"
-    let isAlchemist = kindred.meritsFlaws.some((m) => m.name === "Thin-Blood Alchemist")
 
     const xpCost = inClan || isAlchemy? v5xp.inClanDisciplines : isCaitiff? v5xp.caitiffDiscipline : v5xp.outOfClanDiscipline
 
@@ -153,13 +152,13 @@ export const v5DisciplineLevel = (kindred:Kindred, discipline:DisciplineKey) => 
     let totalXpNeeded = 0
     let pastXpNeeded = [0]
     if (xp === 0) {
-      let level = creationPoints + freebiePoints + (isAlchemy&&isAlchemist?1:0);
+      let level = creationPoints + freebiePoints;
       let totalXpNeeded = (level + 1) * xpCost;
       pastXpNeeded.push(totalXpNeeded)
       return {level, totalXpNeeded, pastXpNeeded};
     } 
     else {
-      let level = creationPoints + freebiePoints + (isAlchemy&&isAlchemist?1:0);
+      let level = creationPoints + freebiePoints;
       let xpNeeded = (level + 1) * xpCost;
       totalXpNeeded += xpNeeded
       pastXpNeeded.push(totalXpNeeded)

@@ -1237,7 +1237,6 @@ export const updateMeritsFlaws = (kindred:Kindred, benefit:Benefit) => {
             filteredMerits = filteredMerits.filter((merit: any) => merit.id !== m.id);
         });
     }
-    console.log(updatedMerits)
     return { updatedMerits, filteredMerits };
 }
 

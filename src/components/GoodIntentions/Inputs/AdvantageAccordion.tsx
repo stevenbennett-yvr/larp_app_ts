@@ -72,6 +72,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, oRef, type, benefitData
         const isCatenating = kindred.meritsFlaws.some((mf) => mf.name === "Catenating blood")
         const canGhoul = !isCatenating && advantage.name === "Retainer" && (kindred.clan === "Thin-Blood")
         const starPowerBool = bRef.name === "Fame" && advantage.name === "Star Power" && v5BackgroundLevel(bRef).level < 3
+        const wallStreetBool = bRef.name === "Resources" && advantage.name === "Wall Street Wizard" && v5BackgroundLevel(bRef).level < 3
         const havenBoolean = bRef.name === "Haven" && v5BackgroundLevel(bRef).level <= v5AdvantageLevel(advantageRef).level
         const { totalXpNeeded } = v5BackgroundLevel(bRef)
         let existingAdvantage = oRef?.advantages.find(a => a.name === advantage.name)
@@ -83,7 +84,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, oRef, type, benefitData
                 return (
                     <NumberInput
                         label="Creation Points"
-                        disabled={starPowerBool || canGhoul || disabled}
+                        disabled={starPowerBool || wallStreetBool || canGhoul || disabled}
                         value={v5AdvantageLevel(advantageRef).level}
                         style={{ width: "100px" }}
                         min={advantageRef.havenPoints ? advantageRef.havenPoints + advantageRef.freebiePoints + advantageRef.loresheetFreebiePoints : advantageRef.freebiePoints + advantageRef.loresheetFreebiePoints}
@@ -101,7 +102,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, oRef, type, benefitData
                 return (
                     <NumberInput
                         label="Loresheet Freebie Points"
-                        disabled={isDisadvantage || disabled}
+                        disabled={isDisadvantage || wallStreetBool || disabled}
                         value={advantageRef.loresheetFreebiePoints + (existingAdvantage ? v5AdvantageLevel(existingAdvantage).level : 0)}
                         min={existingAdvantage && existingAdvantage.name === advantageRef.name ? v5AdvantageLevel(existingAdvantage).level : 0}
                         step={advantageStep(advantageRef, backgroundInfo)}
@@ -124,7 +125,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, oRef, type, benefitData
                 return (
                     <NumberInput
                         label="Predator Type Freebie Points"
-                        disabled={isDisadvantage || disabled}
+                        disabled={isDisadvantage || wallStreetBool || disabled}
                         value={advantageRef.loresheetFreebiePoints + (existingAdvantage ? v5AdvantageLevel(existingAdvantage).level : 0)}
                         min={existingAdvantage && existingAdvantage.name === advantageRef.name ? v5AdvantageLevel(existingAdvantage).level : 0}
                         step={advantageStep(advantageRef, backgroundInfo)}
@@ -147,7 +148,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, oRef, type, benefitData
                 return (
                     <NumberInput
                         label="Freebie Points"
-                        disabled={isDisadvantage || disabled}
+                        disabled={isDisadvantage || wallStreetBool || disabled}
                         value={advantageRef.freebiePoints}
                         min={0}
                         step={advantageStep(advantageRef, backgroundInfo)}
@@ -167,7 +168,7 @@ const AdvantageAccordion = ({ kindred, setKindred, bRef, oRef, type, benefitData
                 );
             case 'experiencePoints':
                 const disabledPlus: boolean = isDisadvantage ? 0 === v5AdvantageLevel(advantageRef).level
-                    : havenBoolean || starPowerBool || disabled || (advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level)
+                    : havenBoolean || starPowerBool || wallStreetBool || disabled || (advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level)
                 const max = isDisadvantage ? 0 === v5AdvantageLevel(advantageRef).level ? advantageRef.experiencePoints : undefined
                     : (advantage.cost[advantage.cost.length - 1] === v5AdvantageLevel(advantageRef).level) || havenBoolean ? advantageRef.experiencePoints : undefined
                 return (
