@@ -10,6 +10,8 @@ import calculateNextGameDate from "../../../utils/calculateNextGameDate";
 import { Calendar } from '@mantine/dates';
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 
+import VtmCarousel from "./GoodIntentionsCarousel";
+
 type DashboardProps = {
     venueData: GoodIntentionsVenueStyleSheet
     userLocalKindred: Kindred[]
@@ -34,7 +36,8 @@ export const DashboardCore = ({ venueData, userLocalKindred }: DashboardProps) =
             setting,
             scheduleDay,
             scheduleWeek,
-            notes
+            notes,
+            images
         },
         goodIntentionsVariables: {
             sect,
@@ -58,6 +61,9 @@ export const DashboardCore = ({ venueData, userLocalKindred }: DashboardProps) =
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '100px' }}>
             <Stack>
+                {images.length > 0 ?
+                <VtmCarousel images={images} />
+                : <></> }
                 <SimpleGrid cols={2}>
                     <Alert variant="light" color="gray">
                         <Stack>

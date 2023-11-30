@@ -20,6 +20,7 @@ export const venueStyleSheetSchema = z.object({
     scheduleDay: z.number(),
     scheduleWeek: z.number(),
     documents: z.string().array(),
+    images: z.string().array(),
 })
 
 export const goodIntentionsVariablesSchema = z.object({
@@ -67,6 +68,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleDay: 6,
             scheduleWeek: 1,
             documents: [],
+            images: [],
         },
         goodIntentionsVariables: {
             vssId: "GI-001",
@@ -105,6 +107,8 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleDay: 6,
             scheduleWeek: 4,
             documents: [],
+            images: [],
+
         },
         goodIntentionsVariables: {
             vssId: "GI-000",
@@ -143,6 +147,8 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleDay: 6,
             scheduleWeek: 4,
             documents: [],
+            images: [],
+
         },
         goodIntentionsVariables: {
             vssId: "GI-015",
@@ -181,6 +187,8 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleDay: 6,
             scheduleWeek: 1,
             documents: [],
+            images: [],
+
         },
         goodIntentionsVariables: {
             vssId: "GI-024",
@@ -219,6 +227,8 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleDay: 6,
             scheduleWeek: 3,
             documents: [],
+            images: [],
+
         },
         goodIntentionsVariables: {
             vssId: "GI-102",
@@ -262,6 +272,8 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleDay: 6,
             scheduleWeek: 3,
             documents: [],
+            images: [],
+
         },
         goodIntentionsVariables: {
             vssId: "GI-108",
@@ -325,6 +337,8 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleDay: 6,
             scheduleWeek: 2,
             documents: [],
+            images: [],
+
         },
         goodIntentionsVariables: {
             vssId: "GI-121",
@@ -375,6 +389,7 @@ export const TatteredVeilVSSs: TatteredVeilStyleSheet[] = [
             scheduleDay: 6,
             scheduleWeek: 4,
             documents: ["https://docs.google.com/document/d/16xm-3sEOckOFiPGRpXHOljvaHRFBvChy_RGbXmln8gE"],
+            images: [],
         }
     }
     ]
