@@ -16,17 +16,18 @@ const V5Backstory = ({ kindred, setKindred }: MageBackgroundProps) => {
 
     return (
         <Center>
-            <Alert color="gray" style={{maxWidth:"700px"}}>
+            <Alert color="gray" style={{ maxWidth: "700px" }}>
                 <Text fz="lg" color="dimmed">
                     <FontAwesomeIcon icon={faBookOpen} /> History
                 </Text>
-                <TipTapRTE html={kindred.backstory.history} setHTML={(val) => setKindred({
-                    ...kindred,
-                    backstory: {
-                        ...kindred.backstory,
-                        history: val,
-                    },
-                })} />
+                <TipTapRTE
+                    html={kindred.backstory.history} setHTML={(val) => setKindred({
+                        ...kindred,
+                        backstory: {
+                            ...kindred.backstory,
+                            history: val,
+                        },
+                    })} />
                 <Text fz="lg" color="dimmed">
                     <FontAwesomeIcon icon={faList} /> Goals
                 </Text>

@@ -24,6 +24,22 @@ export const predatorTypeNameSchema = z.union([
 ])
 export type PredatorTypeName = z.infer<typeof predatorTypeNameSchema>
 
+export const allPredatorTypes : PredatorTypeName[] = [
+    "Alleycat",
+    "Bagger",
+    "Cleaver",
+    "Consentualist",
+    "Extortionist",
+    "Farmer",
+    "Ferryman",
+    "Graverobber",
+    "Hitcher",
+    "Osiris",
+    "Sandman",
+    "Scene Queen",
+    "Siren",
+]
+
 export const selectableBackgroundsSchema = z.object({
     options: v5BackgroundRefSchema.array(),
     totalPoints: z.number().int(),

@@ -6,6 +6,7 @@ export const userSchema = z.object({
     email: z.string(),
     uid: z.string(),
     mc: z.number(),
+    roles: z.string().array(),
 })
 
 export type User = z.infer<typeof userSchema>
@@ -17,5 +18,6 @@ export const getEmptyUser = (): User => {
         email: "",
         uid: "",
         mc: 0,
+        roles: [],
     }
 }

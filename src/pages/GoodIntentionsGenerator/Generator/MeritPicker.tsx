@@ -154,9 +154,6 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep, venueData }: Mer
                       disciplines: updatedDisciplines,
                       formulae: [],
                     });
-                  } if (kindred.clan === "Ghoul") {
-                    // Handle the Ghoul case
-                    //setGhoulModalOpen(true);
                   } if (!(isAlchemist || isDiscipline || isCursed)) {
                     // Handle other conditions
                     nextStep();

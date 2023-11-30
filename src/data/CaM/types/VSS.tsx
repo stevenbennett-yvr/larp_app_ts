@@ -9,6 +9,7 @@ export const venueStyleSheetSchema = z.object({
     name: z.string(),
     chronicle: chronicleNameSchema,
     domainCode: z.string(),
+    storyteller: z.string(),
     staff: z.string().array().optional(),
     theme: z.string(),
     mood: z.string(),
@@ -38,6 +39,7 @@ export const goodIntentionsVariablesSchema = z.object({
     bannedRituals: z.string().array(),
     bannedCeremonies: z.string().array(),
     bannedLoresheets: z.string().array(),
+    bannedFormulae: z.string().array(),
 })
 
 const goodIntentionsVSSSchema = z.object({
@@ -54,6 +56,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             name: "Minutes to Midnight",
             chronicle: "Good Intentions",
             domainCode: "CND-001",
+            storyteller: "vst.masq.001",
             staff: ["vst.masq.001@canadaatmidnight.com"],
             theme: "Survival, Faith, Loyalty, and Corruption",
             mood: "Tense and Excessive",
@@ -82,6 +85,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             bannedCeremonies:[],
             bannedRituals:[],
             bannedLoresheets:[],
+            bannedFormulae:[],
         }
     },
     {
@@ -90,6 +94,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             name: "Twisted Realities",
             chronicle: "Good Intentions",
             domainCode: "CND-000",
+            storyteller: "vst.masq.000",
             staff: ["vst.masq.000@canadaatmidnight.com"],
             theme: "Mystery, Deception, and Illusion",
             mood: "Eerie and Uncanny",
@@ -118,6 +123,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             bannedCeremonies:[],
             bannedRituals:[],
             bannedLoresheets:[],
+            bannedFormulae:[],
         }
     },
     {
@@ -126,6 +132,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             name: "Belli Nebula",
             chronicle: "Good Intentions",
             domainCode: "CND-015",
+            storyteller: "vst.masq.015",
             staff: ["vst.masq.015@canadaatmidnight.com"],
             theme: "Too many mouths, not enough food. Personal Horror. Real consequences, for actions.",
             mood: "Street by street, story by story Montreal will be built.",
@@ -154,6 +161,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             bannedCeremonies:[],
             bannedRituals:[],
             bannedLoresheets:[],
+            bannedFormulae:[],
         }
     },
     {
@@ -162,6 +170,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             name: "",
             chronicle: "Good Intentions",
             domainCode: "CND-024",
+            storyteller: "vst.masq.024",
             staff: ["vst.masq.024@canadaatmidnight.com"],
             theme: "Personal Horror, Control, Responsibility, Morality.",
             mood: "Introspective, tense.",
@@ -190,6 +199,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             bannedCeremonies:[],
             bannedRituals:[],
             bannedLoresheets:[],
+            bannedFormulae:[],
         }
     },
     {
@@ -198,6 +208,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             name: "Emerald and Ivory",
             chronicle: "Good Intentions",
             domainCode: "CND-102",
+            storyteller: "vst.masq.102",
             staff: ["vst.masq.102@canadaatmidnight.com"],
             theme: "Survival; Class Warfare; Religion; Prejudices",
             mood: "Tension; Envy; Paranoia",
@@ -226,6 +237,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             bannedCeremonies:[],
             bannedRituals:[],
             bannedLoresheets:[],
+            bannedFormulae:[],
         }
     },
     {
@@ -234,6 +246,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             name: "Back to Basics",
             chronicle: "Good Intentions",
             domainCode: "CND-108",
+            storyteller: "vst.masq.108",
             staff: ["vst.masq.108@canadaatmidnight.com"],
             theme: "<ul> <li>General retreat to proven strategies</li> <li>Rejection of technology and innovation</li> <li>Competing interests from outside and within</li> <li>Petty court insults and retributions</li> <li>The dubious nature yet pervasive need for favors as currency</li> <li>The things that bind us to our humanity and what happens when we lose them.</li> <li>Theocracy vs Separation of Church and State</li> <li>Staling relationships and the bindings that chafe</li> <li>A world without heroes</li> <li>Independence vs safety</li> </ul>",
             mood: "",
@@ -267,6 +280,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             bannedCeremonies:[],
             bannedRituals:[],
             bannedLoresheets:[],
+            bannedFormulae:[],
         }
     },
     {
@@ -275,6 +289,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             name: "Dark Frontier",
             chronicle: "Good Intentions",
             domainCode: "CND-121",
+            storyteller: "vst.masq.121",
             staff: ["vst.masq.121@canadaatmidnight.com"],
             theme: "Reconstruction; Survival; Political (game related); Paranoia; Supernatural Incursion",
             mood: "Grim Dark, Gothic Horror, Ambition",
@@ -328,6 +343,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             bannedCeremonies:[],
             bannedRituals:[],
             bannedLoresheets:[],
+            bannedFormulae:[],
         }
     },
 ]
@@ -345,6 +361,7 @@ export const TatteredVeilVSSs: TatteredVeilStyleSheet[] = [
             name: "Haunted Streets",
             chronicle: "Tattered Veil",
             domainCode: "CND-001",
+            storyteller: "vst.tattered.001",
             staff: ["vst.tattered.001@canadaatmidnight.com"],
             theme: "Unforeseen Consequences and Hubris",
             mood: "Dreams and Nightmares. Optimism meets crushing responsibility. Lingering doubt.",

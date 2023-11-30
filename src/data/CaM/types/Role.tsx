@@ -1,8 +1,7 @@
 import { z } from "zod"
 
 /* 
-
-Domain Roles:
+Venue Roles:
     Member
     Election Officer
     Complaints Reviewer
@@ -18,9 +17,52 @@ Global Roles:
 
 */
 
-export const roleSchema =  {
+export const roleSchema =  z.object({
     id: z.string(),
-    uid: z.string(),
     title: z.string(),
-    email: z.string(), // use Email as Outgoing one-to-one ID for now.
-}
+})
+
+export type Role = z.infer<typeof roleSchema>
+
+export const Roles: Role[] = [
+    {
+        id: "good.intentions",
+        title: "Chronicle Storyteller",
+    },
+    {
+        id: "vst.masq.000",
+        title: "Venue Storyteller",
+    },
+    {
+        id: "vst.masq.000",
+        title: "Venue Storyteller",
+    },
+    {
+        id: "vst.masq.001",
+        title: "Venue Storyteller",
+    },
+    {
+        id: "vst.masq.015",
+        title: "Venue Storyteller",
+    },
+    {
+        id: "vst.masq.024",
+        title: "Venue Storyteller",
+    },
+    {
+        id: "vst.masq.102",
+        title: "Venue Storyteller",
+    },
+    {
+        id: "vst.masq.108",
+        title: "Venue Storyteller",
+    },
+    {
+        id: "vst.masq.121",
+        title: "Venue Storyteller",
+    },
+    {
+        id: "vst.tattered.001",
+        title: "Venue Storyteller",
+    },
+]
