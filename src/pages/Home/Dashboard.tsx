@@ -26,10 +26,13 @@ export default function Dashboard() {
     if (userData.uid==="") {
       fetchUserData(setUserData);
     }
-    if (userData.domain==="") {
+  }, [fetchUserData, userData, setUserData]);
+
+  useEffect(() => {
+    if (userData.uid!==""&&userData.domain==="") {
       setShowDomainSelector(true)
     }
-  }, [fetchUserData, userData, setUserData]);
+  }, [userData])
 
   return (
     <Center h={"100%"}>
@@ -43,7 +46,7 @@ export default function Dashboard() {
                 <Text fz={globals.smallerFontSize}>MC: {userData.mc}</Text>
                 <Text fz={globals.smallerFontSize}>Domain: {userData.domain}</Text>
               </Card>
-              <DomainCard userData={userData} />
+              <DomainCard userData={userData} setShowDomainSelector={setShowDomainSelector} />
             </Group>
           </Alert>
         </Group>
@@ -51,7 +54,7 @@ export default function Dashboard() {
         <Grid grow m={0}>
           {ChroncileSelector(userData)}
         </Grid>
-        {!userData.domain ?
+        {showDomainSelector ?
           <DomainSelector
             showDomainSelector={showDomainSelector}
             setShowDomainSelector={setShowDomainSelector}

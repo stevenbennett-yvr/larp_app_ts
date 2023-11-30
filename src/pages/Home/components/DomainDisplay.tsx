@@ -3,52 +3,13 @@ import { globals } from "../../../assets/globals"
 import domains from '../../../data/CaM/source/domains.json'
 import { FacebookLogo, DiscordLogo, WebLogo } from "../../../assets/images/CaM"
 import { User } from "../../../data/CaM/types/User"
-import { useUser } from "../../../contexts/UserContext"
-import { useAuth } from "../../../contexts/AuthContext"
 
 type DomainCardProps = {
-  userData: User
+  userData: User;
+  setShowDomainSelector: (showDomainSelector: boolean) => void;
 }
 
-export const DomainCard = ({ userData }: DomainCardProps) => {
-  const { getUser, updateUser } = useUser()
-  const { currentUser } = useAuth()
-
-  const handleDomainChange = async () => {
-    try {
-      let updatedUser = null;
-      if (!userData) {
-        const fetchedUserData = await getUser();
-        if (fetchedUserData) {
-          updatedUser = {
-            ...fetchedUserData,
-            domain: ""
-          };
-        } else {
-          // Handle case when userData is not available
-          console.log('User data not found');
-          return;
-        }
-      } else {
-        updatedUser = {
-          ...userData,
-          domain: ""
-        };
-      }
-      if (currentUser) {
-        console.log(updatedUser)
-        await updateUser(currentUser.uid, updatedUser);
-        localStorage.removeItem("userData")
-        window.location.reload();
-      } else {
-        console.log("User is not authenticated")
-      }
-    } catch (error) {
-      console.error(error);
-      // Handle the error as needed
-    }
-  };
-
+export const DomainCard = ({ userData, setShowDomainSelector }: DomainCardProps) => {
 
   const domain = domains.find((domain) => domain.id === userData.domain)
 
@@ -63,7 +24,7 @@ export const DomainCard = ({ userData }: DomainCardProps) => {
           {domain.links?.discord ? <Button variant='link' onClick={() => window.open(domain.links.discord)}><Avatar radius="xs" size="sm" src={DiscordLogo} /> Discord</Button> : <></>}
           {domain.links?.website ? <Button variant='link' onClick={() => window.open(domain.links.website)}><Avatar radius="xs" size="sm" src={WebLogo} /> Website</Button> : <></>}
         </Button.Group>
-        <Button variant='link' onClick={() => handleDomainChange()}>Change Domain</Button>
+        <Button variant='link' onClick={() => setShowDomainSelector(true)}>Change Domain</Button>
       </Card>
     )
   } else {

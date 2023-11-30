@@ -6,83 +6,82 @@ import { useAuth } from "../../../contexts/AuthContext"
 import domains from '../../../data/CaM/source/domains.json'
 
 type DomainSelectorProps = {
-    showDomainSelector: boolean,
-    setShowDomainSelector: (showDomainSelector:boolean) => void,
-    userData: any
+  showDomainSelector: boolean,
+  setShowDomainSelector: (showDomainSelector: boolean) => void,
+  userData: any
 }
 
-const DomainSelector = ({showDomainSelector, setShowDomainSelector, userData}: DomainSelectorProps) => {
-    const [selectedCoordinates, setSelectedCoordinates] = useState({ lat: 49.2827, lng: -123.1207 });
-    const [selectedDomain, setSelectedDomain] = useState('Nova Albion');
-    const [selectedDomainId, setSelectedDomainId] = useState('CND-001');
+const DomainSelector = ({ showDomainSelector, setShowDomainSelector, userData }: DomainSelectorProps) => {
+  const [selectedCoordinates, setSelectedCoordinates] = useState({ lat: 49.2827, lng: -123.1207 });
+  const [selectedDomain, setSelectedDomain] = useState('Nova Albion');
+  const [selectedDomainId, setSelectedDomainId] = useState('CND-001');
 
-    const { getUser, updateUser } = useUser()
-    const { currentUser } = useAuth()
+  const { getUser, updateUser } = useUser()
+  const { currentUser } = useAuth()
 
-    const handleDomainChange = async (value: any) => {
-        const selectedDomain = value;
-        const domain = domains.find((domain) => domain.name === selectedDomain)
+  const handleDomainChange = async (value: any) => {
+    const selectedDomain = value;
+    const domain = domains.find((domain) => domain.name === selectedDomain)
 
-        if (domain && domain.location) {
-            const { city, province } = parseLocation(domain.location);
-            const coordinates = await getGeolocation(city, province);
+    if (domain && domain.location) {
+      const { city, province } = parseLocation(domain.location);
+      const coordinates = await getGeolocation(city, province);
 
-            if (coordinates) {
-                setSelectedDomain(selectedDomain)
-                setSelectedDomainId(domain.id)
-                setSelectedCoordinates({
-                    lat: coordinates.lat,
-                    lng: coordinates.lng
-                })
-            }
-        }
+      if (coordinates) {
+        setSelectedDomain(selectedDomain)
+        setSelectedDomainId(domain.id)
+        setSelectedCoordinates({
+          lat: coordinates.lat,
+          lng: coordinates.lng
+        })
+      }
     }
+  }
 
-    const activeDomains = domains.filter((domain) => domain.active);
+  const activeDomains = domains.filter((domain) => domain.active);
 
-    const selectData = activeDomains.map((domain) => ({
-        value: domain.name,
-        label: domain.name
-    }));
-    
-    const handleDomainConfirm = async () => {
-        try {
-          let updatedUser = null;
-          if (!userData) {
-            const fetchedUserData = await getUser();
-            if (fetchedUserData) {
-              updatedUser = {
-                ...fetchedUserData,
-                domain: selectedDomainId
-              };
-            } else {
-              // Handle case when userData is not available
-              console.log('User data not found');
-              return;
-            }
-          } else {
-            updatedUser = {
-              ...userData,
-              domain: selectedDomainId
-            };
-          }
-          if (currentUser) {
-            console.log(updatedUser)
-          await updateUser(currentUser.uid, updatedUser);
-          setShowDomainSelector(false);
-          localStorage.removeItem("userData")
-          window.location.reload();
+  const selectData = activeDomains.map((domain) => ({
+    value: domain.name,
+    label: domain.name
+  }));
+
+  const handleDomainConfirm = async () => {
+    try {
+      let updatedUser = null;
+      if (!userData) {
+        const fetchedUserData = await getUser();
+        if (fetchedUserData) {
+          updatedUser = {
+            ...fetchedUserData,
+            domain: selectedDomainId
+          };
         } else {
-            console.log("User is not authenticated")
+          // Handle case when userData is not available
+          console.log('User data not found');
+          return;
         }
+      } else {
+        updatedUser = {
+          ...userData,
+          domain: selectedDomainId
+        };
+      }
+      if (currentUser) {
+        console.log(updatedUser)
+        await updateUser(currentUser.uid, updatedUser);
+        setShowDomainSelector(false);
+        localStorage.removeItem("userData")
+        window.location.reload();
+      } else {
+        console.log("User is not authenticated")
+      }
     } catch (error) {
-        console.error(error);
-        // Handle the error as needed
-        }
-    };
+      console.error(error);
+      // Handle the error as needed
+    }
+  };
 
-    // Extra showDomainSelector is just to make sure I'm not overcharged for the map component.
-    return(
+  return (
     <Modal opened={showDomainSelector} onClose={() => setShowDomainSelector(false)}>
       <Modal.Title style={{ marginBottom: '10px', fontWeight: 'bold', fontSize: '24px' }}>
         Choose Domain
@@ -118,7 +117,7 @@ const DomainSelector = ({showDomainSelector, setShowDomainSelector, userData}: D
         Confirm
       </Button>
     </Modal>
-    )
+  )
 }
 
 export default DomainSelector
