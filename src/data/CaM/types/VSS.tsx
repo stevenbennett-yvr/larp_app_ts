@@ -4,6 +4,11 @@ import { sectNameSchema } from "../../GoodIntentions/types/V5Sect";
 import { clanNameSchema } from "../../GoodIntentions/types/V5Clans";
 import { predatorTypeNameSchema } from "../../GoodIntentions/types/V5PredatorType";
 
+export const statusSchema = z.union([
+    z.literal('active'),
+    z.literal('inactive'),
+])
+
 export const venueStyleSheetSchema = z.object({
     id: z.string(),
     name: z.string(),
@@ -21,11 +26,12 @@ export const venueStyleSheetSchema = z.object({
     scheduleWeek: z.number(),
     documents: z.string().array(),
     banner: z.string(),
+    status: statusSchema
 })
 
 export const goodIntentionsVariablesSchema = z.object({
     vssId: z.string(),
-    boundaries: z.string(),    
+    boundaries: z.string(),
     sect: sectNameSchema,
     tenants: z.object({
         global: z.string(),
@@ -50,6 +56,49 @@ const goodIntentionsVSSSchema = z.object({
 
 export type GoodIntentionsVenueStyleSheet = z.infer<typeof goodIntentionsVSSSchema>
 
+export const getEmtpyGoodIntentionsVss = (): GoodIntentionsVenueStyleSheet => {
+    return {
+        venueStyleSheet: {
+            id: "",
+            name: "",
+            chronicle: "",
+            domainCode: "",
+            storyteller: "",
+            staff: [],
+            theme: "",
+            mood: "",
+            setting: "",
+            focus: "...",
+            timeline: "...",
+            notes: "",
+            scheduleDay: 6,
+            scheduleWeek: 1,
+            documents: [],
+            banner: "",
+            status: "active",
+        },
+        goodIntentionsVariables: {
+            vssId: "",
+            boundaries: "",
+            sect: "",
+            tenants: {
+                global: "",
+                sect: "",
+                venue: ""
+            },
+            bannedClans: [],
+            bannedSects: [],
+            bannedPredatorTypes: [],
+            bannedMerits: [],
+            bannedPowers: [],
+            bannedCeremonies: [],
+            bannedRituals: [],
+            bannedLoresheets: [],
+            bannedFormulae: [],
+        }
+    }
+}
+
 export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
     {
         venueStyleSheet: {
@@ -69,25 +118,26 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleWeek: 1,
             documents: [],
             banner: "",
+            status: "active",
         },
         goodIntentionsVariables: {
             vssId: "GI-001",
             boundaries: "Greater Vancouver Regional District",
             sect: "Anarch",
             tenants: {
-                global:"For the Good of the City, Right or Wrong",
-                sect:"Gangs First, Vampires Second",
-                venue:"Survival is Paramount"
+                global: "For the Good of the City, Right or Wrong",
+                sect: "Gangs First, Vampires Second",
+                venue: "Survival is Paramount"
             },
-            bannedClans:["Hecata","Salubri","Ghoul"],
-            bannedSects:[],
-            bannedPredatorTypes:[],
-            bannedMerits:[],
-            bannedPowers:[],
-            bannedCeremonies:[],
-            bannedRituals:[],
-            bannedLoresheets:[],
-            bannedFormulae:[],
+            bannedClans: ["Hecata", "Salubri", "Ghoul"],
+            bannedSects: [],
+            bannedPredatorTypes: [],
+            bannedMerits: [],
+            bannedPowers: [],
+            bannedCeremonies: [],
+            bannedRituals: [],
+            bannedLoresheets: [],
+            bannedFormulae: [],
         }
     },
     {
@@ -108,26 +158,26 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleWeek: 4,
             documents: [],
             banner: "",
-
+            status: "active",
         },
         goodIntentionsVariables: {
             vssId: "GI-000",
             boundaries: "New York Van Java",
             sect: "",
             tenants: {
-                global:"Freedom Above All",
-                sect:"Solidarity Against the Camarilla",
-                venue:"Defiance in Unity"
+                global: "Freedom Above All",
+                sect: "Solidarity Against the Camarilla",
+                venue: "Defiance in Unity"
             },
-            bannedClans:[],
-            bannedSects:[],
-            bannedPredatorTypes:[],
-            bannedMerits:[],
-            bannedPowers:[],
-            bannedCeremonies:[],
-            bannedRituals:[],
-            bannedLoresheets:[],
-            bannedFormulae:[],
+            bannedClans: [],
+            bannedSects: [],
+            bannedPredatorTypes: [],
+            bannedMerits: [],
+            bannedPowers: [],
+            bannedCeremonies: [],
+            bannedRituals: [],
+            bannedLoresheets: [],
+            bannedFormulae: [],
         }
     },
     {
@@ -148,6 +198,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleWeek: 4,
             documents: [],
             banner: "",
+            status: "active",
 
         },
         goodIntentionsVariables: {
@@ -155,19 +206,19 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             boundaries: "Greater Montreal Area (Montreal Island, Laval, and South Shore)",
             sect: "Camarilla",
             tenants: {
-                global:"For the Good of the City, Right or Wrong.",
-                sect:"Uphold the Traditions.",
-                venue:"Question Your Direction."
+                global: "For the Good of the City, Right or Wrong.",
+                sect: "Uphold the Traditions.",
+                venue: "Question Your Direction."
             },
-            bannedClans:[],
-            bannedSects:[],
-            bannedPredatorTypes:[],
-            bannedMerits:[],
-            bannedPowers:[],
-            bannedCeremonies:[],
-            bannedRituals:[],
-            bannedLoresheets:[],
-            bannedFormulae:[],
+            bannedClans: [],
+            bannedSects: [],
+            bannedPredatorTypes: [],
+            bannedMerits: [],
+            bannedPowers: [],
+            bannedCeremonies: [],
+            bannedRituals: [],
+            bannedLoresheets: [],
+            bannedFormulae: [],
         }
     },
     {
@@ -188,6 +239,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleWeek: 1,
             documents: [],
             banner: "",
+            status: "active",
 
         },
         goodIntentionsVariables: {
@@ -195,19 +247,19 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             boundaries: "Ottawa/Gatineau",
             sect: "Anarch",
             tenants: {
-                global:"Deny your Beast.",
-                sect:"Gangs First, Vampires Second.",
-                venue:"Survival is Paramount."
+                global: "Deny your Beast.",
+                sect: "Gangs First, Vampires Second.",
+                venue: "Survival is Paramount."
             },
-            bannedClans:[],
-            bannedSects:[],
-            bannedPredatorTypes:[],
-            bannedMerits:[],
-            bannedPowers:[],
-            bannedCeremonies:[],
-            bannedRituals:[],
-            bannedLoresheets:[],
-            bannedFormulae:[],
+            bannedClans: [],
+            bannedSects: [],
+            bannedPredatorTypes: [],
+            bannedMerits: [],
+            bannedPowers: [],
+            bannedCeremonies: [],
+            bannedRituals: [],
+            bannedLoresheets: [],
+            bannedFormulae: [],
         }
     },
     {
@@ -228,6 +280,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleWeek: 3,
             documents: [],
             banner: "",
+            status: "active",
 
         },
         goodIntentionsVariables: {
@@ -235,19 +288,19 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             boundaries: "King County",
             sect: "Anarch",
             tenants: {
-                global:"For the Good of the City, Right or Wrong",
-                sect:"Gangs First, Vampires Second",
-                venue:"Be a Shepherd Among Wolves"
+                global: "For the Good of the City, Right or Wrong",
+                sect: "Gangs First, Vampires Second",
+                venue: "Be a Shepherd Among Wolves"
             },
-            bannedClans:["Salubri", "Ghoul"],
-            bannedSects:[],
-            bannedPredatorTypes:[],
-            bannedMerits:[],
-            bannedPowers:[],
-            bannedCeremonies:[],
-            bannedRituals:[],
-            bannedLoresheets:[],
-            bannedFormulae:[],
+            bannedClans: ["Salubri", "Ghoul"],
+            bannedSects: [],
+            bannedPredatorTypes: [],
+            bannedMerits: [],
+            bannedPowers: [],
+            bannedCeremonies: [],
+            bannedRituals: [],
+            bannedLoresheets: [],
+            bannedFormulae: [],
         }
     },
     {
@@ -273,6 +326,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleWeek: 3,
             documents: [],
             banner: "",
+            status: "active",
 
         },
         goodIntentionsVariables: {
@@ -280,19 +334,19 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             boundaries: "Los Angeles County and Orange County",
             sect: "Camarilla",
             tenants: {
-                global:"The Masquerade is Sacred",
-                sect:"Uphold the Traditions",
-                venue:"Boons Before Dishonor"
+                global: "The Masquerade is Sacred",
+                sect: "Uphold the Traditions",
+                venue: "Boons Before Dishonor"
             },
-            bannedClans:["Thin-Blood", "Caitiff", "Hecata", "Ravnos", "Salubri"],
-            bannedSects:[],
-            bannedPredatorTypes:[],
-            bannedMerits:[],
-            bannedPowers:[],
-            bannedCeremonies:[],
-            bannedRituals:[],
-            bannedLoresheets:[],
-            bannedFormulae:[],
+            bannedClans: ["Thin-Blood", "Caitiff", "Hecata", "Ravnos", "Salubri"],
+            bannedSects: [],
+            bannedPredatorTypes: [],
+            bannedMerits: [],
+            bannedPowers: [],
+            bannedCeremonies: [],
+            bannedRituals: [],
+            bannedLoresheets: [],
+            bannedFormulae: [],
         }
     },
     {
@@ -338,6 +392,7 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             scheduleWeek: 2,
             documents: [],
             banner: "",
+            status: "active",
 
         },
         goodIntentionsVariables: {
@@ -345,19 +400,19 @@ export const GoodIntentionsVSSs: GoodIntentionsVenueStyleSheet[] = [
             boundaries: "Greater Spokane Area and Coeur d’Alene",
             sect: "Camarilla",
             tenants: {
-                global:"The Masquerade is Sacred",
-                sect:"For the Good of the City, Right or Wrong",
-                venue:"Uphold the Traditions"
+                global: "The Masquerade is Sacred",
+                sect: "For the Good of the City, Right or Wrong",
+                venue: "Uphold the Traditions"
             },
-            bannedClans:["Hecata", "Salubri", "Tzimisce"],
-            bannedSects:[],
-            bannedPredatorTypes:[],
-            bannedMerits:[],
-            bannedPowers:[],
-            bannedCeremonies:[],
-            bannedRituals:[],
-            bannedLoresheets:[],
-            bannedFormulae:[],
+            bannedClans: ["Hecata", "Salubri", "Tzimisce"],
+            bannedSects: [],
+            bannedPredatorTypes: [],
+            bannedMerits: [],
+            bannedPowers: [],
+            bannedCeremonies: [],
+            bannedRituals: [],
+            bannedLoresheets: [],
+            bannedFormulae: [],
         }
     },
 ]
@@ -390,11 +445,12 @@ export const TatteredVeilVSSs: TatteredVeilStyleSheet[] = [
             scheduleWeek: 4,
             documents: ["https://docs.google.com/document/d/16xm-3sEOckOFiPGRpXHOljvaHRFBvChy_RGbXmln8gE"],
             banner: "",
+            status: "active",
         }
     }
-    ]
+]
 
-    export const VenueStyleSheets: (GoodIntentionsVenueStyleSheet | TatteredVeilStyleSheet)[] = [
-        ...TatteredVeilVSSs,
-        ...GoodIntentionsVSSs,
-    ];
+export const VenueStyleSheets: (GoodIntentionsVenueStyleSheet | TatteredVeilStyleSheet)[] = [
+    ...TatteredVeilVSSs,
+    ...GoodIntentionsVSSs,
+];

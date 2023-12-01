@@ -1,5 +1,5 @@
 import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone';
-import { Card, Text, BackgroundImage, Button, Title } from '@mantine/core';
+import { Box, Text, BackgroundImage, Button, Title } from '@mantine/core';
 import { useState } from 'react';
 import { GoodIntentionsVenueStyleSheet } from '../../data/CaM/types/VSS';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
@@ -16,12 +16,12 @@ function VssDropzone({ vssData, setVssData }: setVssProps) {
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
     return <BackgroundImage key={index} src={imageUrl} onLoad={() => URL.revokeObjectURL(imageUrl)}>
-      <Card w="100%" h={300}>
-      <Title style={{ position:"relative", top:250, left:10 }}>
+      <Box w="100%" h={300}>
+        <Title style={{ position: "relative", top: 250, left: 10 }}>
           {vssData.venueStyleSheet.name}
-          </Title>
-      </Card>
-      </BackgroundImage>;
+        </Title>
+      </Box>
+    </BackgroundImage>;
   });
 
 

@@ -18,9 +18,10 @@ import VssDropzone from "./VssDropzone";
 type GiVssEditProps = {
     vssData: GoodIntentionsVenueStyleSheet;
     setVssData: (vssData: GoodIntentionsVenueStyleSheet) => void;
+    handleVss: (vssData: GoodIntentionsVenueStyleSheet) => void;
 }
 
-const GiVssEdit = ({ vssData, setVssData }: GiVssEditProps) => {
+const GiVssEdit = ({ vssData, setVssData, handleVss }: GiVssEditProps) => {
 
     const isPhoneScreen = globals.isPhoneScreen
 
@@ -270,7 +271,7 @@ const GiVssEdit = ({ vssData, setVssData }: GiVssEditProps) => {
                     </Grid>
                 </Alert>
                 <Center>
-                    <Button>
+                    <Button onClick={() => handleVss(vssData)}>
                         Update
                     </Button>
                 </Center>
