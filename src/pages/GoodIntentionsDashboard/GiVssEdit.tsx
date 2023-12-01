@@ -1,4 +1,4 @@
-import { Center, Stack, Alert, Grid, TextInput, Select, Text, MultiSelect, Button, SimpleGrid } from "@mantine/core";
+import { Center, Stack, Alert, Grid, TextInput, Select, Text, MultiSelect, Button } from "@mantine/core";
 
 import { TipTapRTE } from "../../components/TipTapRTE";
 import { GoodIntentionsVenueStyleSheet } from "../../data/CaM/types/VSS"
@@ -47,12 +47,6 @@ const GiVssEdit = ({ vssData, setVssData }: GiVssEditProps) => {
     const ritualNames = Rituals.map(r => ({ value: r.name, label: `${r.level} - ${r.name}` }))
     const ceremonyNames = Ceremonies.map(r => ({ value: r.name, label: `${r.level} - ${r.name}` }))
     const formulaeNames = Formulae.map(r => ({ value: r.name, label: `${r.level} - ${r.name}` }))
-
-
-    const removeImage = (indexToRemove:number) => {
-        setVssData(
-            {...vssData, venueStyleSheet: {...vssData.venueStyleSheet, images: vssData.venueStyleSheet.images.filter((_, index) => index !== indexToRemove)}})
-      };
 
     return (
         <Center>
@@ -152,18 +146,6 @@ const GiVssEdit = ({ vssData, setVssData }: GiVssEditProps) => {
                 </Alert>
                 <Alert color="gray" style={{ maxWidth: "700px" }}>
                     <VssDropzone vssData={vssData} setVssData={setVssData} />
-                    <SimpleGrid cols={4}>
-                        {vssData.venueStyleSheet.images.map((imageUrl, index) => (
-                            <Stack>
-                                <img src={imageUrl} alt={`Image ${index}`} style={{ height: '150px', objectFit: 'cover' }} />
-                                <Button
-                                    onClick={() => removeImage(index)}
-                                >
-                                    Remove
-                                </Button>
-                            </Stack>
-                        ))}
-                    </SimpleGrid>
 
                 </Alert>
                 <Alert color="gray" style={{ maxWidth: "700px" }}>

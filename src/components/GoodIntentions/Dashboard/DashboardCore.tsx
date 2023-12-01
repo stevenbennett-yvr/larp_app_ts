@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Center, Stack, Button, Avatar, Text, List, Alert, Title, Input, Tooltip, SimpleGrid } from "@mantine/core";
+import { Box, BackgroundImage, Center, Stack, Button, Avatar, Text, List, Alert, Title, Input, Tooltip, SimpleGrid } from "@mantine/core";
 import { DiscordLogo } from "../../../assets/images/CaM";
 import SoftCoverV5 from '../../../assets/images/GoodIntentions/core/Soft_Cover_3d__88604.png';
 import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS";
@@ -9,8 +9,6 @@ import { globals } from "../../../assets/globals";
 import calculateNextGameDate from "../../../utils/calculateNextGameDate";
 import { Calendar } from '@mantine/dates';
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
-
-import VtmCarousel from "./GoodIntentionsCarousel";
 
 type DashboardProps = {
     venueData: GoodIntentionsVenueStyleSheet
@@ -37,7 +35,7 @@ export const DashboardCore = ({ venueData, userLocalKindred }: DashboardProps) =
             scheduleDay,
             scheduleWeek,
             notes,
-            images
+            banner,
         },
         goodIntentionsVariables: {
             sect,
@@ -57,14 +55,21 @@ export const DashboardCore = ({ venueData, userLocalKindred }: DashboardProps) =
 
     const nextGameDay = calculateNextGameDate(scheduleDay, scheduleWeek)
 
+    const isPhoneScreen = globals.isPhoneScreen
 
     return (
-        <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '100px' }}>
+        <Center>
             <Stack>
-                {images.length > 0 ?
-                <VtmCarousel images={images} />
-                : <></> }
-                <SimpleGrid cols={2}>
+                {banner !== "" ?
+                    <BackgroundImage src={banner} >
+                        <Box w="100%" h={300}>
+                            <Title style={{ position: "relative", top: 250, left: 10 }}>
+                                {name}
+                            </Title>
+                        </Box>
+                    </BackgroundImage>
+                    : <></>}
+                <SimpleGrid cols={isPhoneScreen ? 1 : 2}>
                     <Alert variant="light" color="gray">
                         <Stack>
                             <Title size="h4" align="center">{name}</Title>

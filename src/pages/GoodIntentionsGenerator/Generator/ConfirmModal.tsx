@@ -1,4 +1,5 @@
-import { Modal, Button } from "@mantine/core"
+import { Modal, TextInput, Button } from "@mantine/core"
+import { useState } from "react"
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred"
 
 type confirmModalProps = {
@@ -9,7 +10,8 @@ type confirmModalProps = {
 
 }
 
-const ConfirmModal = ({ showRetire, setShowRetire, handleSubmit}:confirmModalProps) => {
+const ConfirmModal = ({kindred, showRetire, setShowRetire, handleSubmit}:confirmModalProps) => {
+    const [characterName, setCharacterName] = useState("")
 
     return(
         <Modal opened={showRetire} onClose={() => setShowRetire(false)}>
@@ -19,9 +21,13 @@ const ConfirmModal = ({ showRetire, setShowRetire, handleSubmit}:confirmModalPro
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Note after submission you will not be able to change or reallocate your creation points. Ensure you character is set how you want before submission.</p>
-
-                <Button onClick={handleSubmit}>
+                <p>Please enter your character name before submitting the sheet. Note after submission you will not be able to change or reallocate your creation points. Ensure you character is set how you want before submission.</p>
+                <TextInput
+                    placeholder="Enter character name"
+                    value={characterName}
+                    onChange={(event) => setCharacterName(event.target.value)}
+                />
+                <Button disabled={!(characterName.toLowerCase()===kindred.name.toLocaleLowerCase())} onClick={handleSubmit}>
                     Submit Character
                 </Button>
             </Modal.Body>
