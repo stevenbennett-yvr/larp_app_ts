@@ -63,7 +63,7 @@ const V5XpInputs = ({ kindred, setKindred, venueData }: V5ExperienceAssignerProp
             <PowerAccordion kindred={kindred} setKindred={setKindred} venueData={venueData} type='experiencePoints' />
             <V5RitualsXpInputs kindred={kindred} setKindred={setKindred} venueData={venueData} modalOpened={ritualModalOpen} closeModal={closeRitualsModal} />
             <V5CeremoniesXpInputs kindred={kindred} setKindred={setKindred} venueData={venueData} modalOpened={ceremonyModalOpen} closeModal={closeCeremoniesModal} />
-            <V5FormulaeXpInputs kindred={kindred} setKindred={setKindred} modalOpened={formulaModalOpen} closeModal={closeFormulaModal} />
+            <V5FormulaeXpInputs kindred={kindred} setKindred={setKindred} modalOpened={formulaModalOpen} closeModal={closeFormulaModal} venueData={venueData} />
 
             <Space h="md" />
             <Center>

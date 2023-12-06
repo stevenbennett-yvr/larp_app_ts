@@ -7,6 +7,7 @@ import { FormulaRef, Formulae, formulaRefs } from "../../../data/GoodIntentions/
 import { useState } from "react"
 import { allClans, ClanName, Clans } from "../../../data/GoodIntentions/types/V5Clans"
 import { handleMeritFlawChange } from "../../../data/GoodIntentions/types/V5MeritsOrFlaws"
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS"
 
 type FormulaPickerProps = {
     kindred: Kindred,
@@ -14,17 +15,18 @@ type FormulaPickerProps = {
     nextStep: () => void,
     modalOpened: boolean
     closeModal: () => void
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
-const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal }: FormulaPickerProps) => {
+const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal, venueData }: FormulaPickerProps) => {
     const phoneScreen = globals.isPhoneScreen
     const smallScreen = globals.isSmallScreen
 
-
+    let { bannedFormulae } = venueData.goodIntentionsVariables
 
     const getformulaCardCols = () => {
         return Formulae.map((formula) => {
-            if (formula.level > 1) { return null }
+            if (formula.level > 1 || bannedFormulae.includes(formula.name)) { return null }
             const formulaRef = formulaRefs.find((entry) => entry.name === formula.name)
             if (!formulaRef) { return null }
 
@@ -90,7 +92,7 @@ const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal 
     for (const discipline in kindred.disciplines) {
         let key = discipline as DisciplineKey
         if (kindred.disciplines[key].creationPoints > 0) {
-            defaultDiscipline=discipline
+            defaultDiscipline = discipline
         }
     }
     const [pickedDiscipline, setPickedDiscipline] = useState(defaultDiscipline)
@@ -103,7 +105,7 @@ const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal 
     const [clan, setClan] = useState<ClanName>(kindred.clan)
     let curseData = allClans.filter(clan => clan !== "Thin-Blood" && clan !== "Ghoul" && clan !== "Caitiff");
     if (isBestial) { curseData = ["Brujah", "Gangrel"] }
-    if (isCatenating) { curseData = [ "Tremere" ] }
+    if (isCatenating) { curseData = ["Tremere"] }
 
 
     return (
@@ -131,20 +133,20 @@ const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal 
                     <Space h={"lg"} />
                     <Center>
                         <Stack>
-                    {isCursed ? 
-                            <Select
-                            label="Choose A Clan Curse"
-                            value={clan}
-                            data={curseData}
-                            onChange={(val:ClanName) => {
-                                if (val === null) return (null)
-                                setClan(val)
-                            }}
-                        />
-                        :<></>}
-                        {clan?
-                        <Text align="center">{Clans[clan].bane}</Text>
-                        :<></>}
+                            {isCursed ?
+                                <Select
+                                    label="Choose A Clan Curse"
+                                    value={clan}
+                                    data={curseData}
+                                    onChange={(val: ClanName) => {
+                                        if (val === null) return (null)
+                                        setClan(val)
+                                    }}
+                                />
+                                : <></>}
+                            {clan ?
+                                <Text align="center">{Clans[clan].bane}</Text>
+                                : <></>}
                         </Stack>
                     </Center>
                     <Space h={"lg"} />
@@ -187,7 +189,7 @@ const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal 
                             });
                         }
                         if (pickedDiscipline !== "") {
-                            
+
                             for (const disciplineKey in kindred.disciplines) {
                                 let key = disciplineKey as DisciplineKey
                                 if (key !== "thin-blood alchemy") {
@@ -204,7 +206,7 @@ const FormulaPicker = ({ kindred, setKindred, nextStep, modalOpened, closeModal 
                                     ...kindred.disciplines,
                                     [discipline]: {
                                         ...kindred.disciplines[discipline],
-                                        creationPoints:1
+                                        creationPoints: 1
                                     }
                                 },
                                 powers: []

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, BackgroundImage, Center, Stack, Button, Avatar, Text, List, Alert, Title, Input, Tooltip, SimpleGrid } from "@mantine/core";
 import { DiscordLogo } from "../../../assets/images/CaM";
@@ -8,16 +9,25 @@ import CharacterCard from "../../../components/GoodIntentions/Cards/KindredCard"
 import { globals } from "../../../assets/globals";
 import calculateNextGameDate from "../../../utils/calculateNextGameDate";
 import { Calendar } from '@mantine/dates';
-import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
+import { User } from "../../../data/CaM/types/User";
+import { useCharacterDb } from "../../../contexts/CharacterContext";
 
 type DashboardProps = {
-    venueData: GoodIntentionsVenueStyleSheet
-    userLocalKindred: Kindred[]
+    venueData: GoodIntentionsVenueStyleSheet;
+    userData: User;
+    isSt: boolean;
 }
 
-export const DashboardCore = ({ venueData, userLocalKindred }: DashboardProps) => {
+export const DashboardCore = ({ venueData, userData, isSt }: DashboardProps) => {
+
+    const { userLocalKindred, getCharacterByUIDAndVSS } = useCharacterDb();
 
     const navigate = useNavigate();
+
+
+    useEffect(() => {
+        getCharacterByUIDAndVSS(userData.uid, venueData.venueStyleSheet.id, isSt);
+    }, [venueData, getCharacterByUIDAndVSS, isSt, userData.uid])
 
 
 

@@ -4,6 +4,8 @@ function calculateNextGameDate(dayOfWeek: number, occurrence: number) {
     }
 
     const currentDate = new Date();
+    const yesterday = new Date(currentDate);
+    yesterday.setDate(currentDate.getDate() - 1);
     let nextGameDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
 
     // Move to the desired day of the week and occurrence within the month
@@ -11,7 +13,7 @@ function calculateNextGameDate(dayOfWeek: number, occurrence: number) {
     nextGameDate.setDate(1 + dayDifference + (occurrence - 1) * 7);
 
     // If the calculated date is in the past, move to the first day of the next month
-    if (nextGameDate < currentDate) {
+    if (nextGameDate < yesterday) {
         nextGameDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
 
         // Move to the desired day of the week and occurrence within the month

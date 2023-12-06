@@ -9,8 +9,8 @@ import { useCharacterDb } from "../../contexts/CharacterContext";
 import { useAuth } from "../../contexts/AuthContext";
 // Data
 import { Kindred, getEmptyKindred } from "../../data/GoodIntentions/types/Kindred";
-import { GoodIntentionsVSSs } from "../../data/CaM/types/VSS";
 import { remainingExperience } from "../../data/GoodIntentions/types/V5Experience";
+import { useGiVssDb } from "../../contexts/GiVssContext";
 // Components
 import ExperienceAside from "./ExperienceAside";
 import PrintSheetCore from "../../components/GoodIntentions/PrintSheet/PrintSheet";
@@ -23,6 +23,9 @@ import { globals } from "../../assets/globals";
 import { getEmptyCoterie } from "../../data/GoodIntentions/types/Coterie";
 import UpdateModal from "./UpdateModal";
 import LogPage from "./LogPage";
+import { getEmptyUser } from "../../data/CaM/types/User";
+import { useUser } from "../../contexts/UserContext";
+import { Chronciles } from "../../data/CaM/types/Chronicles";
 
 const KindredPage = () => {
   const theme = useMantineTheme()
@@ -32,6 +35,9 @@ const KindredPage = () => {
   const [showRetire, setShowRetire] = useState<boolean>(false);
   const [showUpdate, setShowUpdate] = useState<boolean>(false);
   const { currentUser } = useAuth();
+  const { getVssById } = useGiVssDb();
+
+
 
   const [coterie, setCoterie] = useState(getEmptyCoterie())
   const [initialKindred, setInitialKindred] = useLocalStorage<Kindred>({
@@ -52,11 +58,46 @@ const KindredPage = () => {
     }
   })
 
-  const venueData = GoodIntentionsVSSs.find(vss => vss.venueStyleSheet.id === kindred.vssId)
+  const [venueData, setVenueData] = useState<any>(null)
 
+  useEffect(() => {
+    // Fetch venue data only when venueId changes
+    if (kindred.vssId) {
+      getVssById(kindred.vssId, setVenueData);
+    }
+  }, [getVssById, kindred.vssId]);
 
-  if ((currentUser && kindred.uid !== currentUser.uid) || !currentUser || !venueData) {
-    return null
+  // Get UserData
+
+  const { fetchUserData } = useUser();
+  const [userData, setUserData] = useLocalStorage({ key: 'userData', defaultValue: getEmptyUser() });
+
+  useEffect(() => {
+    if (userData.uid === "") {
+      fetchUserData(setUserData);
+    }
+  }, [fetchUserData, userData, setUserData])
+
+  if (venueData === null) {
+    console.log("Loading...");
+    return (
+      <></>
+    )
+  }
+
+  if (!venueData) {
+    console.log("invalid venue id")
+    return (
+      <></>
+    )
+  }
+
+  const isSt = userData.roles && (userData.roles.includes(venueData.venueStyleSheet.storyteller) || userData.roles.includes(Chronciles["Good Intentions"].leadStoryteller));
+
+  if (!isSt) {
+    if ((currentUser && kindred.uid !== currentUser.uid) || !currentUser || !venueData) {
+      return null
+    }
   }
 
   return (
@@ -94,7 +135,7 @@ const KindredPage = () => {
           <Tabs.Panel value="logs" pt="xs">
             {kindred ?
               <LogPage kindred={kindred} />
-            : null}
+              : null}
           </Tabs.Panel>
 
           <Tabs.Panel value="print sheet" pt="xs">
@@ -113,7 +154,7 @@ const KindredPage = () => {
           <Button
             style={{ margin: "5px" }}
             color="gray"
-            disabled={remainingExperience(kindred) < 0 || _.isEqual(initialKindred,kindred)}
+            disabled={remainingExperience(kindred) < 0 || _.isEqual(initialKindred, kindred)}
             onClick={() => setShowUpdate(true)}>
             Update
           </Button>

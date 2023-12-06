@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Center } from "@mantine/core"
 import { useLocalStorage } from "@mantine/hooks"
 import { useParams, useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import { useCharacterDb } from "../../contexts/CharacterContext";
 
 // Data
 import { Kindred, getEmptyKindred } from "../../data/GoodIntentions/types/Kindred"
-import { GoodIntentionsVSSs } from "../../data/CaM/types/VSS";
+import { Chronciles } from "../../data/CaM/types/Chronicles";
 
 //Components
 import SectPicker from "./Generator/SectPicker"
@@ -26,14 +26,28 @@ import V5PrintSheet from './Generator/PrintSheet'
 import BackgroundLoreTabs from './Generator/BackgroundLoreTabs'
 import SideSheet from "./Generator/sidebars/SideSheet"
 import AsideBar from "./Generator/sidebars/GeneratorAside"
+import { useGiVssDb } from "../../contexts/GiVssContext";
 
 import changeLog from "../../utils/GoodIntentions/LoggingTool";
+import { getEmptyUser } from "../../data/CaM/types/User";
+import { useUser } from "../../contexts/UserContext";
 
 const GenerateKindred = () => {
     const { onSubmitCharacter, userLocalKindred, getCharacterByUIDAndVSS } = useCharacterDb()
+    const { getVssById } = useGiVssDb();
 
     const { venueId } = useParams();
-    const venueData = GoodIntentionsVSSs.find((venue) => venue.venueStyleSheet.id === venueId);
+
+    const [venueData, setVenueData] = useState<any>(null)
+
+    useEffect(() => {
+        // Fetch venue data only when venueId changes
+        if (venueId) {
+            getVssById(venueId, setVenueData);
+        }
+    }, [venueId, getVssById]);
+
+
     const navigate = useNavigate();
 
     const { currentUser } = useAuth()
@@ -41,22 +55,38 @@ const GenerateKindred = () => {
     const [kindred, setKindred] = useLocalStorage<Kindred>({ key: `kindred:${venueId}`, defaultValue: getEmptyKindred() });
     const [selectedStep, setSelectedStep] = useLocalStorage({ key: `goodIntentionsSelectedStep:${venueId}`, defaultValue: 0 });
 
+    // Get UserData
+
+    const { fetchUserData } = useUser();
+    const [userData, setUserData] = useLocalStorage({ key: 'userData', defaultValue: getEmptyUser() });
+
+    useEffect(() => {
+        if (userData.uid === "") {
+            fetchUserData(setUserData);
+        }
+    }, [fetchUserData, userData, setUserData])
+
     useEffect(() => {
         getCharacterByUIDAndVSS(currentUser?.uid ?? '', venueData?.venueStyleSheet.id ?? '');
     }, [])
 
+    const chronicleData = Chronciles["Good Intentions"]
 
-    if (userLocalKindred.length > 0 && venueId !== "GI-000") {
-        return <Center h={"100%"}><div>Character exists for this user in this VSS</div></Center>;
-    }
 
     if (!venueData) {
-        return <Center h={"100%"}><div>Invalid Venue ID</div></Center>;
+        return <Center h={"100%"}><div>Checking Venue ID</div></Center>;
     }
 
     if (!currentUser) {
         console.log("Invalid User")
     }
+
+    const isSt = userData.roles && (userData.roles.includes(venueData.venueStyleSheet.storyteller) || userData.roles.includes(chronicleData.leadStoryteller));
+
+    if (userLocalKindred.length > 0 && (venueId !== "GI-000" || !isSt) ) {
+        return <Center h={"100%"}><div>Character exists for this user in this VSS</div></Center>;
+    }
+
 
     async function handleSubmit() {
         try {

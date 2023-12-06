@@ -34,10 +34,6 @@ export const Roles: Role[] = [
         title: "Venue Storyteller",
     },
     {
-        id: "vst.masq.000",
-        title: "Venue Storyteller",
-    },
-    {
         id: "vst.masq.001",
         title: "Venue Storyteller",
     },

@@ -7,7 +7,7 @@ import { useState } from "react";
 
 type characterContextValue = {
   onSubmitCharacter: (newCharacter: (Kindred)) => void;
-  getCharacterByUIDAndVSS: (uid:string, vssId:string) => void;
+  getCharacterByUIDAndVSS: (uid:string, vssId:string, isSt?:boolean) => void;
   userLocalKindred: any[];
   getKindredById: (id:string, setKindred: (kindred:Kindred) => void) => void;
   updateKindred: (id:string, updatedKindred:Kindred) => void;
@@ -47,8 +47,10 @@ export function CharacterProvider({ children }: { children: React.ReactNode }): 
   const [userLocalKindred, setUserLocalKindred] = useState<any[]>([]); // Initialize with an empty array
 
   const getCharacterByUIDAndVSS = useCallback(
-    async (uid: string, vssId: string) => {
-      const q = query(collectionRef, where("uid", "==", uid), where("vssId", "==", vssId), where("status", "==", "active"));
+    async (uid: string, vssId: string, isSt?:boolean) => {
+      let q = null
+      if (isSt) {q = query(collectionRef, where("vssId", "==", vssId), where("status", "==", "active"));}
+      else {q = query(collectionRef, where("uid", "==", uid), where("vssId", "==", vssId), where("status", "==", "active"));}
 
       try {
         const snapshot = await getDocs(q);

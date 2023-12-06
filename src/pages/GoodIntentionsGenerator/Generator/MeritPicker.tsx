@@ -107,7 +107,7 @@ const MeritPicker = ({ kindred, setKindred, nextStep, backStep, venueData }: Mer
             <MeritsGrid kindred={kindred} setKindred={setKindred} type="creationPoints" venueData={venueData} />
           </Center>
 
-          <FormulaPicker kindred={kindred} setKindred={setKindred} nextStep={nextStep} modalOpened={modalOpen} closeModal={handleCloseModal} />
+          <FormulaPicker kindred={kindred} setKindred={setKindred} nextStep={nextStep} modalOpened={modalOpen} closeModal={handleCloseModal} venueData={venueData} />
 
 
         </ScrollArea>

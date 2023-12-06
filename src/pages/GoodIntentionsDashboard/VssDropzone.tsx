@@ -46,8 +46,10 @@ function VssDropzone({ vssData, setVssData }: setVssProps) {
 
   return (
     <div>
+      <Text>VSS Banner</Text>
+
       <Dropzone accept={IMAGE_MIME_TYPE} onDrop={setFiles}>
-        <Text ta="center">Drop images here</Text>
+        <Text ta="center">Drop banner image here</Text>
       </Dropzone>
 
       {previews}

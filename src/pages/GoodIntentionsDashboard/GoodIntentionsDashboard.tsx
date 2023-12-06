@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Center, Tabs, Stack } from "@mantine/core";
 //import { GoodIntentionsVSSs } from "../../data/CaM/types/VSS";
-import { useAuth } from "../../contexts/AuthContext";
-import { useCharacterDb } from "../../contexts/CharacterContext";
 import { useUser } from '../../contexts/UserContext';
 import { useLocalStorage } from '@mantine/hooks';
 import { getEmptyUser } from '../../data/CaM/types/User';
 import { useGiVssDb } from "../../contexts/GiVssContext";
+import { Chronciles } from "../../data/CaM/types/Chronicles";
 
 import { globals } from "../../assets/globals";
 
@@ -31,8 +30,6 @@ export default function GoodIntentionsDashboard() {
 
     const { getVssById, onSubmitVss, updateVss } = useGiVssDb();
     const { venueId } = useParams();
-    const { currentUser } = useAuth();
-    const { userLocalKindred, getCharacterByUIDAndVSS } = useCharacterDb();
     const [venueData, setVenueData] = useState<any>(null)
 
     useEffect(() => {
@@ -42,30 +39,35 @@ export default function GoodIntentionsDashboard() {
         }
     }, [venueId, getVssById]);
 
-    useEffect(() => {
-        getCharacterByUIDAndVSS(currentUser?.uid ?? '', venueData?.venueStyleSheet.id ?? '');
-    }, [currentUser, venueData, getCharacterByUIDAndVSS])
+    // ChronicleData
+
+    const chronicleData = Chronciles["Good Intentions"]
 
     if (venueData === null) {
         console.log("Loading...");
-        return <Center h={"100%"}><div>Loading...</div></Center>;
+        return (
+            <></>
+        )
     }
 
     if (!venueData) {
         console.log("invalid venue id")
-        return <Center h={"100%"}><div>Invalid Venue ID</div></Center>;
+        return (
+            <></>
+        )
     }
 
-    // Check if ST
-    const isSt = userData.roles && userData.roles.includes(venueData.venueStyleSheet.storyteller);
+        // Check if ST
+        const isSt = userData.roles && (userData.roles.includes(venueData.venueStyleSheet.storyteller) || userData.roles.includes(chronicleData.leadStoryteller));
 
-    const handleVss = (venueData: any) => {
-        if (!venueData.id) {
-            onSubmitVss(venueData)
-        } else {
-            updateVss(venueData.id, venueData)
+        const handleVss = (venueData: any) => {
+            if (!venueData.id) {
+                onSubmitVss(venueData)
+            } else {
+                updateVss(venueData.id, venueData)
+            }
         }
-    }
+    
 
     return (
         <Center style={{ paddingTop: globals.isPhoneScreen ? '60px' : '100px' }}>
@@ -83,7 +85,7 @@ export default function GoodIntentionsDashboard() {
                     </Center>
 
                     <Tabs.Panel value="vss" pt="xs">
-                        <DashboardCore venueData={venueData} userLocalKindred={userLocalKindred} />
+                        <DashboardCore venueData={venueData} userData={userData} isSt={isSt} />
                     </Tabs.Panel>
                     <Tabs.Panel value="vssEdit" pt="xs">
                         <GiVssEdit vssData={venueData} setVssData={setVenueData} handleVss={handleVss} />

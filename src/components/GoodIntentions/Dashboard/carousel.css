@@ -1,9 +1,0 @@
-/* Default style for the slide */
-.splide__slide {
-    transition: transform 0.3s ease;
-  }
-  
-  /* Enlarged style for the hovered slide */
-  .splide__slide:hover {
-    transform: scale(1.1); /* Increase the size by 10% */
-  }

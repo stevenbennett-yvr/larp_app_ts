@@ -5,23 +5,26 @@ import { Grid, Card, Group, Text, Badge, Button, Space, ScrollArea, Stack, Cente
 import { upcase } from "../../../utils/case"
 import { disciplines, v5DisciplineLevel } from "../../../data/GoodIntentions/types/V5Disciplines"
 import { v5xp } from "../../../data/GoodIntentions/types/V5Costs"
+import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS"
 
 type FormulaeModalProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void,
     modalOpened: boolean
     closeModal: () => void
+    venueData: GoodIntentionsVenueStyleSheet
 }
 
-const V5FormulaeXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: FormulaeModalProps) => {
+const V5FormulaeXpInputs = ({ kindred, setKindred, modalOpened, closeModal, venueData }: FormulaeModalProps) => {
     const phoneScreen = globals.isPhoneScreen
     const smallScreen = globals.isSmallScreen
 
+    let { bannedFormulae } = venueData.goodIntentionsVariables
 
     const getCeremonyCardColsFreebie = () => {
         return Formulae.map((formula) => {
             const formulaRef = formulaRefs.find((entry) => entry.name === formula.name)
-            if (!formulaRef) { return null }
+            if (!formulaRef || bannedFormulae.includes(formula.name)) { return null }
 
             const onClick = () => {
                 const updatedFormulae = [...kindred.formulae, { ...formulaRef, creationPoints: 1 }];
@@ -73,7 +76,7 @@ const V5FormulaeXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: Fo
                 </Grid.Col>
             )
         })
-    }
+    };
 
     const getCeremonyCardColsXp = () => {
         return Formulae.map((formula) => {
@@ -86,7 +89,7 @@ const V5FormulaeXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: Fo
                 check = kindred.formulae.find((r) => r.name === formula.name);
             }
 
-            if (!formulaRef || !check) { return null }
+            if (!formulaRef || !check || bannedFormulae.includes(formula.name)) { return null }
 
             const onClick = (freebie: boolean) => () => {
                 if (freebie) {
@@ -145,7 +148,7 @@ const V5FormulaeXpInputs = ({ kindred, setKindred, modalOpened, closeModal }: Fo
                 )
             }
         })
-    }
+    };
 
     const height = globals.viewportHeightPx
     return (
