@@ -18,6 +18,7 @@ import V5XpInputs from "../../components/GoodIntentions/V5XpInputs";
 import BackstoryTab from "../../components/GoodIntentions/V5BackstoryTab";
 import RetireModal from "../../components/GoodIntentions/Editor/RetireModal";
 import CoterieSheet from "../../components/GoodIntentions/Coterie/coterieSheet";
+import StorytellerEditSheet from "../../components/GoodIntentions/StorytellerEdit/StorytellerEditSheet";
 
 import { globals } from "../../assets/globals";
 import { getEmptyCoterie } from "../../data/GoodIntentions/types/Coterie";
@@ -106,6 +107,7 @@ const KindredPage = () => {
         <Stack spacing="0">
           <Center>
             <Tabs.List className="no-print">
+              <Tabs.Tab value="storyteller tab">Storyteller Sheet</Tabs.Tab>
               <Tabs.Tab value="coterie"><Text color={theme.colors.red[8]}>Coterie</Text></Tabs.Tab>
               <Tabs.Tab value="experience"><Text color={theme.colors.grape[8]}>XP Tab</Text></Tabs.Tab>
               <Tabs.Tab value="logs">Logs</Tabs.Tab>
@@ -141,6 +143,12 @@ const KindredPage = () => {
           <Tabs.Panel value="print sheet" pt="xs">
             {kindred ?
               <PrintSheetCore kindred={kindred} vssId={kindred.vssId} />
+              : null}
+          </Tabs.Panel>
+
+          <Tabs.Panel value="storyteller tab" pt="xs">
+            {kindred ?
+              <StorytellerEditSheet kindred={kindred} setKindred={setKindred} />
               : null}
           </Tabs.Panel>
 
