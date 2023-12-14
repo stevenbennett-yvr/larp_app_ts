@@ -7,7 +7,6 @@ export const powerRefSchema = z.object({
     name: z.string(),
     creationPoints: z.number(),
     freebiePoints: z.number(),
-    experiencePoints: z.number()
 })
 export type PowerRef=z.infer<typeof powerRefSchema>
 
@@ -243,10 +242,9 @@ export const powerRefs: PowerRef[] = allPowers.map((power) => ({
     name: power.name,
     creationPoints: 0,
     freebiePoints: 0,
-    experiencePoints: 0,
 }))
 
-type VariableKeys = "creationPoints" | "freebiePoints" | "experiencePoints";
+type VariableKeys = "creationPoints" | "freebiePoints" ;
 
 export const handlePowerChange = (
     kindred: Kindred,

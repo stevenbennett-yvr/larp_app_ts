@@ -148,7 +148,7 @@ const KindredPage = () => {
 
           <Tabs.Panel value="storyteller tab" pt="xs">
             {kindred ?
-              <StorytellerEditSheet kindred={kindred} setKindred={setKindred} />
+              <StorytellerEditSheet kindred={kindred} setKindred={setKindred} venueData={venueData} />
               : null}
           </Tabs.Panel>
 

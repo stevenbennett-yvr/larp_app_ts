@@ -14,13 +14,13 @@ type DisciplineAccordionProps = {
 
 const DisciplineAccordion = ({ kindred, setKindred }: DisciplineAccordionProps) => {
 
-    let mostDisciplines = allDisciplines.filter((disciplineName) => {
+    let mostDisciplines:any = allDisciplines.filter((disciplineName) => {
         if (kindred.clan === "Thin-Blood") { return disciplineName !== "thin-blood alchemy" && kindred.disciplines[disciplineName].creationPoints !== 0 }
         return disciplineName !== "thin-blood alchemy";
     })
     const thinBloodAlchemy = kindred.meritsFlaws.some((mf) => mf.name === "Thin-Blood Alchemist")
     const disciplinesForClan = kindred.clan === "Thin-Blood" && thinBloodAlchemy ? ["thin-blood alchemy"] : kindred.clan === "Caitiff" ? mostDisciplines : Clans[kindred.clan].disciplines;
-    const otherDisciplines = mostDisciplines.filter((disciplineName) => {
+    const otherDisciplines = mostDisciplines.filter((disciplineName:any) => {
         return !disciplinesForClan.includes(disciplineName);
     });
 
@@ -130,7 +130,7 @@ const DisciplineAccordion = ({ kindred, setKindred }: DisciplineAccordionProps) 
                                     </thead>
                                     <tbody>
                                         {
-                                            disciplinesForClan.map((d) => disciplineKeySchema.parse(d)).map((discipline) => disciplineXpInputs(discipline))
+                                            disciplinesForClan.map((d:any) => disciplineKeySchema.parse(d)).map((discipline:any) => disciplineXpInputs(discipline))
                                         }
                                     </tbody>
                                 </Table>
@@ -158,7 +158,7 @@ const DisciplineAccordion = ({ kindred, setKindred }: DisciplineAccordionProps) 
                                     </thead>
                                     <tbody>
                                         {
-                                            otherDisciplines.map((d) => disciplineKeySchema.parse(d)).map((discipline) => disciplineXpInputs(discipline))
+                                            otherDisciplines.map((d:any) => disciplineKeySchema.parse(d)).map((discipline:any) => disciplineXpInputs(discipline))
                                         }
                                     </tbody>
                                 </Table>
