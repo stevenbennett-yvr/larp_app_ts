@@ -136,8 +136,6 @@ export function mergeBackgrounds(id: string, ...objects: V5BackgroundRef[]): V5B
     return result;
 }
 
-
-
 export type requirementFunctions = (kindred: Kindred) => boolean
 
 const requirementSchema = z.object({
@@ -169,7 +167,7 @@ export const v5BackgroundSchema = z.object({
 
 export type V5Background = z.infer<typeof v5BackgroundSchema>;
 
-const getIcon = (name: string) => {
+export const getIcon = (name: string) => {
     if (name === "Allies") {
         return faUserGroup
     }
@@ -194,7 +192,7 @@ const getIcon = (name: string) => {
     if (name === "Resources") {
         return faCoins
     } else {
-        return ""
+        return faMasksTheater
     }
 }
 
@@ -347,7 +345,7 @@ export const v5AdvantageLevel = (AdvantageRef: V5AdvantageRef) => {
 
 }
 
-type VariableKeys = "backgroundName" | "backgroundDescription" | "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "havenPoints" | "predatorTypeFreebiePoints" | "share";
+type VariableKeys = "backgroundName" | "backgroundDescription" | "creationPoints" | "freebiePoints" | "experiencePoints" | "sphere" | "note" | "havenPoints" | "predatorTypeFreebiePoints" | "share" | "loresheetFreebiePoints";
 
 export const handleBackgroundChange = (
     kindred: Kindred,

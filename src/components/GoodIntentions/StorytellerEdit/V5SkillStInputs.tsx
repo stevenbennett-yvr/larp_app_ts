@@ -75,6 +75,7 @@ const V5SkillStInputs = ({ kindred, setKindred }: V5SkillStInputsProps) => {
                                         <td>{category}</td>
                                         <td>CP</td>
                                         <td>XP</td>
+                                        <td>FP</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -137,7 +138,8 @@ const V5SkillStInputs = ({ kindred, setKindred }: V5SkillStInputsProps) => {
                                                                 step={1}
                                                                 value={skillInfo.freebiePoints}
                                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                    const val = Number(e.target.value);                                                                                        changeFreebiePoints(SkillName, val)
+                                                                    const val = Number(e.target.value);
+                                                                    changeFreebiePoints(SkillName, val)
                                                                 }}
                                                             />
                                                         </td>
