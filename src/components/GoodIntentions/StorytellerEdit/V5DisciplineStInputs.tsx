@@ -2,6 +2,7 @@ import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
 import { Center, Stack, Text, Table, Input } from "@mantine/core";
 import { DisciplineKey, allDisciplines, disciplineKeySchema, v5DisciplineLevel, v5FindMaxDiscipline, v5HandleXpDisciplineChange } from "../../../data/GoodIntentions/types/V5Disciplines";
 import { Clans } from "../../../data/GoodIntentions/types/V5Clans";
+import { upcase } from "../../../utils/case";
 
 type V5SkillStInputsProps = {
     kindred: Kindred;
@@ -62,7 +63,7 @@ const V5DisciplineStInputs = ({ kindred, setKindred }: V5SkillStInputsProps) => 
                             return (
 
                                 <tr key={`row-${discipline}`}>
-                                    <td>{discipline}</td>
+                                    <td>{upcase(discipline)}</td>
                                     <td>{v5DisciplineLevel(kindred, discipline).level}</td>
                                     <td>
                                         <Input
