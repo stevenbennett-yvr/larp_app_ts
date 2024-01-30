@@ -537,7 +537,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                 onClick={() => {
                     // Filter out options with freebiePoints <= 0
                     const selectableBackgrounds = predatorData.selectableBackground.options.filter((option: any) => option.predatorTypeFreebiePoints > 0);
-                    const selectableMeritFlaw = predatorData.selectableMeritFlaw.options.filter((option: any) => option.predatorTypeFreebiePoints > 0);
+                    const selectableMeritFlaw = predatorData.selectableMeritFlaw.options.filter((option: any) => option.freebiePoints > 0);
 
                     // Combine predatorData.backgrounds and the filtered selectableBackgrounds
                     const combinedBackgrounds = [
