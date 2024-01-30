@@ -10,13 +10,17 @@ import { MeritFlawCategory, v5HandleMeritRemove, meritFlawData, V5MeritFlawRef, 
 import Tally from "../../../utils/talley";
 import { GoodIntentionsVenueStyleSheet } from "../../../data/CaM/types/VSS";
 
-export type TypeCategory = 'creationPoints' | 'experiencePoints';
+type TypeCategory = 'creationPoints' | 'experiencePoints' | 'freebiePoints';
+type MerfitFlawBool = 'merit' | 'flaw'
 
 type MeritsGridProps = {
     kindred: Kindred,
     setKindred: (kindred: Kindred) => void
     type: TypeCategory
     venueData: GoodIntentionsVenueStyleSheet
+    selectCategory?: MeritFlawCategory
+    pointMax?: number
+    meritFlawBool?: MerfitFlawBool
 }
 
 const flawIcon = () => {
@@ -56,7 +60,7 @@ const v5GetMeritByName = (name: string) => {
     }
 }
 
-const MeritsGrid = ({ kindred, setKindred, type, venueData }: MeritsGridProps) => {
+const MeritsGrid = ({ kindred, setKindred, type, venueData, selectCategory, pointMax, meritFlawBool }: MeritsGridProps) => {
     const theme = useMantineTheme()
 
     const meritFlawData = v5MeritFlawFilter(kindred)
@@ -189,6 +193,32 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }: MeritsGridProps) =
         )
     }
 
+    const MeritFreebiePointInput = (merit: V5MeritFlaw) => {
+
+        const meritInfo = meritFlawData.find(entry => entry.name === merit.name)
+        const meritRef = kindred.meritsFlaws.find((mf) => mf.name === merit.name) || v5MeritFlawRefs.find((mf) => mf.name === merit.name)
+        if (!meritRef || !meritInfo) { return }
+        const getMeritPoints = (meritRef: V5MeritFlawRef) => {
+            const meritInfo = kindred.meritsFlaws.find((mf) => mf.name === meritRef.name)
+            const creation = meritInfo ? meritInfo.creationPoints : 0
+            const freebie = meritInfo ? meritInfo.freebiePoints : 0
+            return creation + freebie
+        }
+        return (
+            <NumberInput
+                key={merit.name}
+                disabled={getMeritPoints(meritRef) === 0 && meritInfo.category === "thin-blood" && ((meritInfo.type === "flaw" && getThinBloodPoints(kindred).totalFlawPoints >= 3) || (meritInfo.type === "merit" && getThinBloodPoints(kindred).totalMeritPoints >= 3))}
+                value={getMeritPoints(meritRef)}
+                min={meritRef.creationPoints}
+                max={meritInfo.cost.length === 1 && meritInfo.cost[0] === 1 ? 1 : v5MeritLevel(meritRef).level === meritInfo.cost[meritInfo?.cost.length - 1] ? meritRef.creationPoints : meritInfo.cost[meritInfo.cost.length - 1]}
+                step={getStep(meritRef)}
+                onChange={(val) => {
+                    handleMeritFlawChange(kindred, setKindred, meritRef, "freebiePoints", val)
+                }}
+            />
+        )
+    }
+
     const createMeritAccordian = (category: string) => {
         if (
             (kindred.clan !== "Thin-Blood" && category === "thin-Blood") ||
@@ -280,9 +310,10 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }: MeritsGridProps) =
                                         </React.Fragment>
                                     );
                                 })
-                            ) : (
+                            ) : 
+                            type === "creationPoints" ? (
                                 meritFlawData
-                                    .filter(((mf) => mf.category.toLocaleLowerCase() === category.toLowerCase() && !bannedMerits.includes(mf.name)))
+                                    .filter(((mf) => mf.category.toLocaleLowerCase() === category.toLowerCase() && !bannedMerits.includes(mf.name) && (!pointMax || (mf && mf.cost.every(cost => cost <= pointMax)))))
                                     .map((meritFlaw) => (
                                         <tr key={`${meritFlaw.name} ${meritFlaw.type}`}>
                                             <td style={{ minWidth: "150px" }}>
@@ -295,7 +326,23 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }: MeritsGridProps) =
                                             <td dangerouslySetInnerHTML={{ __html: `${meritFlaw.description}` }} />
                                         </tr>
                                     ))
-                            )}
+                            ) : 
+                            type === "freebiePoints" ? (
+                                meritFlawData
+                                .filter(((mf) => mf.category.toLocaleLowerCase() === category.toLowerCase() && !bannedMerits.includes(mf.name) && (!pointMax || (mf && mf.cost.every(cost => cost <= pointMax))) && (!meritFlawBool || (mf && mf.type === meritFlawBool))))
+                                .map((meritFlaw) => (
+                                        <tr key={`${meritFlaw.name} ${meritFlaw.type}`}>
+                                            <td style={{ minWidth: "150px" }}>
+                                                <Text key={`${meritFlaw.name}-${meritFlaw.type}`}>
+                                                    {meritFlaw.type === "flaw" ? flawIcon() : meritIcon()} &nbsp; {meritFlaw.name}
+                                                </Text>
+                                                {getRating(meritFlaw.cost)}
+                                                {MeritFreebiePointInput(meritFlaw)}
+                                            </td>
+                                            <td dangerouslySetInnerHTML={{ __html: `${meritFlaw.description}` }} />
+                                        </tr>
+                                    ))
+                            ) : null}
                         </tbody>
                     </Table>
                 </Accordion.Panel>
@@ -313,7 +360,13 @@ const MeritsGrid = ({ kindred, setKindred, type, venueData }: MeritsGridProps) =
 
     return (
         <Accordion w={globals.isSmallScreen ? "100%" : "600px"}>
-            {type === "experiencePoints" ? (
+            {
+            selectCategory? 
+            (
+                createMeritAccordian(selectCategory)
+            )
+            :
+            type === "experiencePoints" ? (
                 meritTypes.map((c) => createMeritAccordian(c))
             ) : (
                 categoryArray.map((c) => createMeritAccordian(c))

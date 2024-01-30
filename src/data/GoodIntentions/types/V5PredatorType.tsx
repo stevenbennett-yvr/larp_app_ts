@@ -184,7 +184,15 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         meritsAndFlaws: [],
         humanityChange: 0,
         selectableBackground: { options: [], totalPoints: 0},
-        selectableMeritFlaw: { options: [], totalPoints: 0},
+        selectableMeritFlaw: { options: [
+            { ...emptyMeritFlaw, id: "sceneQueen-boundToTheEarth", name:"Bound to the Earth" },
+            { ...emptyMeritFlaw, id: "sceneQueen-eeriePresence", name:"Eerie Presence" },
+            { ...emptyMeritFlaw, id: "sceneQueen-folkloricBane", name:"Folkloric Bane" },
+            { ...emptyMeritFlaw, id: "sceneQueen-folkloricBlock", name:"Folkloric Block" },
+            { ...emptyMeritFlaw, id: "sceneQueen-Haunted", name:"Haunted" },
+            { ...emptyMeritFlaw, id: "sceneQueen-Stigmata", name:"Stigmata" },
+            { ...emptyMeritFlaw, id: "sceneQueen-TroubleMagnet", name:"Trouble Magnet" },
+        ], totalPoints: 3},
         selectableSpheres: [],
 
     },

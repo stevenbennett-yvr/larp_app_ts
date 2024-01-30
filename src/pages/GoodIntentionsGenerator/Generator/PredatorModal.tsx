@@ -14,9 +14,8 @@ import {
     Tooltip,
     Accordion,
     Table,
-    Center
+    Center,
 } from "@mantine/core";
-
 
 // Data Types
 import { Kindred } from "../../../data/GoodIntentions/types/Kindred";
@@ -64,7 +63,6 @@ const meritIcon = () => {
 }
 
 const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep, pickedPredatorType, predatorData, setPredatorData }: PredatorModalProps) => {
-
     let pass = true
 
     const getRating = (array: number[]) => {
@@ -132,7 +130,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                         } else {
                                             pass = false;
                                         }
-                                         return (
+                                        return (
                                             <>
                                                 <Group position="apart">
                                                     <Text maw={"80%"} fz={"xl"}>
@@ -424,7 +422,7 @@ const PredatorModal = ({ modalOpened, closeModal, kindred, setKindred, nextStep,
                                     </Text>
                                     {meritFlaw.name === "Enemy" ? (
                                         (() => {
-                                            let enemy = predatorData.meritsAndFlaws.find((mf:any) => mf.name === "Enemy")
+                                            let enemy = predatorData.meritsAndFlaws.find((mf: any) => mf.name === "Enemy")
                                             if (pass && enemy.sphere && enemy.sphere[0] !== null) { pass = true } else { pass = false }
                                             return (
                                                 <div>
