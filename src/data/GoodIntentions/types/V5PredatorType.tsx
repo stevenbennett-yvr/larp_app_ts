@@ -179,7 +179,8 @@ export const PredatorTypes: Record<PredatorTypeName, PredatorType> = {
         name: "Ferryman",
         summary: "Use your retainers to herd prey",
         backgrounds: [
-            { ...emptyBackground, id: "ferryman-allies", note:"Ferryman Retainer", name: "Allies", predatorTypeFreebiePoints: 2, advantages: [{ ...emptyAdvantage, name: "Retainer", freebiePoints: 2 }], sphere: [] }
+            { ...emptyBackground, id: "ferryman-allies", note:"Ferryman Retainer", name: "Allies", predatorTypeFreebiePoints: 2, advantages: [{ ...emptyAdvantage, name: "Retainer", freebiePoints: 2 }], sphere: [] },
+            { ...emptyBackground, id: "ferryman-haven", note:"Ferryman Haven", name: "Haven", predatorTypeFreebiePoints: 2, advantages: [] }
         ],
         meritsAndFlaws: [],
         humanityChange: 0,
